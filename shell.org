@@ -221,13 +221,9 @@
 ** PROMPT
 
 #+begin_src zsh :tangle ~/.zshrc
-  prompt_vcs_setup() {
-      local user_at_host="%B%F{green}%n%F{yellow}@%F{green}%m"
-      local cwd="%B%F{yellow}:%F{magenta}%~"
-      local exit_status="%B%(?.%F{yellow}√.%F{red}%?)"
-      local prompt="%B%F{yellow}%#%b%f"
-      PS1="${user_at_host}${cwd}"$'\n'"${exit_status} ${prompt} "
-  }
-
-  prompt_vcs_setup "$@"
+  user_at_host="%B%F{green}%n%F{yellow}@%F{green}%m"
+  cwd="%B%F{yellow}:%F{magenta}%~"
+  exit_status="%B%(?.%F{yellow}√.%F{red}%?)"
+  prompt="%B%F{yellow}%#%b%f"
+  PS1="${user_at_host}${cwd}"$'\n'"${exit_status} ${prompt} "
 #+end_src
