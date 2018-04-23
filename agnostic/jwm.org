@@ -1,0 +1,203 @@
+#+TITLE: JWM CONFIGURATION
+#+PROPERTY: header-args :cache yes
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :tangle-mode (identity #o600)
+#+PROPERTY: header-args+ :results silent
+#+PROPERTY: header-args+ :padline no
+#+BEGIN_SRC xml :tangle ~/.jwmrc
+  <?xml version="1.0"?>
+  <JWM>
+    <!-- The root menu. -->
+    <RootMenu onroot="12">
+      <Program label="Firefox">firefox</Program>
+      <Program label="The GIMP">gimp</Program>
+      <Menu label="GNU Emacs">
+        <Program label="Emacs">xterm -e emacs -nw</Program>
+        <Program label="Emacs Quick">xterm -e emacs -nw -q</Program>
+        <Program label="Emacs Debug">xterm -e emacs -nw --debug-init</Program>
+        <Program label="Emacs Daemon">xterm -e emacsclient -nw -c -a ""</Program>
+        <Program label="GTK Emacs">emacs</Program>
+        <Program label="GTK Emacs Quick">emacs -Q</Program>
+        <Program label="GTK Emacs Debug">emacs --debug-init</Program>
+        <Program label="GTK Emacs Daemon">emacsclient -c -a ""</Program>
+      </Menu>
+      <Program label="Tabbed">tabbed -c xterm -into</Program>
+      <Program label="Tmux">xterm -e tmux</Program>
+      <Program label="XTerm">xterm</Program>
+      <Program label="Lock">xlock -mode random</Program>
+      <Menu label="Utilities">
+        <Program label="Fonts">xfontsel</Program>
+        <Restart label="Restart WM"/>
+        <Program label="XEventViewer">xterm -e xev</Program>
+        <Program label="XProp">xprop | xmessage -file -</Program>
+        <Program label="XWinInfo">xwininfo | xmessage -file -</Program>
+      </Menu>
+      <Separator/>
+      <Menu label="Exit">
+        <Exit label="Logout" confirm="true"/>
+        <Program label="Reboot">shutdown -r now</Program>
+        <Program label="Shutdown">shutdown -p now</Program>
+      </Menu>
+    </RootMenu>
+
+    <!-- Options for all window groups. -->
+    <Group>
+      <Option>tiled</Option>
+      <Option>aerosnap</Option>
+      <Option>maximized</Option>
+      <Option>notitle</Option>
+      <Option>noborder</Option>
+      <Option>iignore</Option>
+      <Option>constrain</Option>
+    </Group>
+
+    <!-- Tray at the bottom. -->
+    <Tray x="0" y="-1" autohide="off" height="20">
+      <Clock format="%d/%m">
+        <Button mask="123">root:1</Button>
+      </Clock>
+      <Spacer width="2"/>
+      <TaskList maxwidth="256"/>
+      <Pager labeled="true"/>
+      <Dock/>
+      <Clock format="%H:%M">
+        <Button mask="123">showdesktop</Button>
+      </Clock>
+    </Tray>
+
+    <!-- Visual Styles -->
+    <WindowStyle>
+      <Font>Sans-9:bold</Font>
+      <Width>4</Width>
+      <Height>21</Height>
+      <Corner>3</Corner>
+      <Foreground>#FFFFFF</Foreground>
+      <Background>#555555</Background>
+      <Outline>#000000</Outline>
+      <Opacity>0.5</Opacity>
+      <Active>
+        <Foreground>#FFFFFF</Foreground>
+        <Background>#004466</Background>
+        <Outline>#000000</Outline>
+        <Opacity>1.0</Opacity>
+      </Active>
+    </WindowStyle>
+    <TrayStyle group="true" list="all">
+      <Font>Sans-10:Bold</Font>
+      <Background>#242424</Background>
+      <Foreground>#FFFFFF</Foreground>
+      <Outline>#000000</Outline>
+      <Opacity>0.75</Opacity>
+    </TrayStyle>
+    <TaskListStyle>
+      <Active>
+        <Font>Sans-9:Bold</Font>
+        <Foreground>#FFFFFF</Foreground>
+        <Background>#004466</Background>
+      </Active>
+      <Font>Sans-9</Font>
+      <Foreground>#ADADAD</Foreground>
+      <Background>#242424</Background>
+    </TaskListStyle>
+    <PagerStyle>
+      <Outline>#000000</Outline>
+      <Foreground>#555555</Foreground>
+      <Background>#242424</Background>
+      <Text>#FFFFFF</Text>
+      <Active>
+        <Foreground>#004466</Foreground>
+        <Background>#004488</Background>
+      </Active>
+    </PagerStyle>
+    <MenuStyle>
+      <Font>Sans-9</Font>
+      <Foreground>#FFFFFF</Foreground>
+      <Background>#242424</Background>
+      <Outline>#000000</Outline>
+      <Active>
+        <Foreground>#FFFFFF</Foreground>
+        <Background>#004466</Background>
+      </Active>
+      <Opacity>0.85</Opacity>
+    </MenuStyle>
+    <PopupStyle>
+      <Font>Sans-9</Font>
+      <Foreground>#000000</Foreground>
+      <Background>#999999</Background>
+    </PopupStyle>
+
+    <!-- Virtual Desktops -->
+    <!-- Desktop tags can be contained within Desktops for desktop names. -->
+    <Desktops width="2" height="2">
+      <Background type="solid">#111111</Background>
+    </Desktops>
+
+    <!-- Double click speed (in milliseconds) -->
+    <DoubleClickSpeed>400</DoubleClickSpeed>
+
+    <!-- Double click delta (in pixels) -->
+    <DoubleClickDelta>2</DoubleClickDelta>
+
+    <!-- The focus model (sloppy or click) -->
+    <FocusModel>sloppy</FocusModel>
+
+    <!-- The snap mode (none, screen, or border) -->
+    <SnapMode distance="10">border</SnapMode>
+
+    <!-- The move mode (outline or opaque) -->
+    <MoveMode>outline</MoveMode>
+
+    <!-- The resize mode (outline or opaque) -->
+    <ResizeMode>outline</ResizeMode>
+
+    <!-- Key bindings -->
+    <Key key="Up">up</Key>
+    <Key key="Down">down</Key>
+    <Key key="Right">right</Key>
+    <Key key="Left">left</Key>
+    <Key key="h">left</Key>
+    <Key key="j">down</Key>
+    <Key key="k">up</Key>
+    <Key key="l">right</Key>
+    <Key key="b">left</Key>
+    <Key key="n">down</Key>
+    <Key key="p">up</Key>
+    <Key key="f">right</Key>
+    <Key key="Return">select</Key>
+    <Key key="Escape">escape</Key>
+
+    <Key mask="4" key="r">exec:dmenu_run</Key>
+    <Key mask="C" key="F2">exec:exec:dmenu_run</Key>
+    <Key mask="4" key="Return">exec:tabbed -c xterm -into</Key>
+    <Key mask="4C" key="Return">exec:xterm</Key>
+    <Key mask="4" key="e">exec:xterm -e emacsclient -nw -c -a ""</Key>
+    <Key mask="4C" key="e">exec:xterm -e emacs -nw</Key>
+    <Key mask="4" key="t">exec:xterm -e tmux</Key>
+    <Key mask="4C" key="t">exec:xterm -e tmux attach</Key>
+    <Key mask="4" key="w">exec:firefox</Key>
+    <Key mask="4C" key="w">exec:chrome</Key>
+
+    <Key mask="4" key="m">root:1</Key>
+    <Key mask="C" key="F1">root:1</Key>
+    <Key mask="4" key="space">window</Key>
+    <Key mask="A" key="F1">window</Key>
+
+    <Key mask="C" key="Tab">nextstacked</Key>
+    <Key mask="CS" key="Tab">prevstacked</Key>
+    <Key mask="C" key="F4">close</Key>
+    <Key mask="C" key="F10">maximize</Key>
+    <Key mask="C" key="F11">fullscreen</Key>
+
+    <Key mask="4" key="d">showdesktop</Key>
+    <Key mask="4" key="#">desktop#</Key>
+    <Key mask="4" key="l">rdesktop</Key>
+    <Key mask="4" key="h">ldesktop</Key>
+    <Key mask="4" key="k">udesktop</Key>
+    <Key mask="4" key="j">ddesktop</Key>
+
+    <Key mask="4C" key="l">exec:xlock -mode random</Key>
+    <Key mask="4C" key="r">restart</Key>
+    <Key mask="4C" key="q">exit</Key>
+
+  </JWM>
+#+END_SRC

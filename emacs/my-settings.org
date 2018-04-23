@@ -1,0 +1,745 @@
+#+TITLE: MY BETTER DEFAULTS
+#+AUTHOR: Toby Slight
+
+#+PROPERTY: header-args :cache yes
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :padline no
+#+PROPERTY: header-args+ :results silent
+#+PROPERTY: header-args+ :tangle ~/.emacs.d/site-lisp/my-settings.el
+#+PROPERTY: header-args+ :tangle-mode (identity #o600)
+
+#+OPTIONS: toc:t
+
+Please see the [[file:README.org][README]] and/or [[file:my-tangles.org][my-tangles.org]] for instructions on how to
+install.
+
+* CONTENTS                                                         :TOC_5_gh:
+- [[#apropos][APROPOS]]
+- [[#auto-revert][AUTO REVERT]]
+- [[#auto-save][AUTO SAVE]]
+- [[#auto-window][AUTO WINDOW]]
+- [[#backup][BACKUP]]
+- [[#bell][BELL]]
+- [[#bookmarks][BOOKMARKS]]
+- [[#copypaste][COPY/PASTE]]
+- [[#custom-file][CUSTOM FIlE]]
+- [[#default-frame][DEFAULT FRAME]]
+- [[#doc-view][DOC VIEW]]
+- [[#enable-disabled][ENABLE DISABLED]]
+- [[#encoding][ENCODING]]
+- [[#hide-show][HIDE SHOW]]
+- [[#history][HISTORY]]
+- [[#indentation][INDENTATION]]
+- [[#interface][INTERFACE]]
+- [[#lockfiles][LOCKFILES]]
+- [[#macos-modifiers][MACOS MODIFIERS]]
+- [[#mark-repeat-pop][MARK REPEAT POP]]
+- [[#message-size][MESSAGE SIZE]]
+- [[#misc][MISC]]
+- [[#modeline][MODELINE]]
+- [[#newline][NEWLINE]]
+- [[#personal-info][PERSONAL INFO]]
+- [[#pretty-symbols][PRETTY SYMBOLS]]
+- [[#registers][REGISTERS]]
+- [[#saveplace][SAVEPLACE]]
+- [[#scrolling][SCROLLING]]
+- [[#show-paren][SHOW PAREN]]
+- [[#startup][STARTUP]]
+- [[#tramp][TRAMP]]
+- [[#truncate-lines][TRUNCATE LINES]]
+- [[#undo-limit][UNDO LIMIT]]
+- [[#version-control][VERSION CONTROL]]
+- [[#windmove][WINDMOVE]]
+- [[#yes-or-no][YES OR NO]]
+
+* APROPOS
+
+#+BEGIN_QUOTE
+The apropos commands answer questions like, “What are the commands for
+working with files?” More precisely, you specify an apropos pattern,
+which means either a word, a list of words, or a regular expression.
+
+If the variable apropos-do-all is non-nil, most apropos commands
+behave as if they had been given a prefix argument. There is one
+exception: apropos-variable without a prefix argument will always
+search for all variables, no matter what the value of apropos-do-all
+is.
+
+-- [[help:apropos-do-all][Help Page]]
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+  (setq apropos-do-all t)
+#+END_SRC
+
+* AUTO REVERT
+
+#+BEGIN_QUOTE
+Global Auto Revert mode is a global minor mode that reverts any buffer
+associated with a file when the file changes on disk.  Use
+‘auto-revert-mode’ to revert a particular buffer.
+
+-- [[help:global-auto-revert-mode][Help Page]]
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+  (global-auto-revert-mode 1)
+#+END_SRC
+
+* AUTO SAVE
+
+#+BEGIN_QUOTE
+Transforms to apply to buffer file name before making auto-save file
+name.  Each transform is a list (REGEXP REPLACEMENT UNIQUIFY): REGEXP
+is a regular expression to match against the file name.  If it
+matches, ‘replace-match’ is used to replace the matching part with
+REPLACEMENT.
+
+If the optional element UNIQUIFY is non-nil, the auto-save file name
+is constructed by taking the directory part of the replaced file-name,
+concatenated with the buffer file name with all directory separators
+changed to ‘!’ to prevent clashes.  This will not work correctly if
+your filesystem truncates the resulting name.
+
+All the transforms in the list are tried, in the order they are
+listed.  When one transform applies, its result is final; no further
+transforms are tried.
+
+-- [[help:auto-save-file-name-transforms][Help Page]]
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+  (setq auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)))
+#+END_SRC
+
+#+BEGIN_QUOTE
+Number of seconds idle time before auto-save.  Zero or nil means
+disable auto-saving due to idleness.  After auto-saving due to this
+many seconds of idle time, Emacs also does a garbage collection if
+that seems to be warranted.
+
+-- [[help:auto-save-timeout][Help Page]]
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+  (setq auto-save-timeout 5)
+#+END_SRC
+
+* AUTO WINDOW
+
+[[https://emacs.stackexchange.com/questions/28736/emacs-pointcursor-movement-lag/28746][Scrolling lag bug on StackExchange]]
+
+[[https://lists.gnu.org/archive/html/emacs-devel/2006-09/msg00814.html][Mailing List discussion]]
+
+#+BEGIN_QUOTE
+Non-nil means to automatically adjust ‘window-vscroll’ to view tall
+lines.
+
+-- [[help:auto-window-vscroll][Help Page]]
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+(setq auto-window-vscroll nil)
+#+END_SRC
+
+* BACKUP
+
+#+BEGIN_QUOTE
+Alist of filename patterns and backup directory names.
+Each element looks like (REGEXP . DIRECTORY).  Backups of files with
+names matching REGEXP will be made in DIRECTORY.  DIRECTORY may be
+relative or absolute.  If it is absolute, so that all matching files
+are backed up into the same directory, the file names in this
+directory will be the full name of the file backed up with all
+directory separators changed to ‘!’ to prevent clashes.  This will not
+work correctly if your filesystem truncates the resulting name.
+
+For the common case of all backups going into one directory, the alist
+should contain a single element pairing "." with the appropriate
+directory name.
+
+If this variable is nil, or it fails to match a filename, the backup
+is made in the original file’s directory.
+
+-- [[help:backup-directory-alist][Help Page]]
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+  (setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
+#+END_SRC
+
+#+BEGIN_QUOTE
+Non-nil means always use copying to create backup files.
+See documentation of variable ‘make-backup-files’.
+
+-- [[help:backup-by-copying][Help Page]]
+
+Non-nil means make a backup of a file the first time it is saved.
+This can be done by renaming the file or by copying.
+
+Renaming means that Emacs renames the existing file so that it is a
+backup file, then writes the buffer into a new file.  Any other names
+that the old file had will now refer to the backup file.  The new file
+is owned by you and its group is defaulted.
+
+Copying means that Emacs copies the existing file into the backup
+file, then writes the buffer on top of the existing file.  Any other
+names that the old file had will now refer to the new (edited) file.
+The file’s owner and group are unchanged.
+
+-- [[help:make-backup-files][make-backup-files Help Page]]
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+  (setq backup-by-copying t) ;; copy files, don't rename them.
+#+END_SRC
+
+#+BEGIN_QUOTE
+If t, delete excess backup versions silently.  If nil, ask
+confirmation.  Any other value prevents any trimming.
+
+-- [[help:delete-old-versions][Help Page]]
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+  (setq delete-old-versions t)
+#+END_SRC
+
+#+BEGIN_QUOTE
+Number of newest versions to keep when a new numbered backup is made.
+Includes the new backup.  Must be > 0
+
+-- [[help:kept-new-versions][Help Page]]
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+  (setq kept-new-versions 12)
+#+END_SRC
+
+#+BEGIN_QUOTE
+Number of oldest versions to keep when a new numbered backup is made.
+
+-- [[help:kept-old-versions][Help Page]]
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+  (setq kept-old-versions 12)
+#+END_SRC
+
+* BELL
+
+#+BEGIN_QUOTE
+ring-bell-function is a variable defined in ‘C source code’.  Its
+value is ‘ignore’ Original value was nil
+
+This variable may be risky if used as a file-local variable.
+
+Documentation: Non-nil means call this function to ring the bell.  The
+function should accept no arguments.
+
+-- [[help:ring-bell-function][Help Page]]
+#+END_QUOTE
+
+#+BEGIN_QUOTE
+Non-nil means try to flash the frame to represent a bell.
+
+-- [[help:visible-bell][Help Page]]
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+  (setq ring-bell-function 'ignore)
+  ;; (setq visible-bell 1)
+#+END_SRC
+
+* BOOKMARKS
+
+#+BEGIN_QUOTE
+Controls when Emacs saves bookmarks to a file.
+
+--> nil means never save bookmarks, except when ‘bookmark-save’ is
+    explicitly called (M-x bookmark-save).
+
+--> t means save bookmarks when Emacs is killed.
+
+--> Otherwise, it should be a number that is the frequency with which
+    the bookmark list is saved (i.e.: the number of times which
+    Emacs’s bookmark list may be modified before it is automatically
+    saved.).  If it is a number, Emacs will also automatically save
+    bookmarks when it is killed.
+
+Therefore, the way to get it to save every time you make or delete a
+bookmark is to set this variable to 1 (or 0, which produces the same
+behavior.)
+
+To specify the file in which to save them, modify the variable
+‘bookmark-default-file’.
+
+-- [[help:bookmark-save-flag][Help Page]]
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+  (setq bookmark-save-flag 1)
+#+END_SRC
+
+* COPY/PASTE
+
+#+BEGIN_QUOTE
+If non-nil, mouse yank commands yank at point instead of at click.
+
+-- [[help:mouse-yank-at-point][Help Page]]
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+  (setq mouse-yank-at-point t)
+#+END_SRC
+
+#+BEGIN_QUOTE
+Save clipboard strings into kill ring before replacing them.  When one
+selects something in another program to paste it into Emacs, but kills
+something in Emacs before actually pasting it, this selection is gone
+unless this variable is non-nil, in which case the other program’s
+selection is saved in the ‘kill-ring’ before the Emacs kill and one
+can still paste it using C-y M-y.
+
+-- [[help:save-interprogram-paste-before-kill][Help Page]]
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+  (setq save-interprogram-paste-before-kill t)
+#+END_SRC
+
+#+BEGIN_QUOTE
+Non-nil means cutting and pasting uses the clipboard.
+This can be in addition to, but in preference to, the primary selection,
+if applicable (i.e. under X11).
+
+-- [[help:select-enable-clipboard][Help Page]]
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+  (setq select-enable-clipboard t)
+#+END_SRC
+
+#+BEGIN_QUOTE
+Non-nil means cutting and pasting uses the primary selection The
+existence of a primary selection depends on the underlying GUI you
+use.  E.g. it doesn’t exist under MS-Windows.
+
+-- [[help:select-enable-primary][Help Page]]
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+  (setq select-enable-primary t)
+#+END_SRC
+
+* CUSTOM FIlE
+
+#+BEGIN_QUOTE
+File used for storing customization information.  The default is nil,
+which means to use your init file as specified by ‘user-init-file’.
+If the value is not nil, it should be an absolute file name.
+
+You can set this option through Custom, if you carefully read the last
+paragraph below.  However, usually it is simpler to write something
+like the following in your init file:
+
+=(setq custom-file "~/.emacs-custom.el")=
+=(load custom-file)=
+
+Note that both lines are necessary: the first line tells Custom to
+save all customizations in this file, but does not load it.
+
+When you change this variable outside Custom, look in the previous
+custom file (usually your init file) for the forms
+‘(custom-set-variables ...)’  and ‘(custom-set-faces ...)’, and copy
+them (whichever ones you find) to the new custom file.  This will
+preserve your existing customizations.
+
+If you save this option using Custom, Custom will write all currently
+saved customizations, including the new one for this option itself,
+into the file you specify, overwriting any ‘custom-set-variables’ and
+‘custom-set-faces’ forms already present in that file.  It will not
+delete any customizations from the old custom file.  You should do
+that manually if that is what you want.  You also have to put
+something like (load "CUSTOM-FILE") in your init file, where
+CUSTOM-FILE is the actual name of the file.  Otherwise, Emacs will not
+load the file when it starts up, and hence will not set ‘custom-file’
+to that file either.
+
+-- [[help:custom-file][Help Page]]
+#+END_QUOTE
+
+#+BEGIN_QUOTE
+Create a temporary file.
+The returned file name (created by appending some random characters at the end
+of PREFIX, and expanding against ‘temporary-file-directory’ if necessary),
+is guaranteed to point to a newly created empty file.
+You can then use ‘write-region’ to write new data into the file.
+
+If DIR-FLAG is non-nil, create a new empty directory instead of a file.
+
+If SUFFIX is non-nil, add that at the end of the file name.
+
+-- [[help:make-temp-file][Help Page]]
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+  (setq custom-file (make-temp-file "emacs-custom"))
+#+END_SRC
+
+* DEFAULT FRAME
+
+#+BEGIN_QUOTE
+Alist of default values for frame creation.
+
+These may be set in your init file, like this:
+
+=(setq default-frame-alist '((width . 80) (height . 55) (menu-bar-lines . 1)))=
+
+These override values given in window system configuration data,
+including X Windows’ defaults database.
+
+For values specific to the first Emacs frame, see [[help:initial-frame-alist][initial-frame-alist]].
+
+For window-system specific values, see
+[[help:window-system-default-frame-alist][window-system-default-frame-alist]].  For values specific to the
+separate minibuffer frame, see [[help:minibuffer-frame-alist][minibuffer-frame-alist]].
+
+The ‘menu-bar-lines’ element of the list controls whether new frames
+have menu bars; ‘menu-bar-mode’ works by altering this
+element. Setting this variable does not affect existing frames, only
+new ones.
+
+-- [[help:default-frame-alist][Help Page]]
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+  (setq default-frame-alist '((fullscreen . maximized)
+                              (vertical-scroll-bars . nil)))
+#+END_SRC
+
+#+BEGIN_QUOTE
+Non-nil means resize frames pixelwise.
+If this option is nil, resizing a frame rounds its sizes to the frame’s
+current values of ‘frame-char-height’ and ‘frame-char-width’.  If this
+is non-nil, no rounding occurs, hence frame sizes can increase/decrease
+by one pixel.
+
+With some window managers you may have to set this to non-nil in order
+to set the size of a frame in pixels, to maximize frames or to make them
+fullscreen.  To resize your initial frame pixelwise, set this option to
+a non-nil value in your init file.
+
+-- [[help:frame-resize-pixelwise][Help Page]]
+#+END_QUOTE
+
+I set this at some point to fix [[https://github.com/LEONID-DOROGIN/PCSI/issues/8][a bug]] in [[https://joewing.net/projects/jwm/][jwm]] detailed [[https://github.com/LEONID-DOROGIN/PCSI/issues/8][here]].
+
+#+BEGIN_SRC emacs-lisp
+  (setq frame-resize-pixelwise t) ;; jwm resize fix
+#+END_SRC
+* DOC VIEW
+
+#+BEGIN_QUOTE
+In Continuous mode reaching the page edge advances to next/previous
+page.  When non-nil, scrolling a line upward at the bottom edge of the
+page moves to the next page, and scrolling a line downward at the top
+edge of the page moves to the previous page.
+
+-- [[help:doc-view-continuous][Help Page]]
+#+END_QUOTE
+
+#+BEGIN_QUOTE
+Dots per inch resolution used to render the documents.  Higher values
+result in larger images.
+
+-- [[help:doc-view-resolution][Help Page]]
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+  (setq doc-view-continuous t
+        doc-view-resolution 300)
+#+END_SRC
+
+* ENABLE DISABLED
+
+#+BEGIN_QUOTE
+Function to call to handle disabled commands.  If nil, the feature is
+disabled, i.e., all commands work normally.
+
+-- [[help:disabled-command-function][Help Page]]
+#+END_QUOTE
+
+*Disabled Commands:*
+
+- set-goal-column
+- narrow-to-region
+- upcase-region
+- downcase-region
+- scroll-left
+- erase-buffer
+
+#+BEGIN_SRC emacs-lisp
+  (setq disabled-command-function nil)
+#+END_SRC
+
+* ENCODING
+
+#+BEGIN_SRC emacs-lisp
+  (setq-default buffer-file-coding-system 'utf-8-unix)
+  (setq-default default-buffer-file-coding-system 'utf-8-unix)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (setq coding-system-for-read 'utf-8-unix)
+  (setq coding-system-for-write 'utf-8-unix)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (set-language-environment "UTF-8")
+  (set-default-coding-systems 'utf-8-unix)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (prefer-coding-system 'utf-8-unix)
+#+END_SRC
+
+* HIDE SHOW
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'prog-mode-hook 'hs-minor-mode)
+#+END_SRC
+* HISTORY
+#+BEGIN_SRC emacs-lisp
+  (savehist-mode 1)
+  (setq savehist-additional-variables
+        '(kill-ring search-ring regexp-search-ring))
+  (setq savehist-save-minibuffer-history 1)
+  (setq history-length t)
+  (setq history-delete-duplicates t)
+#+END_SRC
+* INDENTATION
+#+BEGIN_SRC emacs-lisp
+  (setq c-default-style "bsd")
+  (setq c-basic-offset 4)
+  (setq js-indent-level 2)
+  (setq css-indent-offset 2)
+#+END_SRC
+* INTERFACE
+
+#+BEGIN_QUOTE
+Return t if SYMBOL’s function definition is not void.
+
+-- [[help:fboundp][fboundp Help Page]]
+#+END_QUOTE
+
+Turn off menu bar mode if bound, unless we are on macos, in which case
+it's hidden in the global menu-bar so doesn't take up any space anyway.
+
+#+BEGIN_SRC emacs-lisp
+  (unless (eq system-type 'darwin)
+    (when (fboundp 'menu-bar-mode)
+      (menu-bar-mode -1)))
+#+END_SRC
+
+Turn off scrollbar if bound.
+
+#+BEGIN_SRC emacs-lisp
+  (when (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
+#+END_SRC
+
+Turn off toolbar if bound.
+
+#+BEGIN_SRC emacs-lisp
+  (when (fboundp 'tool-bar-mode) (tool-bar-mode -1))
+#+END_SRC
+
+Turn off tooltips if bound.
+
+#+BEGIN_SRC emacs-lisp
+  (when (fboundp 'tooltip-mode) (tooltip-mode -1))
+#+END_SRC
+
+* LOCKFILES
+#+BEGIN_SRC emacs-lisp
+  (setq create-lockfiles nil) ;; prevent creation of .#myfile.ext
+#+END_SRC
+* MACOS MODIFIERS
+#+BEGIN_SRC emacs-lisp
+  (when (eq system-type 'darwin) ;; mac specific settings
+    (setq mac-option-modifier 'meta)
+    ;; (setq mac-command-modifier 'control)
+    ;; (setq mac-control-modifier 'super)
+    ;; (setq mac-function-modifier 'hyper)
+    (global-set-key [kp-delete] 'delete-char))
+#+END_SRC
+* MARK REPEAT POP
+#+BEGIN_SRC emacs-lisp
+  (setq set-mark-command-repeat-pop t) ;; repeating C-SPC after popping, pops it
+#+END_SRC
+* MESSAGE SIZE
+
+Increase the number of messages in the Messages buffer.
+
+#+BEGIN_SRC emacs-lisp
+(setq message-log-max 10000)
+#+END_SRC
+* MISC
+#+BEGIN_SRC emacs-lisp
+  (setq load-prefer-newer t) ;; if init.elc is older, use newer init.el
+  (pending-delete-mode 1) ;; remove selected region if typing
+#+END_SRC
+* MODELINE
+#+BEGIN_SRC emacs-lisp
+  (column-number-mode t)
+  (setq display-time-format "%H:%M %d/%m/%y")
+  (display-time-mode 1)
+  (display-battery-mode 1)
+  (size-indication-mode t)
+#+END_SRC
+* NEWLINE
+#+BEGIN_SRC emacs-lisp
+  (setq require-final-newline t) ;; useful for crontab
+#+END_SRC
+* PERSONAL INFO
+#+BEGIN_SRC emacs-lisp
+  (setq user-full-name "Toby Slight"
+        user-mail-address "tobyslight@gmail.com")
+#+END_SRC
+* PRETTY SYMBOLS
+#+BEGIN_SRC emacs-lisp
+  (setq prettify-symbols-unprettify-at-point 'right-edge)
+  (global-prettify-symbols-mode 0)
+#+END_SRC
+* REGISTERS
+#+BEGIN_SRC emacs-lisp
+  (set-register ?h (cons 'file "~/"))
+  (set-register ?g (cons 'file "~/git"))
+  (set-register ?o (cons 'file "~/org"))
+  (set-register ?t (cons 'file "~/org/todo.org"))
+  (set-register ?n (cons 'file "~/org/notes.org"))
+  (set-register ?j (cons 'file "~/org/journal.org"))
+  (set-register ?b (cons 'file "~/Documents/bbk"))
+  (set-register ?i (cons 'file "~/git/etc/agnostic/emacs.org"))
+#+END_SRC
+* SAVEPLACE
+#+BEGIN_SRC emacs-lisp
+  (save-place-mode 1)
+  (setq save-place-file (concat user-emacs-directory "saveplace.el"))
+#+END_SRC
+* SCROLLING
+#+BEGIN_SRC emacs-lisp
+  ;; Moving cursor down at bottom scrolls only a single line, not half page
+  (setq scroll-step 4)
+  (setq scroll-margin 6)
+  (setq scroll-conservatively 8)
+#+END_SRC
+* SHOW PAREN
+
+#+BEGIN_QUOTE
+Toggle visualization of matching parens (Show Paren mode).  With a
+prefix argument ARG, enable Show Paren mode if ARG is positive, and
+disable it otherwise.  If called from Lisp, enable the mode if ARG is
+omitted or nil.
+
+Show Paren mode is a global minor mode.  When enabled, any matching
+parenthesis is highlighted in ‘show-paren-style’ after
+‘show-paren-delay’ seconds of Emacs idle time.
+
+-- [[help:show-paren-mode][Help Page]]
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+  (show-paren-mode 1)
+#+END_SRC
+
+* STARTUP
+
+#+BEGIN_QUOTE
+Non-nil inhibits the initial startup echo area message.
+
+The startup message is in the echo area as it provides information
+about GNU Emacs and the GNU system in general, which we want all
+users to see.  As this is the least intrusive startup message,
+this variable gets specialized treatment to prevent the message
+from being disabled site-wide by systems administrators, while
+still allowing individual users to do so.
+
+Setting this variable takes effect only if you do it with the
+customization buffer or if your init file contains a line of this
+form:
+ (setq inhibit-startup-echo-area-message "YOUR-USER-NAME")
+If your init file is byte-compiled, use the following form
+instead:
+ (eval '(setq inhibit-startup-echo-area-message "YOUR-USER-NAME"))
+Thus, someone else using a copy of your init file will see the
+startup message unless he personally acts to inhibit it.
+
+-- [[help:inhibit-startup-echo-area-message][Help Page]]
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+  (setq inhibit-startup-echo-area-message t)
+#+END_SRC
+
+#+BEGIN_QUOTE
+Non-nil inhibits the startup screen.
+
+This is for use in your personal init file (but NOT site-start.el),
+once you are familiar with the contents of the startup screen.
+
+-- [[help:inhibit-startup-screen][Help Page]]
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+  (setq inhibit-startup-screen t)
+#+END_SRC
+
+#+BEGIN_QUOTE
+Initial documentation displayed in *scratch* buffer at startup.
+If this is nil, no message will be displayed.
+
+-- [[help:initial-scratch-message][Help Page]]
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+  (setq initial-scratch-message nil)
+#+END_SRC
+
+#+BEGIN_QUOTE
+Major mode command symbol to use for the initial ‘*scratch*’ buffer.
+
+-- [[help:initial-major-mode][Help Page]]
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+  (setq initial-major-mode 'fundamental-mode)
+#+END_SRC
+
+* TRAMP
+#+BEGIN_SRC emacs-lisp
+  (setq tramp-backup-directory-alist backup-directory-alist)
+  (setq tramp-default-method "ssh")
+#+END_SRC
+* TRUNCATE LINES
+#+BEGIN_SRC emacs-lisp
+  (set-default 'truncate-lines t)
+#+END_SRC
+* UNDO LIMIT
+#+BEGIN_SRC emacs-lisp
+  (setq undo-limit 150000)
+  (setq undo-strong-limit 300000)
+#+END_SRC
+* VERSION CONTROL
+#+BEGIN_SRC emacs-lisp
+  (setq vc-follow-symlinks t)
+  (setq vc-make-backup-files t)
+  (setq version-control t)
+#+END_SRC
+* WINDMOVE
+#+BEGIN_SRC emacs-lisp
+  (windmove-default-keybindings 'control)
+#+END_SRC
+* YES OR NO
+#+BEGIN_SRC emacs-lisp
+  (fset 'yes-or-no-p 'y-or-n-p) ;; never have to type full word
+#+END_SRC

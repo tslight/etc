@@ -1,0 +1,31 @@
+#+TITLE: AUTOHOTKEY SCRIPTS
+#+PROPERTY: header-args :cache yes
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :tangle-mode (identity #o600)
+#+PROPERTY: header-args+ :results silent
+#+PROPERTY: header-args+ :padline no
+* SWITCH CTRL TAB WITH ALT TAB
+#+BEGIN_SRC ahk :tangle "~/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup/swap_ctrl-tab_alt_tab.ahk"
+  #NoEnv                       ; Recommended for performance and compatibility with future AutoHotkey releases.
+  #Warn                        ; Enable warnings to assist with detecting common errors.
+
+  SendMode Input               ; Recommended for new scripts due to its superior speed and reliability.
+  SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
+
+  ;!Tab::Send {LCtrl down}{Tab}{LCtrl up}
+  ;!+Tab::Send {Shift down}{LCtrl down}{Tab}{LCtrl up}{Shift up}
+
+  ^Tab::Send, {LAlt Down}{Tab}
+  #If WinExist("ahk_class MultitaskingViewFrame")
+  Ctrl Up::Send, {LAlt Up}
+
+  !Tab::Return
+  !+Tab::Return
+
+  ^q::Send !{F4}
+  Return
+#+END_SRC
+* EMACS EVERYWHERE
+#+BEGIN_SRC ahk :tangle "~/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup/emacs_everywhere.ahk"
+
+#+END_SRC

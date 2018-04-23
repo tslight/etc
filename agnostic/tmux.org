@@ -1,0 +1,55 @@
+#+PROPERTY: header-args :cache yes
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :tangle-mode (identity #o600)
+#+PROPERTY: header-args+ :results silent
+#+PROPERTY: header-args+ :padline no
+#+BEGIN_SRC conf :tangle ~/.tmux.conf
+  ## MISC
+  set -g base-index 1
+  set -g pane-base-index 1
+  set -g history-limit 42420
+  set -g renumber-windows on
+  set -g set-titles on
+  set -g set-titles-string "#T: [#S] #I: #W: #P"
+  set -g mode-keys vi
+
+  ## COLORS
+  set -g message-bg default
+  set -g message-fg brightgreen
+  set -g mode-bg default
+  set -g mode-fg brightgreen
+  set -g status-bg default
+  set -g status-fg brightgreen
+  set -g window-status-attr bold
+  set -g window-status-current-attr underscore
+
+  ## STATUS
+  set -g status-interval 60
+  set -g status-left "[#S] "
+  set -g status-left-length 50
+  set -g status-right "%H:%M %a %d/%m/%y"
+  set -g status-right-length 50
+  set -g window-status-current-format "#I: #W.#P*"
+
+  ## MOUSE
+  set -g mouse on
+  bind -n MouseDown2Status copy-mode
+
+  ## KEYS
+  # unbind C-b
+  # set -g prefix C-j
+  # bind C-j send-prefix
+  bind C-l switch-client -l
+  bind C-c new-session
+  bind C-x kill-session
+  bind C-r source-file ~/.tmux.conf
+  bind C neww -n cmus cmus
+  bind e neww -n emacs 'emacsclient -nw -c -a ""'
+  bind E neww -n emacs 'emacs -nw'
+  bind H neww -n htop htop
+  bind r neww -n fm ranger
+  bind R neww -n sfm 'sudo ranger'
+  bind M-r neww -n dl rtorrent
+  bind S neww -n su su
+  bind t splitw -h -p 42 top
+#+END_SRC

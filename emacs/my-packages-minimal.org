@@ -1,0 +1,423 @@
+#+TITLE: MINIMAL PACKAGE CONFIGURATION
+#+AUTHOR: Toby Slight
+
+#+PROPERTY: header-args :cache yes
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :padline no
+#+PROPERTY: header-args+ :results silent
+#+PROPERTY: header-args+ :tangle ~/.emacs.d/site-lisp/my-packages-minimal.el
+#+PROPERTY: header-args+ :tangle-mode (identity #o600)
+
+#+OPTIONS: toc:t
+
+Please see the [[file:README.org][README]] and/or [[file:my-tangles.org][my-tangles.org]] for instructions on how to
+install.
+
+This file contains the configuration for third-party MELPA packages I
+can't really live without.
+
+Sometimes, I just want to have nice minimal Emacs setup, in which case
+I set the :tangle no flag on the [[help:use-package][use-package]] [[file:my-packages-full.org][my-packages-full]]
+declaration in [[file:my-packages.org][my-packages]].
+
+* CONTENTS                                                         :TOC_5_gh:
+- [[#ace-window][ACE WINDOW]]
+- [[#bind-key][BIND-KEY]]
+- [[#counsel][COUNSEL]]
+- [[#hydra][HYDRA]]
+- [[#ivy][IVY]]
+- [[#magit][MAGIT]]
+- [[#undo-tree][UNDO TREE]]
+
+* ACE WINDOW
+
+#+BEGIN_QUOTE
+*What and why*
+
+I'm sure you're aware of the other-window command. While it's great
+for two windows, it quickly loses its value when there are more
+windows. You need to call it many times, and since it's not easily
+predictable, you have to check each time if you're in the window that
+you wanted.
+
+Another approach is to use windmove-left, windmove-up, etc. These are
+fast and predictable. Their disadvantage is that they need 4 key
+bindings. The default ones are shift+arrows, which are hard to reach.
+
+This package aims to take the speed and predictability of windmove and
+pack it into a single key binding, similar to other-window.
+
+*Setup*
+
+Just assign ace-window to a short key binding, as switching windows is
+a common task. I suggest M-o, as it's short and not bound to anything
+important in the default Emacs.
+
+*Usage*
+
+When there are two windows, ace-window will call other-window (unless
+aw-dispatch-always is set non-nil). If there are more, each window
+will have the first character of its window label highlighted at the
+upper left of the window. Pressing that character will either switch
+to that window or filter to the next character needed to select a
+specific window. Note that, unlike ace-jump-mode, the position of
+point will not be changed, i.e. the same behavior as that of
+other-window.
+
+A special character defined by aw-make-frame-char (default = z) means
+create a new frame and use its window as the target. The new frame's
+location is set relative to the prior selected frame's location and
+given by aw-frame-offset. The new frame's size is given by
+aw-frame-size. See their documentation strings for more information.
+
+The windows are ordered top-down, left-to-right. This means that if
+you remember your window layouts, you can switch windows without even
+looking at the leading char. For instance, the top left window will
+always be 1 (or a if you use letters for window characters).
+
+-- [[https://github.com/abo-abo/ace-window][Abo-Abo GitHub Link]]
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package ace-window
+    :after bind-key
+    :ensure t
+    :bind
+    ("C-x o" . ace-window)
+    ("C-x 0" . ace-delete-window)
+    ("C-x 1" . ace-delete-other-windows)
+    :config
+    (set-face-attribute 'aw-leading-char-face nil :foreground "deep sky blue" :weight 'bold :height 3.0)
+    (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
+#+END_SRC
+
+* BIND-KEY
+
+#+BEGIN_QUOTE
+To bind multiple keys in a `bind-key*' way (to be sure that your
+bindings will not be overridden by other modes), you may use
+`bind-keys*' macro:
+
+-- [[https://emacs.stackexchange.com/questions/352/how-to-override-major-mode-bindings][How to override major-mode bindings]]
+#+END_QUOTE
+
+#+BEGIN_QUOTE
+=:bind*=
+
+Bind keys, and define autoloads for the bound commands,
+*overriding all minor mode bindings*.
+
+-- [[help:use-package][Help Page]]
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package bind-key
+    :demand t
+    :bind*
+    ("C-c i" . imenu)
+    ;; evaluation keymap
+    ("C-x C-e" . pp-eval-last-sexp)
+    ("C-c e s" . pp-eval-last-sexp)
+    ("C-c e f" . eval-defun)
+    ("C-c e c" . eval-current-buffer)
+    ("C-c e b" . eval-buffer)
+    ("C-c e e" . pp-eval-expression)
+    ("C-c e r" . eval-region)
+    ("C-c e m" . lisp-interaction-mode)
+    ;; org mode keymap
+    ("C-c o a" . org-agenda)
+    ("C-c o c" . org-capture)
+    ;; toggle bindings
+    ("C-c t a" . toggle-text-mode-autofill)
+    ("C-c t d e" . toggle-debug-on-error)
+    ("C-c t d E" . toggle-debug-on-entry)
+    ("C-c t d q" . toggle-debug-on-quit)
+    ("C-c t l" . linum-mode)
+    ("C-c t t" . toggle-truncate-lines)
+    ("C-c t C-t" . (lambda () (interactive) (mapc #'disable-theme custom-enabled-themes)))
+    ;; emacs space rebindings
+    ("C-:" . pp-eval-expression)
+    ("C-;" . comment-line)
+    ("M-;" . comment-or-uncomment-region)
+    ("C-x C" . save-buffers-kill-emacs)
+    ("C-x C-S-J" . dired-jump-other-window)
+    ("C-x C-b" . ibuffer)
+    ("C-x C-j" . dired-jump)
+    ("C-x j" . jump-to-register)
+    ("C-x K" . kill-buffer)
+    ("C-x k" . kill-this-buffer)
+    ("C-x p" . pop-to-mark-command)
+    ("M-/" . hippie-expand)
+    ("M-SPC" . cycle-spacing)
+    ;; spacecadet rebindings
+    ("C-w" . kill-ring-save)
+    ("M-w" . kill-region)
+    ("C-c x" . execute-extended-command)
+    ("C-<" . beginning-of-buffer)
+    ("C->" . end-of-buffer)
+    ("C-(" . insert-parentheses)
+    ("C-)" . move-past-close-and-reindent)
+    ("C-^" . delete-indentation)
+    ("C-%" . query-replace)
+    ("C-$" . ispell-word)
+    ("C-!" . shell-command)
+    ("C-~" . not-modified)
+    ("C-S-v" . scroll-other-window)
+    ("C-M-v" . scroll-other-window-down)
+    ;; function keys
+    ("<f6>" . desktop-read)
+    ("S-<f6>" . desktop-save)
+    ("S-<f10>" . menu-bar-mode)
+    ("C-<f10>" . toggle-frame-maximized)
+    ("C-<f11>" . toggle-frame-fullscreen))
+#+END_SRC
+
+* COUNSEL
+
+#+BEGIN_QUOTE
+Toggle Counsel mode on or off.
+
+Turn Counsel mode on if ARG is positive, off otherwise. Counsel mode
+remaps built-in emacs functions that have counsel replacements.
+
+-- [[help:counsel-mode][Help Page]]
+#+END_QUOTE
+
+#+BEGIN_QUOTE
+ivy-mode ensures that any Emacs command using completing-read-function
+uses ivy for completion.
+
+Counsel takes this further, providing versions of common Emacs
+commands that are customised to make the best use of ivy. For example,
+counsel-find-file has some additional keybindings. Pressing DEL will
+move you to the parent directory.
+
+Enabling counsel-mode remaps built-in Emacs functions that have
+counsel replacements:
+
+|--------------------------+----------------------------|
+| Emacs command            | Counsel equivalent         |
+|--------------------------+----------------------------|
+| execute-extended-command | counsel-M-x                |
+| describe-bindings        | counsel-descbinds          |
+| describe-function        | counsel-describe-function  |
+| describe-variable        | counsel-describe-variable  |
+| describe-face            | counsel-describe-face      |
+| list-faces-display       | counsel-faces              |
+| find-file                | counsel-find-file          |
+| find-library             | counsel-find-library       |
+| imenu                    | counsel-imenu              |
+| load-library             | counsel-load-library       |
+| load-theme               | counsel-load-theme         |
+| yank-pop                 | counsel-yank-pop           |
+| info-lookup-symbol       | counsel-info-lookup-symbol |
+| pop-to-mark-command      | counsel-mark-ring          |
+| bookmark-jump            | counsel-bookmark           |
+|--------------------------+----------------------------|
+
+-- [[https://github.com/abo-abo/swiper][Abo-Abo GitHub]]
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package counsel
+    :ensure t
+    :diminish
+    :bind
+    ("C-x C-f" . counsel-find-file)
+    ("M-x" . counsel-M-x)
+    ("M-y" . counsel-yank-pop)
+    ("C-h a" . counsel-apropos)
+    ("C-h f" . counsel-describe-function)
+    ("C-h v" . counsel-describe-variable)
+    ("C-h l" . counsel-load-library)
+    ("C-h i" . counsel-info-lookup-symbol)
+    ("C-h u" . counsel-unicode-char)
+    ("C-c g" . counsel-git)
+    ("C-c C-g" . counsel-git-grep)
+    ("C-c M-g" . counsel-ag)
+    ("C-c l" . counsel-locate)
+    ("C-x r b" . counsel-bookmark)
+    ("C-c f l" . counsel-find-library)
+    ("C-c f f" . counsel-file-jump)
+    ("C-c f j" . counsel-dired-jump)
+    :config
+    (counsel-mode 1))
+#+END_SRC
+
+* HYDRA
+
+#+BEGIN_QUOTE
+This is a package for GNU Emacs that can be used to tie related
+commands into a family of short bindings with a common prefix - a
+Hydra.
+
+*Description for Poets*
+
+Once you summon the Hydra through the prefixed binding (the body + any
+one head), all heads can be called in succession with only a short
+extension.
+
+The Hydra is vanquished once Hercules, any binding that isn't the
+Hydra's head, arrives. Note that Hercules, besides vanquishing the
+Hydra, will still serve his original purpose, calling his proper
+command. This makes the Hydra very seamless, it's like a minor mode
+that disables itself auto-magically.
+
+-- [[https://github.com/abo-abo/hydra][Abo-Abo GitHub]]
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package hydra
+    :ensure t
+    :defer t
+    :config
+    (use-package hydra-examples
+      :defer t)
+
+    (defhydra hydra-buffers (:idle 1.0)
+      "BUFFERS"
+      ("b" my/last-buffer "last" :exit t)
+      ("C-b" my/last-buffer)
+      ("n" next-buffer "next")
+      ("C-n" next-buffer :exit t)
+      ("p" previous-buffer "prev")
+      ("C-p" previous-buffer :exit t)
+      ("i" my/indent-buffer "indent" :exit t)
+      ("C-i" my/indent-buffer)
+      ("k" my/nuke-buffers "nuke" :exit t)
+      ("C-k" my/nuke-buffers)
+      ("q" my/fill-buffer "fill" :exit t)
+      ("C-q" my/fill-buffer )
+      ("s" my/save-buffers-silently "save" :exit t)
+      ("C-s" my/save-buffers-silently)
+      ("g" nil "cancel")
+      ("<escape>" nil "cancel"))
+
+    (defhydra hydra-marks (:idle 1.0)
+      "MARK"
+      ("m" counsel-mark-ring :exit t)
+      ("p" my/push-mark-no-activate "push" :exit t)
+      ("j" my/jump-to-mark "jump")
+      ("g" nil "cancel")
+      ("<escape>" nil "cancel"))
+
+    (defhydra hydra-windows (:idle 1.0)
+      "WINDOWS"
+      ("w" ace-window "ace" :exit t)
+      ("n" other-window "next")
+      ("N" other-window :exit t)
+      ("p" my/prev-window "prev")
+      ("P" m/prev-window :exit t)
+      ("v" split-window-right "split |" :exit t)
+      ("C-v" split-window-right)
+      ("h" split-window-below "split -" :exit t)
+      ("C-h" split-window-below)
+      ("H" my/hsplit-last-buffer "split last -" :exit t)
+      ("C-H" my/hsplit-last-buffer)
+      ("V" my/vsplit-last-buffer "split last |" :exit t)
+      ("C-V" my/vsplit-last-buffer)
+      ("l" my/last-window "last" :exit t)
+      ("x" ace-delete-window "delete" :exit t)
+      ("C-x" ace-delete-window)
+      ("m" ace-delete-other-windows "maximize" :exit t)
+      ("C-m" ace-delete-other-windows)
+      ("s" ace-swap-window "swap" :exit t)
+      ("C-s" ace-swap-window)
+      ("u" winner-undo "undo")
+      ("r" winner-redo "redo")
+      ("h" windmove-left "<-")
+      ("j" windmove-down "v")
+      ("k" windmove-up "^")
+      ("l" windmove-right "->")
+      ("C-h" hydra-move-splitter-left "resize <-")
+      ("C-j" hydra-move-splitter-down "resize v")
+      ("C-k" hydra-move-splitter-up "resize ^")
+      ("C-l" hydra-move-splitter-right "resize ->")
+      ("b" ivy-switch-buffer-other-window "buffer" :exit t)
+      ("d" dired-jump-other-window :exit t)
+      ("f" find-file-other-window "file" :exit t)
+      ("C-b" ivy-switch-buffer-other-window)
+      ("C-f" find-file-other-window)
+      ("C-d" dired-jump-other-window)
+      ("g" nil "cancel")
+      ("<escape>" nil "cancel"))
+
+    (defhydra hydra-zoom (:idle 1.0)
+      "ZOOM"
+      ("i" text-scale-increase "in")
+      ("o" text-scale-decrease "out")
+      ("g" nil "cancel")
+      ("<escape>" nil "cancel"))
+
+    :bind
+    ("C-c b" . hydra-buffers/body)
+    ("C-c m" . hydra-marks/body)
+    ("C-c w" . hydra-windows/body)
+    ("C-c z" . hydra-zoom/body))
+#+END_SRC
+
+* IVY
+
+#+BEGIN_SRC emacs-lisp
+  (use-package ivy
+    :ensure t
+    :diminish
+    :bind
+    ("C-x b" . ivy-switch-buffer)
+    ("C-r" . swiper)
+    ("C-s" . swiper)
+    ("C-S-s" . swiper-multi)
+    ("C-c C-r" . ivy-resume)
+    :config
+    (ivy-mode 1)
+    (setq ivy-wrap t)
+    (setq ivy-use-virtual-buffers t)
+    (setq ivy-height 20)
+    (setq ivy-initial-inputs-alist nil) ;; no ^
+    (setq ivy-re-builders-alist
+          '((swiper . ivy--regex-plus)
+            (t      . ivy--regex-fuzzy)))
+    (define-key ivy-minibuffer-map (kbd "C-s") 'ivy-next-line)
+    (define-key ivy-minibuffer-map (kbd "C-r") 'ivy-previous-line))
+#+END_SRC
+
+* MAGIT
+
+[[https://github.com/magit/magit/issues/2971][Batch operation wontfix]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package magit
+    :ensure t
+    :bind
+    ("C-x g g" . magit-status)
+    ("C-x g d" . magit-dispatch-popup)
+    ("C-x g l" . magit-list-repositories)
+    :init
+    (setq magit-repository-directories `(("~/" . 3)))
+    (setq magit-repolist-columns
+          '(("Name" 10 magit-repolist-column-ident nil)
+            ("Version" 25 magit-repolist-column-version nil)
+            ("Pull" 6 magit-repolist-column-unpulled-from-upstream)
+            ("Push" 6 magit-repolist-column-unpushed-to-upstream)
+            ("Commit" 8 magit-repolist-column-dirty)
+            ("Path" 99 magit-repolist-column-path nil)))
+    :config
+    (setq magit-completing-read-function 'ivy-completing-read))
+#+END_SRC
+
+* UNDO TREE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package undo-tree
+    :defer 4
+    :ensure t
+    :diminish undo-tree-mode
+    :bind
+    ("C-x u" . undo-tree-visualize)
+    :init
+    (global-undo-tree-mode 1)
+    :config
+    (setq undo-tree-auto-save-history t)
+    (setq undo-tree-history-directory-alist
+          `(("." . ,(expand-file-name "~/.emacs.d/undos/")))))
+#+END_SRC

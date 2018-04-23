@@ -1,0 +1,136 @@
+#+PROPERTY: header-args :cache yes
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :tangle-mode (identity #o600)
+#+PROPERTY: header-args+ :results silent
+#+PROPERTY: header-args+ :padline no
+* SUSPEND
+#+BEGIN_SRC sh :tangle /sudo::/etc/apm/suspend :tangle-mode (identity #o755)
+#!/bin/sh
+pkill -USR1 xidle
+#+END_SRC
+* CHARGING
+#+BEGIN_SRC sh :tangle /sudo::/etc/sensorsd/charging :tangle-mode (identity #o755)
+  #! /bin/sh
+
+  dbglog=/var/log/charging
+
+  logger=/usr/bin/logger
+
+  device=$1         # e.g. acpibat0
+  devtype=$2        # "watthour"
+  sensornum=$3      # e.g. "3"
+  curval=$4         # 1 = discharging, 2 = charging
+  lowlim_watthr=$5
+
+  date                                >> $dbglog
+  echo device        = $device        >> $dbglog
+  echo devtype       = $devtype       >> $dbglog
+  echo sensornum     = $sensornum     >> $dbglog
+  echo curval        = $curval        >> $dbglog
+  echo lowlim_watthr = $lowlim_watthr >> $dbglog
+
+  if [ "$curval" = "1" ]; then
+
+      # Run the discharging script with the appropriate parameters.
+      watthours=`sysctl -n hw.sensors.acpibat0.watthour3 | awk '{print $1}'`
+
+      if [ "$watthours" ]; then
+
+          /etc/apm/discharging "acpibat0" "watthour" "3" "$watthours" "Wh" "$lowlim_watthr" "Wh"
+
+      fi
+
+  elif [ "$curval" = "2" ]; then
+
+      # Charging.  We probably want to abort any shutdowns...
+      message="Stopping any shutdowns that may have been issued."
+      echo $message >> $dbglog
+      $logger "$message"
+      pkill -9 shutdown
+
+  fi
+
+  echo "" >> $dbglog
+#+END_SRC
+* DISCHARGING
+#+BEGIN_SRC sh :tangle /sudo::/etc/sensorsd/discharging :tangle-mode (identity #o755)
+  #!/bin/sh
+
+  dbglog=/var/log/discharging
+
+  logger=/usr/bin/logger
+  shutdown=/sbin/shutdown
+
+  device=$1         # e.g. acpibat0
+  devtype=$2        # "watthour"
+  sensornum=$3      # e.g. "3"
+  curval=$4         # floating point number
+  curval_units=$5   #"Ah" or "Wh"
+  lowlim=$6         # floating point number
+  lowlim_units=$7   #"Ah" or "Wh"
+
+  # calculate exception
+  if (awk "BEGIN {exit(!($curval < $lowlim))}"); then
+      exception='below'
+  else
+      exception='within'
+  fi
+
+  date                                   >> $dbglog
+  echo device    = $device               >> $dbglog
+  echo devtype   = $devtype              >> $dbglog
+  echo sensornum = $sensornum            >> $dbglog
+  echo exception = $exception            >> $dbglog
+  echo curval    = $curval $curval_units >> $dbglog
+  echo lowlim    = $lowlim $lowlim_units >> $dbglog
+
+  # Handle the potential low-battery condition.
+  if [ "$device" = "acpibat0" -a "$sensornum" = "3" -a "$exception" = "below" ]; then
+
+      sysctl hw.sensors.${device}.raw0 >> $dbglog
+      charging_stat=`sysctl -n hw.sensors.${device}.raw0 | awk '{print $1}'`
+      echo "Charging status code = $charging_stat" >> $dbglog
+
+      if [ "$charging_stat" = "1" ]; then
+
+          message="Low battery on $device $devtype $sensornum. Shutting down."
+          echo $message >> $dbglog
+          $logger "$message"
+          $shutdown -p +5 "$message"
+
+      elif [ "$charging_stat" = "2" ]; then
+
+          message="Low battery on $device $devtype $sensornum. Battery is charging."
+          echo "$message" >> $dbglog
+          $logger "$message"
+
+      else
+
+          message="Low battery on $device $devtype $sensornum. Unknown code $charging_stat."
+          echo "$message" >> $dbglog
+          $logger "$message"
+
+      fi
+
+  fi
+
+  echo "" >> $dbglog
+#+END_SRC
+* SENSORSD
+#+BEGIN_SRC conf :tangle /sudo::/etc/sensorsd.conf :tangle-mode (identity #o644)
+  # If the battery gets too low, shut down the machine in an orderly
+  # fashion.  When the battery charging status changes, make sure we are still
+  # doing the right thing.
+  #
+  # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  # IF YOU CHANGE THE LIMITS ON THE WATT RULES, REMEMBER TO CHANGE
+  # THEM ON THE RAW0 ACTION AS WELL
+  # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  # low limit 20 Wh
+  hw.sensors.acpibat0.watthour3:low=9Wh:command=/etc/sensorsd/discharging %x %t %n %2 %3
+
+  # When wall power goes off, we need to doublecheck the battery level.
+  # When wall power goes on, we need to kill any pending shutdowns.
+  hw.sensors.acpibat0.raw0:command=/etc/sensorsd/charging %x %t %n %2 "9"
+#+END_SRC

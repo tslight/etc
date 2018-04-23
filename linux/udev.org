@@ -1,0 +1,110 @@
+#+TITLE: UDEV SETTINGS
+#+PROPERTY: header-args :cache yes
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :tangle-mode (identity #o644)
+#+PROPERTY: header-args+ :results silent
+#+PROPERTY: header-args+ :padline no
+#+PROPERTY: header-args+ :tangle /sudo::/etc/udev/hwdb.d/90-kbd.hwdb
+
+* HARDWARE DATABASE
+
+UDEV MAP SCANCODES TO KEYCODES
+
+[[https://wiki.archlinux.org/index.php/Map_scancodes_to_keycodes][Archlinux Wiki Article 1]]
+
+[[https://wiki.archlinux.org/index.php/Extra_keyboard_keys#Scancodes][Archlinux Wiki Article 2]]
+
+To find the correct keycodes use the evtest utility with the path to the input
+device as the parameter, eg. /dev/input/event0. The keycode is the unique
+identifier after the string "value".
+
+However, it may also work with the values from running showkey from a tty...
+
+For examples of how to derive the first keyboard type matching rule, check
+either /lib/udev/hwdb.d/60-keyboard.hwdb or the same path with a /usr prefix.
+
+Also, /usr/include/linux/input.h may be of use... Good luck!
+
+Finally one needs to run 'udevadm hwdb --update' and 'udevadm trigger'
+
+** NU SKOOL THINKPAD KEYBOARD MODS
+
+WORKS WITH POST *30 (2012) SERIES THINKPADS
+
+*** EMACS INSPIRED SPACE CADET SETUP
+#+BEGIN_SRC conf :tangle no
+  #keyboard:dmi:*                # only works on udev versions 208-215
+  evdev:atkbd:dmi:*              # only works with udev versions > 215
+   KEYBOARD_KEY_01=capslock      # esc   --> caps
+   KEYBOARD_KEY_3a=esc           # caps  --> esc
+   KEYBOARD_KEY_38=leftctrl      # alt   --> leftctrl
+   KEYBOARD_KEY_b8=rightctrl     # altgr --> rightctrl
+   KEYBOARD_KEY_db=leftalt       # super --> leftalt
+   KEYBOARD_KEY_b7=leftalt       # prtsc --> leftalt (to avoid altgr shit)
+   KEYBOARD_KEY_1d=leftmeta      # ctrl  --> super
+   KEYBOARD_KEY_9d=rightmeta     # ctrl  --> super
+#+END_SRC
+*** CLASSIC CTRL ALT SETUP (NO SUPER KEYS)
+#+BEGIN_SRC conf :tangle no
+  #keyboard:dmi:*                # only works on udev versions 208-215
+  evdev:atkbd:dmi:*              # only works with udev versions > 215
+   KEYBOARD_KEY_01=capslock      # esc   --> caps
+   KEYBOARD_KEY_3a=esc           # caps  --> esc
+   KEYBOARD_KEY_b7=rightctrl     # prtsc --> super
+   KEYBOARD_KEY_db=leftctrl      # meta  --> control
+   KEYBOARD_KEY_b8=leftalt       # altgr --> a
+#+END_SRC
+*** SWAPCAPSESCAPE PRTSC_RWIN
+#+BEGIN_SRC conf :tangle no
+  #keyboard:dmi:*                # only works on udev versions 208-215
+  evdev:atkbd:dmi:*              # only works with udev versions > 215
+   KEYBOARD_KEY_01=capslock      # esc   --> caps
+   KEYBOARD_KEY_3a=esc           # caps  --> esc
+   KEYBOARD_KEY_b7=rightmeta     # prtsc --> super
+   KEYBOARD_KEY_b8=leftalt       # altgr --> alt
+#+END_SRC
+** OLD SKOOL THINKPAD KEYBOARD MODS
+
+WORKS WITH PRE *30 (2012) SERIES THINKPADS
+
+*** SPACE CADET
+#+BEGIN_SRC conf
+#keyboard:dmi:*            # only works on udev versions 208-215
+evdev:atkbd:dmi:*          # only works with udev versions > 215
+ KEYBOARD_KEY_01=capslock  # esc   --> caps
+ KEYBOARD_KEY_3a=esc       # caps  --> esc
+ KEYBOARD_KEY_b8=rightctrl # altgr --> rctrl
+ KEYBOARD_KEY_38=leftctrl  # alt   --> lctrl
+ KEYBOARD_KEY_db=leftalt   # lwin  --> lalt
+ KEYBOARD_KEY_dd=leftalt   # menu  --> lalt, not altgr (hence left)
+ KEYBOARD_KEY_9d=rightmeta # rctrl --> rwin
+ KEYBOARD_KEY_1d=leftmeta  # lctrl --> lwin
+#+END_SRC
+*** SYMMETRICAL SUPER KEY SETUP
+#+BEGIN_SRC conf :tangle no
+#keyboard:dmi:*            # only works on udev versions 208-215
+evdev:atkbd:dmi:*          # only works with udev versions > 215
+ KEYBOARD_KEY_01=capslock  # esc   --> caps
+ KEYBOARD_KEY_3a=esc       # caps  --> esc
+ KEYBOARD_KEY_dd=rightmeta # menu  --> super
+ KEYBOARD_KEY_b8=leftalt   # altgr --> alt
+#+END_SRC
+** SHITTY HP BLUETOOTH THING MODS!
+
+WORKS WITH SHITTY HP BLUETOOTH THING!
+
+#+BEGIN_SRC conf :tangle no
+  #keyboard:dmi:*            # only works on udev versions 208-215
+  #evdev:atkbd:dmi:*         # only works with udev versions > 215 atkbd means built-in
+  evdev:*:dmi:*              # only works with udev versions > 215 pattern match for usb and bluetooth keyboards
+   KEYBOARD_KEY_70029=capslock  # esc    --> caps
+   KEYBOARD_KEY_70039=esc       # caps   --> esc
+   KEYBOARD_KEY_700e6=rightctrl # altgr  --> ctrl
+   KEYBOARD_KEY_700e2=leftctrl  # alt    --> ctrl
+   KEYBOARD_KEY_70065=leftalt   # menu   --> alt (leftalt so altgr doesn't activate)
+   KEYBOARD_KEY_700e3=leftalt   # super  --> alt
+   KEYBOARD_KEY_700e4=rightmeta # ctrl   --> super
+   KEYBOARD_KEY_700e0=leftmeta  # ctrl   --> super
+#+END_SRC
+
+* RULES DIRECTORY

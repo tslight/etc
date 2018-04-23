@@ -1,0 +1,106 @@
+#+TITLE: SHELL ALIASES
+#+PROPERTY: header-args :cache yes
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :tangle-mode (identity #o600)
+#+PROPERTY: header-args+ :results silent
+#+PROPERTY: header-args+ :padline no
+#+BEGIN_SRC sh :tangle ~/.aliases
+  case $OSTYPE in
+      darwin*)
+          alias bye="sudo shutdown -h now"
+          alias enabled_services='sudo launchctl list'
+          alias grep='grep --color=always'
+          alias l='ls -Gh'
+          alias ll='ls -laGh'
+          alias rb='sudo reboot'
+          alias srch='sudo /usr/libexec/locate.updatedb && locate -i'
+          alias zzz='pmset sleepnow'
+          ;;
+      freebsd*)
+          ;;
+      linux*)
+          alias bye="systemctl poweroff"
+          alias powertune='sudo powertop --auto-tune'
+          alias enabled_services='systemctl list-unit-files | grep enabled'
+          alias ls='ls --color=always'
+          alias l='ls -F'
+          alias la='ls -aF'
+          alias ll='ls -Fhl'
+          alias lla='ls -aFhl'
+          alias rb='systemctl reboot'
+          alias srch='sudo updatedb && locate -i'
+          alias zzz='systemctl suspend'
+          alias ZZZ='systemctl hibernate'
+          ;;
+      netbsd*)
+          alias bat='envstat -d acpibat0'
+          alias bye='shutdown -p now'
+          alias l='ls -F'
+          alias l='ls -F'
+          alias la='ls -aF'
+          alias ll='ls -Fhl'
+          alias lla='ls -aFhl'
+          alias pkg='pkgin'
+          alias spkg='sudo pkgin'
+          alias rb='shutdown -r now'
+          alias zzz='sudo sysctl -w hw.acpi.sleep.state=3'
+          ;;
+      openbsd*)
+          alias bat='sysctl -a | grep bat'
+          alias bye='shutdown -p now'
+          alias killall='zap -f'
+          alias l='ls -F'
+          alias la='ls -aF'
+          alias ll='ls -Fhl'
+          alias lla='ls -aFhl'
+          alias lock='lock -np' # no timeout & use user's password
+          alias pkg_search='pkg_info -Q'
+          alias sensors='sysctl hw.sensors'
+          alias srch='doas /usr/libexec/locate.updatedb && locate -i'
+          alias temp='sysctl hw.sensors | egrep -i "fan|temp"'
+          ;;
+  esac
+
+  # os agnostic aliases
+  alias add="awk '{s+=\$1} END {print s}'" # adds columns of numbers via stdin
+  alias cp='cp -i'
+  alias d2d='for f in *;do mv $f ${f// - /-}; done' # convert ' - ' to '-'
+  alias df='df -h'
+  alias dh='dirs -v'
+  alias du='du -h'
+  alias g='git'
+  alias h='history'
+  alias ha='history 0'
+  alias j='jobs -l'
+  alias lc='grep -cv "^$"' # line count
+  alias lgc='lazygit clone'
+  alias lgs='lazygit status'
+  alias lgf='lazygit fetch'
+  alias lgp='lazygit pull'
+  alias lgP='lazygit push'
+  alias lgua='lazygit add-urls'
+  alias lgur='lazygit rm-urls'
+  alias m='make'
+  alias mc='make clean'
+  alias mi='make install clean'
+  alias mkdir='mkdir -p'
+  alias mv='mv -i'
+  alias p='pwd'
+  alias ping4='ping -c 4'
+  alias pingg='ping -c 4 8.8.8.8'
+  alias rm='rm -i'
+  alias s2us='for f in *;do mv $f ${f// /_};done' # convert ' ' to '_'
+  alias sshaa='eval $(ssh-agent) && ssh-add'
+  alias uc='egrep -v "^#|^$"' # uncomment
+  alias up='uptime'
+  command -v colordiff >/dev/null 2>&1 && alias diff='colordiff'
+  command -v emacs > /dev/null 2>&1 && alias e='emacs'
+  command -v emacsclient > /dev/null 2>&1 && alias ec='emacsclient -c -a ""'
+  command -v sudo > /dev/null 2>&1 && alias se='sudoedit'
+  command -v tmux > /dev/null 2>&1 && alias t='tmux -u'
+  command -v tmux > /dev/null 2>&1 && alias ta='tmux -u attach'
+  command -v tmux > /dev/null 2>&1 && alias tk='tmux kill-session'
+  command -v tmux > /dev/null 2>&1 && alias tka='tmux kill-session -a'
+  command -v vim > /dev/null 2>&1 && alias v='vim'
+  command -v startx > /dev/null 2>&1 && alias x='exec startx; logout'
+#+END_SRC

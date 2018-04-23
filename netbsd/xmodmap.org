@@ -1,0 +1,83 @@
+#+PROPERTY: header-args :cache yes
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :tangle-mode (identity #o400)
+#+PROPERTY: header-args+ :results silent
+#+PROPERTY: header-args+ :padline no
+#+BEGIN_SRC conf :tangle ~/.xmodmap/space_cadet.kbd
+  ! Clear all the modifiers
+  clear control
+  clear mod1
+  clear mod4
+  clear mod5
+  clear lock
+
+  ! Alt_R -> Control_L
+  keycode 64 = Control_L
+
+  ! ISO_Level3_Shift -> Control_R
+  keycode 113 = Control_R
+
+  ! Super_L -> Alt_L
+  keycode 115 = Alt_L Meta_L
+
+  ! PrtSc -> Alt_R
+  ! keycode 111 = Alt_R Meta_R
+
+  ! Menu  -> Alt_R
+  keycode 117 = Alt_R Meta_R
+
+  ! Control_L -> Super_L
+  keycode 37 = Super_L
+
+  ! Control_R -> Super_R
+  keycode 109 = Super_R
+
+  ! Escape -> Caps_Lock
+  keycode 9 = Caps_Lock
+
+  ! Caps_Lock -> Escape
+  keycode 66 = Escape
+
+  ! ThinkPad Fn -> Menu
+  keysym XF86WakeUp = Menu
+
+  ! Re-add modifiers
+  add lock = Caps_Lock
+  add Control = Control_L Control_R
+  add mod1 = Alt_L Alt_R Meta_L Meta_R
+  add mod4 = Super_L Super_R
+  add mod5 = ISO_Level3_Shift
+#+END_SRC
+#+BEGIN_SRC conf :tangle ~/.xmodmap/ctrl_alt.kbd
+  ! Clear all the modifiers
+  clear control
+  clear mod1
+  clear mod4
+  clear mod5
+  clear lock
+
+  ! ISO_Level3_Shift -> Control_R
+  keycode 113 = Alt_R Meta_R
+
+  ! Super_L -> Control_L
+  keycode 115 = Control_L
+
+  ! PrtSc -> Control_R
+  keycode 111 = Control_R
+
+  ! Escape -> Caps_Lock
+  keycode 9 = Caps_Lock
+
+  ! Caps_Lock -> Escape
+  keycode 66 = Escape
+
+  ! ThinkPad Fn -> Menu
+  keysym XF86WakeUp = Menu
+
+  ! Re-add modifiers
+  add lock = Caps_Lock
+  add Control = Control_L Control_R
+  add mod1 = Alt_L Alt_R Meta_L Meta_R
+  add mod4 = Super_L Super_R
+  add mod5 = ISO_Level3_Shift
+#+END_SRC

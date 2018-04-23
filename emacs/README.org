@@ -1,0 +1,41 @@
+#+TITLE: JOIN THE CHURCH OF EMACS!
+#+AUTHOR: Toby Slight
+
+To install this Emacs configuration we need to evaluate [[file:my-tangles.org][my-tangles.org]] in
+Emacs' org-mode, with:
+
+=org-babel-execute-buffer= /(C-c C-v b)/
+
+Having loaded the variables and functions contained in that file into
+memory, we need to run one of the newly defined functions:
+
+=my/tangle-all= with =execute-extended-command= /(M-x)/
+
+Running that function will tangle all the src code blocks contained in
+all the files in the current directory. Since we are in the Emacs
+directory, this will create the following elisp configuration files:
+
+|-------------------------+---------------------------------------------|
+| ORG SOURCE FILE         | TANGLED ELISP FILE                          |
+|-------------------------+---------------------------------------------|
+| [[file:my-init.org][my-init.org]]             | ~/.emacs.d/init.el                          |
+| [[file:my-packages-minimal.org][my-packages-minimal.org]] | ~/.emacs.d/site-lisp/my-packages-minimal.el |
+| [[file:my-packages-emacs.org][my-packages-emacs.org]]   | ~/.emacs.d/site-lisp/my-packages-emacs.el   |
+| [[file:my-packages-full.org][my-packages-full.org]]    | ~/.emacs.d/site-lisp/my-packages-full.el    |
+| [[file:my-packages.org][my-packages.org]]         | ~/.emacs.d/site-lisp/my-packages.el         |
+| [[file:my-buffers.org][my-buffers.org]]          | ~/.emacs.d/site-lisp/my-buffers.el          |
+| [[file:my-dired.org][my-dired.org]]            | ~/.emacs.d/site-lisp/my-dired.el            |
+| [[file:my-edits.org][my-edits.org]]            | ~/.emacs.d/site-lisp/my-edits.el            |
+| [[file:my-files.org][my-files.org]]            | ~/.emacs.d/site-lisp/my-files.el            |
+| [[file:my-misc.org][my-misc.org]]             | ~/.emacs.d/site-lisp/my-misc.el             |
+| [[file:my-org.org][my-org.org]]              | ~/.emacs.d/site-lisp/my-org.el              |
+| [[file:my-settings.org][my-settings.org]]         | ~/.emacs.d/site-lisp/my-settings.el         |
+| [[file:my-tangles.org][my-tangles.org]]          | ~/.emacs.d/site-lisp/my-tangles.el          |
+| [[file:my-windows.org][my-windows.org]]          | ~/.emacs.d/site-lisp/my-windows.el          |
+|-------------------------+---------------------------------------------|
+
+The function then byte compiles and loads the new configuration files,
+pulling in third party packages via the magic of [[https://github.com/jwiegley/use-package][use-package]].
+
+Please see the [[file:my-init.org][my-init.org]], [[file:my-tangles.org][my-tangles.org]] and [[file:packages.org][my-packages.org]] for
+more details.

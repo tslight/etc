@@ -1,0 +1,134 @@
+#+TITLE: DIRED CONFIGURATION
+#+AUTHOR: Toby Slight
+
+#+PROPERTY: header-args :cache yes
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :padline no
+#+PROPERTY: header-args+ :results silent
+#+PROPERTY: header-args+ :tangle ~/.emacs.d/site-lisp/my-dired.el
+#+PROPERTY: header-args+ :tangle-mode (identity #o600)
+
+#+OPTIONS: toc:t
+
+* CONTENTS                                                         :TOC_5_gh:
+- [[#find-dired][FIND DIRED]]
+- [[#get-size][GET SIZE]]
+- [[#open-marked][OPEN MARKED]]
+- [[#sort][SORT]]
+- [[#top--bottom-jumps][TOP & BOTTOM JUMPS]]
+- [[#view-current][VIEW CURRENT]]
+
+* FIND DIRED
+
+#+BEGIN_SRC emacs-lisp
+  (use-package find-dired
+    :defer t
+    :after dired
+    :config
+    (setq find-ls-option '("-print0 | xargs -0 ls -ld" . "-ld")))
+#+END_SRC
+
+* GET SIZE
+
+#+BEGIN_SRC emacs-lisp
+  (defun my/dired-get-size ()
+    "Get cumlative size of marked or current item."
+    (interactive)
+    (let ((files (dired-get-marked-files)))
+      (with-temp-buffer
+        (apply 'call-process "/usr/bin/du" nil t nil "-sch" files)
+        (message "Size of all marked files: %s"
+                 (progn
+                   (re-search-backward "\\(^[0-9.,]+[A-Za-z]+\\).*total$")
+                   (match-string 1))))))
+#+END_SRC
+
+* OPEN MARKED
+
+#+BEGIN_SRC emacs-lisp
+  (defun my/dired-open-marked-files ()
+    "Open marked files."
+    (interactive)
+    (let ((distinguish-one-marked nil))
+      (mapc 'find-file
+            (dired-map-over-marks
+             (dired-get-file-for-visit)
+             current-prefix-arg))))
+#+END_SRC
+
+* SORT
+
+[[http://ergoemacs.org/emacs/dired_sort.html][Xah Lee's Dired Sort]]
+
+Note: this may not work in Mac OS X or *BSD. You need to have GNU's version of ls.
+
+#+BEGIN_SRC emacs-lisp
+  (defun my/dired-sort ()
+    "Sort dired dir listing in different ways.
+     Prompt for a choice."
+    (interactive)
+    (let (-sort-by -arg)
+      (if (eq system-type 'berkeley-unix)
+          (progn
+            (setq -sort-by (ido-completing-read "Sort by:" '( "date" "size" "name")))
+            (cond
+             ((equal -sort-by "name") (setq -arg "-alhpL"))
+             ((equal -sort-by "date") (setq -arg "-alhpLt"))
+             ((equal -sort-by "size") (setq -arg "-alhpLS "))
+             (t (error "logic error 09535" ))
+             )
+            )
+        (progn
+          (setq -sort-by (ido-completing-read "Sort by:" '( "date" "size" "name" "dir")))
+          (cond
+           ((equal -sort-by "name") (setq -arg "-Al --si --time-style long-iso "))
+           ((equal -sort-by "date") (setq -arg "-Al --si --time-style long-iso -t"))
+           ((equal -sort-by "size") (setq -arg "-Al --si --time-style long-iso -S"))
+           ((equal -sort-by "dir") (setq -arg "-Al --si --time-style long-iso --group-directories-first"))
+           (t (error "logic error 09535" ))
+           )
+          )
+        )
+      (dired-sort-other -arg )))
+#+END_SRC
+
+* TOP & BOTTOM JUMPS
+
+[[http://whattheemacsd.com/setup-dired.el-02.html][Dired back to top blogpost]]
+
+#+BEGIN_SRC emacs-lisp
+  (defun my/dired-back-to-top ()
+    (interactive)
+    (goto-char (point-min))
+    (dired-next-line 2))
+  (define-key dired-mode-map
+    (vector 'remap 'beginning-of-buffer) 'my/dired-back-to-top)
+
+  (defun my/dired-jump-to-bottom ()
+    (interactive)
+    (goto-char (point-max))
+    (dired-next-line -1))
+  (define-key dired-mode-map
+    (vector 'remap 'end-of-buffer) 'my/dired-jump-to-bottom)
+#+END_SRC
+
+* VIEW CURRENT
+
+#+BEGIN_SRC emacs-lisp
+  (defun my/dired-view-current ()
+    "View current file in read-only temporary buffer and other window"
+    (interactive)
+    (if (not (window-parent))
+        (split-window-horizontally))
+    (let ((file (dired-get-file-for-visit))
+          (dbuffer (current-buffer)))
+      (other-window 1)
+      (unless (equal dbuffer (current-buffer))
+        (if (or view-mode (equal major-mode 'dired-mode))
+            (kill-buffer)))
+      (let ((filebuffer (get-file-buffer file)))
+        (if filebuffer
+            (switch-to-buffer filebuffer)
+          (view-file file))
+        (other-window -1))))
+#+END_SRC

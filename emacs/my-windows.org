@@ -1,0 +1,61 @@
+#+TITLE: PLUNDERED WINDOWS FUNCTIONS LIBRARY
+#+AUTHOR: Toby Slight
+
+#+PROPERTY: header-args :cache yes
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :padline no
+#+PROPERTY: header-args+ :results silent
+#+PROPERTY: header-args+ :tangle ~/.emacs.d/site-lisp/my-windows.el
+#+PROPERTY: header-args+ :tangle-mode (identity #o600)
+
+#+OPTIONS: toc:t
+
+Please see the [[file:README.org][README]] and/or [[file:my-tangles.org][my-tangles.org]] for instructions on how to
+install.
+
+[[https://github.com/bbatsov/prelude/blob/master/core/prelude-core.el][Prelude Core]]
+
+* CONTENTS                                                         :TOC_5_gh:
+- [[#last-window][LAST WINDOW]]
+- [[#prev-window][PREV WINDOW]]
+- [[#split-last-buffer][SPLIT LAST BUFFER]]
+
+* LAST WINDOW
+#+BEGIN_SRC emacs-lisp
+  (defun my/last-window ()
+    "Switch back and forth between two windows easily."
+    (interactive)
+    (let ((win (get-mru-window t t t)))
+      (unless win (error "Last window not found."))
+      (let ((frame (window-frame win)))
+        (raise-frame frame)
+        (select-frame frame)
+        (select-window win))))
+#+END_SRC
+* PREV WINDOW
+#+BEGIN_SRC emacs-lisp
+  (defun my/prev-window ()
+    "Go the previously used window, excluding other frames."
+    (interactive)
+    (other-window -1))
+#+END_SRC
+* SPLIT LAST BUFFER
+
+[[https://www.reddit.com/r/emacs/comments/25v0eo/you_emacs_tips_and_tricks/chldury][Reddit Thread]] & [[http://pages.sachachua.com/.emacs.d/Sacha.html#unnumbered-30][Sacha Chua dotemacs]]:
+
+#+BEGIN_SRC emacs-lisp
+  (defun my/hsplit-last-buffer (prefix)
+    "Split the window vertically and display the previous buffer."
+    (interactive "p")
+    (split-window-vertically)
+    (other-window 1 nil)
+    (if (= prefix 1)
+        (switch-to-next-buffer)))
+
+  (defun my/vsplit-last-buffer (prefix)
+    "Split the window horizontally and display the previous buffer."
+    (interactive "p")
+    (split-window-horizontally)
+    (other-window 1 nil)
+    (if (= prefix 1) (switch-to-next-buffer)))
+#+END_SRC

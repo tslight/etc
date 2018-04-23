@@ -1,0 +1,66 @@
+#+TITLE: THE COLD DARK IGLOO OF TERRIBLE TUX
+#+AUTHOR: Toby Slight
+#+DATE: 18/10/15
+
+In order to install these files, first, either tangle my [[../agnostic/emacs.org][Emacs config]],
+or evaluate the code block below (taken from [[http://fgiasson.com/blog/index.php/2016/10/26/literate-clojure-programming-tangle-all-in-org-mode/][here]]) in Emacs, using C-c
+C-v t (or M-x org-babel-tangle):
+
+#+BEGIN_SRC emacs-lisp
+  (defun my/directory-files-recursive (directory match maxdepth)
+    "List files in DIRECTORY and in its sub-directories. Return files that match
+        the regular expression MATCH. Recurse only to depth MAXDEPTH. If zero or negative,
+        then do not recurse"
+    (let* ((files-list '())
+           (current-directory-list
+            (directory-files directory t)))
+      ;; while we are in the current directory
+      (while current-directory-list
+        (let ((f (car current-directory-list)))
+          (cond
+           ((and
+             (file-regular-p f)
+             (file-readable-p f)
+             (string-match match f))
+            (setq files-list (cons f files-list)))
+           ((and
+             (file-directory-p f)
+             (file-readable-p f)
+             (not (string-equal ".." (substring f -2)))
+             (not (string-equal "." (substring f -1)))
+             (> maxdepth 0))
+            ;; recurse only if necessary
+            (setq files-list
+                  (append files-list
+                          (my/directory-files-recursive f match (- maxdepth -1))))
+            (setq files-list (cons f files-list)))
+           (t)))
+        (setq current-directory-list (cdr current-directory-list)))
+      files-list))
+
+  (defun my/tangle-all ()
+    "Tangle all the Org-mode files in the directory of the file of the current buffer
+        recursively in child folders. Returns the list of tangled files"
+    (interactive)
+    (mapc (lambda (f)
+            (when (not (file-directory-p f))
+              (org-babel-tangle-file f)))
+          (my/directory-files-recursive (file-name-directory (buffer-file-name)) "\\.org$" 20))
+    (when (equal (file-name-directory (directory-file-name buffer-file-name))
+                 (concat (getenv "HOME") "/cfg/agnostic/"))
+      (byte-compile-file (concat user-emacs-directory "init.el"))
+      (load-file (concat user-emacs-directory "init.elc"))))
+#+END_SRC
+
+Then navigate to this directory in Emacs (You're probably already
+there!) and run M-x my/tangle-all. Alternatively, if you only want to
+install certain files, simple navigate to the file and run C-c C-v t
+(org-babel-tangle).
+
+[[./udev.org][Udev Keyboard Layout Rules]]
+
+[[./aliases.org][Shell Aliases]]
+
+[[./functions.org][Shell Functions]]
+
+[[./modprobe.org][Modprobe mods]]
