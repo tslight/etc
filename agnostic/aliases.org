@@ -76,7 +76,7 @@
   alias lgc='lazygit clone'
   alias lgs='lazygit "status -s"'
   alias lgf='lazygit fetch'
-  alias lgp='lazygit pull -q'
+  alias lgp='lazygit "pull -q"'
   alias lgP='lazygit push'
   alias lgr='lazygit "remote -v"'
   alias lgua='lazygit add-urls'
