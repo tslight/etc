@@ -35,6 +35,8 @@ the org-mode manual:
 
 * Where can I see these mythical beasts?
 
+*** Emacs
+
 The main emacs configuration from which this strange odyssey of [[http://www.mncc.com.my/ossig/lists/general/2003-09/msg00143.html][sexp
 worship]] & literate unicorn summoning springs is located [[file:emacs/README.org][here]].
 
@@ -53,11 +55,13 @@ with me…
 #+NAME:fig:real programmers
      [[./img/real_programmers.png]]
 
+*** *BSD
+
 Configuration files dedicated to the [[Http://www.unixprogram.com/churchofbsd/][Church of BSD]] ([[https://www.openbsd.org/][OpenBSD]] and
 [[https://www.freebsd.org/][FreeBSD]]), are located [[file:openbsd/README.org][here]] and [[file:freebsd/][here]], respectively.
 
 #+BEGIN_QUOTE
-One day I was at a restaurant explaining process control to one of my
+"One day I was at a restaurant explaining process control to one of my
 disciples.  I was mentioning how we have to kill the children (child
 processes) if they become unresponsive. Or we can even set an alarm
 for the children to kill themselves.
@@ -68,7 +72,7 @@ woman sitting across had was unforgettable.
 
 I tried to explain it was a computer software thing but it was too
 late, she fled terrified, probably to call the police or something. I
-didn't really want to stick around too long to find out.
+didn't really want to stick around too long to find out."
 
 -- [[http://www.unixprogram.com/cgi-bin/man.cgi?comd%3Dps][man ps]]
 #+END_QUOTE
@@ -79,13 +83,16 @@ didn't really want to stick around too long to find out.
 #+NAME:fig:success
      [[./img/success.png]]
 
+*** Linux
+
 Those dedicated to the infernal penguin are [[./linux/README.org][here]].
 
 #+BEGIN_QUOTE
 "I must say the linux community is a lot nicer than the unix
 community. a negative comment on unix would warrant death
 threats. With linux, it is like stirring up a nest of butterflies."
-             -- Ken Thompson author of C Language. 1999
+
+-- Ken Thompson author of C Language. 1999
 #+END_QUOTE
 
 *Come and stir the butterflys...*
@@ -94,18 +101,26 @@ threats. With linux, it is like stirring up a nest of butterflies."
 #+NAME:fig:cautionary
      [[./img/cautionary.png]]
 
+*** Proprietary
+
 Evil proprietary systems are also catered for...
 
-Cupertino's wickedness resides [[file:macos/README.org][here]], whilst Redmonds unutterable
-ghastliness dwells in [[file:windows/README.org][this]] unspeakable den of inquity.
+Cupertino's wickedness resides [[file:macos/README.org][here]], whilst Redmond's ghastliness
+dwells in [[file:windows/README.org][this]] unspeakable den of inquity.
 
 #+BEGIN_QUOTE
-They say when you play a Microsoft CD backwards you can hear satanic
+"They say when you play a Microsoft CD backwards you can hear satanic
 messages...but that's nothing, if you play it forward it will install
-Windows!
+Windows!"
 
 -- [[Http://www.unixprogram.com/churchofbsd/][Church of BSD]]
 #+END_QUOTE
+
+#+CAPTION: Mac vs PC
+#+NAME:fig:mac_pc
+     [[./img/mac_pc.png]]
+
+*** Agnostic
 
 And finally, those poor agnostic souls, forever lost in OS purgatory,
 are to be found [[./agnostic/README.org][here]].
