@@ -75,6 +75,10 @@ didn't really want to stick around too long to find out.
 
 *They are full of suicidal children and zombie parents...*
 
+#+CAPTION: Success
+#+NAME:fig:success
+     [[./img/success.png]]
+
 Those dedicated to the infernal penguin are [[./linux/README.org][here]].
 
 #+BEGIN_QUOTE
@@ -86,9 +90,9 @@ threats. With linux, it is like stirring up a nest of butterflies."
 
 *Come and stir the butterflys...*
 
-#+CAPTION: BSD vs. Linux, Any questions?
-#+NAME:fig:death to butterflies
-     [[./img/bsd-vs-linux.jpg]]
+#+CAPTION: Cautionary
+#+NAME:fig:cautionary
+     [[./img/cautionary.png]]
 
 Evil proprietary systems are also catered for...
 
