@@ -74,10 +74,11 @@
   alias j='jobs -l'
   alias lc='grep -cv "^$"' # line count
   alias lgc='lazygit clone'
-  alias lgs='lazygit status'
+  alias lgs='lazygit "status -s"'
   alias lgf='lazygit fetch'
   alias lgp='lazygit pull'
   alias lgP='lazygit push'
+  alias lgr='lazygit "remote -v"'
   alias lgua='lazygit add-urls'
   alias lgur='lazygit rm-urls'
   alias m='make'
