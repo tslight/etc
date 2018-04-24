@@ -7,14 +7,14 @@
      [[./img/local.jpg]]
 * We'll have no trouble here.
 
-The culmination of years of procrastination and [[http://projects.csail.mit.edu/gsb/old-archive/gsb-archive/gsb2000-02-11.html][yak-shaving]]...
+The culmination of years of [[http://projects.csail.mit.edu/gsb/old-archive/gsb-archive/gsb2000-02-11.html][yak-shaving]]...
 
 All in one handy dandy git repo. Amazeballs.
 
 * How does all this work?
 
-Basically, I'm using Emacs' amazing org-mode as a configuration file
-management system.
+I'm using Emacs' amazing org-mode as a configuration file management
+system.
 
 The functions defined in [[file:emacs/my-tangles.org][this]] file, allow automated tangling of the
 files in this repository.
@@ -22,7 +22,7 @@ files in this repository.
 Please see the [[file:emacs/README.org][Emacs configuration directory]] for more details on how
 this is implemented.
 
-The main functions were stolen from this guy's blog:
+The main functions were inspired by this guy's blog:
 
 [[http://fgiasson.com/blog/index.php/2016/10/26/literate-clojure-programming-tangle-all-in-org-mode/][Frederick Giasson's Literate Programming Blog]]
 
@@ -48,6 +48,10 @@ with me…
 #+END_QUOTE
 
 *It is full of [[https://orgmode.org/worg/org-faq.html#unicorn][unicorn]] wonder and lispy joy.*
+
+#+CAPTION: Real Programmers
+#+NAME:fig:real programmers
+     [[./img/real_programmers.png]]
 
 Configuration files dedicated to the [[Http://www.unixprogram.com/churchofbsd/][Church of BSD]] ([[https://www.openbsd.org/][OpenBSD]] and
 [[https://www.freebsd.org/][FreeBSD]]), are located [[file:openbsd/README.org][here]] and [[file:freebsd/][here]], respectively.
