@@ -11,7 +11,8 @@
   set -g renumber-windows on
   set -g set-titles on
   set -g set-titles-string "#T: [#S] #I: #W: #P"
-  set -g mode-keys vi
+  set -g display-panes-time 4000 # I'm slow and indecisive!
+  #set -g mode-keys vi
 
   ## COLORS
   set -g message-bg default
@@ -52,4 +53,12 @@
   bind M-r neww -n dl rtorrent
   bind S neww -n su su
   bind t splitw -h -p 42 top
+
+  bind C-n select-pane -D
+  bind C-p select-pane -U
+  bind C-f select-pane -R
+  bind C-b select-pane -L
+
+  ## MAC COPY PASTE
+  if shell "uname | grep -q Darwin" 'bind -T copy-mode C-w send -X copy-pipe "reattach-to-user-namespace pbcopy" \; display-message "copied to system clipboard"'
 #+END_SRC
