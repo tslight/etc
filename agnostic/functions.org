@@ -15,7 +15,7 @@
       netbsd*)
       ;;
       openbsd*)
-          lsblk() {
+          lsdisk () {
               sysctl hw.disknames | sed -n 1'p' | tr ',' '\n'\
                   | while read word; do
                   echo $word | sed -e 's/^hw.disknames=//g'
