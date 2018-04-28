@@ -12,6 +12,7 @@
           alias grep='grep --color=always'
           alias l='ls -Gh'
           alias ll='ls -laGh'
+          alias lsblk='diskutil list'
           alias rb='sudo reboot'
           alias srch='sudo /usr/libexec/locate.updatedb && locate -i'
           alias zzz='pmset sleepnow'
