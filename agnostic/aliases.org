@@ -5,7 +5,7 @@
 #+PROPERTY: header-args+ :results silent
 #+PROPERTY: header-args+ :padline no
 #+BEGIN_SRC sh :tangle ~/.aliases
-  case $OSTYPE in
+  case "$OSTYPE" in
       darwin*)
           alias bye="sudo shutdown -h now"
           alias enabled_services='sudo launchctl list'

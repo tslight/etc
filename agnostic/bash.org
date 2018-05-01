@@ -31,24 +31,24 @@
       fi
   fi
 
-  # emacs tramp remote directory tracking
-  function set-eterm-dir {
-      echo -e "\033AnSiTu" "$LOGNAME" # $LOGNAME is more portable than using whoami.
-      echo -e "\033AnSiTc" "$(pwd)"
-      if [ $(uname) = "SunOS" ]; then
-          # The -f option does something else on SunOS and is not needed anyway.
-          hostname_options="";
-      else
-          hostname_options="-f";
-      fi
-      echo -e "\033AnSiTh" "$(hostname $hostname_options)" # Using the -f option can cause problems on some OSes.
-      history -a # Write history to disk.
-  }
+  # # emacs tramp remote directory tracking
+  # function set-eterm-dir {
+  #     echo -e "\033AnSiTu" "$LOGNAME" # $LOGNAME is more portable than using whoami.
+  #     echo -e "\033AnSiTc" "$(pwd)"
+  #     if [ $(uname) = "SunOS" ]; then
+  #         # The -f option does something else on SunOS and is not needed anyway.
+  #         hostname_options="";
+  #     else
+  #         hostname_options="-f";
+  #     fi
+  #     echo -e "\033AnSiTh" "$(hostname $hostname_options)" # Using the -f option can cause problems on some OSes.
+  #     history -a # Write history to disk.
+  # }
 
-  # Track directory, username, and cwd for remote logons.
-  if [ "$TERM" = "eterm-color" ]; then
-      PROMPT_COMMAND=set-eterm-dir
-  fi
+  # # Track directory, username, and cwd for remote logons.
+  # if [ "$TERM" = "eterm-color" ]; then
+  #     PROMPT_COMMAND=set-eterm-dir
+  # fi
 
   [ -f ~/.profile ] && source ~/.profile
   [ -f ~/.bashrc ] && source ~/.bashrc
@@ -56,9 +56,9 @@
 * BASHRC
 #+BEGIN_SRC sh :tangle ~/.bashrc
   [ -z "$PS1" ] && return # If not running interactively, don't do anything
-  [ -f /etc/bash.bashrc ] && . /etc/bash.bashrc
+  [ -f /etc/bash.bashrc ] && source /etc/bash.bashrc
 
-  if [ "$(uname)" != "Darwin" ]; then
+  if [[ "$BASH_VERSINFO" -ge 4 ]]; then
       shopt -s autocd       # cd without cd. who knew?
       shopt -s checkjobs    # don't exit if we still have jobs running
       shopt -s dirspell     # correct directory spelling
