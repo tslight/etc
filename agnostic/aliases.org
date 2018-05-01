@@ -75,9 +75,9 @@
   alias j='jobs -l'
   alias lc='grep -cv "^$"' # line count
   alias lgc='lazygit clone'
-  alias lgs='lazygit "status -s"'
+  alias lgs='lazygit "status -s" | sed "s/ -s//g;/^$/d"'
   alias lgf='lazygit fetch'
-  alias lgp='lazygit "pull -q"'
+  alias lgp='lazygit "pull -q" | sed "s/ -q//g;/^$/d"'
   alias lgP='lazygit push'
   alias lgr='lazygit "remote -v"'
   alias lgua='lazygit add-urls'
