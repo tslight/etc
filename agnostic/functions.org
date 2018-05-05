@@ -4,77 +4,92 @@
 #+PROPERTY: header-args+ :tangle-mode (identity #o600)
 #+PROPERTY: header-args+ :results silent
 #+PROPERTY: header-args+ :padline no
+
+https://stackoverflow.com/questions/4767396/linux-command-how-to-find-only-text-files
+
 #+BEGIN_SRC sh :tangle ~/.functions
-  case $OSTYPE in
-      darwin*)
-      ;;
-      freebsd*)
-      ;;
-      linux*)
-      ;;
-      netbsd*)
-      ;;
-      openbsd*)
-          lsdisk () {
-              sysctl hw.disknames | sed -n 1'p' | tr ',' '\n'\
-                  | while read word; do
-                  echo $word | sed -e 's/^hw.disknames=//g'
-              done
-          }
+    case "$OSTYPE" in
+        darwin*)
+            dos2unix_recursive () {
+                find "$1" -type f -exec grep -Il "" {} \; |\
+                    while IFS= read -r f; do
+                        dos2unix "$f"
+                    done
+            }
+            ;;
+        freebsd*)
+            ;;
+        linux*)
+            dos2unix_recursive () {
+                find "$1" -type f -exec grep -Iq "" {} \; |\
+                    while IFS= read -r f; do
+                        dos2unix "$f"
+                    done
+            }
+            ;;
+        netbsd*)
+            ;;
+        openbsd*)
+            lsdisk () {
+                sysctl hw.disknames | sed -n 1'p' | tr ',' '\n'\
+                    | while read word; do
+                    echo $word | sed -e 's/^hw.disknames=//g'
+                done
+            }
 
-          lspart() {
-              echo " "
-              lsblk | cut -c3 | while read number; do
-                  doas disklabel -h sd$number\
-                      | sed -ne '/unused/d;1p;/size/,$p'\
-                      | cut -c -21,40-46,67-
-                  echo " "
-              done
-          }
-          ;;
-      ,*)
-          ;;
-  esac
+            lspart() {
+                echo " "
+                lsblk | cut -c3 | while read number; do
+                    doas disklabel -h sd$number\
+                        | sed -ne '/unused/d;1p;/size/,$p'\
+                        | cut -c -21,40-46,67-
+                    echo " "
+                done
+            }
+            ;;
+        ,*)
+            ;;
+    esac
 
-  # os agnostic functions
-  bzipr() {
-      for dir in $1; do
-          base=$(basename "$dir"); tar cvjf "${base}.tar.bz2" "$dir";
-      done
-  }
+    # os agnostic functions
+    bzipr() {
+        for dir in $1; do
+            base=$(basename "$dir"); tar cvjf "${base}.tar.bz2" "$dir";
+        done
+    }
 
-  cdot () {
-      for x in $(seq "$1"); do
-          cd ..;
-      done
-  }
+    cdot () {
+        for x in $(seq "$1"); do
+            cd ..;
+        done
+    }
 
-  calc() {
-      echo "scale=3;$@" | bc -l
-  }
+    calc() {
+        echo "scale=3;$@" | bc -l
+    }
 
-  cheat () {
-      curl cheat.sh/${1:-cheat};
-  }
+    cheat () {
+        curl cheat.sh/${1:-cheat};
+    }
 
-  dusort() {
-      du -h -d1 $1 | sort -h -r
-  }
+    dusort() {
+        du -h -d1 $1 | sort -h -r
+    }
 
-  fixperms() {
-      find $3 -type d -exec chmod $1 {} \;
-      find $3 -type f -exec chmod $2 {} \;
-  }
+    fixperms() {
+        find $3 -type d -exec chmod $1 {} \;
+        find $3 -type f -exec chmod $2 {} \;
+    }
 
-  mkcd () {
-      mkdir -p $1 && cd $1
-  }
+    mkcd () {
+        mkdir -p $1 && cd $1
+    }
 
-  psee() {
-      ps aux | grep -i $1 | grep -v grep
-  }
+    psee() {
+        ps aux | grep -i $1 | grep -v grep
+    }
 
-  rssget() {
-      curl $1 | grep -E "http.*\.$2" | sed "s/.*\(http.*\.$2\).*/\1/" | xargs wget -nc
-  }
+    rssget() {
+        curl $1 | grep -E "http.*\.$2" | sed "s/.*\(http.*\.$2\).*/\1/" | xargs wget -nc
+    }
 #+END_SRC
