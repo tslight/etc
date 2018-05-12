@@ -15,6 +15,7 @@ install.
 
 * CONTENTS                                                         :TOC_5_gh:
 - [[#align-equals][ALIGN EQUALS]]
+- [[#change-pairs][CHANGE PAIRS]]
 - [[#copy-or-cut-line-or-region][COPY OR CUT LINE OR REGION]]
 - [[#delete-in][DELETE IN]]
 - [[#generate-numbered-list][GENERATE NUMBERED LIST]]
@@ -24,6 +25,7 @@ install.
 - [[#mark-pushing--jumping][MARK PUSHING & JUMPING]]
 - [[#narrow--widen-dwim][NARROW & WIDEN DWIM]]
 - [[#open-lines-sanely][OPEN LINES SANELY]]
+- [[#remove-dos-junk][REMOVE DOS JUNK]]
 - [[#smart-beginning-of-line][SMART BEGINNING OF LINE]]
 - [[#sort-lines-nocase][SORT LINES NOCASE]]
 - [[#unfill-region][UNFILL REGION]]
@@ -65,44 +67,16 @@ align the section based upon the = sign:
      (let (($bracketsList
             '("(paren)"
               "{brace}"
-              "[square]"
               "<greater>"
+              "<<double greater,2>>"
               "`emacs'"
               "`markdown`"
               "~tilde~"
               "=equal="
-              "\"ascii quote\""
+              "\"quote\""
+              "[square]"
               "[[double square,2]]"
-              "“curly quote”"
-              "‘single quote’"
-              "‹angle quote›"
-              "«double angle quote»"
-              "「corner」"
-              "『white corner』"
-              "【LENTICULAR】"
-              "〖white LENTICULAR〗"
-              "〈angle bracket〉"
-              "《double angle bracket》"
-              "〔TORTOISE〕"
-              "⦅white paren⦆"
-              "〚white square〛"
-              "⦃white curly bracket⦄"
-              "〈angle bracket〉"
-              "⦑ANGLE BRACKET WITH DOT⦒"
-              "⧼CURVED ANGLE BRACKET⧽"
-              "⟦math square⟧"
-              "⟨math angle⟩"
-              "⟪math DOUBLE ANGLE BRACKET⟫"
-              "⟮math FLATTENED PARENTHESIS⟯"
-              "⟬math WHITE TORTOISE SHELL BRACKET⟭"
-              "❛HEAVY SINGLE QUOTATION MARK ORNAMENT❜"
-              "❝HEAVY DOUBLE TURNED COMMA QUOTATION MARK ORNAMENT❞"
-              "❨MEDIUM LEFT PARENTHESIS ORNAMENT❩"
-              "❪MEDIUM FLATTENED LEFT PARENTHESIS ORNAMENT❫"
-              "❴MEDIUM LEFT CURLY BRACKET ORNAMENT❵"
-              "❬MEDIUM LEFT-POINTING ANGLE BRACKET ORNAMENT❭"
-              "❮HEAVY LEFT-POINTING ANGLE QUOTATION MARK ORNAMENT❯"
-              "❰HEAVY LEFT-POINTING ANGLE BRACKET ORNAMENT❱"
+              "'single quote'"
               "none"
               )))
        (list
