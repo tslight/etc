@@ -82,6 +82,7 @@ file. This block is just here so that these variables are available
 when =org-babel-execute-buffer= is executed.
 
 #+BEGIN_SRC emacs-lisp :tangle no
+  (setq-default buffer-file-coding-system 'utf-8-unix)
   (setq my/config-directory "~/etc/"
 	my/agnostic-config-directory (concat my/config-directory "agnostic/")
 	my/emacs-config-directory    (concat my/config-directory "emacs/")
