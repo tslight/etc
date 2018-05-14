@@ -131,8 +131,7 @@ set everything else up.
     (add-to-list 'load-path my/site-lisp)
     (require 'my-packages-minimal)
     (require 'my-packages-emacs)
-    (when (display-graphic-p)
-      (require 'my-packages-full))
+    (require 'my-packages-full)
     (require 'my-packages))
 #+END_SRC
 
