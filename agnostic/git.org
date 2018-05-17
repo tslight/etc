@@ -4,30 +4,32 @@
 #+PROPERTY: header-args+ :results silent
 #+PROPERTY: header-args+ :padline no
 #+BEGIN_SRC conf :tangle ~/.gitconfig
-[user]
-    name = tslight
-    email = tobyslight@gmail.com
-[color]
-    ui = true
-[push]
-    default = current
-[alias]
-    a = add
-    aa = add -A
-    ba = branch -a
-    bd = branch -d
-    b = branch
-    c = commit
-    ca = commit -a
-    C = clone
-    cm = commit -m
-    co = checkout
-    m = merge
-    P = pull
-    p = push
-    pa = push --all -u
-    pm = push origin master
-    po = push origin
-    r = rebase
-    s = status
+  [user]
+      name = tslight
+      email = tobyslight@gmail.com
+  [color]
+      ui = true
+  [push]
+      default = current
+  [alias]
+      a = add
+      aa = add -A
+      ba = branch -a
+      bd = branch -d
+      b = branch
+      c = commit
+      ca = commit -a
+      C = clone
+      cm = commit -m
+      co = checkout
+      m = merge
+      P = pull
+      p = push
+      pa = push --all -u
+      pm = push origin master
+      po = push origin
+      r = rebase
+      s = status
+  [core]
+      autocrlf = input
 #+END_SRC
