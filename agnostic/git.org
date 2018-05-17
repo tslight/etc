@@ -31,5 +31,5 @@
       r = rebase
       s = status
   [core]
-      autocrlf = input
+      autocrlf = false
 #+END_SRC
