@@ -11,25 +11,33 @@
   export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
   export HISTCONTROL=ignoreboth:erasedups
   export HISTFILESIZE=44000
-  export HISTIGNORE="h*:history*:[bf]g:exit"
+  export HISTIGNORE="h:history:[bf]g:exit"
   export HISTSIZE=42000
   export PAGER="/usr/bin/less"
   export PATH=$PATH:$HOME/.local/bin:$HOME/bin
 
   umask 022
 
-  if [[ $(uname) != "Darwin" ]] || [[ $(uname) != "OpenBSD" ]]; then
-      # agent_run_state: 0=agent running w/ key; 1=agent w/o key; 2= agent not running
-      agent_run_state=$(ssh-add -l > /dev/null 2>&1; echo $?)
-
-      if [ ! "$SSH_AUTH_SOCK" ] || [ $agent_run_state = 2 ]; then
-          ssh-agent > ~/.ssh/agent.env
-          source ~/.ssh/agent.env
-          ssh-add
-      elif [ "$SSH_AUTH_SOCK" ] && [ $agent_run_state = 1 ]; then
-          ssh-add
-      fi
+  if [ ! -S ~/.ssh/ssh_auth_sock ]; then
+      eval $(ssh-agent) &> /dev/null
+      ln -sf "$SSH_AUTH_SOCK" ~/.ssh/ssh_auth_sock
   fi
+
+  export SSH_AUTH_SOCK=~/.ssh/ssh_auth_sock
+  ssh-add -l &> /dev/null || ssh-add
+
+  # if [[ $(uname) != "Darwin" ]] || [[ $(uname) != "OpenBSD" ]]; then
+  #     # agent_run_state: 0=agent running w/ key; 1=agent w/o key; 2= agent not running
+  #     agent_run_state=$(ssh-add -l > /dev/null 2>&1; echo $?)
+
+  #     if [ ! "$SSH_AUTH_SOCK" ] || [ $agent_run_state = 2 ]; then
+  #         ssh-agent > ~/.ssh/agent.env
+  #         source ~/.ssh/agent.env
+  #         ssh-add
+  #     elif [ "$SSH_AUTH_SOCK" ] && [ $agent_run_state = 1 ]; then
+  #         ssh-add
+  #     fi
+  # fi
 
   # # emacs tramp remote directory tracking
   # function set-eterm-dir {
