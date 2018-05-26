@@ -124,10 +124,14 @@ https://stackoverflow.com/questions/4767396/linux-command-how-to-find-only-text-
 I have since found ~pgrep -ail~...
 
 #+BEGIN_SRC sh
-psee() {
-    local char="${1:0:1}" rest="${1:1}"
-    ps aux | grep -i "[$char]$rest"
-}
+  psee() {
+      tput setaf 3
+      printf "\nYou should probably be using $(tput setaf 6)pgrep -ail$(tput setaf 3)...\n\n"
+      tput sgr0
+      local char="${1:0:1}" rest="${1:1}"
+      ps aux | grep -i "[$char]$rest"
+      echo
+  }
 #+END_SRC
 
 ** RSS GET
