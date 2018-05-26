@@ -102,6 +102,30 @@ https://stackoverflow.com/questions/4767396/linux-command-how-to-find-only-text-
   }
 #+END_SRC
 
+** DUEXT
+
+Regex example:
+
+-regex '.*\.\(zip\|tgz\)'
+
+#+BEGIN_SRC sh
+  duext () {
+      total=0;
+      sizes=($(find "$1" -iname "$2" -exec du -sm {} \; | awk '{print $1}'))
+
+      for s in "${sizes[@]}"; do
+          total=$((total+s))
+      done
+
+      if ((total<1024)); then
+          echo "$total MB"
+      else
+          total=$(echo "$total 1024" | awk '{printf "%.2g", $1/$2}')
+          echo "$total GB"
+      fi
+  }
+#+END_SRC
+
 ** FIXPERMS
 
 #+BEGIN_SRC sh
