@@ -42,12 +42,13 @@
 * OS AGNOSTIC
 ** BZIPR
 
-Bzip all files in directory
+Bzip all files in directory.
 
 #+BEGIN_SRC sh
-  bzipr() {
-      for dir in $1; do
-          base=$(basename "$dir"); tar cvjf "${base}.tar.bz2" "$dir";
+  bzipr () {
+      for dir in "$1"; do
+          base=$(basename "$dir")
+          tar cvjf "${base}.tar.bz2" "$dir"
       done
   }
 #+END_SRC
@@ -66,15 +67,17 @@ Go up \x\ directories...
 
 ** CALC
 
-Floating point in bash
+Floating point from shell.
 
 #+BEGIN_SRC sh
-  calc() {
+  calc () {
       echo "scale=3;$@" | bc -l
   }
 #+END_SRC
 
 ** CHEAT
+
+Get useful information on commands.
 
 #+BEGIN_SRC sh
   cheat () {
@@ -96,6 +99,8 @@ https://stackoverflow.com/questions/4767396/linux-command-how-to-find-only-text-
 
 ** DUSORT
 
+Sort directory by human readable size.
+
 #+BEGIN_SRC sh
   dusort () {
       # d1 = depth 1, sort -hr = human-readable & reverse
@@ -104,6 +109,10 @@ https://stackoverflow.com/questions/4767396/linux-command-how-to-find-only-text-
 #+END_SRC
 
 ** FIXPERMS
+
+Recursive chmod on files and directories.
+
+Usage: fixperms [DIRECTORY OCTAL] [FILE OCTAL] [PATH]
 
 #+BEGIN_SRC sh
   fixperms () {
@@ -115,6 +124,8 @@ https://stackoverflow.com/questions/4767396/linux-command-how-to-find-only-text-
 #+END_SRC
 
 ** MKCD
+
+Make a directory and cd into it.
 
 #+BEGIN_SRC sh
   mkcd () {
@@ -138,6 +149,8 @@ I have since found ~pgrep -ail~...
 #+END_SRC
 
 ** RSS GET
+
+Great for downloading all episodes in a podcast feed.
 
 #+BEGIN_SRC sh
   rssget() {
