@@ -106,7 +106,7 @@ https://stackoverflow.com/questions/4767396/linux-command-how-to-find-only-text-
 
 #+BEGIN_SRC sh
   fixperms () {
-      local path=$(eval echo "${3//>}")
+      local path=$(eval echo "${3//>}") # santize input so find doesn't break on spaces or ~
       local -i fileperms="$2" dirperms="$1"
       find "$path" -type d -exec chmod "$dirperms" {} \;
       find "$path" -type f -exec chmod "$fileperms" {} \;
