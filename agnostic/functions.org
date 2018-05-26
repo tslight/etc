@@ -98,7 +98,8 @@ https://stackoverflow.com/questions/4767396/linux-command-how-to-find-only-text-
 
 #+BEGIN_SRC sh
   dusort () {
-      du -h -d1 "$1" | sort -h -r
+      # d1 = depth 1, sort -hr = human-readable & reverse
+      du -hd1 "$1" | sort -hr
   }
 #+END_SRC
 
