@@ -232,7 +232,7 @@ counsel replacements:
     ("C-h l" . counsel-load-library)
     ("C-h i" . counsel-info-lookup-symbol)
     ("C-h u" . counsel-unicode-char)
-    ("C-c g" . counsel-git)
+    ("C-c g c" . counsel-git)
     ("C-c C-g" . counsel-git-grep)
     ("C-c M-g" . counsel-ag)
     ("C-c l" . counsel-locate)
@@ -389,9 +389,9 @@ that disables itself auto-magically.
   (use-package magit
     :ensure t
     :bind
-    ("C-x g g" . magit-status)
-    ("C-x g d" . magit-dispatch-popup)
-    ("C-x g l" . magit-list-repositories)
+    ("C-x g" . magit-status)
+    ("C-c g d" . magit-dispatch-popup)
+    ("C-c g l" . magit-list-repositories)
     :init
     (setq magit-repository-directories `(("~/" . 3)))
     (setq magit-repolist-columns
