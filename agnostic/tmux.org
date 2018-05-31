@@ -37,9 +37,9 @@
   bind -n MouseDown2Status copy-mode
 
   ## KEYS
-  # unbind C-b
-  # set -g prefix C-j
-  # bind C-j send-prefix
+  unbind C-b
+  set -g prefix C-j
+  bind C-j send-prefix
   bind C-l switch-client -l
   bind C-c new-session
   bind C-x kill-session

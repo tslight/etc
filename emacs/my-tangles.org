@@ -204,11 +204,9 @@ subprocesses.
 		(goto-char (point-min))
 		(insert ";; -*- lexical-binding: t; -*-\n")
 		(goto-char (point-max))
-		(when (equal (file-name-directory file)
-			     (concat user-emacs-directory "site-lisp/"))
-		  (let ((provide-string (file-name-sans-extension
-					 (file-name-nondirectory file))))
-		    (insert (concat "(provide '"provide-string")"))))
+		(let ((provide-string (file-name-sans-extension
+				       (file-name-nondirectory file))))
+		  (insert (concat "(provide '"provide-string")")))
 		(message (concat "Inserted boilerplate into " file)))
 	    (save-buffer temp-buffer)
 	    (kill-buffer temp-buffer)))))
