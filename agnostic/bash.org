@@ -39,6 +39,29 @@
       ssh-add -l &> /dev/null || ssh-add
   fi
 
+  # https://jackkamm.github.io/blog/directory-tracking-in-emacs-terminal-emulators/
+  # https://stackoverflow.com/a/10050104
+  if [ -n "$INSIDE_EMACS" ]; then
+      # function to set the dired and host for ansiterm
+      set_eterm_dir() {
+          print -P "\033AnSiTu %n"
+          print -P "\033AnSiTh" "$(hostname -f)"
+          print -P "\033AnSiTc %d"
+      }
+      # call prmptcmd whenever prompt is redrawn
+      precmd_functions=($precmd_functions set_eterm_dir)
+  fi
+
+  # https://www.emacswiki.org/emacs/AnsiTermHints#toc5
+  function set-eterm-dir {
+      echo -e "\033AnSiTc" "$(pwd)"
+      echo -e "\033AnSiTu" "$LOGNAME"
+      echo -e "\033AnSiTh" "$(hostname -f)"
+  }
+  if [ "$TERM" = "eterm-color" ]; then
+      PROMPT_COMMAND=set-eterm-dir
+  fi
+
   [ -f ~/.profile ] && source ~/.profile
   [ -f ~/.bashrc ] && source ~/.bashrc
 #+END_SRC
