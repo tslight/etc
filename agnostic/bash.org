@@ -68,9 +68,9 @@
   WHITE="\[$(tput setaf 7)\]"
 
   if [ $(id -u) -eq 0 ]; then
-      export PS1="${BOLD}${RED}\u${YELLOW}@${RED}\h ${CYAN}\$?${YELLOW}:${CYAN}\!/\#${YELLOW}:${CYAN}\j\n${MAGENTA}\w ${YELLOW}\$ ${NC}"
+      export PS1="${BOLD}${RED}\u@\H ${CYAN}\$?${YELLOW}:${CYAN}\!/\#${YELLOW}:${CYAN}\j\n${MAGENTA}\w ${YELLOW}\$ ${NC}"
   else
-      export PS1="${BOLD}${GREEN}\u${YELLOW}@${GREEN}\h ${MAGENTA}\$?${YELLOW}:${MAGENTA}\!/\#${YELLOW}:${MAGENTA}\j\n${CYAN}\w ${YELLOW}\$ ${NC}"
+      export PS1="${BOLD}${GREEN}\u@\H ${MAGENTA}\$?${YELLOW}:${MAGENTA}\!/\#${YELLOW}:${MAGENTA}\j\n${CYAN}\w ${YELLOW}\$ ${NC}"
   fi
 
   stty -ixon # disable ctrl-s/q flow control
