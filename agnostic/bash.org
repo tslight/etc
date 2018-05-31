@@ -34,8 +34,6 @@
 #+BEGIN_SRC sh :tangle ~/.bashrc
   [ -z "$PS1" ] && return # If not running interactively, don't do anything
   [ -f /etc/bash.bashrc ] && source /etc/bash.bashrc
-  # add easy colors to one-liners
-
 
   if [[ "$BASH_VERSINFO" -ge 4 ]]; then
       shopt -s autocd       # cd without cd. who knew?
