@@ -80,18 +80,18 @@
 #+END_SRC
 * INPUTRC
 #+BEGIN_SRC sh :tangle ~/.inputrc
-$include /etc/inputrc
+  $include /etc/inputrc
 
-set show-all-if-ambiguous on
-set show-all-if-unmodified on
-set completion-ignore-case on
+  set show-all-if-ambiguous on
+  set show-all-if-unmodified on
+  set completion-ignore-case on
 
-#menu-complete-display-prefix on
-#TAB: menu-complete
-#"\e[Z": menu-complete-backward
+  #menu-complete-display-prefix on
+  TAB: menu-complete
+  "\e[Z": menu-complete-backward
 
-"\en": history-search-forward
-"\ep": history-search-backward
-"\em": "\C-a\eb\ed\C-y\e#man \C-y\C-m\C-p\C-p\C-a\C-d\C-e"
-"\eh": "\C-a\eb\ed\C-y\e#man \C-y\C-m\C-p\C-p\C-a\C-d\C-e"
+  "\en": history-search-forward
+  "\ep": history-search-backward
+  "\em": "\C-a\eb\ed\C-y\e#man \C-y\C-m\C-p\C-p\C-a\C-d\C-e"
+  "\eh": "\C-a\eb\ed\C-y\e#man \C-y\C-m\C-p\C-p\C-a\C-d\C-e"
 #+END_SRC
