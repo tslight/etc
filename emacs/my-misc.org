@@ -89,3 +89,32 @@ install.
         (switch-to-buffer "*ansi-term*")
       (ansi-term (getenv "SHELL"))))
 #+END_SRC
+* TRAMP TERM
+#+BEGIN_SRC emacs-lisp
+  (defun my/tramp-term (&optional path name)
+    "Opens an ansi terminal at PATH. If no PATH is given, it uses
+     the value of `default-directory'. PATH may be a tramp remote path.
+     The ansi-term buffer is named based on `name' "
+    (interactive)
+    (unless path (setq path default-directory))
+    (unless name (setq name "ansi-term"))
+    (ansi-term "/bin/bash" name)
+    (let ((path (replace-regexp-in-string "^file:" "" path))
+          (cd-str
+           "fn=%s; if test ! -d $fn; then fn=$(dirname $fn); fi; cd $fn;")
+          (bufname (concat "*" name "*" )))
+      (if (tramp-tramp-file-p path)
+          (let ((tstruct (tramp-dissect-file-name path)))
+            (cond
+             ((equal (tramp-file-name-method tstruct) "ssh")
+              (process-send-string bufname (format
+                                            (concat  "ssh -t %s '"
+                                                     cd-str
+                                                     "exec bash'; exec bash; clear\n")
+                                            (tramp-file-name-host tstruct)
+                                            (tramp-file-name-localname tstruct))))
+             (t (error "not implemented for method %s"
+                       (tramp-file-name-method tstruct)))))
+        (process-send-string bufname (format (concat cd-str " exec bash;clear\n")
+                                             path)))))
+#+END_SRC
