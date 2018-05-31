@@ -117,6 +117,7 @@ My library of minor-modes and functions called via use-package.
   (use-package my-misc
     :commands
     my/after-make-frame
+    my/tramp-term
     :bind
     ("C-c a g" . my/google)
     ("C-c a t" . my/switch-to-ansi-term)
