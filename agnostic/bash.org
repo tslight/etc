@@ -18,7 +18,8 @@
 
   umask 022
 
-  if [[ $(uname) != "Darwin" && $(uname) != "OpenBSD" ]]; then
+  # if [[ $(uname) != "Darwin" && $(uname) != "OpenBSD" ]]; then
+  if ! pgrep ssh-agent &> /dev/null; then
       if [ ! -S ~/.ssh/ssh_auth_sock ]; then
           eval $(ssh-agent) &> /dev/null
           ln -sf "$SSH_AUTH_SOCK" ~/.ssh/ssh_auth_sock
