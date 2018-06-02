@@ -332,6 +332,16 @@ use.  E.g. it doesn’t exist under MS-Windows.
   (setq select-enable-primary t)
 #+END_SRC
 
+#+BEGIN_QUOTE
+Whether to enable X clipboard manager support.  If non-nil, then whenever Emacs
+is killed or an Emacs frame is deleted while owning the X clipboard, the
+clipboard contents are saved to the clipboard manager if one is present.
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+  (setq x-select-enable-clipboard-manager nil)
+#+END_SRC
+
 * CUSTOM FIlE
 
 #+BEGIN_QUOTE

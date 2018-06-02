@@ -7,36 +7,40 @@
 #+BEGIN_SRC xml :tangle ~/.jwmrc
   <?xml version="1.0"?>
   <JWM>
+    <!-- Autostart application -->
+    <StartupCommand>xfce4-power-manager</StartupCommand>
+    <StartupCommand>xfce4-clipman</StartupCommand>
+
     <!-- The root menu. -->
     <RootMenu onroot="12">
       <Program label="Firefox">firefox</Program>
+      <Program label="Chromium">chromium-browser</Program>
       <Program label="The GIMP">gimp</Program>
-      <Menu label="GNU Emacs">
-        <Program label="Emacs">xterm -e emacs -nw</Program>
-        <Program label="Emacs Quick">xterm -e emacs -nw -q</Program>
-        <Program label="Emacs Debug">xterm -e emacs -nw --debug-init</Program>
-        <Program label="Emacs Daemon">xterm -e emacsclient -nw -c -a ""</Program>
+      <Menu label="Emacs">
+        <Program label="Emacs">xfce4-terminal -x emacs -nw</Program>
+        <Program label="Emacs Quick">xfce4-terminal -x emacs -nw -q</Program>
+        <Program label="Emacs Debug">xfce4-terminal -x emacs -nw --debug-init</Program>
+        <Program label="Emacs Daemon">xfce4-terminal -x emacsclient -nw -c -a ""</Program>
         <Program label="GTK Emacs">emacs</Program>
         <Program label="GTK Emacs Quick">emacs -Q</Program>
         <Program label="GTK Emacs Debug">emacs --debug-init</Program>
         <Program label="GTK Emacs Daemon">emacsclient -c -a ""</Program>
       </Menu>
-      <Program label="Tabbed">tabbed -c xterm -into</Program>
-      <Program label="Tmux">xterm -e tmux</Program>
-      <Program label="XTerm">xterm</Program>
-      <Program label="Lock">xlock -mode random</Program>
+      <Program label="Tmux">xfce4-terminal -x tmux</Program>
+      <Program label="Term">xfce4-terminal</Program>
+      <Program label="Lock">slock</Program>
       <Menu label="Utilities">
         <Program label="Fonts">xfontsel</Program>
         <Restart label="Restart WM"/>
-        <Program label="XEventViewer">xterm -e xev</Program>
+        <Program label="XEventViewer">xfce4-terminal -x xev</Program>
         <Program label="XProp">xprop | xmessage -file -</Program>
         <Program label="XWinInfo">xwininfo | xmessage -file -</Program>
       </Menu>
       <Separator/>
       <Menu label="Exit">
         <Exit label="Logout" confirm="true"/>
-        <Program label="Reboot">shutdown -r now</Program>
-        <Program label="Shutdown">shutdown -p now</Program>
+        <Program label="Reboot">systemctl reboot</Program>
+        <Program label="Shutdown">systemctl poweroff</Program>
       </Menu>
     </RootMenu>
 
@@ -168,14 +172,13 @@
 
     <Key mask="4" key="r">exec:dmenu_run</Key>
     <Key mask="C" key="F2">exec:exec:dmenu_run</Key>
-    <Key mask="4" key="Return">exec:tabbed -c xterm -into</Key>
-    <Key mask="4C" key="Return">exec:xterm</Key>
-    <Key mask="4" key="e">exec:xterm -e emacsclient -nw -c -a ""</Key>
-    <Key mask="4C" key="e">exec:xterm -e emacs -nw</Key>
-    <Key mask="4" key="t">exec:xterm -e tmux</Key>
-    <Key mask="4C" key="t">exec:xterm -e tmux attach</Key>
+    <Key mask="4" key="Return">exec:xfce4-terminal</Key>
+    <Key mask="4" key="e">exec:emacsclient -c -a ""</Key>
+    <Key mask="4C" key="e">exec:emacs</Key>
+    <Key mask="4" key="t">exec:xfce4-terminal -x tmux</Key>
+    <Key mask="4C" key="t">exec:xfce4-terminal -x tmux attach</Key>
     <Key mask="4" key="w">exec:firefox</Key>
-    <Key mask="4C" key="w">exec:chrome</Key>
+    <Key mask="4C" key="w">exec:chromium-browser</Key>
 
     <Key mask="4" key="m">root:1</Key>
     <Key mask="C" key="F1">root:1</Key>
@@ -195,7 +198,7 @@
     <Key mask="4" key="k">udesktop</Key>
     <Key mask="4" key="j">ddesktop</Key>
 
-    <Key mask="4C" key="l">exec:xlock -mode random</Key>
+    <Key mask="4C" key="l">exec:slock</Key>
     <Key mask="4C" key="r">restart</Key>
     <Key mask="4C" key="q">exit</Key>
 
