@@ -133,7 +133,6 @@ My library of minor-modes and functions called via use-package.
 
 #+BEGIN_SRC emacs-lisp
   (use-package my-org
-    :defer t
     :after org-mode)
 #+END_SRC
 
