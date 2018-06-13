@@ -22,6 +22,12 @@
           alias zzz='pmset sleepnow'
           ;;
       freebsd*)
+          alias bye="sudo shutdown -p now"
+          alias rb='sudo reboot'
+          alias l='ls -Gh'
+          alias ll='ls -laGh'
+          alias grep='grep --color=always'
+          alias lsblk='geom disk list'
           ;;
       linux*)
           alias bye="systemctl poweroff"

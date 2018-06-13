@@ -125,8 +125,8 @@
   set completion-ignore-case on
 
   #menu-complete-display-prefix on
-  TAB: menu-complete
-  "\e[Z": menu-complete-backward
+  # TAB: menu-complete
+  # "\e[Z": menu-complete-backward
 
   "\en": history-search-forward
   "\ep": history-search-backward
