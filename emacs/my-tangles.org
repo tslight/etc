@@ -84,14 +84,14 @@ when =org-babel-execute-buffer= is executed.
 #+BEGIN_SRC emacs-lisp :tangle no
   (setq-default buffer-file-coding-system 'utf-8-unix)
   (setq my/config-directory "~/etc/"
-	my/agnostic-config-directory (concat my/config-directory "agnostic/")
-	my/emacs-config-directory    (concat my/config-directory "emacs/")
-	my/linux-config-directory    (concat my/config-directory "linux/")
-	my/macos-config-directory    (concat my/config-directory "macos/")
-	my/freebsd-config-directory  (concat my/config-directory "freebsd/")
-	my/netbsd-config-directory   (concat my/config-directory "netbsd/")
-	my/openbsd-config-directory  (concat my/config-directory "openbsd/")
-	my/windows-config-directory  (concat my/config-directory "windows/"))
+        my/agnostic-config-directory (concat my/config-directory "agnostic/")
+        my/emacs-config-directory    (concat my/config-directory "emacs/")
+        my/linux-config-directory    (concat my/config-directory "linux/")
+        my/macos-config-directory    (concat my/config-directory "macos/")
+        my/freebsd-config-directory  (concat my/config-directory "freebsd/")
+        my/netbsd-config-directory   (concat my/config-directory "netbsd/")
+        my/openbsd-config-directory  (concat my/config-directory "openbsd/")
+        my/windows-config-directory  (concat my/config-directory "windows/"))
 #+END_SRC
 
 * INSERT BOILERPLATE
@@ -198,18 +198,18 @@ subprocesses.
     (interactive "FFile: ")
     (when (equal (file-name-extension file) "el")
       (let ((temp-buffer (set-buffer (find-file-noselect file))))
-	(when temp-buffer
-	  (unwind-protect
-	      (progn
-		(goto-char (point-min))
-		(insert ";; -*- lexical-binding: t; -*-\n")
-		(goto-char (point-max))
-		(let ((provide-string (file-name-sans-extension
-				       (file-name-nondirectory file))))
-		  (insert (concat "(provide '"provide-string")")))
-		(message (concat "Inserted boilerplate into " file)))
-	    (save-buffer temp-buffer)
-	    (kill-buffer temp-buffer)))))
+        (when temp-buffer
+          (unwind-protect
+              (progn
+                (goto-char (point-min))
+                (insert ";; -*- lexical-binding: t; -*-\n")
+                (goto-char (point-max))
+                (let ((provide-string (file-name-sans-extension
+                                       (file-name-nondirectory file))))
+                  (insert (concat "(provide '"provide-string")")))
+                (message (concat "Inserted boilerplate into " file)))
+            (save-buffer temp-buffer)
+            (kill-buffer temp-buffer)))))
     file)
 #+END_SRC
 
@@ -248,20 +248,20 @@ the same thing, but simpler [[https://www.gnu.org/software/emacs/manual/html_nod
      sub-directories."
     (interactive "DDirectory name: ")
     (let (org-files-list
-	  (current-directory-list
-	   (directory-files-and-attributes directory t)))
+          (current-directory-list
+           (directory-files-and-attributes directory t)))
       (while current-directory-list
-	(cond ((equal ".org" (substring (car (car current-directory-list)) -4))
-	       (setq org-files-list
-		     (cons (car (car current-directory-list)) org-files-list)))
-	      ((eq t (car (cdr (car current-directory-list))))
-	       (if (equal "." (substring (car (car current-directory-list)) -1)) ()
-		 (setq org-files-list
-		       (append
-			(my/recursive-files-list
-			 (car (car current-directory-list)))
-			org-files-list)))))
-	(setq current-directory-list (cdr current-directory-list)))
+        (cond ((equal ".org" (substring (car (car current-directory-list)) -4))
+               (setq org-files-list
+                     (cons (car (car current-directory-list)) org-files-list)))
+              ((eq t (car (cdr (car current-directory-list))))
+               (if (equal "." (substring (car (car current-directory-list)) -1)) ()
+                 (setq org-files-list
+                       (append
+                        (my/recursive-files-list
+                         (car (car current-directory-list)))
+                        org-files-list)))))
+        (setq current-directory-list (cdr current-directory-list)))
       org-files-list))
 #+END_SRC
 
@@ -285,26 +285,26 @@ run [[*COMPILE%20AND%20LOAD%20CONFIG][my/compile-and-load-config]].
 #+BEGIN_SRC emacs-lisp
   (defun my/tangle-directory (directory)
     "Takes a DIRECTORY as an argument and recursively tangles all
-	  the org-mode files in it and it's child directories, using
-	  my/recursive-file-list.
+          the org-mode files in it and it's child directories, using
+          my/recursive-file-list.
 
-	  If the directory being tangled is my emacs configuration directory,
-	  run my/compile-and-load-config."
+          If the directory being tangled is my emacs configuration directory,
+          run my/compile-and-load-config."
     (interactive "DDirectory name: ")
 
     (unless (featurep 'org)
       (require 'org))
 
     (mapc (lambda (file)
-	    (my/insert-boilerplate
-	     (format "%s" (car (org-babel-tangle-file file)))))
-	  (my/recursive-files-list directory))
+            (my/insert-boilerplate
+             (format "%s" (car (org-babel-tangle-file file)))))
+          (my/recursive-files-list directory))
 
     (when (equal (expand-file-name directory)
-		 (expand-file-name my/emacs-config-directory))
+                 (expand-file-name my/emacs-config-directory))
       (my/compile-and-load-config)
       (when (file-readable-p "~/.emacs")
-	(delete-file "~/.emacs")))
+        (delete-file "~/.emacs")))
     (message "my/tangle-directory completed."))
 #+END_SRC
 
@@ -317,24 +317,24 @@ emacs directories.
 #+BEGIN_SRC emacs-lisp
   (defun my/tangle-all ()
     "Conditioanlly tangle configuration files, based on value
-	 returned by system-type, using my/tangle-directory.
+         returned by system-type, using my/tangle-directory.
 
-	 Always tangle agnostic and emacs directories."
+         Always tangle agnostic and emacs directories."
     (interactive)
     (my/tangle-directory my/agnostic-config-directory)
     (my/tangle-directory my/emacs-config-directory)
     (cond ((eq system-type 'gnu/linux)
-	   (my/tangle-directory my/linux-config-directory))
-	  ((eq system-type 'darwin)
-	   (my/tangle-directory my/macos-config-directory))
-	  ((cl-search "openbsd" system-configuration)
-	   (my/tangle-directory my/openbsd-config-directory))
-	  ((cl-search "freebsd" system-configuration)
-	   (my/tangle-directory my/freebsd-config-directory))
-	  ((cl-search "netbsd" system-configuration)
-	   (my/tangle-directory my/netbsd-config-directory))
-	  ((eq system-type 'windows-nt)
-	   (my/tangle-directory my/windows-config-directory)))
+           (my/tangle-directory my/linux-config-directory))
+          ((eq system-type 'darwin)
+           (my/tangle-directory my/macos-config-directory))
+          ((cl-search "openbsd" system-configuration)
+           (my/tangle-directory my/openbsd-config-directory))
+          ((cl-search "freebsd" system-configuration)
+           (my/tangle-directory my/freebsd-config-directory))
+          ((cl-search "netbsd" system-configuration)
+           (my/tangle-directory my/netbsd-config-directory))
+          ((eq system-type 'windows-nt)
+           (my/tangle-directory my/windows-config-directory)))
     (message "my/tangle-all completed."))
 #+END_SRC
 
@@ -360,39 +360,39 @@ another OS.
      However, I may want to be able to edit them without auto
      tangling from another OS."
     (when (equal (file-name-directory (directory-file-name buffer-file-name))
-		 (expand-file-name my/agnostic-config-directory))
+                 (expand-file-name my/agnostic-config-directory))
       (org-babel-tangle))
     (when (equal (file-name-directory (directory-file-name buffer-file-name))
-		 (expand-file-name my/emacs-config-directory))
+                 (expand-file-name my/emacs-config-directory))
       (byte-compile-file
        (my/insert-boilerplate
-	(format "%s" (car (org-babel-tangle))))0))
+        (format "%s" (car (org-babel-tangle))))0))
     (when (and (equal (file-name-directory (directory-file-name buffer-file-name))
-		      (expand-file-name my/linux-config-directory))
-	       (equal system-type 'gnu/linux))
+                      (expand-file-name my/linux-config-directory))
+               (equal system-type 'gnu/linux))
       (org-babel-tangle))
     (when (and (equal (file-name-directory (directory-file-name buffer-file-name))
-		      (expand-file-name my/macos-config-directory))
-	       (equal system-type 'darwin))
+                      (expand-file-name my/macos-config-directory))
+               (equal system-type 'darwin))
       (org-babel-tangle))
     (when (and (equal (file-name-directory (directory-file-name buffer-file-name))
-		      (expand-file-name my/freebsd-config-directory))
-	       (cl-search "freebsd" system-configuration))
+                      (expand-file-name my/freebsd-config-directory))
+               (cl-search "freebsd" system-configuration))
       (org-babel-tangle))
     (when (and (equal (file-name-directory (directory-file-name buffer-file-name))
-		      (expand-file-name my/netbsd-config-directory))
-	       (cl-search "netbsd" system-configuration))
+                      (expand-file-name my/netbsd-config-directory))
+               (cl-search "netbsd" system-configuration))
       (org-babel-tangle))
     (when (and (equal (file-name-directory (directory-file-name buffer-file-name))
-		      (expand-file-name my/openbsd-config-directory))
-	       (cl-search "openbsd" system-configuration))
+                      (expand-file-name my/openbsd-config-directory))
+               (cl-search "openbsd" system-configuration))
       (org-babel-tangle))
     (when (and (equal (file-name-directory (directory-file-name buffer-file-name))
-		      (expand-file-name my/netbsd-config-directory))
-	       (equal system-type 'berkeley-unix))
+                      (expand-file-name my/netbsd-config-directory))
+               (equal system-type 'berkeley-unix))
       (org-babel-tangle))
     (when (and (equal (file-name-directory (directory-file-name buffer-file-name))
-		      (expand-file-name my/windows-config-directory))
-	       (equal system-type 'windows-nt))
+                      (expand-file-name my/windows-config-directory))
+               (equal system-type 'windows-nt))
       (org-babel-tangle)))
 #+END_SRC
