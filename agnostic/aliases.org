@@ -19,6 +19,7 @@
           alias lsblk='diskutil list'
           alias rb='sudo reboot'
           alias srch='sudo /usr/libexec/locate.updatedb && locate -i'
+          alias update='brew update && brew upgrade && sudo softwareupdate -i --all'
           alias zzz='pmset sleepnow'
           ;;
       freebsd*)
@@ -101,12 +102,13 @@
   alias mkdir='mkdir -p'
   alias mv='mv -i'
   alias p='pwd'
+  alias pg='pgrep -ail'
   alias ping4='ping -c 4'
   alias pingg='ping -c 4 8.8.8.8'
   alias rm='rm -i'
   alias s2us='for f in *;do mv $f ${f// /_};done' # convert ' ' to '_'
   alias sshaa='eval $(ssh-agent) && ssh-add'
-  alias uc='egrep -v "^#|^$"' # uncomment
+  alias uc='grep -Ev "^#|^\s+#|^\t+#|^$"' # uncomment
   alias up='uptime'
   command -v colordiff >/dev/null 2>&1 && alias diff='colordiff'
   command -v emacs > /dev/null 2>&1 && alias e='emacs'
