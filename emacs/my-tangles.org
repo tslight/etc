@@ -81,7 +81,7 @@ No need to tangle this block since these variables are loaded by init
 file. This block is just here so that these variables are available
 when =org-babel-execute-buffer= is executed.
 
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp
   (setq-default buffer-file-coding-system 'utf-8-unix)
   (setq my/config-directory "~/etc/"
         my/agnostic-config-directory (concat my/config-directory "agnostic/")
