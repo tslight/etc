@@ -32,7 +32,8 @@ Finally one needs to run 'udevadm hwdb --update' and 'udevadm trigger'
 WORKS WITH POST *30 (2012) SERIES THINKPADS
 
 *** EMACS INSPIRED SPACE CADET SETUP
-#+BEGIN_SRC conf :tangle no
+
+#+BEGIN_SRC conf
   #keyboard:dmi:*                # only works on udev versions 208-215
   evdev:atkbd:dmi:*              # only works with udev versions > 215
    KEYBOARD_KEY_01=capslock      # esc   --> caps
@@ -44,7 +45,9 @@ WORKS WITH POST *30 (2012) SERIES THINKPADS
    KEYBOARD_KEY_1d=leftmeta      # ctrl  --> super
    KEYBOARD_KEY_9d=rightmeta     # ctrl  --> super
 #+END_SRC
+
 *** CLASSIC CTRL ALT SETUP (NO SUPER KEYS)
+
 #+BEGIN_SRC conf :tangle no
   #keyboard:dmi:*                # only works on udev versions 208-215
   evdev:atkbd:dmi:*              # only works with udev versions > 215
@@ -54,7 +57,9 @@ WORKS WITH POST *30 (2012) SERIES THINKPADS
    KEYBOARD_KEY_db=leftctrl      # meta  --> control
    KEYBOARD_KEY_b8=leftalt       # altgr --> a
 #+END_SRC
+
 *** SWAPCAPSESCAPE PRTSC_RWIN
+
 #+BEGIN_SRC conf :tangle no
   #keyboard:dmi:*                # only works on udev versions 208-215
   evdev:atkbd:dmi:*              # only works with udev versions > 215
@@ -63,12 +68,14 @@ WORKS WITH POST *30 (2012) SERIES THINKPADS
    KEYBOARD_KEY_b7=rightmeta     # prtsc --> super
    KEYBOARD_KEY_b8=leftalt       # altgr --> alt
 #+END_SRC
+
 ** OLD SKOOL THINKPAD KEYBOARD MODS
 
 WORKS WITH PRE *30 (2012) SERIES THINKPADS
 
 *** SPACE CADET
-#+BEGIN_SRC conf
+
+#+BEGIN_SRC conf :tangle no
 #keyboard:dmi:*            # only works on udev versions 208-215
 evdev:atkbd:dmi:*          # only works with udev versions > 215
  KEYBOARD_KEY_01=capslock  # esc   --> caps
@@ -80,7 +87,9 @@ evdev:atkbd:dmi:*          # only works with udev versions > 215
  KEYBOARD_KEY_9d=rightmeta # rctrl --> rwin
  KEYBOARD_KEY_1d=leftmeta  # lctrl --> lwin
 #+END_SRC
+
 *** SYMMETRICAL SUPER KEY SETUP
+
 #+BEGIN_SRC conf :tangle no
 #keyboard:dmi:*            # only works on udev versions 208-215
 evdev:atkbd:dmi:*          # only works with udev versions > 215
@@ -89,6 +98,7 @@ evdev:atkbd:dmi:*          # only works with udev versions > 215
  KEYBOARD_KEY_dd=rightmeta # menu  --> super
  KEYBOARD_KEY_b8=leftalt   # altgr --> alt
 #+END_SRC
+
 ** SHITTY HP BLUETOOTH THING MODS!
 
 WORKS WITH SHITTY HP BLUETOOTH THING!
