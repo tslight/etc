@@ -133,6 +133,24 @@ Make a directory and cd into it.
   }
 #+END_SRC
 
+** PGREPKILL
+
+Find and kill all processes with a given name
+
+#+BEGIN_SRC sh
+  pgrepkill () {
+      if pid=($(pgrep -i "$1")); then
+          for p in "${pid[@]}"; do
+              if ps -p "$p" &> /dev/null; then
+                  echo "Killing $1 process: $p"
+                  sudo kill -9 "$p"
+              fi
+          done
+      else
+          echo "No $1 processes found."
+      fi
+  }
+#+END_SRC
 ** PSEE
 
 I have since found ~pgrep -ail~...
