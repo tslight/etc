@@ -52,7 +52,7 @@
   bind r neww -n fm ranger
   bind R neww -n sfm 'sudo ranger'
   bind M-r neww -n dl rtorrent
-  bind S neww -n su su
+  bind S neww -n su 'sudo -s'
   bind t splitw -h -p 42 top
 
   ## MAC COPY PASTE
