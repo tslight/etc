@@ -61,6 +61,9 @@ My library of minor-modes and functions called via use-package.
     my/sort-lines-nocase
     my/untabify-buffer
     :bind
+    ("C-a" . my/smart-beginning-of-line)
+    ("C-w" . my/copy-line-or-region)
+    ("M-w" . my/cut-line-or-region)
     ("C-c e p" . my/change-pairs)
     ("C-c C-=" . my/align-equals)
     ("C-c d b" . my/delete-in-brackets)
