@@ -88,6 +88,7 @@
   alias ha='history 0'
   alias j='jobs -l'
   alias lc='grep -cv "^$"' # line count
+  alias lgb='lazygit backup'
   alias lgc='lazygit clone'
   alias lgs='lazygit "status -s" | sed "s/ -s//g;/^$/d"'
   alias lgf='lazygit fetch'
