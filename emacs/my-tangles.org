@@ -305,7 +305,7 @@ run [[*COMPILE%20AND%20LOAD%20CONFIG][my/compile-and-load-config]].
       (my/compile-and-load-config)
       (when (file-readable-p "~/.emacs")
         (delete-file "~/.emacs")))
-    (message "my/tangle-directory completed."))
+    (message (concat "my/tangle-directory "directory" completed.")))
 #+END_SRC
 
 * TANGLE ALL
