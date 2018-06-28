@@ -13,6 +13,7 @@
   set -g set-titles-string "#T: [#S] #I: #W: #P"
   set -g display-panes-time 4000 # I'm slow and indecisive!
   set -g default-terminal "screen-256color"
+  set -g escape-time 0 # default is 500ms which feels like forever..
   #set -g mode-keys vi
 
   ## COLORS
