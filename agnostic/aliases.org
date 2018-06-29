@@ -111,29 +111,19 @@
   alias sshaa='eval $(ssh-agent) && ssh-add'
   alias uc='grep -Ev "^#|^\s+#|^\t+#|^$"' # uncomment
   alias up='uptime'
-  command -v colordiff >/dev/null 2>&1 && alias diff='colordiff'
-  command -v emacs > /dev/null 2>&1 && alias e='emacs'
-  command -v emacsclient > /dev/null 2>&1 && alias ec='emacsclient -c -a ""'
-  command -v sudo > /dev/null 2>&1 && alias se='sudoedit'
-  command -v tmux > /dev/null 2>&1 && alias t='tmux -u'
-  command -v tmux > /dev/null 2>&1 && alias ta='tmux -u attach'
-  command -v tmux > /dev/null 2>&1 && alias tk='tmux kill-session'
-  command -v tmux > /dev/null 2>&1 && alias tka='tmux kill-session -a'
-  command -v vim > /dev/null 2>&1 && alias v='vim'
-  command -v startx > /dev/null 2>&1 && alias x='exec startx; logout'
 #+END_SRC
 
 * APPLICATION DEPENDENT
 
 #+BEGIN_SRC sh
   command -v colordiff >/dev/null 2>&1 && alias diff='colordiff'
-  command -v emacs > /dev/null 2>&1 && alias e='emacs'
-  command -v emacsclient > /dev/null 2>&1 && alias ec='emacsclient -c -a ""'
-  command -v sudo > /dev/null 2>&1 && alias se='sudoedit'
-  command -v tmux > /dev/null 2>&1 && alias t='tmux -u'
-  command -v tmux > /dev/null 2>&1 && alias ta='tmux -u attach'
-  command -v tmux > /dev/null 2>&1 && alias tk='tmux kill-session'
-  command -v tmux > /dev/null 2>&1 && alias tka='tmux kill-session -a'
-  command -v vim > /dev/null 2>&1 && alias v='vim'
-  command -v startx > /dev/null 2>&1 && alias x='exec startx; logout'
+  command -v emacs &>/dev/null && alias e='emacs'
+  command -v emacsclient &>/dev/null && alias ec='emacsclient -c -a ""'
+  command -v sudo &>/dev/null && alias se='sudoedit'
+  command -v tmux &>/dev/null && alias t='tmux -u'
+  command -v tmux &>/dev/null && alias ta='tmux -u attach'
+  command -v tmux &>/dev/null && alias tk='tmux kill-session'
+  command -v tmux &>/dev/null && alias tka='tmux kill-session -a'
+  command -v vim &>/dev/null && alias v='vim'
+  command -v startx &>/dev/null && alias x='exec startx; logout'
 #+END_SRC
