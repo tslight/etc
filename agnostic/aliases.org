@@ -90,10 +90,10 @@
   alias lc='grep -cv "^$"' # line count ignoring empty lines
   alias lgscp='lazygit scp' # add, commit, push
   alias lgb='lazygit backup'
-  alias lgc='lazygit clone tslight | sed "/^$/d"'
-  alias lgs='lazygit "status -s" | sed "s/ -s//g;/^$/d"'
+  alias lgc='lazygit clone tslight'
+  alias lgs='lazygit "status -s"'
   alias lgf='lazygit fetch'
-  alias lgp='lazygit pull | sed "s/ -q//g;/^$/d"'
+  alias lgp='lazygit pull'
   alias lgr='lazygit "remote -v"'
   alias lgua='lazygit urls add'
   alias lgur='lazygit urls rm'
