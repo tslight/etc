@@ -46,7 +46,7 @@ All the non-essential, but nice to have stuff goes in here.
 - [[#yasnippets][YASNIPPETS]]
 
 * AGGRESSIVE INDENT
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package aggressive-indent
     :ensure t
     :diminish aggressive-indent-mode
