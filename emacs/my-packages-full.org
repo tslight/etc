@@ -297,10 +297,11 @@ https://elpy.readthedocs.io/en/latest/
 #+BEGIN_SRC emacs-lisp
   (use-package elpy
     :ensure t
-    :defer 4
+    :defer t
+    :hook
+    (python-mode . elpy-mode)
     :config
     (elpy-enable)
-    ;; jedi is great
     (setq elpy-rpc-backend "jedi")
     (setq python-shell-interpreter "jupyter"
           python-shell-interpreter-args "console --simple-prompt"
@@ -315,8 +316,9 @@ https://pypi.org/project/autopep8/
 #+BEGIN_SRC emacs-lisp
   (use-package py-autopep8
     :ensure t
+    :defer t
     :hook
-    (elpy-mode-hook . py-autopep8-enable-on-save))
+    (elpy-mode . py-autopep8-enable-on-save))
 #+END_SRC
 
 * SMEX
