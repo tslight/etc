@@ -296,6 +296,7 @@ https://pypi.org/project/autopep8/
       :hook
       (elpy-mode . py-autopep8-enable-on-save))
 #+END_SRC
+
 * SMEX
 #+BEGIN_SRC emacs-lisp
   (use-package smex
