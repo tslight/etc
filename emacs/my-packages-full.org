@@ -254,6 +254,7 @@ kill.
     :mode "\\.ps1\\'")
 #+END_SRC
 * PROJECTILE
+
 #+BEGIN_SRC emacs-lisp
   (use-package projectile
     :ensure t
@@ -269,6 +270,7 @@ kill.
       ;; Optionally write to persistent `projectile-known-projects-file'
       (projectile-save-known-projects)))
 #+END_SRC
+
 * PYTHON
 
 https://realpython.com/emacs-the-best-python-editor/
