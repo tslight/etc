@@ -26,6 +26,7 @@ All the non-essential, but nice to have stuff goes in here.
 - [[#counsel-projectile][COUNSEL PROJECTILE]]
 - [[#diminish][DIMINISH]]
 - [[#emmet-mode][EMMET MODE]]
+- [[#exec-path-from-shell][EXEC PATH FROM SHELL]]
 - [[#expand-region][EXPAND REGION]]
 - [[#flx][FLX]]
 - [[#flycheck][FLYCHECK]]
@@ -159,6 +160,20 @@ kill.
     (css-mode)
     (web-mode))
 #+END_SRC
+
+* EXEC PATH FROM SHELL
+
+https://github.com/purcell/exec-path-from-shell
+
+#+BEGIN_SRC emacs-lisp
+  (use-package exec-path-from-shell
+    :if (eq system-type 'darwin)
+    :ensure t
+    :defer t
+    :config
+    (exec-path-from-shell-initialize))
+#+END_SRC
+
 * EXPAND REGION
 #+BEGIN_SRC emacs-lisp
   (use-package expand-region
@@ -282,9 +297,15 @@ https://elpy.readthedocs.io/en/latest/
 #+BEGIN_SRC emacs-lisp
   (use-package elpy
     :ensure t
-    :defer t
-    :after python
-    :config (elpy-enable))
+    :defer 4
+    :config
+    (elpy-enable)
+    ;; jedi is great
+    (setq elpy-rpc-backend "jedi")
+    (setq python-shell-interpreter "jupyter"
+          python-shell-interpreter-args "console --simple-prompt"
+          python-shell-prompt-detect-failure-warning nil)
+    (add-to-list 'python-shell-completion-native-disabled-interpreters"jupyter"))
 #+END_SRC
 
 ** PEP8
@@ -292,11 +313,10 @@ https://elpy.readthedocs.io/en/latest/
 https://pypi.org/project/autopep8/
 
 #+BEGIN_SRC emacs-lisp
-    (use-package py-autopep8
-      :ensure t
-      :defer t
-      :hook
-      (elpy-mode . py-autopep8-enable-on-save))
+  (use-package py-autopep8
+    :ensure t
+    :hook
+    (elpy-mode-hook . py-autopep8-enable-on-save))
 #+END_SRC
 
 * SMEX
