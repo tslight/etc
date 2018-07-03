@@ -169,8 +169,7 @@ https://github.com/purcell/exec-path-from-shell
   (use-package exec-path-from-shell
     :if (eq system-type 'darwin)
     :ensure t
-    :defer t
-    :config
+    :init
     (exec-path-from-shell-initialize))
 #+END_SRC
 
