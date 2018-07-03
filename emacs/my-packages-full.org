@@ -38,6 +38,9 @@ All the non-essential, but nice to have stuff goes in here.
 - [[#powerline][POWERLINE]]
 - [[#powershell][POWERSHELL]]
 - [[#projectile][PROJECTILE]]
+- [[#python][PYTHON]]
+   - [[#elpy][ELPY]]
+   - [[#pep8][PEP8]]
 - [[#smex][SMEX]]
 - [[#ssh-agency][SSH-AGENCY]]
 - [[#web-mode][WEB MODE]]
@@ -48,6 +51,7 @@ All the non-essential, but nice to have stuff goes in here.
 * AGGRESSIVE INDENT
 #+BEGIN_SRC emacs-lisp :tangle no
   (use-package aggressive-indent
+    :disabled t
     :ensure t
     :diminish aggressive-indent-mode
     :defer t
@@ -207,6 +211,7 @@ kill.
 * LISPY
 #+BEGIN_SRC emacs-lisp :tangle no
   (use-package lispy
+    :disabled t
     :ensure t
     :defer t
     :hook
@@ -263,6 +268,33 @@ kill.
             (mapcar #'file-name-as-directory (magit-list-repos)))
       ;; Optionally write to persistent `projectile-known-projects-file'
       (projectile-save-known-projects)))
+#+END_SRC
+* PYTHON
+
+https://realpython.com/emacs-the-best-python-editor/
+
+** ELPY
+
+https://elpy.readthedocs.io/en/latest/
+
+#+BEGIN_SRC emacs-lisp
+  (use-package elpy
+    :ensure t
+    :defer t
+    :after python
+    :config (elpy-enable))
+#+END_SRC
+
+** PEP8
+
+https://pypi.org/project/autopep8/
+
+#+BEGIN_SRC emacs-lisp
+    (use-package py-autopep8
+      :ensure t
+      :defer t
+      :hook
+      (elpy-mode . py-autopep8-enable-on-save))
 #+END_SRC
 * SMEX
 #+BEGIN_SRC emacs-lisp
