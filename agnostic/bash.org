@@ -18,15 +18,26 @@
 
   umask 022
 
-  # if [[ $(uname) != "Darwin" && $(uname) != "OpenBSD" ]]; then
-  if ! pgrep ssh-agent &> /dev/null; then
-      if [ ! -S ~/.ssh/ssh_auth_sock ]; then
-          eval $(ssh-agent) &> /dev/null
-          ln -sf "$SSH_AUTH_SOCK" ~/.ssh/ssh_auth_sock
-      fi
-      export SSH_AUTH_SOCK=~/.ssh/ssh_auth_sock
-      ssh-add -l &> /dev/null || ssh-add
+  # run a ssh-agent process if there is not one already, and save the output thereof
+  if ! pgrep -u "$USER" ssh-agent > /dev/null; then
+      ssh-agent > ~/.ssh/agent_cache
   fi
+
+  # If there is one running already, we retrieve the cached ssh-agent output and
+  # evaluate it which will set the necessary environment variables
+  if [[ "$SSH_AGENT_PID" == "" ]]; then
+      eval "$(< ~/.ssh/agent_cache)"
+  fi
+
+  # if [[ $(uname) != "Darwin" && $(uname) != "OpenBSD" ]]; then
+  # if ! pgrep ssh-agent &> /dev/null; then
+  #     if [ ! -S ~/.ssh/ssh_auth_sock ]; then
+  #         eval $(ssh-agent) &> /dev/null
+  #         ln -sf "$SSH_AUTH_SOCK" ~/.ssh/ssh_auth_sock
+  #     fi
+  #     export SSH_AUTH_SOCK=~/.ssh/ssh_auth_sock
+  #     ssh-add -l &> /dev/null || ssh-add
+  # fi
 
   [ -f ~/.profile ] && source ~/.profile
   [ -f ~/.bashrc ] && source ~/.bashrc

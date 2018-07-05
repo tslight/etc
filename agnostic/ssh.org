@@ -1,0 +1,11 @@
+#+PROPERTY: header-args :cache yes
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :padline no
+#+PROPERTY: header-args+ :results silent
+#+PROPERTY: header-args+ :tangle-mode (identity #o600)
+#+BEGIN_SRC conf :tangle ~/.ssh/config
+  Host *
+       UseKeychain yes
+       AddKeysToAgent yes
+       IdentityFile ~/.ssh/id_rsa
+#+END_SRC
