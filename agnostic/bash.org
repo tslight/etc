@@ -25,7 +25,7 @@
 
   # If there is one running already, we retrieve the cached ssh-agent output and
   # evaluate it which will set the necessary environment variables
-  if [[ "$SSH_AGENT_PID" == "" ]]; then
+  if [[ ! "$SSH_AGENT_PID" == "" ]]; then
       eval "$(< ~/.ssh/agent_cache)"
   fi
 
