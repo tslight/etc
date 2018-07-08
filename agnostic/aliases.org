@@ -83,6 +83,7 @@
   alias df='df -h'
   alias dh='dirs -v'
   alias du='du -h'
+  alias fuck='sudo $(history -p \!\!)'
   alias g='git'
   alias h='history'
   alias ha='history 0'
