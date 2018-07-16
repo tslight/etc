@@ -27,8 +27,10 @@ install.
 - [[#doc-view][DOC VIEW]]
 - [[#enable-disabled][ENABLE DISABLED]]
 - [[#encoding][ENCODING]]
+- [[#fill-column][FILL COLUMN]]
 - [[#hide-show][HIDE SHOW]]
 - [[#history][HISTORY]]
+- [[#highlight-line-mode][HIGHLIGHT LINE MODE]]
 - [[#indentation][INDENTATION]]
 - [[#interface][INTERFACE]]
 - [[#lockfiles][LOCKFILES]]
@@ -532,6 +534,10 @@ disabled, i.e., all commands work normally.
   (setq savehist-save-minibuffer-history 1)
   (setq history-length t)
   (setq history-delete-duplicates t)
+#+END_SRC
+* HIGHLIGHT LINE MODE
+#+BEGIN_SRC emacs-lisp
+  (global-hl-line-mode)
 #+END_SRC
 * INDENTATION
 #+BEGIN_SRC emacs-lisp
