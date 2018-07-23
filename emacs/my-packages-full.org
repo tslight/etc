@@ -287,6 +287,14 @@ https://github.com/purcell/exec-path-from-shell
 
 * PYTHON
 
+[[https://emacs.stackexchange.com/questions/2745/make-fill-paragraph-in-python-docstring-leave-the-triple-quotes-on-separate-line/2758][Docstring Fill Column Mode]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package python
+    :config
+    (setq python-fill-docstring-style 'django))
+#+END_SRC
+
 https://realpython.com/emacs-the-best-python-editor/
 
 ** ELPY
