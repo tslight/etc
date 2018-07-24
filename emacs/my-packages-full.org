@@ -291,6 +291,7 @@ https://github.com/purcell/exec-path-from-shell
 
 #+BEGIN_SRC emacs-lisp
   (use-package python
+    :ensure t
     :config
     (setq python-fill-docstring-style 'django))
 #+END_SRC
