@@ -89,6 +89,7 @@
   alias ha='history 0'
   alias j='jobs -l'
   alias lc='grep -cv "^$"' # line count ignoring empty lines
+  alias lg='lazygit'
   alias lgscp='lazygit scp' # add, commit, push
   alias lgb='lazygit backup'
   alias lgc='lazygit clone tslight'
