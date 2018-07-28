@@ -28,7 +28,9 @@
       pa = push --all -u
       pm = push origin master
       po = push origin
-      r = rebase
+      R = rebase
+      r = remote
+      rv = remote -v
       s = status
   [core]
       autocrlf = false
