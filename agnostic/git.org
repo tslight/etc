@@ -32,6 +32,8 @@
       r = remote
       rv = remote -v
       s = status
+      ua = remote set-url --add --push origin
+      ud = remote set-url --delete --push origin
   [core]
       autocrlf = false
 #+END_SRC
