@@ -34,6 +34,7 @@ All the non-essential, but nice to have stuff goes in here.
 - [[#hungry-delete][HUNGRY DELETE]]
 - [[#iedit][IEDIT]]
 - [[#lispy][LISPY]]
+- [[#markdown][MARKDOWN]]
 - [[#paredit][PAREDIT]]
 - [[#pc-buffer-switch][PC BUFFER SWITCH]]
 - [[#powerline][POWERLINE]]
@@ -42,6 +43,8 @@ All the non-essential, but nice to have stuff goes in here.
 - [[#python][PYTHON]]
    - [[#elpy][ELPY]]
    - [[#pep8][PEP8]]
+   - [[#jedi][JEDI]]
+   - [[#company-jedi][COMPANY JEDI]]
 - [[#smex][SMEX]]
 - [[#ssh-agency][SSH-AGENCY]]
 - [[#web-mode][WEB MODE]]
@@ -233,6 +236,19 @@ https://github.com/purcell/exec-path-from-shell
     (lisp-mode . lispy-mode)
     (lisp-interaction-mode . lispy-mode))
 #+END_SRC
+* MARKDOWN
+
+#+BEGIN_SRC emacs-lisp
+  (use-package markdown-mode
+    :ensure t
+    :defer t
+    :commands (markdown-mode gfm-mode)
+    :mode (("README\\.md\\'" . gfm-mode)
+           ("\\.md\\'" . markdown-mode)
+           ("\\.markdown\\'" . markdown-mode))
+    :init (setq markdown-command "multimarkdown"))
+#+END_SRC
+
 * PAREDIT
 #+BEGIN_SRC emacs-lisp
   (use-package paredit
@@ -290,8 +306,10 @@ https://github.com/purcell/exec-path-from-shell
 [[https://emacs.stackexchange.com/questions/2745/make-fill-paragraph-in-python-docstring-leave-the-triple-quotes-on-separate-line/2758][Docstring Fill Column Mode]]
 
 #+BEGIN_SRC emacs-lisp
-  (use-package python
+  (use-package python-mode
     :ensure t
+    :commands (python-mode)
+    :mode (("\\.py\\'" . python-mode))
     :config
     (setq python-fill-docstring-style 'django))
 #+END_SRC
@@ -326,7 +344,31 @@ https://pypi.org/project/autopep8/
     :ensure t
     :defer t
     :hook
-    (elpy-mode . py-autopep8-enable-on-save))
+    (python-mode . py-autopep8-enable-on-save))
+#+END_SRC
+
+** JEDI
+
+https://github.com/anschwa/emacs.d#python
+
+#+BEGIN_SRC emacs-lisp
+  (use-package jedi
+    :ensure t
+    :defer t
+    :init
+    (setq jedi:complete-on-dot t)
+    :hook
+    (python-mode . jedi:setup))
+#+END_SRC
+
+** COMPANY JEDI
+
+#+BEGIN_SRC emacs-lisp
+  (use-package company-jedi
+    :ensure t
+    :defer t
+    :config
+    (add-to-list 'company-backends 'company-jedi))
 #+END_SRC
 
 * SMEX
