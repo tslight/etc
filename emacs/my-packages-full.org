@@ -303,6 +303,14 @@ https://github.com/purcell/exec-path-from-shell
 
 * PYTHON
 
+Make sure the following python packages are installed:
+
+- jedi
+- autopep8
+- flake8
+- jupyter
+- virtualenv
+
 [[https://emacs.stackexchange.com/questions/2745/make-fill-paragraph-in-python-docstring-leave-the-triple-quotes-on-separate-line/2758][Docstring Fill Column Mode]]
 
 #+BEGIN_SRC emacs-lisp
