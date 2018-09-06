@@ -87,7 +87,6 @@ My library of minor-modes and functions called via use-package.
 
 #+BEGIN_SRC emacs-lisp
   (use-package my-dired
-    :after dired-mode
     :bind
     (:map
      dired-mode-map
