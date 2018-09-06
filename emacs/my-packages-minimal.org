@@ -414,9 +414,8 @@ that disables itself auto-magically.
     :diminish undo-tree-mode
     :bind
     ("C-x u" . undo-tree-visualize)
-    :init
-    (global-undo-tree-mode 1)
     :config
+    (global-undo-tree-mode 1)
     (setq undo-tree-auto-save-history t)
     (setq undo-tree-history-directory-alist
           `(("." . ,(expand-file-name "~/.emacs.d/undos/")))))
