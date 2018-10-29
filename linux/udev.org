@@ -34,7 +34,7 @@ WORKS WITH POST *30 (2012) SERIES THINKPADS
 
 *** EMACS INSPIRED SPACE CADET SETUP
 
-#+BEGIN_SRC conf
+#+BEGIN_SRC conf :tangle no
   #keyboard:dmi:*                # only works on udev versions 208-215
   evdev:atkbd:dmi:*              # only works with udev versions > 215
    KEYBOARD_KEY_01=capslock      # esc   --> caps
@@ -76,7 +76,7 @@ WORKS WITH PRE *30 (2012) SERIES THINKPADS
 
 *** SPACE CADET
 
-#+BEGIN_SRC conf :tangle no
+#+BEGIN_SRC conf
 #keyboard:dmi:*            # only works on udev versions 208-215
 evdev:atkbd:dmi:*          # only works with udev versions > 215
  KEYBOARD_KEY_01=capslock  # esc   --> caps
