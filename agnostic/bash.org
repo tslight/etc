@@ -22,58 +22,17 @@
       eval $(ssh-agent -s) && ssh-add
   fi
 
-  # SSH_ENV="$HOME/.ssh/environment"
-
-  # function start_agent {
-  #     echo "Initialising new SSH agent..."
-  #     /usr/bin/ssh-agent | sed 's/^echo/#echo/' > "${SSH_ENV}"
-  #     echo succeeded
-  #     chmod 600 "${SSH_ENV}"
-  #     . "${SSH_ENV}" > /dev/null
-  #     /usr/bin/ssh-add;
-  # }
-
-  # # Source SSH settings, if applicable
-
-  # if [ -f "${SSH_ENV}" ]; then
-  #     . "${SSH_ENV}" > /dev/null
-  #     #ps ${SSH_AGENT_PID} doesn't work under cywgin
-  #     ps -ef | grep ${SSH_AGENT_PID} | grep ssh-agent$ > /dev/null || {
-  #         start_agent;
-  #     }
-  # else
-  #     start_agent;
-  # fi
-
-  # SSH_AGENT_CACHE="$HOME/.ssh/agent_cache"
-
-  # # run a ssh-agent process if there is not one already, and save the output thereof
-  # if ! pgrep -u "$USER" ssh-agent > /dev/null; then
-  #     ssh-agent > "$SSH_AGENT_CACHE"
-  #     eval $(ssh-agent) && ssh-add
-  # fi
-
-  # # If there is one running already, we retrieve the cached ssh-agent output and
-  # # evaluate it which will set the necessary environment variables
-  # if [[ ! "$SSH_AGENT_PID" == "" ]]; then
-  #     if [[ ! -f "$SSH_AGENT_CACHE" ]]; then
-  #         ssh-agent > "$SSH_AGENT_CACHE"
-  #     fi
-  #     eval "$(< $SSH_AGENT_CACHE)"
-  # fi
-
-  # if [[ $(uname) != "Darwin" && $(uname) != "OpenBSD" ]]; then
-  # if ! pgrep ssh-agent &> /dev/null; then
-  #     if [ ! -S ~/.ssh/ssh_auth_sock ]; then
-  #         eval $(ssh-agent) &> /dev/null
-  #         ln -sf "$SSH_AUTH_SOCK" ~/.ssh/ssh_auth_sock
-  #     fi
-  #     export SSH_AUTH_SOCK=~/.ssh/ssh_auth_sock
-  #     ssh-add -l &> /dev/null || ssh-add
-  # fi
-
   [ -f ~/.profile ] && source ~/.profile
   [ -f ~/.bashrc ] && source ~/.bashrc
+#+END_SRC
+* BASH LOGOUT
+#+BEGIN_SRC sh :tangle ~/.bash_logout
+  # when leaving the console clear the screen to increase privacy
+  if [ "$SHLVL" = 1 ]; then
+      [ -x /usr/bin/clear_console ] && /usr/bin/clear_console -q
+  fi
+
+  pgrep -u "$USER" ssh-agent && pkill -u "$USER" ssh-agent
 #+END_SRC
 * BASHRC
 #+BEGIN_SRC sh :tangle ~/.bashrc
