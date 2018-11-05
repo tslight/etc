@@ -1,0 +1,21 @@
+#+PROPERTY: header-args :cache yes
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :padline no
+#+PROPERTY: header-args+ :results silent
+#+PROPERTY: header-args+ :tangle-mode (identity #o600)
+#+NAME: Powershell
+
+* POWERSHELL PROFILE
+
+#+BEGIN_SRC conf yes :tangle ~/Documents/WindowsPowershell/Microsoft.Powershell_profile.ps1
+  $env:PSModulePath = $env:PSModulePath + ";$HOME\src\TSPSModules"
+  if ($host.Name -eq 'ConsoleHost') {
+      Import-Module PSReadLine
+      Set-PSReadLineOption -EditMode Emacs
+  }
+  New-Alias -Name 'll' -Value 'Get-ChildItem'
+#+END_SRC
+
+#+BEGIN_SRC conf :noweb yes :tangle ~/OneDrive/Documents/WindowsPowershell/Microsoft.Powershell_profile.ps1
+<<Powershell>>
+#+END_SRC
