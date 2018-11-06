@@ -7,6 +7,6 @@
 
 * POWERSHELL PROFILE
 #+BEGIN_SRC sh :tangle ~/.config/powershell/Microsoft.Powershell_profile.ps1
-$env:PSModulePath = $env:PSModulePath + ":$HOME/src/TSPSModules"
+$env:PSModulePath = $env:PSModulePath + ":$HOME/src"
 New-Alias -Name 'll' -Value 'Get-ChildItem'
 #+END_SRC

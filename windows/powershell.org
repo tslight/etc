@@ -8,7 +8,7 @@
 * POWERSHELL PROFILE
 
 #+BEGIN_SRC conf yes :tangle ~/Documents/WindowsPowershell/Microsoft.Powershell_profile.ps1
-  $env:PSModulePath = $env:PSModulePath + ";$HOME\src\TSPSModules"
+  $env:PSModulePath = $env:PSModulePath + ";%USERPROFILE%\src"
   if ($host.Name -eq 'ConsoleHost') {
       Import-Module PSReadLine
       Set-PSReadLineOption -EditMode Emacs
