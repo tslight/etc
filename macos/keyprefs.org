@@ -1,0 +1,26 @@
+#+TITLE: KEYBOARD PREFERENCES
+#+PROPERTY: header-args :cache yes
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :tangle-mode (identity #o600)
+#+PROPERTY: header-args+ :results silent
+#+PROPERTY: header-args+ :padline no
+#+PROPERTY: header-args+ :tangle-mode (identity #o700)
+* APP SHORTCUTS
+#+BEGIN_SRC sh :tangle ~/bin/mkmackeys
+  #!/usr/bin/env bash
+
+  defaults write -g NSUserKeyEquivalents '{
+      Copy = "^c";
+      Cut = "^x";
+      "Enter Full Screen" = "^\\Uf70e";
+      "New Tab" = "^t";
+      "Open File..." = "^o";
+      "Open Location" = "^l";
+      "Open Location..." = "^l";
+      Paste = "^v";
+      "Re-open Closed Tab" = "^$t";
+      Redo = "^y";
+      Undo = "^z";
+      Zoom = "^\\Uf70d";
+  }'
+#+END_SRC
