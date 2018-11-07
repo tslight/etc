@@ -14,7 +14,7 @@
       Set-PSReadLineOption -EditMode Emacs
   }
 
-  New-Alias -Name 'll' -Value 'Get-ChildItem'
+  New-Alias -Name 'll' -Value 'Get-ChildItem' -Force
 
   function Save-AllISEFiles {
       <#
@@ -29,13 +29,15 @@
 
       foreach($tab in $psISE.PowerShellTabs) {
           foreach($file in $tab.Files) {
-              if(!$file.IsUntitled) {
+              if (-Not ($file.IsUntitled -Or $file.IsSaved)) {
                   try {
                       $file.Save()
-                      Write-Verbose "Successfully saved $file."
+                      Write-Host "Successfully saved $($file.FullPath)"
                   } catch {
                       throw $_.Exception.Message
                   }
+              } else {
+                  Write-Verbose "$($file.FullPath) is already saved or not titled."
               }
           }
       }
