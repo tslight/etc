@@ -7,13 +7,65 @@
 
 * POWERSHELL PROFILE
 
-#+BEGIN_SRC conf yes :tangle ~/Documents/WindowsPowershell/Microsoft.Powershell_profile.ps1
+#+BEGIN_SRC powershell yes :tangle ~/Documents/WindowsPowershell/Microsoft.Powershell_profile.ps1
   $env:PSModulePath = $env:PSModulePath + ";%USERPROFILE%\src"
   if ($host.Name -eq 'ConsoleHost') {
       Import-Module PSReadLine
       Set-PSReadLineOption -EditMode Emacs
   }
+
   New-Alias -Name 'll' -Value 'Get-ChildItem'
+
+  function Save-AllISEFiles {
+      <#
+  .SYNOPSIS
+
+  Saves all ISE Files except for untitled files.
+
+  If You have multiple PowerShellTabs, saves files in all tabs.
+  #>
+      [cmdletbinding(SupportsShouldProcess=$True)]
+      param ()
+
+      foreach($tab in $psISE.PowerShellTabs) {
+          foreach($file in $tab.Files) {
+              if(!$file.IsUntitled) {
+                  try {
+                      $file.Save()
+                      Write-Verbose "Successfully saved $file."
+                  } catch {
+                      throw $_.Exception.Message
+                  }
+              }
+          }
+      }
+  }
+
+  function Add-ISEMenuItemAndKey {
+      <#
+  .SYNOPSIS
+
+  Adds a menu item and key-binding to ISE for a given function.
+  #>
+      [cmdletbinding(SupportsShouldProcess=$True)]
+      param(
+          [Parameter(Mandatory=$True,Position=1)]
+          [string]$Name,
+          [Parameter(Mandatory=$True,Position=2)]
+          [string]$Function,
+          [Parameter(Mandatory=$True,Position=3)]
+          [string]$Key
+      )
+
+      if ($psISE.CurrentPowerShellTab.AddOnsMenu.Submenus.DisplayName -contains $Name) {
+          Write-Verbose "$Name menu item already exists."
+      } else {
+          $psISE.CurrentPowerShellTab.AddOnsMenu.Submenus.Add($Name,{$Function},$Key)
+          Write-Verbose "Successfully added $Name menu item and keybinding."
+      }
+  }
+
+  Add-ISEMenuItemAndKey -Name "Save All" -Function "Save-AllISEFiles" -Key "Ctrl+Shift+s" -Verbose
 #+END_SRC
 
 #+BEGIN_SRC conf :noweb yes :tangle ~/OneDrive/Documents/WindowsPowershell/Microsoft.Powershell_profile.ps1
