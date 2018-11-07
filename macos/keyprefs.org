@@ -1,17 +1,16 @@
 #+TITLE: KEYBOARD PREFERENCES
 #+PROPERTY: header-args :cache yes
 #+PROPERTY: header-args+ :mkdirp yes
-#+PROPERTY: header-args+ :tangle-mode (identity #o600)
+#+PROPERTY: header-args+ :tangle-mode (identity #o700)
 #+PROPERTY: header-args+ :results silent
 #+PROPERTY: header-args+ :padline no
-#+PROPERTY: header-args+ :tangle-mode (identity #o700)
 * APP SHORTCUTS
 
 Get the shortcuts with:
 
 ~~defaults read -g NSUserKeyEquivalents~~
 
-#+BEGIN_SRC sh :tangle ~/bin/mkmackeys
+#+BEGIN_SRC sh :tangle ~/bin/mkmackeys :tangle-mode (identity #o700)
   #!/usr/bin/env bash
 
   defaults write -g NSUserKeyEquivalents '{
@@ -19,6 +18,7 @@ Get the shortcuts with:
       Cut = "^x";
       "Enter Full Screen" = "^\\Uf70e";
       "New Tab" = "^t";
+      "Close Tab" = "~w";
       "Open File..." = "^o";
       "Open Location" = "^l";
       "Open Location..." = "^l";
