@@ -16,7 +16,6 @@ Get the shortcuts with:
   defaults write -g NSUserKeyEquivalents '{
       Copy = "^c";
       Cut = "^x";
-      "Enter Full Screen" = "^\\Uf70e";
       "New Tab" = "^t";
       "Close Tab" = "~w";
       "Open File..." = "^o";
@@ -26,6 +25,5 @@ Get the shortcuts with:
       "Re-open Closed Tab" = "^$t";
       Redo = "^y";
       Undo = "^z";
-      Zoom = "^\\Uf70d";
   }'
 #+END_SRC
