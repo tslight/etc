@@ -25,7 +25,6 @@ declaration in [[file:my-packages.org][my-packages]].
 - [[#bind-key][BIND-KEY]]
 - [[#counsel][COUNSEL]]
 - [[#evil][EVIL]]
-   - [[#evil-1][EVIL]]
 - [[#hydra][HYDRA]]
 - [[#ivy][IVY]]
 - [[#magit][MAGIT]]
@@ -247,16 +246,14 @@ counsel replacements:
 #+END_SRC
 
 * EVIL
-** EVIL
 
 [[https://stackoverflow.com/a/28985130][Make insert state into emacs state]]
 
 #+BEGIN_SRC emacs-lisp
   (use-package evil
     :ensure t
-    :init
-    (evil-mode 1)
     :config
+    ;; (evil-mode 1)
     (setq evil-insert-state-map (make-sparse-keymap))
     (define-key evil-insert-state-map (kbd "<escape>") 'evil-normal-state))
 #+END_SRC
