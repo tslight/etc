@@ -26,8 +26,6 @@ declaration in [[file:my-packages.org][my-packages]].
 - [[#counsel][COUNSEL]]
 - [[#evil][EVIL]]
    - [[#evil-1][EVIL]]
-   - [[#evil-collection][EVIL COLLECTION]]
-   - [[#general][GENERAL]]
 - [[#hydra][HYDRA]]
 - [[#ivy][IVY]]
 - [[#magit][MAGIT]]
@@ -250,45 +248,17 @@ counsel replacements:
 
 * EVIL
 ** EVIL
+
+[[https://stackoverflow.com/a/28985130][Make insert state into emacs state]]
+
 #+BEGIN_SRC emacs-lisp
   (use-package evil
     :ensure t
-    :demand t
     :init
-    (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
-    (setq evil-want-keybinding nil)
+    (evil-mode 1)
     :config
-    (evil-mode 1))
-#+END_SRC
-** EVIL COLLECTION
-#+BEGIN_SRC emacs-lisp
-  (use-package evil-collection
-    :after evil
-    :ensure t
-    :demand t
-    :init
-    (evil-collection-setup-minibuffer t)
-    :config
-    (evil-collection-init))
-#+END_SRC
-** GENERAL
-#+BEGIN_SRC emacs-lisp
-  (use-package general
-    :ensure t
-    :config
-    (setq general-override-states '(insert
-                                    emacs
-                                    hybrid
-                                    normal
-                                    visual
-                                    motion
-                                    operator
-                                    replace))
-    (general-override-mode)
-    (general-define-key
-     :states '(normal visual motion)
-     :keymaps 'override
-     "SPC" 'hydra-space/body))
+    (setq evil-insert-state-map (make-sparse-keymap))
+    (define-key evil-insert-state-map (kbd "<escape>") 'evil-normal-state))
 #+END_SRC
 * HYDRA
 
@@ -319,24 +289,6 @@ that disables itself auto-magically.
     :config
     (use-package hydra-examples
       :defer t)
-
-    (defhydra hydra-space (:idle 1.0)
-      "BODY"
-      ("bl" my/last-buffer "last" :exit t)
-      ("bL" my/last-buffer)
-      ("bn" next-buffer "next")
-      ("bN" next-buffer :exit t)
-      ("bp" previous-buffer "prev")
-      ("bP" previous-buffer :exit t)
-      ("bi" my/indent-buffer "indent" :exit t)
-      ("bI" my/indent-buffer)
-      ("bk" my/nuke-buffers "nuke" :exit t)
-      ("bk" my/nuke-buffers)
-      ("bf" my/fill-buffer "fill" :exit t)
-      ("bF" my/fill-buffer )
-      ("bs" my/save-buffers-silently "save" :exit t)
-      ("bS" my/save-buffers-silently)
-      ("<escape>" nil "cancel"))
 
     (defhydra hydra-buffers (:idle 1.0)
       "BUFFERS"
