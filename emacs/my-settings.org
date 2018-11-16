@@ -46,6 +46,7 @@ install.
 - [[#saveplace][SAVEPLACE]]
 - [[#scrolling][SCROLLING]]
 - [[#show-paren][SHOW PAREN]]
+- [[#split-threshold][SPLIT THRESHOLD]]
 - [[#startup][STARTUP]]
 - [[#tramp][TRAMP]]
 - [[#truncate-lines][TRUNCATE LINES]]
@@ -672,6 +673,25 @@ parenthesis is highlighted in ‘show-paren-style’ after
 
 #+BEGIN_SRC emacs-lisp
   (show-paren-mode 1)
+#+END_SRC
+
+* SPLIT THRESHOLD
+
+#+BEGIN_QUOTE
+Minimum width for splitting windows sensibly.
+If this is an integer, ‘split-window-sensibly’ may split a window
+horizontally only if it has at least this many columns.  If this
+is nil, ‘split-window-sensibly’ is not allowed to split a window
+horizontally.
+
+-- [[help:split-width-threshold][Help Page]]
+#+END_QUOTE
+
+[[https://stackoverflow.com/a/43972522][Stack Overflow]]
+
+#+BEGIN_SRC emacs-lisp
+(setq split-width-threshold 0)
+(setq split-height-threshold nil)
 #+END_SRC
 
 * STARTUP
