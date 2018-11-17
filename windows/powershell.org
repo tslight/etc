@@ -7,7 +7,7 @@
 
 * POWERSHELL PROFILE
 
-#+BEGIN_SRC powershell :tangle yes ~/Documents/WindowsPowershell/Microsoft.Powershell_profile.ps1
+#+BEGIN_SRC powershell :tangle ~/Documents/WindowsPowershell/Microsoft.Powershell_profile.ps1
   $env:PSModulePath = $env:PSModulePath + ";%USERPROFILE%\src"
   $ChocolateyProfile = "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
 
@@ -27,7 +27,7 @@
   New-Alias -Name 'll' -Value 'Get-ChildItem' -Force
 #+END_SRC
 
-#+BEGIN_SRC powershell :tangle yes ~/Documents/WindowsPowershell/Microsoft.PowershellISE_profile.ps1
+#+BEGIN_SRC powershell :tangle ~/Documents/WindowsPowershell/Microsoft.PowershellISE_profile.ps1
   function Save-AllISEFiles {
       <#
   .SYNOPSIS
