@@ -5,7 +5,7 @@
 #+PROPERTY: header-args+ :results silent
 #+PROPERTY: header-args+ :padline no
 * SWITCH CTRL TAB WITH ALT TAB
-#+BEGIN_SRC ahk :tangle "~/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup/swap_ctrl-tab_alt_tab.ahk"
+#+BEGIN_SRC ahk "~/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup/swap_ctrl-tab_alt_tab.ahk"
   #NoEnv                       ; Recommended for performance and compatibility with future AutoHotkey releases.
   #Warn                        ; Enable warnings to assist with detecting common errors.
 
@@ -26,6 +26,6 @@
   Return
 #+END_SRC
 * EMACS EVERYWHERE
-#+BEGIN_SRC ahk :tangle "~/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup/emacs_everywhere.ahk"
+#+BEGIN_SRC ahk "~/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup/emacs_everywhere.ahk"
 
 #+END_SRC
