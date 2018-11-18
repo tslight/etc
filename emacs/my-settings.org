@@ -677,7 +677,11 @@ parenthesis is highlighted in ‘show-paren-style’ after
 
 * SPLIT THRESHOLD
 
+[[https://stackoverflow.com/a/43972522][Stack Overflow]]
+
 #+BEGIN_QUOTE
+Original value was 160
+
 Minimum width for splitting windows sensibly.
 If this is an integer, ‘split-window-sensibly’ may split a window
 horizontally only if it has at least this many columns.  If this
@@ -687,11 +691,27 @@ horizontally.
 -- [[help:split-width-threshold][Help Page]]
 #+END_QUOTE
 
-[[https://stackoverflow.com/a/43972522][Stack Overflow]]
+#+BEGIN_SRC emacs-lisp
+(setq split-width-threshold 200)
+#+END_SRC
+
+#+BEGIN_QUOTE
+Original value was 80
+
+Minimum height for splitting windows sensibly.
+If this is an integer, ‘split-window-sensibly’ may split a window
+vertically only if it has at least this many lines.  If this is
+nil, ‘split-window-sensibly’ is not allowed to split a window
+vertically.  If, however, a window is the only window on its
+frame, or all the other ones are dedicated,
+‘split-window-sensibly’ may split it vertically disregarding the
+value of this variable.
+
+-- [[help:split-height-threshold][Help Page]]
+#+END_QUOTE
 
 #+BEGIN_SRC emacs-lisp
-(setq split-width-threshold 0)
-(setq split-height-threshold nil)
+(setq split-height-threshold 100)
 #+END_SRC
 
 * STARTUP
