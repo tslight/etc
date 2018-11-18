@@ -15,7 +15,6 @@ install.
 
 All the non-essential, but nice to have stuff goes in here.
 
-
 * CONTENTS                                                         :TOC_5_gh:
 - [[#aggressive-indent][AGGRESSIVE INDENT]]
 - [[#async][ASYNC]]
@@ -29,7 +28,6 @@ All the non-essential, but nice to have stuff goes in here.
 - [[#flx][FLX]]
 - [[#flycheck][FLYCHECK]]
 - [[#git-timemachine][GIT TIMEMACHINE]]
-- [[#hungry-delete][HUNGRY DELETE]]
 - [[#iedit][IEDIT]]
 - [[#markdown][MARKDOWN]]
 - [[#paredit][PAREDIT]]
@@ -169,15 +167,6 @@ https://github.com/purcell/exec-path-from-shell
   (use-package git-timemachine
     :defer t
     :ensure t)
-#+END_SRC
-* HUNGRY DELETE
-#+BEGIN_SRC emacs-lisp
-  (use-package hungry-delete
-    :defer 6
-    :ensure t
-    :diminish hungry-delete-mode
-    :config
-    (global-hungry-delete-mode))
 #+END_SRC
 * IEDIT
 #+BEGIN_SRC emacs-lisp

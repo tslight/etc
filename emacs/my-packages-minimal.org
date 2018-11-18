@@ -27,6 +27,7 @@ declaration in [[file:my-packages.org][my-packages]].
 - [[#counsel][COUNSEL]]
 - [[#evil][EVIL]]
 - [[#expand-region][EXPAND REGION]]
+- [[#hungry-delete][HUNGRY DELETE]]
 - [[#hydra][HYDRA]]
 - [[#ivy][IVY]]
 - [[#magit][MAGIT]]
@@ -300,6 +301,15 @@ counsel replacements:
     :bind
     ("C-<SPC>" . er/expand-region)
     ("C-S-<SPC>" . er/contract-region))
+#+END_SRC
+* HUNGRY DELETE
+#+BEGIN_SRC emacs-lisp
+  (use-package hungry-delete
+    :defer 6
+    :ensure t
+    :diminish hungry-delete-mode
+    :config
+    (global-hungry-delete-mode))
 #+END_SRC
 * HYDRA
 
