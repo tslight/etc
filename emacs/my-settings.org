@@ -692,7 +692,7 @@ horizontally.
 #+END_QUOTE
 
 #+BEGIN_SRC emacs-lisp
-(setq split-width-threshold 200)
+(setq split-width-threshold 80)
 #+END_SRC
 
 #+BEGIN_QUOTE
@@ -711,7 +711,7 @@ value of this variable.
 #+END_QUOTE
 
 #+BEGIN_SRC emacs-lisp
-(setq split-height-threshold 100)
+(setq split-height-threshold nil)
 #+END_SRC
 
 * STARTUP
