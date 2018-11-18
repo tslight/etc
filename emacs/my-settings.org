@@ -711,7 +711,7 @@ value of this variable.
 #+END_QUOTE
 
 #+BEGIN_SRC emacs-lisp
-(setq split-height-threshold nil)
+(setq split-height-threshold 200)
 #+END_SRC
 
 * STARTUP
