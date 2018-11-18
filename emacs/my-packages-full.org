@@ -21,19 +21,16 @@ All the non-essential, but nice to have stuff goes in here.
 - [[#async][ASYNC]]
 - [[#autohotkey-mode][AUTOHOTKEY MODE]]
 - [[#avy][AVY]]
-- [[#change-inner][CHANGE INNER]]
 - [[#company-mode][COMPANY MODE]]
 - [[#counsel-projectile][COUNSEL PROJECTILE]]
 - [[#diminish][DIMINISH]]
 - [[#emmet-mode][EMMET MODE]]
 - [[#exec-path-from-shell][EXEC PATH FROM SHELL]]
-- [[#expand-region][EXPAND REGION]]
 - [[#flx][FLX]]
 - [[#flycheck][FLYCHECK]]
 - [[#git-timemachine][GIT TIMEMACHINE]]
 - [[#hungry-delete][HUNGRY DELETE]]
 - [[#iedit][IEDIT]]
-- [[#lispy][LISPY]]
 - [[#markdown][MARKDOWN]]
 - [[#paredit][PAREDIT]]
 - [[#pc-buffer-switch][PC BUFFER SWITCH]]
@@ -98,34 +95,6 @@ All the non-essential, but nice to have stuff goes in here.
                                (?m . avy-action-mark)
                                (?z . avy-action-zap-to-char))))
 #+END_SRC
-* CHANGE INNER
-#+BEGIN_QUOTE
-change-inner gives you vim's ci command, building on expand-region. It
-is most easily explained by example:
-
-=function test() { return "semantic kill";}=
-
-With point after the word semantic
-
-change-inner " would kill the contents of the string
-change-outer " would kill the entire string
-change-inner { would kill the return-statement
-change-outer { would kill the entire block
-
-I use M-i and M-o for this.
-
-Giving these commands a prefix argument C-u means copy instead of
-kill.
-
--- [[https://github.com/magnars/change-inner.el][GitHub Repo]]
-#+END_QUOTE
-#+BEGIN_SRC emacs-lisp
-  (use-package change-inner
-    :ensure t
-    :bind
-    ("M-i" . change-inner)
-    ("M-o" . change-outer))
-#+END_SRC
 * COMPANY MODE
 #+BEGIN_SRC emacs-lisp
   (use-package company
@@ -176,14 +145,6 @@ https://github.com/purcell/exec-path-from-shell
     (exec-path-from-shell-initialize))
 #+END_SRC
 
-* EXPAND REGION
-#+BEGIN_SRC emacs-lisp
-  (use-package expand-region
-    :ensure t
-    :bind
-    ("C-S-<SPC>" . er/expand-region)
-    ("C-=" . er/expand-region))
-#+END_SRC
 * FLX
 #+BEGIN_SRC emacs-lisp
   (use-package flx
@@ -224,17 +185,6 @@ https://github.com/purcell/exec-path-from-shell
     :ensure t
     :bind
     ("M-%" . iedit-mode))
-#+END_SRC
-* LISPY
-#+BEGIN_SRC emacs-lisp :tangle no
-  (use-package lispy
-    :disabled t
-    :ensure t
-    :defer t
-    :hook
-    (emacs-lisp-mode . lispy-mode)
-    (lisp-mode . lispy-mode)
-    (lisp-interaction-mode . lispy-mode))
 #+END_SRC
 * MARKDOWN
 
@@ -279,9 +229,8 @@ https://github.com/purcell/exec-path-from-shell
 * POWERSHELL
 #+BEGIN_SRC emacs-lisp
   (use-package powershell
-    :if (eq system-type 'windows-nt)
     :ensure t
-    :mode "\\.ps1\\'")
+    :defer t)
 #+END_SRC
 * PROJECTILE
 

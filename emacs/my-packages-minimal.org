@@ -23,8 +23,10 @@ declaration in [[file:my-packages.org][my-packages]].
 * CONTENTS                                                         :TOC_5_gh:
 - [[#ace-window][ACE WINDOW]]
 - [[#bind-key][BIND-KEY]]
+- [[#change-inner][CHANGE INNER]]
 - [[#counsel][COUNSEL]]
 - [[#evil][EVIL]]
+- [[#expand-region][EXPAND REGION]]
 - [[#hydra][HYDRA]]
 - [[#ivy][IVY]]
 - [[#magit][MAGIT]]
@@ -173,6 +175,34 @@ Bind keys, and define autoloads for the bound commands,
     ("C-<f11>" . toggle-frame-fullscreen))
 #+END_SRC
 
+* CHANGE INNER
+#+BEGIN_QUOTE
+change-inner gives you vim's ci command, building on expand-region. It
+is most easily explained by example:
+
+=function test() { return "semantic kill";}=
+
+With point after the word semantic
+
+change-inner " would kill the contents of the string
+change-outer " would kill the entire string
+change-inner { would kill the return-statement
+change-outer { would kill the entire block
+
+I use M-i and M-o for this.
+
+Giving these commands a prefix argument C-u means copy instead of
+kill.
+
+-- [[https://github.com/magnars/change-inner.el][GitHub Repo]]
+#+END_QUOTE
+#+BEGIN_SRC emacs-lisp
+  (use-package change-inner
+    :ensure t
+    :bind
+    ("M-i" . change-inner)
+    ("M-o" . change-outer))
+#+END_SRC
 * COUNSEL
 
 #+BEGIN_QUOTE
@@ -263,6 +293,14 @@ counsel replacements:
           evil-normal-state-cursor '(box "purple")))
 #+END_SRC
 
+* EXPAND REGION
+#+BEGIN_SRC emacs-lisp
+  (use-package expand-region
+    :ensure t
+    :bind
+    ("C-<SPC>" . er/expand-region)
+    ("C-S-<SPC>" . er/contract-region))
+#+END_SRC
 * HYDRA
 
 #+BEGIN_QUOTE
