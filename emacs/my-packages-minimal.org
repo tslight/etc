@@ -29,9 +29,12 @@ declaration in [[file:my-packages.org][my-packages]].
 - [[#expand-region][EXPAND REGION]]
 - [[#hungry-delete][HUNGRY DELETE]]
 - [[#hydra][HYDRA]]
+- [[#iedit][IEDIT]]
 - [[#ivy][IVY]]
 - [[#magit][MAGIT]]
 - [[#undo-tree][UNDO TREE]]
+- [[#which-key][WHICH KEY]]
+- [[#yasnippets][YASNIPPETS]]
 
 * ACE WINDOW
 
@@ -423,6 +426,13 @@ that disables itself auto-magically.
     ("C-c z" . hydra-zoom/body))
 #+END_SRC
 
+* IEDIT
+#+BEGIN_SRC emacs-lisp
+  (use-package iedit
+    :ensure t
+    :bind
+    ("M-%" . iedit-mode))
+#+END_SRC
 * IVY
 
 #+BEGIN_SRC emacs-lisp
@@ -486,4 +496,28 @@ that disables itself auto-magically.
     (setq undo-tree-auto-save-history t)
     (setq undo-tree-history-directory-alist
           `(("." . ,(expand-file-name "~/.emacs.d/undos/")))))
+#+END_SRC
+* WHICH KEY
+#+BEGIN_SRC emacs-lisp
+  (use-package which-key
+    :ensure t
+    :defer t
+    :diminish which-key-mode
+    :init
+    (which-key-mode))
+#+END_SRC
+
+* YASNIPPETS
+#+BEGIN_SRC emacs-lisp
+  (use-package yasnippet
+    :ensure t
+    :defer t
+    :diminish yas-minor-mode
+    :hook
+    (prog-mode . yas-minor-mode)
+    :config
+    (use-package yasnippet-snippets
+      :defer t
+      :ensure t
+      :after yasnippet))
 #+END_SRC

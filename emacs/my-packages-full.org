@@ -16,7 +16,6 @@ install.
 All the non-essential, but nice to have stuff goes in here.
 
 * CONTENTS                                                         :TOC_5_gh:
-- [[#aggressive-indent][AGGRESSIVE INDENT]]
 - [[#async][ASYNC]]
 - [[#autohotkey-mode][AUTOHOTKEY MODE]]
 - [[#avy][AVY]]
@@ -28,11 +27,9 @@ All the non-essential, but nice to have stuff goes in here.
 - [[#flx][FLX]]
 - [[#flycheck][FLYCHECK]]
 - [[#git-timemachine][GIT TIMEMACHINE]]
-- [[#iedit][IEDIT]]
 - [[#markdown][MARKDOWN]]
 - [[#paredit][PAREDIT]]
 - [[#pc-buffer-switch][PC BUFFER SWITCH]]
-- [[#powerline][POWERLINE]]
 - [[#powershell][POWERSHELL]]
 - [[#projectile][PROJECTILE]]
 - [[#python][PYTHON]]
@@ -44,19 +41,7 @@ All the non-essential, but nice to have stuff goes in here.
 - [[#ssh-agency][SSH-AGENCY]]
 - [[#web-mode][WEB MODE]]
 - [[#wgrep][WGREP]]
-- [[#which-key][WHICH KEY]]
-- [[#yasnippets][YASNIPPETS]]
 
-* AGGRESSIVE INDENT
-#+BEGIN_SRC emacs-lisp :tangle no
-  (use-package aggressive-indent
-    :disabled t
-    :ensure t
-    :diminish aggressive-indent-mode
-    :defer t
-    :hook
-    (prog-mode . aggressive-indent-mode))
-#+END_SRC
 * ASYNC
 #+BEGIN_SRC emacs-lisp
   (use-package async
@@ -118,6 +103,7 @@ All the non-essential, but nice to have stuff goes in here.
     :ensure t)
 #+END_SRC
 * EMMET MODE
+
 #+BEGIN_SRC emacs-lisp
   (use-package emmet-mode
     :defer t
@@ -168,13 +154,6 @@ https://github.com/purcell/exec-path-from-shell
     :defer t
     :ensure t)
 #+END_SRC
-* IEDIT
-#+BEGIN_SRC emacs-lisp
-  (use-package iedit
-    :ensure t
-    :bind
-    ("M-%" . iedit-mode))
-#+END_SRC
 * MARKDOWN
 
 #+BEGIN_SRC emacs-lisp
@@ -205,15 +184,6 @@ https://github.com/purcell/exec-path-from-shell
     ("C-S-<escape>" . pc-bufsw-lru)
     :config
     (setq pc-bufsw-quit-time 1))
-#+END_SRC
-* POWERLINE
-#+BEGIN_SRC emacs-lisp
-  (use-package powerline
-    :disabled
-    :config
-    (when (eq system-type 'darwin)
-      (setq ns-use-srgb-colorspace nil))
-    (powerline-default-theme))
 #+END_SRC
 * POWERSHELL
 #+BEGIN_SRC emacs-lisp
@@ -384,27 +354,4 @@ https://github.com/anschwa/emacs.d#python
   (use-package wgrep
     :ensure t
     :defer t)
-#+END_SRC
-* WHICH KEY
-#+BEGIN_SRC emacs-lisp
-  (use-package which-key
-    :ensure t
-    :defer t
-    :diminish which-key-mode
-    :init
-    (which-key-mode))
-#+END_SRC
-* YASNIPPETS
-#+BEGIN_SRC emacs-lisp
-  (use-package yasnippet
-    :ensure t
-    :defer t
-    :diminish yas-minor-mode
-    :hook
-    (prog-mode . yas-minor-mode)
-    :config
-    (use-package yasnippet-snippets
-      :defer t
-      :ensure t
-      :after yasnippet))
 #+END_SRC
