@@ -305,8 +305,8 @@ https://spwhitton.name/blog/entry/expandregionlines/
   (use-package expand-region
     :ensure t
     :bind
-    ("C-<SPC>" . er/expand-region)
-    ("C-S-<SPC>" . er/contract-region)
+    ("C-=" . er/expand-region)
+    ("C--" . er/contract-region)
     :config
     (defadvice er/expand-region (around fill-out-region activate)
       (if (or (not (region-active-p))
