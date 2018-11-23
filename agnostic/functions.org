@@ -133,6 +133,16 @@ Make a directory and cd into it.
   }
 #+END_SRC
 
+** PEEK
+
+https://github.com/lf94/peek-for-tmux
+
+#+BEGIN_SRC sh
+  peek () {
+      tmux split-window -p 33 $EDITOR $@ || exit
+  }
+#+END_ARC
+
 ** PGREPKILL
 
 Find and kill all processes with a given name
