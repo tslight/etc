@@ -14,16 +14,16 @@ Get the shortcuts with:
   #!/usr/bin/env bash
 
   defaults write -g NSUserKeyEquivalents '{
-      Copy = "^c";
-      Cut = "^x";
-      "New Tab" = "^t";
+      Copy = "~c";
+      Cut = "~x";
+      "New Tab" = "~t";
       "Close Tab" = "~w";
-      "Open File..." = "^o";
-      "Open Location" = "^l";
-      "Open Location..." = "^l";
-      Paste = "^v";
-      "Re-open Closed Tab" = "^$t";
-      Redo = "^y";
-      Undo = "^z";
+      "Open File..." = "~o";
+      "Open Location" = "~l";
+      "Open Location..." = "~l";
+      Paste = "~v";
+      "Re-open Closed Tab" = "~$t";
+      Redo = "~y";
+      Undo = "~z";
   }'
 #+END_SRC

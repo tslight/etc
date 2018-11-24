@@ -139,9 +139,9 @@ https://github.com/lf94/peek-for-tmux
 
 #+BEGIN_SRC sh
   peek () {
-      tmux split-window -p 33 $EDITOR $@ || exit
+      tmux split-window -h -p 48 "$PAGER" "$@" || exit
   }
-#+END_ARC
+#+END_SRC
 
 ** PGREPKILL
 
@@ -166,7 +166,7 @@ Find and kill all processes with a given name
 I have since found ~pgrep -ail~...
 
 #+BEGIN_SRC sh
-  psee() {
+  psee () {
       tput setaf 3
       printf "\nYou should probably be using $(tput setaf 6)pgrep -ail$(tput setaf 3)...\n\n"
       tput sgr0
@@ -181,7 +181,7 @@ I have since found ~pgrep -ail~...
 Great for downloading all episodes in a podcast feed.
 
 #+BEGIN_SRC sh
-  rssget() {
+  rssget () {
       curl "$1" | grep -E "http.*\.$2" | sed "s/.*\(http.*\.$2\).*/\1/" | xargs wget -nc
   }
 #+END_SRC
