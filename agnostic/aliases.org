@@ -12,6 +12,7 @@
   case "$OSTYPE" in
       darwin*)
           alias bye="sudo shutdown -h now"
+          alias cpu="sysctl -n machdep.cpu.brand_string"
           alias enabled_services='sudo launchctl list'
           alias grep='grep --color=always'
           alias l='ls -Gh'
