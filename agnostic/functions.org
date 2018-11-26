@@ -6,6 +6,18 @@
 #+PROPERTY: header-args+ :padline no
 #+PROPERTY: header-args+ :tangle ~/.functions
 
+* BASH LIBRARY
+
+#+BEGIN_SRC sh
+  if echo "$0" | grep -q bash; then
+      if [ -d "$HOME"/lib/bash ]; then
+          for f in "$HOME"/lib/bash/*; do
+              source "$f"
+          done
+      fi
+  fi
+#+END_SRC
+
 * OS SPECIFIC
 
 #+BEGIN_SRC sh
