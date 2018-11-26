@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+refresh_packages () {
+    emacs -Q --batch --eval '(package-refresh-contents)'\
+				     2>&1 | grep -Ei 'complete|error'
+}
+
 tangle_tangles () {
     emacs -Q --batch --eval '(with-current-buffer
 			     (find-file-noselect "~/etc/emacs/my-tangles.org")
@@ -24,6 +29,7 @@ tangle_dir () {
 }
 
 main () {
+    refresh_packages
     tangle_tangles
     local arg="$1" dir="$2"
     case "$arg" in
