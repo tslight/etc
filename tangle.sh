@@ -1,8 +1,13 @@
 #!/usr/bin/env bash
 
 refresh_packages () {
-    emacs -Q --batch --eval '(package-refresh-contents)'\
-				     2>&1 | grep -Ei 'complete|error'
+    if emacs -Q --batch --eval '(package-refresh-contents)'\
+	     2>&1 | grep -Ei 'complete|error'; then
+	echo "Successfully refreshed Emacs package contents."
+    else
+	echo "Failed to refresh Emacs package contents."
+	exit 1
+    fi
 }
 
 tangle_tangles () {
@@ -24,14 +29,19 @@ tangle_emacs () {
 
 tangle_dir () {
     local dir="$1"
+
+    [[ -z "$dir" ]] && { echo "Invalid directory"; exit 1; }
+
     emacs -Q --batch -l ~/.emacs.d/site-lisp/my-tangles.el\
 	  --eval '(my/tangle-directory "~/etc/'$dir'")' 2>&1 | grep -Ei 'complete|error'
 }
 
 main () {
+    local arg="$1" dir="$2"
+
     refresh_packages
     tangle_tangles
-    local arg="$1" dir="$2"
+
     case "$arg" in
 	dir)
 	    tangle_dir "$dir"
