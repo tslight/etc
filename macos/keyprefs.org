@@ -10,7 +10,7 @@ Get the shortcuts with:
 
 ~~defaults read -g NSUserKeyEquivalents~~
 
-#+BEGIN_SRC sh :tangle ~/bin/mkmackeys :tangle-mode (identity #o700)
+#+BEGIN_SRC sh :tangle no :tangle-mode (identity #o700)
   #!/usr/bin/env bash
 
   defaults write -g NSUserKeyEquivalents '{
