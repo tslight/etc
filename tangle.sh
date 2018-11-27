@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 
 refresh_packages () {
-    if emacs -Q --batch --eval '(package-refresh-contents)'\
-	     2>&1 | grep -Ei 'complete|error'; then
+    if emacs -Q --batch --eval '(package-refresh-contents)'; then
 	echo "Successfully refreshed Emacs package contents."
     else
 	echo "Failed to refresh Emacs package contents."
