@@ -27,6 +27,7 @@ install.
 - [[#doc-view][DOC VIEW]]
 - [[#enable-disabled][ENABLE DISABLED]]
 - [[#encoding][ENCODING]]
+- [[#epa][EPA]]
 - [[#fill-column][FILL COLUMN]]
 - [[#hide-show][HIDE SHOW]]
 - [[#history][HISTORY]]
@@ -515,6 +516,15 @@ disabled, i.e., all commands work normally.
 
 #+BEGIN_SRC emacs-lisp
   (prefer-coding-system 'utf-8-unix)
+#+END_SRC
+* EPA
+
+[[https://emacs.stackexchange.com/questions/27841/unable-to-decrypt-gpg-file-using-emacs-but-command-line-gpg-works][macOS fix]]
+
+[[https://colinxy.github.io/software-installation/2016/09/24/emacs25-easypg-issue.html][macOS fix]]
+
+#+BEGIN_SRC emacs-lisp
+(setf epa-pinentry-mode 'loopback)
 #+END_SRC
 
 * FILL COLUMN
