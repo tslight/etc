@@ -519,9 +519,20 @@ disabled, i.e., all commands work normally.
 #+END_SRC
 * EPA
 
-[[https://emacs.stackexchange.com/questions/27841/unable-to-decrypt-gpg-file-using-emacs-but-command-line-gpg-works][macOS fix]]
+#+BEGIN_QUOTE
+On line 47 of epa.el for emacs 25.1, a new variable epa-pinentry-mode is
+introduced with defcustom. Its documentation says something about the invocation
+of pinentry, which sounds like the interface for entering the passphrase. And as
+the documentation says, by setting epa-pinentry-mode to 'loopback Emacs will
+handle querying the passphrase through minibuffer, the perfect desired behavior.
 
-[[https://colinxy.github.io/software-installation/2016/09/24/emacs25-easypg-issue.html][macOS fix]]
+Now I add this line of code to my .emacs, and problem solved! Though good
+proctice might add it though custom-set-variables.
+
+-- [[https://emacs.stackexchange.com/a/27870][Emacs StackExchange]]
+-- [[https://colinxy.github.io/software-installation/2016/09/24/emacs25-easypg-issue.html][Blog Post]]
+
+#+END_QUOTE
 
 #+BEGIN_SRC emacs-lisp
 (setf epa-pinentry-mode 'loopback)
