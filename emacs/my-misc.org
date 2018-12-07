@@ -18,6 +18,7 @@ install.
 - [[#gc-flx-fix][GC FLX FIX]]
 - [[#google][GOOGLE]]
 - [[#switch-to-term][SWITCH TO TERM]]
+- [[#tramp-term][TRAMP TERM]]
 
 * AFTER MAKE FRAME
 #+BEGIN_SRC emacs-lisp
@@ -36,7 +37,7 @@ install.
               (eq system-type 'berkeley-unix))
       (set-frame-font "Monospace 9" nil t))
     (if (display-graphic-p)
-        (load-theme 'wombat)
+        (load-theme 'deeper-blue)
       (progn
         (load-theme 'manoj-dark)
         (xterm-mouse-mode 1)
