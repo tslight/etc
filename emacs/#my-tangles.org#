@@ -1,0 +1,398 @@
+#+TITLE: TANGLE ALL THE THINGS!
+#+AUTHOR: Toby Slight
+
+#+PROPERTY: header-args :cache yes
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :padline no
+#+PROPERTY: header-args+ :results silent
+#+PROPERTY: header-args+ :tangle ~/.emacs.d/site-lisp/my-tangles.el
+#+PROPERTY: header-args+ :tangle-mode (identity #o600)
+
+#+OPTIONS: toc:t
+
+To install this Emacs configuration we need to evaluate this buffer
+with:
+
+=org-babel-execute-buffer= /(C-c C-v b)/
+
+Then run the following newly defined function:
+
+=my/tangle-directory= with  =execute-extended-command= /(M-x)/
+
+You will be prompted to enter a directory. All org mode files in the
+entered directory will be tangled.
+
+Since we are visiting this file in the emacs configuration directory,
+we simply need to press enter and all our emacs configuration org
+files will be tangled, compiled and loaded.
+
+* CONTENTS                                                         :TOC_5_gh:
+- [[#babel-no-confirm][BABEL NO CONFIRM]]
+- [[#variables][VARIABLES]]
+- [[#insert-boilerplate][INSERT BOILERPLATE]]
+- [[#compile-and-load-config][COMPILE AND LOAD CONFIG]]
+- [[#recursive-file-list][RECURSIVE FILE LIST]]
+- [[#tangle-directory][TANGLE DIRECTORY]]
+- [[#tangle-all][TANGLE ALL]]
+- [[#auto-tangle][AUTO TANGLE]]
+
+* BABEL NO CONFIRM
+
+*Org Babel Execute Confirmation Variable:*
+
+Turn off evaluation confirmation so we can execute all the src blocks
+in the buffer with =org-babel-execute-buffer= /C-c C-v b/.
+
+We will turn this back on later in org-modes package configuration,
+since I'd rather not let org babel execute arbitrary code without
+confirmation.
+
+[[https://www.reddit.com/r/emacs/comments/64jhlt/autoexecuting_code_in_org_mode/%5D%5D][Autoexecuting code in org mode]]
+
+[[https://emacs.stackexchange.com/questions/2945/org-babel-eval-with-no-confirmation-is-explicit-eval-yes%5D%5D][Org Babel eval with no confirmation]]
+
+*From the documentation:*
+
+#+BEGIN_QUOTE
+Require confirmation before interactively evaluating code blocks in
+Org-mode buffers.  The default value of this variable is t, meaning
+confirmation is required for any code block evaluation.  This variable
+can be set to nil to inhibit any future confirmation requests.  This
+variable can also be set to a function which takes two arguments the
+language of the code block and the body of the code block.  Such a
+function should then return a non-nil value if the user should be
+prompted for execution or nil if no prompt is required.
+
+Warning: Disabling confirmation may result in accidental evaluation of
+potentially harmful code.  It may be advisable remove code block
+execution from C-c C-c as further protection against accidental code
+block evaluation.  The ‘org-babel-no-eval-on-ctrl-c-ctrl-c’ variable
+can be used to remove code block execution from the C-c C-c
+keybinding.
+#+END_QUOTE
+
+#+Begin_SRC emacs-lisp
+  (setq org-confirm-babel-evaluate nil)
+#+END_SRC
+
+* VARIABLES
+
+No need to tangle this block since these variables are loaded by init
+file. This block is just here so that these variables are available
+when =org-babel-execute-buffer= is executed.
+
+#+BEGIN_SRC emacs-lisp
+  (setq-default buffer-file-coding-system 'utf-8-unix)
+  (setq my/config-directory "~/etc/"
+        my/agnostic-config-directory (concat my/config-directory "agnostic/")
+        my/emacs-config-directory    (concat my/config-directory "emacs/")
+        my/linux-config-directory    (concat my/config-directory "linux/")
+        my/macos-config-directory    (concat my/config-directory "macos/")
+        my/freebsd-config-directory  (concat my/config-directory "freebsd/")
+        my/netbsd-config-directory   (concat my/config-directory "netbsd/")
+        my/openbsd-config-directory  (concat my/config-directory "openbsd/")
+        my/windows-config-directory  (concat my/config-directory "windows/"))
+#+END_SRC
+
+* INSERT BOILERPLATE
+
+#+BEGIN_QUOTE
+To enable lexical binding in your elisp library, put a line like this
+at the top of the file:
+
+=;; -*- lexical-binding: t -*-=
+
+This will enable lexical-binding for the code in the file, but note
+that global variables declared with defvar, defcustom or defconst will
+be dynamically bound due to the global binding being marked as
+“special” by those forms.  Note: as of Emacs 24.4, any closures
+created before marking the variable as “special” are unaffected by
+this effect. It’s not clear whether this is intentional. (I could
+reproduce this in SBCL, but not CLISP. Maybe it’s supposed to have
+undefined behavior.)
+
+Note: as of Emacs 24.4, the undocumented internal-make-var-non-special
+function does not work as expected, and the only known way to revert a
+special variable status is restarting Emacs. makunbound doesn’t help,
+either.
+
+-- [[https://www.emacswiki.org/emacs/dynamicbindingvslexicalbinding][emacs wiki - dynamic vs lexical binding]]
+-- [[https://www.emacswiki.org/emacs/lexicalbinding][emacs wiki - lexical binding]]
+#+END_QUOTE
+
+Take a file as an argument & insert elisp header and footer comments
+into it if it's an elisp file.
+
+If the file is in my site-lisp directory also insert a provide
+expression, so that the file can be loaded as a package.
+
+Return the file name, so that this function can be piped to other
+functions, such as my/compile-and-load-file.
+
+[[http://ergoemacs.org/emacs/elisp_buffer_file_functions.html][Ergoemacs Buffer File Functions]]
+[[https://superuser.com/questions/297774/how-do-i-get-emacs-to-insert-text-into-an-arbitrary-file][Superuser - How to insert text into a file]]
+
+#+BEGIN_QUOTE
+Do BODYFORM, protecting with UNWINDFORMS.
+If BODYFORM completes normally, its value is returned
+after executing the UNWINDFORMS.
+If BODYFORM exits nonlocally, the UNWINDFORMS are executed anyway.
+
+-- [[help:unwind-protect][Help Page]]
+#+END_QUOTE
+
+#+BEGIN_QUOTE
+unwind-protect executes body-form with a guarantee that the
+cleanup-forms will be evaluated if control leaves body-form, no matter
+how that happens. body-form may complete normally, or execute a throw
+out of the unwind-protect, or cause an error; in all cases, the
+cleanup-forms will be evaluated.
+
+If body-form finishes normally, unwind-protect returns the value of
+body-form, after it evaluates the cleanup-forms. If body-form does not
+finish, unwind-protect does not return any value in the normal sense.
+
+Only body-form is protected by the unwind-protect. If any of the
+cleanup-forms themselves exits nonlocally (via a throw or an error),
+unwind-protect is not guaranteed to evaluate the rest of them. If the
+failure of one of the cleanup-forms has the potential to cause
+trouble, then protect it with another unwind-protect around that form.
+
+The number of currently active unwind-protect forms counts, together
+with the number of local variable bindings, against the limit
+max-specpdl-size
+
+You might think that we could just as well write (kill-buffer
+(current-buffer)) and dispense with the variable buffer. However, the
+way shown above is safer, if body-form happens to get an error after
+switching to a different buffer! (Alternatively, you could write a
+save-current-buffer around body-form, to ensure that the temporary
+buffer becomes current again in time to kill it.)
+
+Emacs includes a standard macro called with-temp-buffer which expands
+into more or less the code shown above (see Current Buffer). Several
+of the macros defined in this manual use unwind-protect in this way.
+
+Here is an actual example derived from an FTP package. It creates a
+process (see Processes) to try to establish a connection to a remote
+machine. As the function ftp-login is highly susceptible to numerous
+problems that the writer of the function cannot anticipate, it is
+protected with a form that guarantees deletion of the process in the
+event of failure. Otherwise, Emacs might fill up with useless
+subprocesses.
+
+-- [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Cleanups.html][Cleanups - Gnu Manual]]
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+  (defun my/insert-boilerplate (file)
+    "Take a FILE as an argument & insert elisp header and footer
+     comments into it, if it's an elisp FILE.
+
+     If the file is in my site-lisp directory also insert a
+     provide expression, so that the FILE can be loaded as a
+     package.
+
+     Return the file name, so that this function can be piped to
+     other functions, such as my/compile-and-load-file."
+    (interactive "FFile: ")
+    (when (equal (file-name-extension file) "el")
+      (let ((temp-buffer (set-buffer (find-file-noselect file))))
+        (when temp-buffer
+          (unwind-protect
+              (progn
+                (goto-char (point-min))
+                (insert ";; -*- lexical-binding: t; -*-\n")
+                (goto-char (point-max))
+                (let ((provide-string (file-name-sans-extension
+                                       (file-name-nondirectory file))))
+                  (insert (concat "(provide '"provide-string")")))
+                (message (concat "Inserted boilerplate into " file)))
+            (save-buffer temp-buffer)
+            (kill-buffer temp-buffer)))))
+    file)
+#+END_SRC
+
+* COMPILE AND LOAD CONFIG
+
+Byte compile init file and site-lisp directory and then load the newly
+compiled configuration.
+
+#+BEGIN_SRC emacs-lisp
+  (defun my/compile-and-load-config ()
+    "Byte compile init file and site-lisp directory and then load
+     the newly compiled configuration."
+    (interactive)
+    (byte-compile-file (concat user-emacs-directory "init.el") 0)
+    (byte-recompile-directory (concat user-emacs-directory "site-lisp") 0))
+#+END_SRC
+
+* RECURSIVE FILE LIST
+
+#+BEGIN_QUOTE
+List files in DIRECTORY and in its sub-directories. Return files that
+match the regular expression MATCH. Recurse only to depth MAXDEPTH. If
+zero or negative, then do not recurse.
+
+-- [[http://fgiasson.com/blog/index.php/2016/10/26/literate-clojure-programming-tangle-all-in-org-mode/][Frederick Giasson's Literate Programming Blog]]
+#+END_QUOTE
+
+However I've found this one to be somewhat buggy, so I found basically
+the same thing, but simpler [[https://www.gnu.org/software/emacs/manual/html_node/eintr/Files-List.html][here]].
+
+[[https://www.gnu.org/software/emacs/manual/html_node/eintr/Files-List.html][Gnu Emacs Manual - Files List]]
+
+#+BEGIN_SRC emacs-lisp
+  (defun my/recursive-files-list (directory)
+    "List all the .org files in a DIRECTORY and in it's
+     sub-directories."
+    (interactive "DDirectory name: ")
+    (let (org-files-list
+          (current-directory-list
+           (directory-files-and-attributes directory t)))
+      (while current-directory-list
+        (cond ((equal ".org" (substring (car (car current-directory-list)) -4))
+               (setq org-files-list
+                     (cons (car (car current-directory-list)) org-files-list)))
+              ((eq t (car (cdr (car current-directory-list))))
+               (if (equal "." (substring (car (car current-directory-list)) -1)) ()
+                 (setq org-files-list
+                       (append
+                        (my/recursive-files-list
+                         (car (car current-directory-list)))
+                        org-files-list)))))
+        (setq current-directory-list (cdr current-directory-list)))
+      org-files-list))
+#+END_SRC
+
+* TANGLE DIRECTORY
+
+[[http://fgiasson.com/blog/index.php/2016/10/26/literate-clojure-programming-tangle-all-in-org-mode/][Frederick Giasson's Literate Programming Blog]]
+
+[[https://www.gnu.org/software/emacs/manual/html_node/eintr/print_002delements_002dof_002dlist.html][Gnu Emacs Manual - Print elements of a list]]
+
+[[https://www.gnu.org/software/emacs/manual/html_node/elisp/Mapping-Functions.html][Gnu Emacs Manual - Mapping Functions]]
+
+[[http://ergoemacs.org/emacs/elisp_mapcar_loop.html][Ergoemacs mapcar]]
+
+Takes a DIRECTORY as an argument and recursively tangles all the
+org-mode files in it and it's child directories, using
+[[*RECURSIVE%20FILE%20LIST][my/recursive-file-list]].
+
+If the directory being tangled is my emacs configuration directory,
+run [[*COMPILE%20AND%20LOAD%20CONFIG][my/compile-and-load-config]].
+
+#+BEGIN_SRC emacs-lisp
+  (defun my/tangle-directory (directory)
+    "Takes a DIRECTORY as an argument and recursively tangles all
+          the org-mode files in it and it's child directories, using
+          my/recursive-file-list.
+
+          If the directory being tangled is my emacs configuration directory,
+          run my/compile-and-load-config."
+    (interactive "DDirectory name: ")
+
+    (unless (featurep 'org)
+      (require 'org))
+
+    (mapc (lambda (file)
+            (my/insert-boilerplate
+             (format "%s" (car (org-babel-tangle-file file)))))
+          (my/recursive-files-list directory))
+
+    (when (equal (expand-file-name directory)
+                 (expand-file-name my/emacs-config-directory))
+      (my/compile-and-load-config)
+      (when (file-readable-p "~/.emacs")
+        (delete-file "~/.emacs")))
+    (message (concat "my/tangle-directory "directory" completed.")))
+#+END_SRC
+
+* TANGLE ALL
+
+Conditioanlly tangle configuration files, based on value returned by
+[[help:system-type][system-type]], using [[*TANGLE%20DIRECTORY][my/tangle-directory]]. Always tangle agnostic and
+emacs directories.
+
+#+BEGIN_SRC emacs-lisp
+  (defun my/tangle-all ()
+    "Conditioanlly tangle configuration files, based on value
+         returned by system-type, using my/tangle-directory.
+
+         Always tangle agnostic and emacs directories."
+    (interactive)
+    (my/tangle-directory my/agnostic-config-directory)
+    (my/tangle-directory my/emacs-config-directory)
+    (cond ((eq system-type 'gnu/linux)
+           (my/tangle-directory my/linux-config-directory))
+          ((eq system-type 'darwin)
+           (my/tangle-directory my/macos-config-directory))
+          ((cl-search "openbsd" system-configuration)
+           (my/tangle-directory my/openbsd-config-directory))
+          ((cl-search "freebsd" system-configuration)
+           (my/tangle-directory my/freebsd-config-directory))
+          ((cl-search "netbsd" system-configuration)
+           (my/tangle-directory my/netbsd-config-directory))
+          ((eq system-type 'windows-nt)
+           (my/tangle-directory my/windows-config-directory)))
+    (message "my/tangle-all completed."))
+#+END_SRC
+
+* AUTO TANGLE
+
+Automatically tangle files in the directories specified below when
+they are edited. Providing the system-type value is correct.
+
+It doesn't make sense to tangle openbsd configurations files on to a
+linux box, for example.
+
+However, I may want to be able to edit them without auto tangling from
+another OS.
+
+#+BEGIN_SRC emacs-lisp
+  (defun my/auto-tangle ()
+    "Auto tangle files in the directories specified below when they
+     are edited. Providing the system-type value is correct.
+
+     It doesn't make sense to tangle openbsd configurations files
+     on to a linux box, for example.
+
+     However, I may want to be able to edit them without auto
+     tangling from another OS."
+    (when (equal (file-name-directory (directory-file-name buffer-file-name))
+                 (expand-file-name my/agnostic-config-directory))
+      (org-babel-tangle))
+    (when (equal (file-name-directory (directory-file-name buffer-file-name))
+                 (expand-file-name my/emacs-config-directory))
+      (byte-compile-file
+       (my/insert-boilerplate
+        (format "%s" (car (org-babel-tangle))))0))
+    (when (and (equal (file-name-directory (directory-file-name buffer-file-name))
+                      (expand-file-name my/linux-config-directory))
+               (equal system-type 'gnu/linux))
+      (org-babel-tangle))
+    (when (and (equal (file-name-directory (directory-file-name buffer-file-name))
+                      (expand-file-name my/macos-config-directory))
+               (equal system-type 'darwin))
+      (org-babel-tangle))
+    (when (and (equal (file-name-directory (directory-file-name buffer-file-name))
+                      (expand-file-name my/freebsd-config-directory))
+               (cl-search "freebsd" system-configuration))
+      (org-babel-tangle))
+    (when (and (equal (file-name-directory (directory-file-name buffer-file-name))
+                      (expand-file-name my/netbsd-config-directory))
+               (cl-search "netbsd" system-configuration))
+      (org-babel-tangle))
+    (when (and (equal (file-name-directory (directory-file-name buffer-file-name))
+                      (expand-file-name my/openbsd-config-directory))
+               (cl-search "openbsd" system-configuration))
+      (org-babel-tangle))
+    (when (and (equal (file-name-directory (directory-file-name buffer-file-name))
+                      (expand-file-name my/netbsd-config-directory))
+               (equal system-type 'berkeley-unix))
+      (org-babel-tangle))
+    (when (and (equal (file-name-directory (directory-file-name buffer-file-name))
+                      (expand-file-name my/windows-config-directory))
+               (equal system-type 'windows-nt))
+      (org-babel-tangle)))
+#+END_SRC

@@ -145,6 +145,16 @@ Make a directory and cd into it.
   }
 #+END_SRC
 
+** MTAIL
+#+BEGIN_SRC sh
+mtail () {
+    trap 'kill $(jobs -p)' EXIT
+    for file in "$@"; do
+        tail -f "$file" &
+    done
+    wait
+}
+#+END_SRC
 ** PEEK
 
 https://github.com/lf94/peek-for-tmux
