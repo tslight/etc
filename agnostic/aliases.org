@@ -31,6 +31,7 @@
           alias ll='ls -laGh'
           alias grep='grep --color=always'
           alias lsblk='geom disk list'
+          alias update='sudo pkg update && sudo pkg upgrade'
           ;;
       linux*)
           alias bye="systemctl poweroff"
@@ -43,6 +44,8 @@
           alias lla='ls -aFhl'
           alias rb='systemctl reboot'
           alias srch='sudo updatedb && locate -i'
+          alias update='sudo apt -y update && sudo apt -y upgrade && sudo apt -y dist-upgrade'
+          alias upclean='sudo apt -y autoremove && sudo apt -y autoclean && sudo apt -y clean'
           alias zzz='systemctl suspend'
           alias ZZZ='systemctl hibernate'
           ;;
