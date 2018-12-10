@@ -176,7 +176,9 @@ Bind keys, and define autoloads for the bound commands,
     ("S-<f6>" . desktop-save)
     ("S-<f10>" . menu-bar-mode)
     ("C-<f10>" . toggle-frame-maximized)
-    ("C-<f11>" . toggle-frame-fullscreen))
+    ("C-s-m" . toggle-frame-maximized)
+    ("C-<f11>" . toggle-frame-fullscreen)
+    ("C-s-f" . toggle-frame-fullscreen))
 #+END_SRC
 
 * CHANGE INNER
