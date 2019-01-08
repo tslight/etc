@@ -20,7 +20,7 @@
           alias lsblk='diskutil list'
           alias rb='sudo reboot'
           alias srch='sudo /usr/libexec/locate.updatedb && locate -i'
-          alias update='brew update && brew upgrade && softwareupdate -i --all'
+          command -v brew >/dev/null 2>&1 && alias update='brew update && brew upgrade && brew cask upgrade && softwareupdate -i --all'
           command -v osx-cpu-temp >/dev/null 2>&1 && alias temp='osx-cpu-temp -c -g -f'
           alias zzz='pmset sleepnow'
           ;;
