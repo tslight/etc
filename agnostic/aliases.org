@@ -84,7 +84,7 @@
 #+BEGIN_SRC sh
   alias add="awk '{s+=\$1} END {print s}'" # adds columns of numbers via stdin
   alias cp='cp -i'
-  alias d2d='for f in *;do mv $f ${f// - /-}; done' # convert ' - ' to '-'
+  alias d2d='for f in *; do mv $f ${f// - /-}; done' # convert ' - ' to '-'
   alias df='df -h'
   alias dh='dirs -v'
   alias du='du -h'
@@ -116,7 +116,7 @@
   alias python='python3'
   alias py='python3'
   alias rm='rm -i'
-  alias s2us='for f in *;do mv $f ${f// /_};done' # convert ' ' to '_'
+  alias s2us='for f in *; do mv $f ${f// /_}; done' # convert ' ' to '_'
   alias sshaa='eval $(ssh-agent) && ssh-add'
   alias uc='grep -Ev "^#|^\s+#|^\t+#|^$"' # uncomment
   alias up='uptime'
