@@ -215,14 +215,12 @@ Create panes for vertical monitor.
 #+BEGIN_SRC sh
   tv() {
       tmux new-session \; \
-           split-window -v htop\; \
-           split-window -v \; \
-           select-pane -t 1 \; \
            split-window -v ranger\; \
+           split-window -v htop\; \
            select-pane -t 1 \; \
-           split-window -h pwsh\; \
-           select-pane -t 5 \; \
+           split-window -v pwsh\; \
            split-window -h ipython\; \
-           select-pane -t 1 \;
+           select-pane -t 1 \; \
+           split-window -h\;
   }
 #+END_SRC
