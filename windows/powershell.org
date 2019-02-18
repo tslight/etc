@@ -3,10 +3,10 @@
 #+PROPERTY: header-args+ :padline no
 #+PROPERTY: header-args+ :results silent
 #+PROPERTY: header-args+ :tangle-mode (identity #o600)
-#+NAME: Powershell
 
 * POWERSHELL PROFILE
 
+#+NAME: Powershell
 #+BEGIN_SRC powershell :tangle ~/Documents/WindowsPowershell/Microsoft.Powershell_profile.ps1
   $env:PSModulePath = $env:PSModulePath + "$env:USERPROFILE\src"
   $env:PSModulePath = $env:PSModulePath + "$env:USERPROFILE\src\mcs_win"
@@ -30,18 +30,11 @@
 
 #+BEGIN_SRC powershell :tangle ~/Documents/WindowsPowershell/Microsoft.PowershellISE_profile.ps1
   function Save-AllISEFiles {
-      <#
-  .SYNOPSIS
+      [CmdletBinding(SupportsShouldProcess)]
+      Param ()
 
-  Saves all ISE Files except for untitled files.
-
-  If You have multiple PowerShellTabs, saves files in all tabs.
-  #>
-      [cmdletbinding(SupportsShouldProcess=$True)]
-      param ()
-
-      foreach($tab in $psISE.PowerShellTabs) {
-          foreach($file in $tab.Files) {
+      foreach ($tab in $psISE.PowerShellTabs) {
+          foreach ($file in $tab.Files) {
               if (-Not ($file.IsUntitled -Or $file.IsSaved)) {
                   try {
                       $file.Save()
@@ -57,18 +50,13 @@
   }
 
   function Add-ISEMenuItemAndKey {
-      <#
-  .SYNOPSIS
-
-  Adds a menu item and key-binding to ISE for a given function.
-  #>
-      [cmdletbinding(SupportsShouldProcess=$True)]
-      param(
-          [Parameter(Mandatory=$True,Position=1)]
+      [CmdletBinding(SupportsShouldProcess)]
+      Param(
+          [Parameter(Mandatory,Position=1)]
           [string]$Name,
-          [Parameter(Mandatory=$True,Position=2)]
+          [Parameter(Mandatory,Position=2)]
           [string]$Function,
-          [Parameter(Mandatory=$True,Position=3)]
+          [Parameter(Mandatory,Position=3)]
           [string]$Key
       )
 
