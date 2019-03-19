@@ -1,0 +1,128 @@
+#+TITLE: CUSTOM YASNIPPET SNIPPETS
+#+AUTHOR: Toby Slight
+
+#+PROPERTY: header-args :cache yes
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :padline no
+#+PROPERTY: header-args+ :results silent
+#+PROPERTY: header-args+ :tangle-mode (identity #o600)
+
+#+OPTIONS: toc:t
+
+* POWERSHELL
+** CMDLETBINDING
+#+BEGIN_SRC snippet :tangle ~/.emacs.d/snippets/powershell-mode/cmdletbinding
+# -*- mode: snippet -*-
+# name: cmdletbinding
+# key: cmd
+# --
+[CmdletBinding(SupportsShouldProcess)]
+Param (
+  $0
+)
+#+END_SRC
+** DOCSTRING
+#+BEGIN_SRC snippet :tangle ~/.emacs.d/snippets/powershell-mode/comment-based-help
+# -*- mode: snippet -*-
+# name: comment-based-help
+# key: cbh
+# --
+<#
+.SYNOPSIS
+${1:Brief description}
+
+.DESCRIPTION
+${2:Longer description}
+
+.PARAMETER Foobar
+${3:Descriptions of parameter Foobar}
+
+.INPUTS
+${4:Types of objects that can be piped to the function}
+
+.OUTPUTS
+${5:Type of the objects that the function returns}
+
+.EXAMPLE
+${6:Actual example}
+
+.NOTES
+${7:Additional notes}
+
+.LINK
+${8:Related URL links}
+#>
+#+END_SRC
+** FOREACH
+#+BEGIN_SRC snippet :tangle ~/.emacs.d/snippets/powershell-mode/foreach
+# -*- mode: snippet -*-
+# name: foreach
+# key: for
+# --
+foreach ($${1:element} in $${2:array}) {
+    $0
+}
+#+END_SRC
+** FOREACH OBJECT
+#+BEGIN_SRC snippet :tangle ~/.emacs.d/snippets/powershell-mode/foreach-object
+# -*- mode: snippet -*-
+# name: foreach-object
+# key: %
+# --
+ForEach-Object {
+    $_.${1:property} $0
+}
+#+END_SRC
+** FUNCTION
+#+BEGIN_SRC snippet :tangle ~/.emacs.d/snippets/powershell-mode/function
+# -*- mode: snippet -*-
+# name: function
+# key: fun
+# --
+function ${1:Verb}-${2:Noun} {
+    $0
+}
+#+END_SRC
+** IF
+#+BEGIN_SRC snippet :tangle ~/.emacs.d/snippets/powershell-mode/if
+# -*- mode: snippet -*-
+# name: if
+# key: if
+# --
+
+if ($${1:condition}) {
+   $0
+}
+#+END_SRC
+** IF ELSE
+#+BEGIN_SRC snippet :tangle ~/.emacs.d/snippets/powershell-mode/ifelse
+# -*- mode: snippet -*-
+# name: ifelse
+# key: ifel
+# --
+
+if ($${1:condition}) {
+   ${2:action}
+} else {
+   $0
+}
+#+END_SRC
+** PARAMETER
+#+BEGIN_SRC snippet :tangle ~/.emacs.d/snippets/powershell-mode/parameter
+# -*- mode: snippet -*-
+# name: parameter
+# key: par
+# --
+[Parameter(Mandatory${1:,ValueFromPipeline})]
+[${2:string}]\$${3:Foobar}
+#+END_SRC
+** WHERE OBJECT
+#+BEGIN_SRC snippet :tangle ~/.emacs.d/snippets/powershell-mode/where-object
+# -*- mode: snippet -*-
+# name: where-object
+# key: ?
+# --
+Where-Object {
+    $_.${1:property} $0
+}
+#+END_SRC

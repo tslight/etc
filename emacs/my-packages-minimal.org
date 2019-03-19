@@ -492,7 +492,7 @@ that disables itself auto-magically.
     :ensure t
     :bind
     ("C-x g" . magit-status)
-    ("C-c g d" . magit-dispatch-popup)
+    ("C-c g d" . magit-dispatch)
     ("C-c g l" . magit-list-repositories)
     :init
     (setq magit-repository-directories `(("~/" . 3)))
@@ -544,5 +544,7 @@ that disables itself auto-magically.
     (use-package yasnippet-snippets
       :defer t
       :ensure t
-      :after yasnippet))
+      :after yasnippet
+      :config
+      (org-babel-tangle-file "my-snippets.org")))
 #+END_SRC
