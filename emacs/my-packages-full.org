@@ -85,10 +85,7 @@ All the non-essential, but nice to have stuff goes in here.
     :defer t
     :diminish company-mode
     :hook
-    (prog-mode . company-mode)
-    :config
-    (setq company-dabbrev-downcase 0)
-    (setq company-idle-delay 0.1))
+    (prog-mode . company-mode))
 #+END_SRC
 * COUNSEL PROJECTILE
 #+BEGIN_SRC emacs-lisp
