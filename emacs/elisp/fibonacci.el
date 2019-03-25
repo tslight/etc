@@ -11,8 +11,10 @@
 
 (defun my/get-fibs(numbers)
   "Get all the Fibonacci numbers up to NUMBER."
-  (cond ((number > )))
+  (cond ((eq (length numbers) 1)
+	 (car )))
   )
+
 (defun my/fibs(number)
   "Get all the Fibonacci numbers up to NUMBER."
   (interactive "nEnter the Fibonacci you want to go up to: ")
