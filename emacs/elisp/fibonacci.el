@@ -19,7 +19,7 @@
     )
   )
 
-(defun my/recursive-list(range, list, function)
+(defun my/recursive-list(range list function)
   "Get recursive LIST of FUNCTION results of RANGE."
   (if (= (length range) 1)
       (funcall function (car range))

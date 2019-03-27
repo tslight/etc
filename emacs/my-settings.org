@@ -22,6 +22,7 @@ install.
 - [[#bell][BELL]]
 - [[#bookmarks][BOOKMARKS]]
 - [[#copypaste][COPY/PASTE]]
+- [[#confirm-kill][CONFIRM KILL]]
 - [[#custom-file][CUSTOM FIlE]]
 - [[#default-frame][DEFAULT FRAME]]
 - [[#doc-view][DOC VIEW]]
@@ -345,6 +346,21 @@ clipboard contents are saved to the clipboard manager if one is present.
 #+BEGIN_SRC emacs-lisp
   (setq x-select-enable-clipboard-manager nil)
 #+END_SRC
+* CONFIRM KILL
+
+#+BEGIN_QUOTE
+How to ask for confirmation when leaving Emacs.
+If nil, the default, don’t ask at all.  If the value is non-nil, it should
+be a predicate function; for example ‘yes-or-no-p’.
+
+-- [[help:confirm-kill-emacs][Help Page]]
+#+END_QUOTE
+
+https://stackoverflow.com/a/21192426
+
+#+BEGIN_SRC emacs-lisp
+(setq confirm-kill-emacs 'y-or-n-p)
+#+END_SRC
 
 * CUSTOM FIlE
 
@@ -400,7 +416,6 @@ If SUFFIX is non-nil, add that at the end of the file name.
 #+BEGIN_SRC emacs-lisp
   (setq custom-file (make-temp-file "emacs-custom"))
 #+END_SRC
-
 * DEFAULT FRAME
 
 #+BEGIN_QUOTE
