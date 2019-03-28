@@ -545,6 +545,5 @@ that disables itself auto-magically.
       :defer t
       :ensure t
       :after yasnippet
-      :config
-      (org-babel-tangle-file "my-snippets.org")))
+      ))
 #+END_SRC
