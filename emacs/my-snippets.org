@@ -125,6 +125,61 @@ if ($${1:condition}) {
    $0
 }
 #+END_SRC
+** MODULE
+#+BEGIN_SRC snippet :tangle ~/.emacs.d/snippets/powershell-mode/module
+  # -*- mode: snippet -*-
+  # name: module
+  # key: mod
+  # --
+  #region get public and private function definition files.
+  $Public  = @( Get-ChildItem -Path $PSScriptRoot\Public\*.ps1 -ErrorAction SilentlyContinue )
+  $Private = @( Get-ChildItem -Path $PSScriptRoot\Private\*.ps1 -ErrorAction SilentlyContinue )
+  #endregion
+
+  #region source the files
+  foreach ($import in @($Public + $Private)) {
+      Try {
+          . $import.fullname
+      } Catch {
+          Write-Error -Message "Failed to import function $($import.fullname): $_"
+      }
+  }
+  #endregion
+
+  #region read in or create an initial config file and variable
+  $ConfigFile = "Config.psd1"
+
+  if (Test-Path "$PSScriptRoot\$ConfigFile") {
+      try {
+          $Config = Import-LocalizedData -BaseDirectory $PSScriptRoot -FileName $ConfigFile
+          ${1:Config variables}
+      } catch {
+          Write-Warning "Invalid configuration data in $ConfigFile."
+          Write-Warning "Please fill out or correct $PSScriptRoot\$ConfigFile."
+          Write-Verbose $_.Exception.Message
+          Write-Verbose $_.InvocationInfo.ScriptName
+          Write-Verbose $_.InvocationInfo.PositionMessage
+      }
+  } else {
+      @"
+  @{
+      ${2:Config variables}
+  }
+  "@ | Out-File -Encoding UTF8 -FilePath "$PSScriptRoot\$ConfigFile"
+      Write-Warning "Generated $PSScriptRoot\$ConfigFile."
+      Write-Warning "Please edit $ConfigFile and re-import module."
+  }
+  #endregion
+
+  #region set variables visible to the module and its functions only
+  ${3:Config variables}
+  #endregion
+
+  #region export Public functions ($Public.BaseName) for WIP modules
+  Export-ModuleMember -Function $Public.Basename
+  #endregion
+
+#+END_SRC
 ** PARAMETER
 #+BEGIN_SRC snippet :tangle ~/.emacs.d/snippets/powershell-mode/parameter
 # -*- mode: snippet -*-
