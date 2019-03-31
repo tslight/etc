@@ -212,6 +212,16 @@ if ($${1:condition}) {
 [Parameter(Mandatory${1:,ValueFromPipeline})]
 [${2:string}]\$${3:Foobar}
 #+END_SRC
+** WARN
+#+BEGIN_SRC snippet :tangle ~/.emacs.d/snippets/powershell-mode/warning
+  # -*- mode: snippet -*-
+  # name: warning
+  # key: war
+  # --
+  Write-Warning $_.InvocationInfo.ScriptName
+  Write-Warning $_.InvocationInfo.Line
+  Write-Warning $_.Exception.Message
+#+END_SRC
 ** WHERE OBJECT
 #+BEGIN_SRC snippet :tangle ~/.emacs.d/snippets/powershell-mode/where
   # -*- mode: snippet -*-
