@@ -148,10 +148,14 @@ if ($${1:condition}) {
 
   #region read in or create an initial config file and variable
   $ConfigFile = "Config.psd1"
+  $Params     = @{
+      BaseDirectory = $PSScriptRoot
+      FileName      = $ConfigFile
+  }
 
   if (Test-Path "$PSScriptRoot\$ConfigFile") {
       try {
-          $Config = Import-LocalizedData -BaseDirectory $PSScriptRoot -FileName $ConfigFile
+          $Config = Import-LocalizedData @Params
           ${1:Config variables}
       } catch {
           Write-Warning "Invalid configuration data in $ConfigFile."
@@ -172,6 +176,20 @@ if ($${1:condition}) {
   #endregion
 
   #region set variables visible to the module and its functions only
+  $Date = Get-Date -UFormat "%Y.%m.%d"
+  $Time = Get-Date -UFormat "%H:%M:%S"
+  $Green = @{
+      Background = 'Black'
+      Foreground = 'Green'
+  }
+  $Cyan = @{
+      Background = 'Black'
+      Foreground = 'Cyan'
+  }
+  $Magenta = @{
+      Background = 'Black'
+      Foreground = 'Magenta'
+  }
   ${3:Config variables}
   #endregion
 
@@ -181,18 +199,18 @@ if ($${1:condition}) {
 
 #+END_SRC
 ** PARAMETER
-#+BEGIN_SRC snippet :tangle ~/.emacs.d/snippets/powershell-mode/parameter
+#+BEGIN_SRC snippet :tangle ~/.emacs.d/snippets/powershell-mode/param
 # -*- mode: snippet -*-
-# name: parameter
+# name: param
 # key: par
 # --
 [Parameter(Mandatory${1:,ValueFromPipeline})]
 [${2:string}]\$${3:Foobar}
 #+END_SRC
 ** WHERE OBJECT
-#+BEGIN_SRC snippet :tangle ~/.emacs.d/snippets/powershell-mode/where-object
+#+BEGIN_SRC snippet :tangle ~/.emacs.d/snippets/powershell-mode/where
   # -*- mode: snippet -*-
-  # name: where-object
+  # name: where
   # key: ?
   # --
   Where-Object {
