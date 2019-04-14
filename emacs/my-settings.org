@@ -553,6 +553,12 @@ proctice might add it though custom-set-variables.
 (setf epa-pinentry-mode 'loopback)
 #+END_SRC
 
+https://emacs.stackexchange.com/a/12231
+
+#+BEGIN_SRC emacs-lisp
+(setq epa-file-cache-passphrase-for-symmetric-encryption t)
+#+END_SRC
+
 * FILL COLUMN
 
 #+BEGIN_SRC emacs-lisp

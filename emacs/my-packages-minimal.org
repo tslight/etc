@@ -121,6 +121,8 @@ Bind keys, and define autoloads for the bound commands,
   (use-package bind-key
     :demand t
     :bind*
+    ("C-s" . isearch-forward-regexp)
+    ("C-r" . isearch-backward-regexp)
     ("C-c i" . imenu)
     ;; evaluation keymap
     ("C-x C-e" . pp-eval-last-sexp)
@@ -466,8 +468,8 @@ that disables itself auto-magically.
     :diminish
     :bind
     ("C-x b" . ivy-switch-buffer)
-    ("C-r" . swiper)
-    ("C-s" . swiper)
+    ("C-M-r" . swiper)
+    ("C-M-s" . swiper)
     ("C-S-s" . swiper-multi)
     ("C-c C-r" . ivy-resume)
     :config
