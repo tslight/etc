@@ -9,7 +9,7 @@
 #+BEGIN_SRC powershell :tangle ~/.config/powershell/Microsoft.Powershell_profile.ps1
 $env:PSModulePath = $env:PSModulePath + ":$HOME/src"
 $env:PSModulePath = $env:PSModulePath + ":$HOME/src/mcs_win"
-New-Alias -Name 'll' -Value 'Get-ChildItem'
+New-Alias -Name 'll' -Value 'Get-ChildItem' -Force
 #+END_SRC
 
 #+BEGIN_SRC powershell :noweb yes :tangle ~/.config/powershell/profile.ps1
