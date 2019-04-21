@@ -232,7 +232,7 @@ single buffer, use ‘electric-pair-local-mode’.
     (setq gnus-thread-ignore-subject t))
 #+END_SRC
 * LINUM MODE
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package linum
     :defer t
     :hook
