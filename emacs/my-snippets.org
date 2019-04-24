@@ -277,7 +277,7 @@ $0
   Write-TSWarning @Params
   $0
 #+END_SRC
-** ** WHERE OBJECT
+** WHERE OBJECT
 #+BEGIN_SRC snippet :tangle ~/.emacs.d/snippets/powershell-mode/where
   # -*- mode: snippet -*-
   # name: where
