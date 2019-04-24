@@ -262,11 +262,22 @@ $0
   # name: warning
   # key: war
   # --
-  Write-Warning $_.InvocationInfo.ScriptName
-  Write-Warning $_.InvocationInfo.Line
-  Write-Warning $_.Exception.Message
+  Write-TSWarning $_ -Verbose:$VerbosePreference
 #+END_SRC
-** WHERE OBJECT
+#+BEGIN_SRC snippet :tangle ~/.emacs.d/snippets/powershell-mode/custom-warning
+  # -*- mode: snippet -*-
+  # name: custom-warning
+  # key: warn
+  # --
+  $Params = @{
+      Exception = $_
+      Warning = \"${1:Message}\"
+      Verbose = $VerbosePreference
+  }
+  Write-TSWarning @Params
+  $0
+#+END_SRC
+** ** WHERE OBJECT
 #+BEGIN_SRC snippet :tangle ~/.emacs.d/snippets/powershell-mode/where
   # -*- mode: snippet -*-
   # name: where
