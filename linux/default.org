@@ -1,0 +1,16 @@
+#+TITLE: ETC DEFAULT DIRECTORY STUFF
+#+PROPERTY: header-args :cache yes
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :tangle-mode (identity #o644)
+#+PROPERTY: header-args+ :results silent
+#+PROPERTY: header-args+ :padline no
+* KEYBOARD
+#+BEGIN_SRC conf :tangle (my/hardware-tangle "Apple Inc" "sudo::/etc/default/keyboard")
+# KEYBOARD CONFIGURATION FILE
+# Consult the keyboard(5) manual page.
+XKBMODEL="pc105"
+XKBLAYOUT="gb"
+XKBVARIANT=""
+XKBOPTIONS="ctrl:swap_rwin_rctl,ctrl:swap_lwin_lctl,lv3:ralt_alt,caps:swapescape,terminate:ctrl_alt_bksp"
+BACKSPACE="guess"
+#+END_SRC

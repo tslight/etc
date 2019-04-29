@@ -28,13 +28,32 @@ Also, /usr/include/linux/input.h may be of use... Good luck!
 Finally one needs to run ~udevadm hwdb --update~, ~systemd-hwdb update~,
 ~udevadm trigger~
 
+** PRE-BUTTERFLY MACBOOK KEYBOARD MODS
+
+*** EMACS INSPIRED SPACE CADET SETUP
+
+This doesn't work :-(
+
+#+BEGIN_SRC conf :tangle no
+  #keyboard:dmi:*                   # only works on udev versions 208-215
+  evdev:input:b0003v05acp0253e0111* # only works with udev versions > 215
+   KEYBOARD_KEY_01=capslock         # esc       --> caps
+   KEYBOARD_KEY_58=esc              # caps      --> esc
+   KEYBOARD_KEY_125=leftctrl        # leftcmd   --> leftctrl
+   KEYBOARD_KEY_126=rightctrl       # rightcmd  --> rightctrl
+   KEYBOARD_KEY_56=leftalt          # leftopt   --> leftalt
+   KEYBOARD_KEY_100=leftalt         # rightopt  --> leftalt (to avoid altgr shit)
+   KEYBOARD_KEY_29=leftmeta         # leftctrl  --> super
+   KEYBOARD_KEY_105=rightmeta       # leftarrow --> super
+#+END_SRC
+
 ** NU SKOOL THINKPAD KEYBOARD MODS
 
 WORKS WITH POST *30 (2012) SERIES THINKPADS
 
 *** EMACS INSPIRED SPACE CADET SETUP
 
-#+BEGIN_SRC conf
+#+BEGIN_SRC conf :tangle no
   #keyboard:dmi:*                # only works on udev versions 208-215
   evdev:atkbd:dmi:*              # only works with udev versions > 215
    KEYBOARD_KEY_01=capslock      # esc   --> caps
