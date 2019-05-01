@@ -14,6 +14,8 @@
 
 * MACBOOK FN KEYS
 
+https://wiki.archlinux.org/index.php/Apple_Keyboard#Function_keys_do_not_work
+
 #+BEGIN_SRC conf  :tangle (my/hardware-tangle "Apple Inc" "/sudo::/etc/modprobe.d/hid_apple.conf")
 options hid_apple fnmode=2
 #+END_SRC
