@@ -11,3 +11,9 @@
 #+BEGIN_SRC conf :tangle no
   options iwlwifi led_mode=1
 #+END_SRC
+
+* MACBOOK FN KEYS
+
+#+BEGIN_SRC conf  :tangle (my/hardware-tangle "Apple Inc" "/sudo::/etc/modprobe.d/hid_apple.conf")
+options hid_apple fnmode=2
+#+END_SRC
