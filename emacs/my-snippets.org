@@ -53,24 +53,24 @@
   .DESCRIPTION
   ${2:Longer description}
 
-  .PARAMETER Foobar
-  ${3:Descriptions of parameter Foobar}
-
-  .INPUTS
-  ${4:Types of objects that can be piped to the function}
-
-  .OUTPUTS
-  ${5:Type of the objects that the function returns}
+  .PARAMETER ${3:Foobar}
+  ${4:Descriptions of parameter Foobar}
 
   .EXAMPLE
-  ${6:Actual example}
-
-  .NOTES
-  ${7:Additional notes}
+  ${5:Actual example}
 
   .LINK
-  ${8:Related URL links}
+  ${6:Related URL links}
   #>
+#+END_SRC
+
+#+BEGIN_SRC snippet :tangle ~/.emacs.d/snippets/powershell-mode/cbh-param
+  # -*- mode: snippet -*-
+  # name: cbh-param
+  # key: cbhpar
+  # --
+  .PARAMETER ${1:Foobar}
+  ${2:Description of parameter Foobar}
 #+END_SRC
 ** FOR
 #+BEGIN_SRC snippet :tangle ~/.emacs.d/snippets/powershell-mode/for
