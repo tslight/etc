@@ -57,14 +57,14 @@
     </Group>
 
     <!-- Tray at the bottom. -->
-    <Tray x="1" y="0" autohide="off" height="20">
+    <Tray x="0" y="0" width="32" layout="vertical">
       <Clock format="%d/%m">
         <Button mask="123">root:1</Button>
       </Clock>
-      <Spacer width="2"/>
-      <TaskList maxwidth="256"/>
+      <TaskList labeled="false"/>
+      <Spacer width="0"/>
       <Pager labeled="true"/>
-      <Dock/>
+      <Dock width="20" spacing="2"/>
       <Clock format="%H:%M">
         <Button mask="123">showdesktop</Button>
       </Clock>
@@ -88,7 +88,7 @@
       </Active>
     </WindowStyle>
     <TrayStyle group="true" list="all">
-      <Font>Sans-10:Bold</Font>
+      <Font>Sans-8:Bold</Font>
       <Background>#242424</Background>
       <Foreground>#FFFFFF</Foreground>
       <Outline>#000000</Outline>
