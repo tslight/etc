@@ -8,6 +8,7 @@
   <?xml version="1.0"?>
   <JWM>
     <!-- Autostart application -->
+    <StartupCommand>nm-applet</StartupCommand>
     <StartupCommand>xfce4-power-manager</StartupCommand>
     <StartupCommand>xfce4-clipman</StartupCommand>
 
@@ -56,7 +57,7 @@
     </Group>
 
     <!-- Tray at the bottom. -->
-    <Tray x="0" y="-1" autohide="off" height="20">
+    <Tray x="1" y="0" autohide="off" height="20">
       <Clock format="%d/%m">
         <Button mask="123">root:1</Button>
       </Clock>
@@ -185,8 +186,8 @@
     <Key mask="4" key="space">window</Key>
     <Key mask="A" key="F1">window</Key>
 
-    <Key mask="C" key="Tab">nextstacked</Key>
-    <Key mask="CS" key="Tab">prevstacked</Key>
+    <Key mask="A" key="Tab">nextstacked</Key>
+    <Key mask="AS" key="Tab">prevstacked</Key>
     <Key mask="C" key="F4">close</Key>
     <Key mask="C" key="F10">maximize</Key>
     <Key mask="C" key="F11">fullscreen</Key>
@@ -198,9 +199,11 @@
     <Key mask="4" key="k">udesktop</Key>
     <Key mask="4" key="j">ddesktop</Key>
 
+    <Key mask="4C" key="XF86Eject">exec:slock</Key>
+    <Key mask="4C" key="q">exec:slock</Key>
     <Key mask="4C" key="l">exec:slock</Key>
     <Key mask="4C" key="r">restart</Key>
-    <Key mask="4C" key="q">exit</Key>
+    <Key mask="4C" key="BackSpace">exit</Key>
 
   </JWM>
 #+END_SRC
