@@ -6,7 +6,7 @@
 #+BEGIN_SRC conf :tangle ~/.gitconfig
   [user]
       name = tslight
-      email = tobyslight@gmail.com
+      email = tslight@pm.com
   [color]
       ui = true
   [push]
