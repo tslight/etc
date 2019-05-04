@@ -42,6 +42,7 @@ install.
 - [[#misc][MISC]]
 - [[#modeline][MODELINE]]
 - [[#newline][NEWLINE]]
+- [[#path][PATH]]
 - [[#personal-info][PERSONAL INFO]]
 - [[#pretty-symbols][PRETTY SYMBOLS]]
 - [[#registers][REGISTERS]]
@@ -144,7 +145,7 @@ lines.
 #+END_QUOTE
 
 #+BEGIN_SRC emacs-lisp
-(setq auto-window-vscroll nil)
+  (setq auto-window-vscroll nil)
 #+END_SRC
 
 * BACKUP
@@ -262,15 +263,15 @@ Non-nil means try to flash the frame to represent a bell.
 Controls when Emacs saves bookmarks to a file.
 
 --> nil means never save bookmarks, except when ‘bookmark-save’ is
-    explicitly called (M-x bookmark-save).
+explicitly called (M-x bookmark-save).
 
 --> t means save bookmarks when Emacs is killed.
 
 --> Otherwise, it should be a number that is the frequency with which
-    the bookmark list is saved (i.e.: the number of times which
-    Emacs’s bookmark list may be modified before it is automatically
-    saved.).  If it is a number, Emacs will also automatically save
-    bookmarks when it is killed.
+the bookmark list is saved (i.e.: the number of times which
+Emacs’s bookmark list may be modified before it is automatically
+saved.).  If it is a number, Emacs will also automatically save
+bookmarks when it is killed.
 
 Therefore, the way to get it to save every time you make or delete a
 bookmark is to set this variable to 1 (or 0, which produces the same
@@ -359,7 +360,7 @@ be a predicate function; for example ‘yes-or-no-p’.
 https://stackoverflow.com/a/21192426
 
 #+BEGIN_SRC emacs-lisp
-(setq confirm-kill-emacs 'y-or-n-p)
+  (setq confirm-kill-emacs 'y-or-n-p)
 #+END_SRC
 
 * CUSTOM FIlE
@@ -532,6 +533,7 @@ disabled, i.e., all commands work normally.
 #+BEGIN_SRC emacs-lisp
   (prefer-coding-system 'utf-8-unix)
 #+END_SRC
+
 * EPA
 
 #+BEGIN_QUOTE
@@ -550,26 +552,29 @@ proctice might add it though custom-set-variables.
 #+END_QUOTE
 
 #+BEGIN_SRC emacs-lisp
-(setf epa-pinentry-mode 'loopback)
+  (setf epa-pinentry-mode 'loopback)
 #+END_SRC
 
 https://emacs.stackexchange.com/a/12231
 
 #+BEGIN_SRC emacs-lisp
-(setq epa-file-cache-passphrase-for-symmetric-encryption t)
+  (setq epa-file-cache-passphrase-for-symmetric-encryption t)
 #+END_SRC
 
 * FILL COLUMN
 
 #+BEGIN_SRC emacs-lisp
-(setq-default fill-column 80)
+  (setq-default fill-column 80)
 #+END_SRC
 
 * HIDE SHOW
+
 #+BEGIN_SRC emacs-lisp
   (add-hook 'prog-mode-hook 'hs-minor-mode)
 #+END_SRC
+
 * HISTORY
+
 #+BEGIN_SRC emacs-lisp
   (savehist-mode 1)
   (setq savehist-additional-variables
@@ -578,17 +583,22 @@ https://emacs.stackexchange.com/a/12231
   (setq history-length t)
   (setq history-delete-duplicates t)
 #+END_SRC
+
 * HIGHLIGHT LINE MODE
+
 #+BEGIN_SRC emacs-lisp
   (global-hl-line-mode)
 #+END_SRC
+
 * INDENTATION
+
 #+BEGIN_SRC emacs-lisp
   (setq c-default-style "bsd")
   (setq c-basic-offset 4)
   (setq js-indent-level 2)
   (setq css-indent-offset 2)
 #+END_SRC
+
 * INTERFACE
 
 #+BEGIN_QUOTE
@@ -625,11 +635,14 @@ Turn off tooltips if bound.
 #+END_SRC
 
 * LOCKFILES
+
 #+BEGIN_SRC emacs-lisp
   (setq create-lockfiles nil) ;; prevent creation of .#myfile.ext
 #+END_SRC
+
 * MACOS MODIFIERS
-#+BEGIN_SRC emacs-lisp
+
+#+BEGIN_SRC emacs-lisp :tangle (my/os-tangle 'darwin)
   (when (eq system-type 'darwin) ;; mac specific settings
     (setq mac-option-modifier 'meta)
     ;; (setq mac-command-modifier 'control)
@@ -637,23 +650,30 @@ Turn off tooltips if bound.
     ;; (setq mac-function-modifier 'hyper)
     (global-set-key [kp-delete] 'delete-char))
 #+END_SRC
+
 * MARK REPEAT POP
+
 #+BEGIN_SRC emacs-lisp
   (setq set-mark-command-repeat-pop t) ;; repeating C-SPC after popping, pops it
 #+END_SRC
+
 * MESSAGE SIZE
 
 Increase the number of messages in the Messages buffer.
 
 #+BEGIN_SRC emacs-lisp
-(setq message-log-max 10000)
+  (setq message-log-max 10000)
 #+END_SRC
+
 * MISC
+
 #+BEGIN_SRC emacs-lisp
   (setq load-prefer-newer t) ;; if init.elc is older, use newer init.el
   (pending-delete-mode 1) ;; remove selected region if typing
 #+END_SRC
+
 * MODELINE
+
 #+BEGIN_SRC emacs-lisp
   (column-number-mode t)
   (setq display-time-format "%H:%M %d/%m/%y")
@@ -661,43 +681,71 @@ Increase the number of messages in the Messages buffer.
   (display-battery-mode 1)
   (size-indication-mode t)
 #+END_SRC
+
 * NEWLINE
+
 #+BEGIN_SRC emacs-lisp
   (setq require-final-newline t) ;; useful for crontab
 #+END_SRC
+
+* PATH
+
+http://ergoemacs.org/emacs/emacs_env_var_paths.html
+
+#+BEGIN_SRC emacs-lisp :tangle (my/os-tangle 'gnu/linux)
+  ;; example of setting env var named “path”, by appending a new path to existing path
+  (setenv "PATH"
+          (concat
+           (concat (getenv "HOME") "/bin" ":")
+           (concat (getenv "HOME") "/.local/bin" ":")
+           (getenv "PATH")
+           )
+          )
+#+END_SRC
+
 * PERSONAL INFO
 #+BEGIN_SRC emacs-lisp
   (setq user-full-name "Toby Slight"
-        user-mail-address "tobyslight@gmail.com")
+        user-mail-address "tslight@pm.me")
 #+END_SRC
 * PRETTY SYMBOLS
+
+http://ergoemacs.org/emacs/emacs_pretty_lambda.html
+
 #+BEGIN_SRC emacs-lisp
-  (setq prettify-symbols-unprettify-at-point 'right-edge)
-  (global-prettify-symbols-mode 0)
+  ;; (setq prettify-symbols-unprettify-at-point 'right-edge)
+  (global-prettify-symbols-mode 1)
 #+END_SRC
+
 * REGISTERS
+
 #+BEGIN_SRC emacs-lisp
   (set-register ?h (cons 'file "~/"))
-  (set-register ?g (cons 'file "~/git"))
+  (set-register ?g (cons 'file "~/src"))
   (set-register ?o (cons 'file "~/org"))
   (set-register ?t (cons 'file "~/org/todo.org"))
   (set-register ?n (cons 'file "~/org/notes.org"))
   (set-register ?j (cons 'file "~/org/journal.org"))
   (set-register ?b (cons 'file "~/Documents/bbk"))
-  (set-register ?i (cons 'file "~/git/etc/agnostic/emacs.org"))
+  (set-register ?i (cons 'file "~/etc/emacs/my-init.org"))
 #+END_SRC
+
 * SAVEPLACE
+
 #+BEGIN_SRC emacs-lisp
   (save-place-mode 1)
   (setq save-place-file (concat user-emacs-directory "saveplace.el"))
 #+END_SRC
+
 * SCROLLING
+
 #+BEGIN_SRC emacs-lisp
   ;; Moving cursor down at bottom scrolls only a single line, not half page
   (setq scroll-step 4)
   (setq scroll-margin 6)
   (setq scroll-conservatively 8)
 #+END_SRC
+
 * SHOW PAREN
 
 #+BEGIN_QUOTE
@@ -734,7 +782,7 @@ horizontally.
 #+END_QUOTE
 
 #+BEGIN_SRC emacs-lisp
-(setq split-width-threshold 160)
+  (setq split-width-threshold 160)
 #+END_SRC
 
 #+BEGIN_QUOTE
@@ -753,7 +801,7 @@ value of this variable.
 #+END_QUOTE
 
 #+BEGIN_SRC emacs-lisp
-(setq split-height-threshold 80)
+  (setq split-height-threshold 80)
 #+END_SRC
 
 * STARTUP
@@ -771,10 +819,10 @@ still allowing individual users to do so.
 Setting this variable takes effect only if you do it with the
 customization buffer or if your init file contains a line of this
 form:
- (setq inhibit-startup-echo-area-message "YOUR-USER-NAME")
+(setq inhibit-startup-echo-area-message "YOUR-USER-NAME")
 If your init file is byte-compiled, use the following form
 instead:
- (eval '(setq inhibit-startup-echo-area-message "YOUR-USER-NAME"))
+(eval '(setq inhibit-startup-echo-area-message "YOUR-USER-NAME"))
 Thus, someone else using a copy of your init file will see the
 startup message unless he personally acts to inhibit it.
 
@@ -820,30 +868,41 @@ Major mode command symbol to use for the initial ‘*scratch*’ buffer.
 #+END_SRC
 
 * TRAMP
+
 #+BEGIN_SRC emacs-lisp
   (setq tramp-backup-directory-alist backup-directory-alist)
   (setq tramp-default-method "ssh")
 #+END_SRC
+
 * TRUNCATE LINES
+
 #+BEGIN_SRC emacs-lisp
   (set-default 'truncate-lines t)
 #+END_SRC
+
 * UNDO LIMIT
+
 #+BEGIN_SRC emacs-lisp
   (setq undo-limit 150000)
   (setq undo-strong-limit 300000)
 #+END_SRC
+
 * VERSION CONTROL
+
 #+BEGIN_SRC emacs-lisp
   (setq vc-follow-symlinks t)
   (setq vc-make-backup-files t)
   (setq version-control t)
 #+END_SRC
+
 * WINDMOVE
+
 #+BEGIN_SRC emacs-lisp
   (windmove-default-keybindings 'control)
 #+END_SRC
+
 * YES OR NO
+
 #+BEGIN_SRC emacs-lisp
   (fset 'yes-or-no-p 'y-or-n-p) ;; never have to type full word
 #+END_SRC

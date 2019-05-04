@@ -36,6 +36,7 @@ files will be tangled, compiled and loaded.
 - [[#tangle-all][TANGLE ALL]]
 - [[#auto-tangle][AUTO TANGLE]]
 - [[#hardware-tangle][HARDWARE TANGLE]]
+- [[#os-tangle][OS TANGLE]]
 
 * BABEL NO CONFIRM
 
@@ -414,4 +415,15 @@ Inspired by https://emacs.stackexchange.com/a/14034
                         (buffer-string)))
         path
       "no"))
+#+END_SRC
+
+* OS TANGLE
+
+Inspired by https://emacs.stackexchange.com/a/14034
+
+#+BEGIN_SRC emacs-lisp
+  (defun my/os-tangle (os)
+    (when (not (equal system-type os))
+      "no")
+    )
 #+END_SRC
