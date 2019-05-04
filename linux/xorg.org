@@ -49,11 +49,11 @@ https://howchoo.com/g/mdy0ngziogm/the-perfect-almost-touchpad-settings-on-linux-
           # I often use thumb to press down the physical button, so let's not
           # ignore it
           Option          "IgnoreThumb" "true"
-          Option          "ThumbRatio" "75"
-          Option          "ThumbSize" "35"
+          Option          "ThumbRatio" "70"
+          Option          "ThumbSize" "25"
           # Ignore palm, with palm takes up to 30% of your touch pad
           Option          "IgnorePalm" "true"
-          Option          "PalmSize" "50"
+          Option          "PalmSize" "35"
           # Trigger mouse button when tap: 1 finger - left click, 2 finger - right
           # click, 3 - middle click
           Option          "TapButton1" "1"
