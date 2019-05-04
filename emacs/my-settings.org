@@ -642,7 +642,7 @@ Turn off tooltips if bound.
 
 * MACOS MODIFIERS
 
-#+BEGIN_SRC emacs-lisp :tangle (my/os-tangle 'darwin)
+#+BEGIN_SRC emacs-lisp
   (when (eq system-type 'darwin) ;; mac specific settings
     (setq mac-option-modifier 'meta)
     ;; (setq mac-command-modifier 'control)
@@ -692,15 +692,15 @@ Increase the number of messages in the Messages buffer.
 
 http://ergoemacs.org/emacs/emacs_env_var_paths.html
 
-#+BEGIN_SRC emacs-lisp :tangle (my/os-tangle 'gnu/linux)
+#+BEGIN_SRC emacs-lisp
   ;; example of setting env var named “path”, by appending a new path to existing path
-  (setenv "PATH"
-          (concat
-           (concat (getenv "HOME") "/bin" ":")
-           (concat (getenv "HOME") "/.local/bin" ":")
-           (getenv "PATH")
-           )
-          )
+  (when (eq system-type 'gnu/linux)
+    (setenv "PATH"
+            (concat
+             (concat (getenv "HOME") "/bin" ":")
+             (concat (getenv "HOME") "/.local/bin" ":")
+             (getenv "PATH")
+             )))
 #+END_SRC
 
 * PERSONAL INFO
