@@ -42,7 +42,6 @@ install.
 - [[#misc][MISC]]
 - [[#modeline][MODELINE]]
 - [[#newline][NEWLINE]]
-- [[#path][PATH]]
 - [[#personal-info][PERSONAL INFO]]
 - [[#pretty-symbols][PRETTY SYMBOLS]]
 - [[#registers][REGISTERS]]
@@ -686,21 +685,6 @@ Increase the number of messages in the Messages buffer.
 
 #+BEGIN_SRC emacs-lisp
   (setq require-final-newline t) ;; useful for crontab
-#+END_SRC
-
-* PATH
-
-http://ergoemacs.org/emacs/emacs_env_var_paths.html
-
-#+BEGIN_SRC emacs-lisp
-  ;; example of setting env var named “path”, by appending a new path to existing path
-  (when (eq system-type 'gnu/linux)
-    (setenv "PATH"
-            (concat
-             (concat (getenv "HOME") "/bin" ":")
-             (concat (getenv "HOME") "/.local/bin" ":")
-             (getenv "PATH")
-             )))
 #+END_SRC
 
 * PERSONAL INFO

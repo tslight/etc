@@ -123,7 +123,7 @@ https://github.com/purcell/exec-path-from-shell
 
 #+BEGIN_SRC emacs-lisp
   (use-package exec-path-from-shell
-    :if (eq system-type 'darwin)
+    :when (memq window-system '(mac ns x))
     :ensure t
     :init
     (exec-path-from-shell-initialize))
