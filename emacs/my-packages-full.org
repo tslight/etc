@@ -123,7 +123,6 @@ https://github.com/purcell/exec-path-from-shell
 
 #+BEGIN_SRC emacs-lisp
   (use-package exec-path-from-shell
-    :when (memq window-system '(mac ns x))
     :ensure t
     :init
     (exec-path-from-shell-initialize)
@@ -224,7 +223,7 @@ Make sure the following python packages are installed with ~pip install~:
 - *virtualenv* /sandboxed python environments/
 - *yapf* /yet another python formatter/
 
-#+BEGIN_SRC python :tangle no
+#+BEGIN_SRC sh :tangle no
 pip3 install autopep8 black flake8 importmagic jedi jupyter rope virtualenv yapf pylint
 #+END_SRC
 
@@ -236,6 +235,7 @@ pip3 install autopep8 black flake8 importmagic jedi jupyter rope virtualenv yapf
     :commands (python-mode)
     :mode (("\\.py\\'" . python-mode))
     :config
+    (setq fill-column 79)
     (setq python-shell-interpreter "ipython3")
     (setq python-fill-docstring-style 'django)
     ;; stop python interpreter from clobbering find-file...
