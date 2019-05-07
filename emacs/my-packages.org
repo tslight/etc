@@ -39,7 +39,6 @@ My library of minor-modes and functions called via use-package.
     my/toggle-buffer
     :bind
     ("C-`" . my/last-buffer)
-    ("M-<escape>" . my/last-buffer)
     ("C-c M-i" . my/indent-buffer)
     ("C-c M-n" . my/nuke-buffers)
     ("C-c s" . my/save-buffers-silently)

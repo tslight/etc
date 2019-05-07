@@ -158,6 +158,7 @@ Bind keys, and define autoloads for the bound commands,
     ("C-x p" . pop-to-mark-command)
     ("M-/" . hippie-expand)
     ("M-SPC" . cycle-spacing)
+    ("M-<escape>" . other-frame)
     ;; spacecadet rebindings
     ("C-w" . kill-ring-save)
     ("M-w" . kill-region)

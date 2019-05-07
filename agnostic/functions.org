@@ -224,3 +224,16 @@ Create panes for vertical monitor.
            split-window -h\;
   }
 #+END_SRC
+
+Create panes for horizontal monitor.
+
+#+BEGIN_SRC sh
+  th() {
+      tmux new-session \; \
+           split-window -h ipython\; \
+           split-window -v pwsh\; \
+           select-pane -t 1 \; \
+           split-window -v ranger\; \
+           select-pane -t 1
+  }
+#+END_SRC
