@@ -17,7 +17,7 @@
   export PATH=$PATH:$HOME/.local/bin:$HOME/bin
 
   # https://wiki.archlinux.org/index.php/SSH_keys#Keychain
-  command -v keychain &>/dev/null && eval $(keychain --eval --quiet id_rsa)
+  # command -v keychain &>/dev/null && eval $(keychain --eval --quiet id_rsa)
 
   umask 022
 
