@@ -234,6 +234,8 @@ Create panes for horizontal monitor.
            split-window -v pwsh\; \
            select-pane -t 1 \; \
            split-window -v node\; \
+           new-window -n fm ranger\; \
+           select-window -t 1\; \
            select-pane -t 1
   }
 #+END_SRC
