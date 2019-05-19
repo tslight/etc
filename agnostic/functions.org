@@ -10,8 +10,8 @@
 
 #+BEGIN_SRC sh
   if echo "$0" | grep -q bash; then
-      if [ -d "$HOME"/lib/bash ]; then
-          for f in "$HOME"/lib/bash/*; do
+      if [ -d "$HOME"/bin/lib/bash ]; then
+          for f in "$HOME"/bin/lib/bash/*; do
               source "$f"
           done
       fi
