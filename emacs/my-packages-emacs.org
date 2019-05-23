@@ -94,7 +94,8 @@ c++, Message); the g in C-x a i g is for global, meaning every mode.
      ("b" . (lambda () (interactive) (find-alternate-file "..")))
      ("c" . dired-do-compress)
      ("f" . dired-find-alternate-file)
-     ("C-q" . kill-this-buffer))
+     ("C-q" . kill-this-buffer)
+     ("c" . dired-do-compress-to))
     :init
     (autoload 'dired-jump "dired-x" t)
     :config
