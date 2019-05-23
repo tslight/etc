@@ -23,7 +23,7 @@ https://forum.manjaro.org/t/solved-manjaro-brightness-hotkey-is-writing-to-intel
   EndSection
 #+END_SRC
 #+BEGIN_SRC conf :noweb yes :tangle (my/hardware-tangle "Apple Inc" "/sudo::/etc/X11/xorg.conf.d/20-intel.conf")
-  <<mtrack>>
+  <<intel>>
 #+END_SRC
 
 * MTRACK
