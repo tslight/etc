@@ -72,14 +72,14 @@ https://howchoo.com/g/mdy0ngziogm/the-perfect-almost-touchpad-settings-on-linux-
           # While touching the touch pad with # fingers, press the touchpad
           # physical click button
           Option          "ClickFinger1" "1"
-          Option          "ClickFinger2" "3"
-          Option          "ClickFinger3" "2"
+          Option          "ClickFinger2" "2"
+          Option          "ClickFinger3" "3"
           Option          "ButtonMoveEmulate" "false"
           Option          "ButtonIntegrated" "true"
           Option          "ButtonZonesEnable" "true"
           Option          "FirstZoneButton" "1"
-          Option          "SecondZoneButton" "3"
-          Option          "ThirdZoneButton" "2"
+          Option          "SecondZoneButton" "2"
+          Option          "ThirdZoneButton" "3"
           Option          "LimitButtonZonesToBottomEdge" "false"
           # The momentum after scroll fingers released
           Option          "ScrollCoastDuration" "600"
