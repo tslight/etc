@@ -26,6 +26,27 @@ https://forum.manjaro.org/t/solved-manjaro-brightness-hotkey-is-writing-to-intel
   <<intel>>
 #+END_SRC
 
+* LINPUT
+
+https://wiki.archlinux.org/index.php/Libinput#Via_Xorg_configuration_file
+#+NAME: libinput
+#+BEGIN_SRC conf :tangle (my/hardware-tangle "Apple Inc" "/sudo::/usr/share/X11/xorg.conf.d/30-touchpad.conf")
+Section "InputClass"
+    Identifier "Touchpad"
+    Driver "libinput"
+    MatchIsPointer "on"
+    Option "Tapping" "false"
+    Option "ClickMethod" "clickfinger"
+    Option "HorizontalScrolling" "true"
+    Option "NaturalScrolling" "false"
+    Option "ScrollMethod" "twofinger"
+    Option "DisableWhileTyping" "true"
+EndSection
+#+END_SRC
+#+BEGIN_SRC conf :noweb yes :tangle (my/hardware-tangle "Apple Inc" "/sudo::/etc/X11/xorg.conf.d/30-touchpad.conf")
+  <<libinput>>
+#+END_SRC
+
 * MTRACK
 
 https://github.com/p2rkw/xf86-input-mtrack
