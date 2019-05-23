@@ -176,6 +176,7 @@
     <Key key="XF86AudioLowerVolume">exec:amixer sset 'Master' 10%-</Key>
 
     <Key mask="4" key="r">exec:dmenu_run</Key>
+    <Key mask="4" key="space">exec:dmenu_run</Key>
     <Key mask="C" key="F2">exec:exec:dmenu_run</Key>
     <Key mask="4" key="Return">exec:xfce4-terminal</Key>
     <Key mask="4" key="e">exec:emacsclient -c -a ""</Key>
@@ -187,7 +188,7 @@
 
     <Key mask="4" key="m">root:1</Key>
     <Key mask="C" key="F1">root:1</Key>
-    <Key mask="4" key="space">window</Key>
+    <Key mask="4C" key="space">window</Key>
     <Key mask="A" key="F1">window</Key>
 
     <Key mask="A" key="Tab">nextstacked</Key>
