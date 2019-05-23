@@ -171,6 +171,9 @@
     <Key key="Return">select</Key>
     <Key key="Escape">escape</Key>
 
+    <Key key="XF86AudioMute">exec:amixer sset 'Master' toggle</Key>
+    <Key key="XF86AudioRaiseVolume">exec:amixer sset 'Master' 10%+</Key>
+    <Key key="XF86AudioLowerVolume">exec:amixer sset 'Master' 10%-</Key>
     <Key mask="4" key="r">exec:dmenu_run</Key>
     <Key mask="C" key="F2">exec:exec:dmenu_run</Key>
     <Key mask="4" key="Return">exec:xfce4-terminal</Key>
