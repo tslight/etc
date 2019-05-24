@@ -7,10 +7,9 @@
 #+BEGIN_SRC common-lisp :tangle ~/.stumpwmrc
   ;; -*-lisp-*-
   (in-package :stumpwm)
-  ;; (toggle-mode-line (current-screen) (current-head))
+  (toggle-mode-line (current-screen) (current-head))
 
-  (setf *startup-message* nil
-        *shell-program* (getenv "SHELL")) ;; getenv is not exported
+  (setf *shell-program* (getenv "SHELL")) ;; getenv is not exported
 
   ;; https://kaashif.co.uk/2015/06/28/hacking-stumpwm-with-common-lisp/
   ;; Connect via Emacs
@@ -70,11 +69,11 @@
   ;; prompt the user for an interactive command. The first arg is an
   ;; optional initial contents.
   (defcommand my-prompt (&optional (initial "")) (:rest)
-    "prompt the user for an interactive command. The first arg is an optional
+              "prompt the user for an interactive command. The first arg is an optional
          initial contents."
-    (let ((cmd (read-one-line (current-screen) ": " :initial-input initial)))
-      (when cmd
-        (eval-command cmd t))))
+              (let ((cmd (read-one-line (current-screen) ": " :initial-input initial)))
+                (when cmd
+                  (eval-command cmd t))))
 
   (defvar *my-emacs-map*
     (let ((m (make-sparse-keymap)))
@@ -98,8 +97,8 @@
   ;; Web jump (works for Google and Imdb)
   (defmacro make-web-jump (name prefix)
     `(defcommand ,(intern name) (search) ((:rest ,(concatenate 'string name " search: ")))
-       (substitute #\+ #\Space search)
-       (run-shell-command (concatenate 'string ,prefix search))))
+                 (substitute #\+ #\Space search)
+                 (run-shell-command (concatenate 'string ,prefix search))))
 
   (make-web-jump "google" "x-www-browser http://www.google.co.uk/search?q=")
   (make-web-jump "imdb" "x-www-browser http://www.imdb.com/find?q=")
@@ -133,27 +132,27 @@
 
   ;; call this to use mru-style window cycling
   (defcommand cycle-alt-tab () ()
-    "focus next windows according to Windows's most recently used policy"
-    (cond
-      ;; if we're still in timeout
-      ((< (- (get-milli-secs) *alt-tab-last-call*) 500)
-       ;; cycle through windows
-       (setf *alt-tab-index* (mod (1+ *alt-tab-index*) (list-length *alt-tab-cycle*)))
-       (select-window-by-number (nth *alt-tab-index* *alt-tab-cycle*)))
-      ;; else start anew
-      (
-       (setf *alt-tab-index* 1)
-       (setf *alt-tab-cycle* (copy-list *alt-tab-list*))
+              "focus next windows according to Windows's most recently used policy"
+              (cond
+                ;; if we're still in timeout
+                ((< (- (get-milli-secs) *alt-tab-last-call*) 500)
+                 ;; cycle through windows
+                 (setf *alt-tab-index* (mod (1+ *alt-tab-index*) (list-length *alt-tab-cycle*)))
+                 (select-window-by-number (nth *alt-tab-index* *alt-tab-cycle*)))
+                ;; else start anew
+                (
+                 (setf *alt-tab-index* 1)
+                 (setf *alt-tab-cycle* (copy-list *alt-tab-list*))
                                           ; if we've fokussed a frame without window, current-window will return nil => select last used
-       (cond
-         ((not (current-window))
-          (select-window-by-number (first *alt-tab-cycle*)))
-         (
-          (push (window-number (current-window)) *alt-tab-cycle*)
-          (select-window-by-number (second *alt-tab-cycle*))))))
+                 (cond
+                   ((not (current-window))
+                    (select-window-by-number (first *alt-tab-cycle*)))
+                   (
+                    (push (window-number (current-window)) *alt-tab-cycle*)
+                    (select-window-by-number (second *alt-tab-cycle*))))))
 
-    ;; update timestamp
-    (setf *alt-tab-last-call* (get-milli-secs)))
+              ;; update timestamp
+              (setf *alt-tab-last-call* (get-milli-secs)))
 
       ;;; hooks:
   (defun alt-tab-new-window (win) ()
