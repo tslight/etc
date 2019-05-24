@@ -37,6 +37,7 @@ All the non-essential, but nice to have stuff goes in here.
    - [[#pep8][PEP8]]
    - [[#jedi][JEDI]]
    - [[#company-jedi][COMPANY JEDI]]
+- [[#slime][SLIME]]
 - [[#smex][SMEX]]
 - [[#ssh-agency][SSH-AGENCY]]
 - [[#web-mode][WEB MODE]]
@@ -307,7 +308,27 @@ https://github.com/anschwa/emacs.d#python
     :config
     (add-to-list 'company-backends 'company-jedi))
 #+END_SRC
+* SLIME
 
+https://kaashif.co.uk/2015/06/28/hacking-stumpwm-with-common-lisp/
+https://github.com/quicklisp/quicklisp-slime-helper
+
+#+BEGIN_SRC emacs-lisp
+  (use-package slime
+    :ensure t
+    :defer t
+    :init
+    (load (expand-file-name "~/quicklisp/slime-helper.el"))
+    (setq inferior-lisp-program "sbcl"))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(use-package slime-company
+  :ensure t
+  :defer t
+  :init
+  (slime-setup '(slime-company)))
+#+END_SRC
 * SMEX
 #+BEGIN_SRC emacs-lisp
   (use-package smex

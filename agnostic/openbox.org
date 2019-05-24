@@ -780,6 +780,7 @@
 * AUTOSTART
 
 #+BEGIN_SRC sh :tangle ~/.config/openbox/autostart
+  xsetroot -solid grey9
   tint2 &
   xfsettingsd
   # nm-applet &
