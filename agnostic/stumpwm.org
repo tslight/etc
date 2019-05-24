@@ -46,8 +46,7 @@
   (define-key *top-map* (kbd "M-s-r") "restart-hard")
   (define-key *top-map* (kbd "s-r") "reload")
   (define-key *top-map* (kbd "s-m") "mode-line")
-  (define-key *root-map* (kbd "e") "emacs")
-  (define-key *root-map* (kbd "E") "exec emacsclient -c -a ''")
+  (define-key *root-map* (kbd "e") "exec emacsclient -c -a ''")
   (define-key *root-map* (kbd "t") "exec x-terminal-emulator -e tmux")
   (define-key *root-map* (kbd "w") "exec x-www-browser")
   (define-key *root-map* (kbd "Tab") "select")
@@ -77,7 +76,10 @@
 
   (defvar *my-emacs-map*
     (let ((m (make-sparse-keymap)))
-      (define-key m (kbd "C-e") "exec emacs")
+      (define-key m (kbd "e") "emacs")
+      (define-key m (kbd "C-e") "emacs")
+      (define-key m (kbd "n") "exec emacs")
+      (define-key m (kbd "c") "exec emacsclient -c -a ''")
       (define-key m (kbd "q") "exec emacs --no-init-file --quick")
       (define-key m (kbd "d") "exec emacs --debug-init")
       (define-key m (kbd "t") "exec emacs -nw")
