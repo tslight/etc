@@ -1,20 +1,16 @@
 #+PROPERTY: header-args :cache yes
 #+PROPERTY: header-args+ :mkdirp yes
-#+PROPERTY: header-args+ :tangle-mode (identity #o600)
+#+PROPERTY: header-args+ :tangle-mode (identity #o644)
 #+PROPERTY: header-args+ :results silent
 #+PROPERTY: header-args+ :padline no
 
 http://tiborsimko.org/emacs-bindings-in-gtk-apps.html
 
-#+NAME: gtkrc
 #+BEGIN_SRC conf :tangle ~/.gtkrc-2.0.mine
-gtk-key-theme-name = "Emacs"
-binding "gtk-emacs-text-entry"
-{
-   bind "<alt>BackSpace" { "delete-from-cursor" (word-ends, -1) }
-}
+gtk-key-theme-name="Emacs"
 #+END_SRC
 
-#+BEGIN_SRC conf :noweb yes :tangle ~/.gtkrc-2.0
-<<gtkrc>>
+#+BEGIN_SRC conf :tangle ~/.config/gtk-3.0/settings.ini
+[Settings]
+gtk-key-theme-name="Emacs"
 #+END_SRC
