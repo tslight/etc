@@ -9,7 +9,8 @@
   (in-package :stumpwm)
   (toggle-mode-line (current-screen) (current-head))
 
-  (setf *shell-program* (getenv "SHELL")) ;; getenv is not exported
+  (setf *startup-message* "HAPPY HACKING!"
+        ,*shell-program* (getenv "SHELL")) ;; getenv is not exported
 
   ;; https://kaashif.co.uk/2015/06/28/hacking-stumpwm-with-common-lisp/
   ;; Connect via Emacs
@@ -32,7 +33,6 @@
   (run-shell-command "nm-applet")
   (run-shell-command "xfce4-power-manager")
   (run-shell-command "xfce4-clipman")
-  (run-shell-command "emacsclient -c -a ''")
 
   (set-prefix-key (kbd "C-i"))
 
@@ -69,7 +69,7 @@
   ;; optional initial contents.
   (defcommand my-prompt (&optional (initial "")) (:rest)
               "prompt the user for an interactive command. The first arg is an optional
-         initial contents."
+           initial contents."
               (let ((cmd (read-one-line (current-screen) ": " :initial-input initial)))
                 (when cmd
                   (eval-command cmd t))))
@@ -121,7 +121,7 @@
          "get timestamp in milliseconds"
          (floor (* 1000 (/ (get-internal-real-time) internal-time-units-per-second))))
 
-      ;;;; ToDo: use hash of group-number => tab-lists to preserve alt-tab list during group change
+        ;;;; ToDo: use hash of group-number => tab-lists to preserve alt-tab list during group change
   ;; Variables we need
                                           ;(defvar *alt-tab-hash* (make-hash-table))
                                           ;(mapcar (lambda (x) (setf (gethash x *alt-tab-hash*) (make-list 0))) (mapcar 'group-number (screen-groups (current-group))))
@@ -156,7 +156,7 @@
               ;; update timestamp
               (setf *alt-tab-last-call* (get-milli-secs)))
 
-      ;;; hooks:
+        ;;; hooks:
   (defun alt-tab-new-window (win) ()
          "function called by new-window-hook. updates alt-tab-list"
          (push (window-number win)  *alt-tab-list*))
@@ -174,14 +174,14 @@
   (setf *destroy-window-hook* (list 'alt-tab-destroy-window))
   (setf *focus-window-hook* (list 'alt-tab-focus-window))
 
-      ;;; group handling:
+        ;;; group handling:
   ;;
   (defun alt-tab-focus-group (to-group from-group) ()
          "handling group switching"
          (setf *alt-tab-list* (mapcar 'window-number (group-windows to-group))))
 
   (setf *focus-group-hook* (list 'alt-tab-focus-group))
-      ;;; bind to Meta-Tab, as stumpwm knows no Alt
+        ;;; bind to Meta-Tab, as stumpwm knows no Alt
   (define-key *top-map* (kbd "M-Tab") "cycle-alt-tab")
 
 #+END_SRC
