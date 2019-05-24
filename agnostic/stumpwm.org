@@ -10,7 +10,7 @@
   ;; (toggle-mode-line (current-screen) (current-head))
 
   (setf *startup-message* nil
-        ,*shell-program* (stumpwm::getenv "SHELL")) ;getenv is not exported
+        *shell-program* (getenv "SHELL")) ;; getenv is not exported
 
   ;; https://kaashif.co.uk/2015/06/28/hacking-stumpwm-with-common-lisp/
   ;; Connect via Emacs
