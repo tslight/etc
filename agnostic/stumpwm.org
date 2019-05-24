@@ -9,9 +9,8 @@
   (in-package :stumpwm)
   ;; (toggle-mode-line (current-screen) (current-head))
 
-  ;; (setf *startup-message* "Never Stop Hacking!")
-  ;; Set the default shell
-  (setf *shell-program* (stumpwm::getenv "SHELL")) ;getenv is not exported
+  (setf *startup-message* nil
+        ,*shell-program* (stumpwm::getenv "SHELL")) ;getenv is not exported
 
   ;; https://kaashif.co.uk/2015/06/28/hacking-stumpwm-with-common-lisp/
   ;; Connect via Emacs
@@ -28,6 +27,7 @@
   (load-module "stumptray")
   (stumptray::add-mode-line-hooks)
   (run-commands "stumptray")
+  (run-shell-command "xsetroot -cursor_name left_ptr")
   (run-shell-command "xfsettingsd")
   (run-shell-command "xsetroot -solid grey9")
   (run-shell-command "nm-applet")
@@ -47,7 +47,8 @@
   (define-key *top-map* (kbd "M-s-r") "restart-hard")
   (define-key *top-map* (kbd "s-r") "reload")
   (define-key *top-map* (kbd "s-m") "mode-line")
-  (define-key *root-map* (kbd "e") "exec emacsclient -c -a ''")
+  (define-key *root-map* (kbd "e") "emacs")
+  (define-key *root-map* (kbd "E") "exec emacsclient -c -a ''")
   (define-key *root-map* (kbd "t") "exec x-terminal-emulator -e tmux")
   (define-key *root-map* (kbd "w") "exec x-www-browser")
   (define-key *root-map* (kbd "Tab") "select")
@@ -57,7 +58,7 @@
   (define-key *root-map* (kbd "v") "hsplit")
   (define-key *root-map* (kbd "space") "exec")
   (define-key *root-map* (kbd "C-r") "reload")
-  (define-key *root-map* (kbd "M-r") "restart-soft")
+  (define-key *root-map* (kbd "M-r") "loadrc")
   (define-key *root-map* (kbd "C-M-r") "restart-hard")
   (define-key *root-map* (kbd "l") "windowlist")
   (define-key *root-map* (kbd "C-l") "exec slock")
@@ -69,11 +70,11 @@
   ;; prompt the user for an interactive command. The first arg is an
   ;; optional initial contents.
   (defcommand my-prompt (&optional (initial "")) (:rest)
-              "prompt the user for an interactive command. The first arg is an optional
-       initial contents."
-              (let ((cmd (read-one-line (current-screen) ": " :initial-input initial)))
-                (when cmd
-                  (eval-command cmd t))))
+    "prompt the user for an interactive command. The first arg is an optional
+         initial contents."
+    (let ((cmd (read-one-line (current-screen) ": " :initial-input initial)))
+      (when cmd
+        (eval-command cmd t))))
 
   (defvar *my-emacs-map*
     (let ((m (make-sparse-keymap)))
@@ -97,8 +98,8 @@
   ;; Web jump (works for Google and Imdb)
   (defmacro make-web-jump (name prefix)
     `(defcommand ,(intern name) (search) ((:rest ,(concatenate 'string name " search: ")))
-                 (substitute #\+ #\Space search)
-                 (run-shell-command (concatenate 'string ,prefix search))))
+       (substitute #\+ #\Space search)
+       (run-shell-command (concatenate 'string ,prefix search))))
 
   (make-web-jump "google" "x-www-browser http://www.google.co.uk/search?q=")
   (make-web-jump "imdb" "x-www-browser http://www.imdb.com/find?q=")
@@ -119,7 +120,7 @@
          "get timestamp in milliseconds"
          (floor (* 1000 (/ (get-internal-real-time) internal-time-units-per-second))))
 
-    ;;;; ToDo: use hash of group-number => tab-lists to preserve alt-tab list during group change
+      ;;;; ToDo: use hash of group-number => tab-lists to preserve alt-tab list during group change
   ;; Variables we need
                                           ;(defvar *alt-tab-hash* (make-hash-table))
                                           ;(mapcar (lambda (x) (setf (gethash x *alt-tab-hash*) (make-list 0))) (mapcar 'group-number (screen-groups (current-group))))
@@ -132,29 +133,29 @@
 
   ;; call this to use mru-style window cycling
   (defcommand cycle-alt-tab () ()
-              "focus next windows according to Windows's most recently used policy"
-              (cond
-                ;; if we're still in timeout
-                ((< (- (get-milli-secs) *alt-tab-last-call*) 500)
-                 ;; cycle through windows
-                 (setf *alt-tab-index* (mod (1+ *alt-tab-index*) (list-length *alt-tab-cycle*)))
-                 (select-window-by-number (nth *alt-tab-index* *alt-tab-cycle*)))
-                ;; else start anew
-                (
-                 (setf *alt-tab-index* 1)
-                 (setf *alt-tab-cycle* (copy-list *alt-tab-list*))
+    "focus next windows according to Windows's most recently used policy"
+    (cond
+      ;; if we're still in timeout
+      ((< (- (get-milli-secs) *alt-tab-last-call*) 500)
+       ;; cycle through windows
+       (setf *alt-tab-index* (mod (1+ *alt-tab-index*) (list-length *alt-tab-cycle*)))
+       (select-window-by-number (nth *alt-tab-index* *alt-tab-cycle*)))
+      ;; else start anew
+      (
+       (setf *alt-tab-index* 1)
+       (setf *alt-tab-cycle* (copy-list *alt-tab-list*))
                                           ; if we've fokussed a frame without window, current-window will return nil => select last used
-                 (cond
-                   ((not (current-window))
-                    (select-window-by-number (first *alt-tab-cycle*)))
-                   (
-                    (push (window-number (current-window)) *alt-tab-cycle*)
-                    (select-window-by-number (second *alt-tab-cycle*))))))
+       (cond
+         ((not (current-window))
+          (select-window-by-number (first *alt-tab-cycle*)))
+         (
+          (push (window-number (current-window)) *alt-tab-cycle*)
+          (select-window-by-number (second *alt-tab-cycle*))))))
 
-              ;; update timestamp
-              (setf *alt-tab-last-call* (get-milli-secs)))
+    ;; update timestamp
+    (setf *alt-tab-last-call* (get-milli-secs)))
 
-    ;;; hooks:
+      ;;; hooks:
   (defun alt-tab-new-window (win) ()
          "function called by new-window-hook. updates alt-tab-list"
          (push (window-number win)  *alt-tab-list*))
@@ -172,14 +173,14 @@
   (setf *destroy-window-hook* (list 'alt-tab-destroy-window))
   (setf *focus-window-hook* (list 'alt-tab-focus-window))
 
-    ;;; group handling:
+      ;;; group handling:
   ;;
   (defun alt-tab-focus-group (to-group from-group) ()
          "handling group switching"
          (setf *alt-tab-list* (mapcar 'window-number (group-windows to-group))))
 
   (setf *focus-group-hook* (list 'alt-tab-focus-group))
-    ;;; bind to Meta-Tab, as stumpwm knows no Alt
-  (define-key *top-map* (kbd "M-TAB") "cycle-alt-tab")
+      ;;; bind to Meta-Tab, as stumpwm knows no Alt
+  (define-key *top-map* (kbd "M-Tab") "cycle-alt-tab")
 
 #+END_SRC
