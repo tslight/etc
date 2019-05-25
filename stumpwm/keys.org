@@ -36,8 +36,8 @@
 (defvar *my-term-map*
   (let ((m (make-sparse-keymap)))
     (define-key m (kbd "C-t") "exec x-terminal-emulator -e tmux attach")
-    (define-key m (kbd "s") "my-prompt exec x-terminal-emulator -e ssh ")
-    (define-key m (kbd "r") "my-prompt exec x-terminal-emulator -e ")
+    (define-key m (kbd "s") "prompt exec x-terminal-emulator -e ssh ")
+    (define-key m (kbd "r") "prompt exec x-terminal-emulator -e ")
     m ; NOTE: this is important
     ))
 #+END_SRC
@@ -52,7 +52,7 @@
     (define-key m (kbd "f") "firefox")
     (define-key m (kbd "g") "google")
     (define-key m (kbd "i") "imdb")
-    (define-key m (kbd "u") "my-prompt exec x-www-browser https://")
+    (define-key m (kbd "u") "prompt exec x-www-browser https://")
     m ; NOTE: this is important
     ))
 #+END_SRC

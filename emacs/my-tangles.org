@@ -83,7 +83,7 @@ No need to tangle this block since these variables are loaded by init
 file. This block is just here so that these variables are available
 when =org-babel-execute-buffer= is executed.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
   (setq-default buffer-file-coding-system 'utf-8-unix)
   (setq my/config-directory "~/etc/"
         my/agnostic-config-directory (concat my/config-directory "agnostic/")
@@ -93,6 +93,7 @@ when =org-babel-execute-buffer= is executed.
         my/freebsd-config-directory  (concat my/config-directory "freebsd/")
         my/netbsd-config-directory   (concat my/config-directory "netbsd/")
         my/openbsd-config-directory  (concat my/config-directory "openbsd/")
+        my/stumpwm-config-directory  (concat my/config-directory "stumpwm/")
         my/windows-config-directory  (concat my/config-directory "windows/"))
 #+END_SRC
 
@@ -107,16 +108,7 @@ at the top of the file:
 This will enable lexical-binding for the code in the file, but note
 that global variables declared with defvar, defcustom or defconst will
 be dynamically bound due to the global binding being marked as
-“special” by those forms.  Note: as of Emacs 24.4, any closures
-created before marking the variable as “special” are unaffected by
-this effect. It’s not clear whether this is intentional. (I could
-reproduce this in SBCL, but not CLISP. Maybe it’s supposed to have
-undefined behavior.)
-
-Note: as of Emacs 24.4, the undocumented internal-make-var-non-special
-function does not work as expected, and the only known way to revert a
-special variable status is restarting Emacs. makunbound doesn’t help,
-either.
+“special” by those forms.
 
 -- [[https://www.emacswiki.org/emacs/dynamicbindingvslexicalbinding][emacs wiki - dynamic vs lexical binding]]
 -- [[https://www.emacswiki.org/emacs/lexicalbinding][emacs wiki - lexical binding]]
@@ -174,14 +166,6 @@ buffer becomes current again in time to kill it.)
 Emacs includes a standard macro called with-temp-buffer which expands
 into more or less the code shown above (see Current Buffer). Several
 of the macros defined in this manual use unwind-protect in this way.
-
-Here is an actual example derived from an FTP package. It creates a
-process (see Processes) to try to establish a connection to a remote
-machine. As the function ftp-login is highly susceptible to numerous
-problems that the writer of the function cannot anticipate, it is
-protected with a form that guarantees deletion of the process in the
-event of failure. Otherwise, Emacs might fill up with useless
-subprocesses.
 
 -- [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Cleanups.html][Cleanups - Gnu Manual]]
 #+END_QUOTE
@@ -325,6 +309,7 @@ emacs directories.
     (interactive)
     (my/tangle-directory my/agnostic-config-directory)
     (my/tangle-directory my/emacs-config-directory)
+    (my/tangle-directory my/stumpwm-config-directory)
     (cond ((eq system-type 'gnu/linux)
            (my/tangle-directory my/linux-config-directory))
           ((eq system-type 'darwin)
@@ -365,6 +350,9 @@ another OS.
                  (expand-file-name my/agnostic-config-directory))
       (org-babel-tangle))
     (when (equal (file-name-directory (directory-file-name buffer-file-name))
+                 (expand-file-name my/stumpwm-config-directory))
+      (org-babel-tangle))
+    (when (equal (file-name-directory (directory-file-name buffer-file-name))
                  (expand-file-name my/emacs-config-directory))
       (byte-compile-file
        (my/insert-boilerplate
@@ -398,6 +386,7 @@ another OS.
                (equal system-type 'windows-nt))
       (org-babel-tangle)))
 #+END_SRC
+
 * HARDWARE TANGLE
 
 Tangle block to PATH if VENDOR string matches that in
