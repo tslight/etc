@@ -284,7 +284,7 @@ https://kaashif.co.uk/2015/06/28/hacking-stumpwm-with-common-lisp/
   (define-key *top-map* (kbd "M-F4") "kill")
   (define-key *top-map* (kbd "C-F10") "only")
   (define-key *top-map* (kbd "C-F11") "fullscreen")
-  (define-key *top-map* (kbd "s-SPC") "exec")
+  (define-key *top-map* (kbd "s-SPC") "exec dmenu_run")
   (define-key *top-map* (kbd "C-s-r") "restart-soft")
   (define-key *top-map* (kbd "M-s-r") "restart-hard")
   (define-key *top-map* (kbd "s-r") "reload")
@@ -321,6 +321,9 @@ https://kaashif.co.uk/2015/06/28/hacking-stumpwm-with-common-lisp/
 
 ** GROUP MAP
 #+BEGIN_SRC common-lisp
+  (define-key *groups-map* (kbd "g") "gother")
+  (define-key *groups-map* (kbd "C-n") "gnext-with-window")
+  (define-key *groups-map* (kbd "C-p") "gprev-with-window")
   (define-key *groups-map* (kbd "l") "grouplist")
   (define-key *groups-map* (kbd "s") "gselect")
 #+END_SRC
