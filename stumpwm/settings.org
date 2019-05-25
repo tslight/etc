@@ -40,7 +40,7 @@
 * MISC
 
 #+BEGIN_SRC common-lisp
-  (setf *startup-message* "^B^5Welcome to StumpWM~%^2Hacks & glory await!")
+  ;; (setf *startup-message* "^B^5Welcome to StumpWM~%^2Hacks & glory await!")
   (setf *shell-program* (getenv "SHELL")) ;; getenv is not exported
   (setf *timeout-wait* 3)
   (setf *mouse-focus-policy* :click)

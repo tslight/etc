@@ -79,7 +79,11 @@ optional initial contents.
     "Return a random element from a list."
     (elt list (random (length list))))
 
-  (defcommand stump-courage () ()
+  (defun my/random-courage ()
+    "Return a random courage message."
+    (my/random-elt words-of-encouragement))
+
+  (defcommand my/stump-courage () ()
     "Print a slime hacker quote."
-    (message "~a" (my/random-elt words-of-encouragement)))
+    (message "~a" (my/random-courage)))
 #+END_SRC
