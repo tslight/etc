@@ -5,10 +5,8 @@
 #+PROPERTY: header-args+ :mkdirp yes
 #+PROPERTY: header-args+ :results silent
 #+PROPERTY: header-args+ :padline no
-#+PROPERTY: header-args+ :tangle ~/.stumpwmrc
+#+PROPERTY: header-args+ :tangle ~/.stumpwm.d/macros.lisp
 #+PROPERTY: header-args+ :tangle-mode (identity #o644)
-
-#+OPTIONS: toc:t
 
 * WEB JUMP
 
