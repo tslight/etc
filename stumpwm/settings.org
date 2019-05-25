@@ -24,6 +24,7 @@
 
 #+BEGIN_SRC common-lisp
   (set-focus-color "green")
+  (set-unfocus-color "magenta")
   (set-fg-color "#00AA00")
   (set-bg-color "grey9")
   (set-border-color "magenta")
@@ -40,7 +41,6 @@
 * MISC
 
 #+BEGIN_SRC common-lisp
-  ;; (setf *startup-message* "^B^5Welcome to StumpWM~%^2Hacks & glory await!")
   (setf *shell-program* (getenv "SHELL")) ;; getenv is not exported
   (setf *timeout-wait* 3)
   (setf *mouse-focus-policy* :click)

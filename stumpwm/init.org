@@ -66,6 +66,7 @@ Stolen from [[https://github.com/alezost/stumpwm-config/blob/master/init.lisp][h
 After loading all our lisp, run some shell programs to make things more comfy.
 
 #+BEGIN_SRC common-lisp
+  (run-shell-command "xmodmap -e 'keycode 113 = Super_R'")
   (run-shell-command "xsetroot -cursor_name left_ptr")
   (run-shell-command "xfsettingsd")
   (run-shell-command "xsetroot -solid grey9")

@@ -18,12 +18,22 @@ https://kaashif.co.uk/2015/06/28/hacking-stumpwm-with-common-lisp/
   (require :swank)
   (swank-loader:init)
   (defcommand swank () ()
-    "Creates a swank server in the stumpwm lisp process"
+    "creates a swank server in the stumpwm lisp process"
     (setf stumpwm:*top-level-error-action* :break)
     (swank:create-server :port 4004
                          :style swank:*communication-style*
                          :dont-close t)
-    (message "^B^5Getting swanky...~%^2Hacks & glory await!"))
+    (message (concat "^B^5Getting swanky...~%^n" (my/random-courage))))
+#+END_SRC
+
+* REINIT
+
+Reload StumpWM and then re-load config.
+
+#+BEGIN_SRC common-lisp
+  (defcommand reinit () ()
+    "reload stumpwm and config."
+    (run-commands "reload" "loadrc"))
 #+END_SRC
 
 * PROMPT
