@@ -54,8 +54,9 @@ https://dataswamp.org/~solene/2016-06-06-stumpwm.html
   (toggle-mode-line (current-screen) (current-head))
   (load-module "stumptray")
   (stumptray::add-mode-line-hooks)
+  (setf *window-format* " [%n] [%s] [%m] %c ")
   (setf *time-modeline-string* "%H:%M")
-  (setf *screen-mode-line-format* (list "^B%d ^2[%n] ^7%v"))
+  (setf *screen-mode-line-format* (list "^3^B%d ^2[%n] ^7%v"))
   (run-commands "stumptray")
 #+END_SRC
 
