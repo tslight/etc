@@ -24,7 +24,7 @@
 * SETTINGS
 
 #+BEGIN_SRC common-lisp
-  (set-focus-color "#00AA00")
+  (set-focus-color "#00FF00")
   (set-normal-gravity :bottom)
   (setf *message-window-gravity* :center)
   (setf *input-window-gravity* :center)
