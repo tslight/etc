@@ -13,39 +13,29 @@
 * HEADER
 
 #+BEGIN_SRC common-lisp
-;; -*- common-lisp -*-
-(in-package :stumpwm)
+  ;; -*- common-lisp -*-
+  (in-package :stumpwm)
+  (load "~/quicklisp/setup.lisp")
+  ;; (ql:quickload :xembed) ;; Required by stumptray
+  ;; (ql:quickload :clx-truetype) ;; Required by ttf-fonts
+  ;; (ql:quickload :swank) ;; Required by slime-connect
 #+END_SRC
 
 * SETTINGS
 
 #+BEGIN_SRC common-lisp
-  (setf *startup-message* "Hacks & glory await!")
+  (set-normal-gravity :bottom)
+  (setf *message-window-gravity* :center)
+  (setf *input-window-gravity* :center)
+  (setf *startup-message* " ~%^B^5Welcome to StumpWM~%
+                            ~%^2Hacks & glory await!~% ")
   (setf *shell-program* (getenv "SHELL")) ;; getenv is not exported
   (setf *timeout-wait* 5)
   (setf *mouse-focus-policy* :click)
+  (setf *frame-number-map* "asdfghjkl")
   (set-font "-*-terminus-bold-*-*-*-14-*")
   (setq *ignore-wm-inc-hints* t)
   (setq *window-border-style* :thin)
-#+END_SRC
-
-* SWANK
-
-Connect to StumpWM with Emacs' Slime mode
-
-https://kaashif.co.uk/2015/06/28/hacking-stumpwm-with-common-lisp/
-
-#+BEGIN_SRC common-lisp
-  (require :swank)
-  (swank-loader:init)
-  (defcommand swank () ()
-    "Creates a swank server in the stumpwm lisp process"
-    (setf stumpwm:*top-level-error-action* :break)
-    (swank:create-server :port 4004
-                         :style swank:*communication-style*
-                         :dont-close t)
-    (echo-string (current-screen)
-                 "Getting swanky... Hacks & glory await!"))
 #+END_SRC
 
 * MODELINE
@@ -55,8 +45,6 @@ https://dataswamp.org/~solene/2016-06-06-stumpwm.html
 
 #+BEGIN_SRC common-lisp
   (toggle-mode-line (current-screen) (current-head))
-  (load "~/quicklisp/setup.lisp")
-  (ql:quickload :xembed) ;; Required by stumptray
   (load-module "stumptray")
   (stumptray::add-mode-line-hooks)
   (setf *screen-mode-line-format* (list "%d %v"))
@@ -75,83 +63,108 @@ https://dataswamp.org/~solene/2016-06-06-stumpwm.html
 #+END_SRC
 
 * PROGRAMS
+** CYCLE-MRU
 
-** ALT TAB
+Stolen from http://nongnu.13855.n7.nabble.com/Alt-Tab-td127943.html
+
+Known Bugs: If there are split frames without windows.
 
 #+BEGIN_SRC common-lisp
-  ;; ALT-TAB
-  ;; timestamp function
+  ;; program to cycle, alt-tab style, through most recently used windows.
   (defun get-milli-secs () ()
          "get timestamp in milliseconds"
-         (floor (* 1000 (/ (get-internal-real-time) internal-time-units-per-second))))
+         (floor (* 1000 (/ (get-internal-real-time)
+                           internal-time-units-per-second))))
 
-  ;; ToDo: use hash of group-number => tab-lists to preserve alt-tab list during group change
-  ;; (defvar *alt-tab-hash* (make-hash-table))
-  ;; (mapcar (lambda
-  ;;        (x)
-  ;;      (setf
-  ;;       (gethash x *alt-tab-hash*)
-  ;;       (make-list 0)))
-  ;;    (mapcar 'group-number (screen-groups (current-group))))
+  (defun mru-new-window (win) ()
+         "function called by new-window-hook. updates mru-list"
+         (push (window-number win)  *mru-list*))
 
-  (defvar *alt-tab-list* (make-list 0))
-  (defvar *alt-tab-cycle* (make-list 0))
-  (defvar *alt-tab-timeout* 500)              ; in milliseconds
-  (defvar *alt-tab-index* 0)              ; in milliseconds
-  (defvar *alt-tab-last-call* (get-milli-secs))
+  (defun mru-destroy-window (win) ()
+         "function called by destroy-window-hook. deletes window number from
+          mru-list"
+         (setf *mru-list* (delete (window-number win) *mru-list*)))
+
+  (defun mru-focus-window (new-win old-win) ()
+         "function called by focus-window-hook. updates mru-list"
+         (when new-win
+           (setf *mru-list* (delete (window-number new-win) *mru-list*)))
+         (when old-win
+           (push (window-number old-win) *mru-list*)))
+
+  (defun mru-focus-group (to-group from-group) ()
+         "handling group switching"
+         (setf *mru-list* (mapcar 'window-number (group-windows to-group))))
+
+  (setf *new-window-hook* (list 'mru-new-window))
+  (setf *destroy-window-hook* (list 'mru-destroy-window))
+  (setf *focus-window-hook* (list 'mru-focus-window))
+  (setf *focus-group-hook* (list 'mru-focus-group))
+
+  (defvar *mru-list* (make-list 0))
+  (defvar *mru-cycle* (make-list 0))
+  (defvar *mru-timeout* 500) ; in milliseconds
+  (defvar *mru-index* 0)     ; in milliseconds
+  (defvar *mru-last-call* (get-milli-secs))
 
   ;; call this to use mru-style window cycling
-  (defcommand cycle-alt-tab () ()
-    "focus next windows according to Windows's most recently used policy"
+  (defcommand cycle-mru () ()
+    "focus next windows according to most recently used policy"
     (cond
       ;; if we're still in timeout
-      ((< (- (get-milli-secs) *alt-tab-last-call*) 500)
+      ((< (- (get-milli-secs) *mru-last-call*) 500)
        ;; cycle through windows
-       (setf *alt-tab-index* (mod (1+ *alt-tab-index*) (list-length *alt-tab-cycle*)))
-       (select-window-by-number (nth *alt-tab-index* *alt-tab-cycle*)))
+       (setf *mru-index* (mod (1+ *mru-index*) (list-length *mru-cycle*)))
+       (select-window-by-number (nth *mru-index* *mru-cycle*)))
       ;; else start anew
       (
-       (setf *alt-tab-index* 1)
-       (setf *alt-tab-cycle* (copy-list *alt-tab-list*))
+       (setf *mru-index* 1)
+       (setf *mru-cycle* (copy-list *mru-list*))
        ;; if we've fokussed a frame without window, current-window will return nil
        ;; => select last used
        (cond
          ((not (current-window))
-          (select-window-by-number (first *alt-tab-cycle*)))
+          (select-window-by-number (first *mru-cycle*)))
          (
-          (push (window-number (current-window)) *alt-tab-cycle*)
-          (select-window-by-number (second *alt-tab-cycle*))))))
+          (push (window-number (current-window)) *mru-cycle*)
+          (select-window-by-number (second *mru-cycle*))))))
 
     ;; update timestamp
-    (setf *alt-tab-last-call* (get-milli-secs)))
+    (setf *mru-last-call* (get-milli-secs)))
+#+END_SRC
 
-  ;;; hooks:
-  (defun alt-tab-new-window (win) ()
-         "function called by new-window-hook. updates alt-tab-list"
-         (push (window-number win)  *alt-tab-list*))
+*TODO*
 
-  (defun alt-tab-destroy-window (win) ()
-         "function called by destroy-window-hook. deletes window number from alt-tab-list"
-         (setf *alt-tab-list* (delete (window-number win) *alt-tab-list*)))
+/Use hash of group-number => tab-lists to preserve mru list during group change/
 
-  (defun alt-tab-focus-window (new-win old-win) ()
-         "function called by focus-window-hook. updates alt-tab-list"
-         (when new-win (setf *alt-tab-list* (delete (window-number new-win) *alt-tab-list*)))
-         (when old-win (push (window-number old-win) *alt-tab-list*)))
-
-  (setf *new-window-hook* (list 'alt-tab-new-window))
-  (setf *destroy-window-hook* (list 'alt-tab-destroy-window))
-  (setf *focus-window-hook* (list 'alt-tab-focus-window))
-
-  ;; group handling:
-  (defun alt-tab-focus-group (to-group from-group) ()
-         "handling group switching"
-         (setf *alt-tab-list* (mapcar 'window-number (group-windows to-group))))
-
-  (setf *focus-group-hook* (list 'alt-tab-focus-group))
+#+BEGIN_SRC common-lisp :tangle no
+  (defvar *mru-hash* (make-hash-table))
+  (mapcar (lambda (x) (setf (gethash x *mru-hash*)
+                       (make-list 0)))
+          (mapcar 'group-number (screen-groups (current-group))))
 #+END_SRC
 
 * COMMANDS
+** SWANK
+
+Connect to StumpWM with Emacs' Slime mode
+
+https://kaashif.co.uk/2015/06/28/hacking-stumpwm-with-common-lisp/
+
+#+BEGIN_SRC common-lisp
+  (require :swank)
+  (swank-loader:init)
+  (defcommand swank () ()
+    "Creates a swank server in the stumpwm lisp process"
+    (setf stumpwm:*top-level-error-action* :break)
+    (swank:create-server :port 4004
+                         :style swank:*communication-style*
+                         :dont-close t)
+    (echo-string (current-screen)
+                 "Getting swanky... Hacks & glory await!"))
+#+END_SRC
+
+** PROMPT
 
 #+BEGIN_SRC common-lisp
 ;; prompt the user for an interactive command. The first arg is an
@@ -163,6 +176,8 @@ https://dataswamp.org/~solene/2016-06-06-stumpwm.html
     (when cmd
       (eval-command cmd t))))
 #+END_SRC
+
+** RUN OR RAISE
 
 #+BEGIN_SRC common-lisp
   (defcommand emacs () ()
@@ -250,7 +265,7 @@ https://dataswamp.org/~solene/2016-06-06-stumpwm.html
 #+END_SRC
 
 #+BEGIN_SRC common-lisp
-  (define-key *top-map* (kbd "M-Tab") "cycle-alt-tab")
+  (define-key *top-map* (kbd "M-Tab") "cycle-mru")
   (define-key *top-map* (kbd "M-Escape") "fnext")
   (define-key *top-map* (kbd "C-F4") "delete")
   (define-key *top-map* (kbd "M-F4") "kill")
