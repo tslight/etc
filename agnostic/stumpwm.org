@@ -27,8 +27,7 @@
   (set-normal-gravity :bottom)
   (setf *message-window-gravity* :center)
   (setf *input-window-gravity* :center)
-  (setf *startup-message* " ~%^B^5Welcome to StumpWM~%
-                            ~%^2Hacks & glory await!~% ")
+  (setf *startup-message* "^B^5Welcome to StumpWM~%^2Hacks & glory await!")
   (setf *shell-program* (getenv "SHELL")) ;; getenv is not exported
   (setf *timeout-wait* 5)
   (setf *mouse-focus-policy* :click)
