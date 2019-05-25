@@ -273,6 +273,7 @@ https://dataswamp.org/~solene/2016-06-06-stumpwm.html
   (define-key *root-map* (kbd "C-o") "fother")
   (define-key *root-map* (kbd "M-i") "other-in-frame")
   (define-key *root-map* (kbd "u") "remove")
+  (define-key *root-map* (kbd "q") "only")
   (define-key *root-map* (kbd "v") "hsplit")
   (define-key *root-map* (kbd "space") "exec")
   (define-key *root-map* (kbd "C-r") "reload")
