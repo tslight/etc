@@ -23,19 +23,15 @@
 
 * SETTINGS
 
-** FONT
-
 https://wiki.archlinux.org/index.php/Stumpwm#Set_font_for_messages_and_modeline
 
 #+BEGIN_SRC common-lisp
+  ;; (set-font "-*-terminus-bold-*-*-*-14-*")
   (load-module "ttf-fonts")
   (set-font (make-instance 'xft:font
                            :family "DejaVu Sans"
                            :subfamily "Bold"
                            :size 9))
-#+END_SRC
-
-#+BEGIN_SRC common-lisp
   (set-focus-color "#00FF00")
   (set-normal-gravity :bottom)
   (setf *message-window-gravity* :center)
@@ -45,7 +41,6 @@ https://wiki.archlinux.org/index.php/Stumpwm#Set_font_for_messages_and_modeline
   (setf *timeout-wait* 3)
   (setf *mouse-focus-policy* :click)
   (setf *frame-number-map* "asdfghjkl")
-  (set-font "-*-terminus-bold-*-*-*-14-*")
   (setq *ignore-wm-inc-hints* t)
   (setq *window-border-style* :thin)
 #+END_SRC
@@ -309,8 +304,9 @@ https://kaashif.co.uk/2015/06/28/hacking-stumpwm-with-common-lisp/
 ** ROOT MAP
 #+BEGIN_SRC common-lisp
   (define-key *root-map* (kbd "e") "emacs")
+  (define-key *root-map* (kbd "t") "terminal")
   (define-key *root-map* (kbd "c") "terminal")
-  (define-key *root-map* (kbd "t") "exec x-terminal-emulator -e tmux")
+  (define-key *root-map* (kbd "T") "exec x-terminal-emulator -e tmux")
   (define-key *root-map* (kbd "w") "web-browser")
   (define-key *root-map* (kbd "Tab") "select")
   (define-key *root-map* (kbd "C-o") "fother")
