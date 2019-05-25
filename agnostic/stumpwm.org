@@ -23,6 +23,18 @@
 
 * SETTINGS
 
+** FONT
+
+https://wiki.archlinux.org/index.php/Stumpwm#Set_font_for_messages_and_modeline
+
+#+BEGIN_SRC common-lisp
+  (load-module "ttf-fonts")
+  (set-font (make-instance 'xft:font
+                           :family "DejaVu Sans"
+                           :subfamily "Bold"
+                           :size 9))
+#+END_SRC
+
 #+BEGIN_SRC common-lisp
   (set-focus-color "#00FF00")
   (set-normal-gravity :bottom)
