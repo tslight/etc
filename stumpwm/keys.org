@@ -72,6 +72,7 @@
   (define-key *top-map* (kbd "s-Tab") "gother")
   (define-key *top-map* (kbd "M-Escape") "fnext")
   (define-key *top-map* (kbd "C-F4") "delete")
+  (define-key *top-map* (kbd "s-q") "delete")
   (define-key *top-map* (kbd "M-F4") "kill")
   (define-key *top-map* (kbd "C-F10") "only")
   (define-key *top-map* (kbd "C-F11") "fullscreen")
