@@ -1,0 +1,78 @@
+#+TITLE: MAY THE SOURCE BE WITH YOU!
+#+AUTHOR: Toby Slight
+#+PROPERTY: header-args :cache yes
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :results silent
+#+PROPERTY: header-args+ :padline no
+#+PROPERTY: header-args+ :tangle ~/.stumpwm.d/settings.lisp
+#+PROPERTY: header-args+ :tangle-mode (identity #o644)
+
+* FONTS
+
+[[https://wiki.archlinux.org/index.php/Stumpwm#Set_font_for_messages_and_modeline][Arch Linux Wiki - How to set Xft font]]
+
+#+BEGIN_SRC common-lisp
+  ;; (set-font "-*-terminus-bold-*-*-*-14-*")
+  (load-module "ttf-fonts")
+  (set-font (make-instance 'xft:font
+                           :family "DejaVu Sans"
+                           :subfamily "Bold"
+                           :size 9))
+#+END_SRC
+
+* COLORS
+
+#+BEGIN_SRC common-lisp
+  (set-focus-color "green")
+  (set-fg-color "#00AA00")
+  (set-bg-color "grey9")
+  (set-border-color "magenta")
+#+END_SRC
+
+* GRAVITY
+
+#+BEGIN_SRC common-lisp
+  (set-normal-gravity :bottom)
+  (setf *message-window-gravity* :center)
+  (setf *input-window-gravity* :center)
+#+END_SRC
+
+* MISC
+
+#+BEGIN_SRC common-lisp
+  (setf *startup-message* "^B^5Welcome to StumpWM~%^2Hacks & glory await!")
+  (setf *shell-program* (getenv "SHELL")) ;; getenv is not exported
+  (setf *timeout-wait* 3)
+  (setf *mouse-focus-policy* :click)
+  (setf *frame-number-map* "asdfghjkl")
+  (setq *ignore-wm-inc-hints* t)
+  (setq *window-border-style* :thin)
+#+END_SRC
+
+* MODELINE
+
+https://github.com/areina/stumpwm.d/blob/master/init.lisp
+https://dataswamp.org/~solene/2016-06-06-stumpwm.html
+
+#+BEGIN_SRC common-lisp
+  (toggle-mode-line (current-screen) (current-head))
+  (load-module "stumptray")
+  (stumptray::add-mode-line-hooks)
+  (setf *window-format* " [%n] [%s] [%m] %c ")
+  (setf *time-modeline-string* "%H:%M")
+  (setf *screen-mode-line-format* (list "^3^B%d ^2[%n] ^7%v"))
+  (run-commands "stumptray")
+#+END_SRC
+
+* GROUPS
+
+#+BEGIN_SRC common-lisp
+  (grename "Alpha")
+  (gnewbg "Beta")
+  (gnewbg "Tau")
+  (gnewbg "Pi")
+  (gnewbg "Zeta")
+  (gnewbg "Teta")
+  (gnewbg "Phi")
+  (gnewbg "Rho")
+#+END_SRC

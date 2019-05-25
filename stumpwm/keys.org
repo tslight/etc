@@ -1,0 +1,122 @@
+#+TITLE: HACK AND BE MERRY!
+#+AUTHOR: Toby Slight
+
+#+PROPERTY: header-args :cache yes
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :results silent
+#+PROPERTY: header-args+ :padline no
+#+PROPERTY: header-args+ :tangle ~/.stumpwm.d/keys.lisp
+#+PROPERTY: header-args+ :tangle-mode (identity #o644)
+
+* PREFIX KEY
+
+#+BEGIN_SRC common-lisp
+  (set-prefix-key (kbd "C-i"))
+#+END_SRC
+
+* EMACS MAP
+
+#+BEGIN_SRC common-lisp
+(defvar *my-emacs-map*
+  (let ((m (make-sparse-keymap)))
+    (define-key m (kbd "e") "emacs")
+    (define-key m (kbd "C-e") "emacs")
+    (define-key m (kbd "n") "exec emacs")
+    (define-key m (kbd "c") "exec emacsclient -c -a ''")
+    (define-key m (kbd "q") "exec emacs --no-init-file --quick")
+    (define-key m (kbd "d") "exec emacs --debug-init")
+    (define-key m (kbd "t") "exec emacs -nw")
+    m ; NOTE: this is important
+    ))
+#+END_SRC
+
+* TERMINAL MAP
+
+#+BEGIN_SRC common-lisp
+(defvar *my-term-map*
+  (let ((m (make-sparse-keymap)))
+    (define-key m (kbd "C-t") "exec x-terminal-emulator -e tmux attach")
+    (define-key m (kbd "s") "my-prompt exec x-terminal-emulator -e ssh ")
+    (define-key m (kbd "r") "my-prompt exec x-terminal-emulator -e ")
+    m ; NOTE: this is important
+    ))
+#+END_SRC
+
+* BROWSER MAP
+
+#+BEGIN_SRC common-lisp
+(defvar *my-web-map*
+  (let ((m (make-sparse-keymap)))
+    (define-key m (kbd "C-w") "exec x-www-browser")
+    (define-key m (kbd "c") "chromium")
+    (define-key m (kbd "f") "firefox")
+    (define-key m (kbd "g") "google")
+    (define-key m (kbd "i") "imdb")
+    (define-key m (kbd "u") "my-prompt exec x-www-browser https://")
+    m ; NOTE: this is important
+    ))
+#+END_SRC
+
+* TOP MAP
+
+#+BEGIN_SRC common-lisp
+  (define-key *top-map* (kbd "XF86AudioLowerVolume") "exec amixer set Master 5%-")
+  (define-key *top-map* (kbd "XF86AudioRaiseVolume") "exec amixer set Master 5%+")
+  (define-key *top-map* (kbd "XF86AudioMute") "exec amixer set Master toggle")
+  ;; (define-key *top-map* (kbd "XF86MonBrightnessDown") "exec xbacklight -dec 10%")
+  ;; (define-key *top-map* (kbd "XF86MonBrightnessUp") "exec xbacklight -inc 10%")
+#+END_SRC
+
+#+BEGIN_SRC common-lisp
+  (define-key *top-map* (kbd "M-Tab") "cycle-mru")
+  (define-key *top-map* (kbd "M-Escape") "fnext")
+  (define-key *top-map* (kbd "C-F4") "delete")
+  (define-key *top-map* (kbd "M-F4") "kill")
+  (define-key *top-map* (kbd "C-F10") "only")
+  (define-key *top-map* (kbd "C-F11") "fullscreen")
+  (define-key *top-map* (kbd "s-SPC") "exec dmenu_run")
+  (define-key *top-map* (kbd "C-s-r") "restart-soft")
+  (define-key *top-map* (kbd "M-s-r") "restart-hard")
+  (define-key *top-map* (kbd "s-r") "reload")
+  (define-key *top-map* (kbd "s-m") "mode-line")
+  (define-key *top-map* (kbd "s-e") "emacs")
+  (define-key *top-map* (kbd "s-c") "terminal")
+  (define-key *top-map* (kbd "s-w") "web-browser")
+#+END_SRC
+
+* ROOT MAP
+
+#+BEGIN_SRC common-lisp
+  (define-key *root-map* (kbd "e") "emacs")
+  (define-key *root-map* (kbd "t") "terminal")
+  (define-key *root-map* (kbd "c") "terminal")
+  (define-key *root-map* (kbd "T") "exec x-terminal-emulator -e tmux")
+  (define-key *root-map* (kbd "w") "web-browser")
+  (define-key *root-map* (kbd "Tab") "select")
+  (define-key *root-map* (kbd "C-o") "fother")
+  (define-key *root-map* (kbd "M-i") "other-in-frame")
+  (define-key *root-map* (kbd "u") "remove")
+  (define-key *root-map* (kbd "q") "only")
+  (define-key *root-map* (kbd "v") "hsplit")
+  (define-key *root-map* (kbd "space") "exec")
+  (define-key *root-map* (kbd "C-r") "reload")
+  (define-key *root-map* (kbd "M-r") "loadrc")
+  (define-key *root-map* (kbd "C-M-r") "restart-hard")
+  (define-key *root-map* (kbd "l") "windowlist")
+  (define-key *root-map* (kbd "C-l") "exec slock")
+  (define-key *root-map* (kbd "C-q") "quit")
+  (define-key *root-map* (kbd "m") "mode-line")
+  (define-key *root-map* (kbd "C-e") '*my-emacs-map*)
+  (define-key *root-map* (kbd "C-t") '*my-term-map*)
+  (define-key *root-map* (kbd "C-w") '*my-web-map*)
+#+END_SRC
+
+* GROUP MAP
+
+#+BEGIN_SRC common-lisp
+  (define-key *groups-map* (kbd "g") "gother")
+  (define-key *groups-map* (kbd "C-n") "gnext-with-window")
+  (define-key *groups-map* (kbd "C-p") "gprev-with-window")
+  (define-key *groups-map* (kbd "l") "grouplist")
+  (define-key *groups-map* (kbd "s") "gselect")
+#+END_SRC

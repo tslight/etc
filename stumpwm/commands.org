@@ -1,0 +1,59 @@
+#+TITLE: LEMONODOR-FAME IS BUT A HACK AWAY!
+#+AUTHOR: Toby Slight
+
+#+PROPERTY: header-args :cache yes
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :results silent
+#+PROPERTY: header-args+ :padline no
+#+PROPERTY: header-args+ :tangle ~/.stumpwm.d/commands.lisp
+#+PROPERTY: header-args+ :tangle-mode (identity #o644)
+
+* SWANK
+
+Connect to StumpWM with Emacs' Slime mode
+
+https://kaashif.co.uk/2015/06/28/hacking-stumpwm-with-common-lisp/
+
+#+BEGIN_SRC common-lisp
+  (require :swank)
+  (swank-loader:init)
+  (defcommand swank () ()
+    "Creates a swank server in the stumpwm lisp process"
+    (setf stumpwm:*top-level-error-action* :break)
+    (swank:create-server :port 4004
+                         :style swank:*communication-style*
+                         :dont-close t)
+    (message "^B^5Getting swanky...~%^2Hacks & glory await!"))
+#+END_SRC
+
+* PROMPT
+
+Taken from the example rc file.
+
+Prompt the user for an interactive command. The first arg is an
+optional initial contents.
+
+#+BEGIN_SRC common-lisp
+  (defcommand prompt (&optional (initial "")) (:rest)
+    "prompt the user for an interactive command. The first arg is an optional
+     initial contents."
+    (let ((cmd (read-one-line (current-screen) ": " :initial-input initial)))
+      (when cmd
+        (eval-command cmd t))))
+#+END_SRC
+
+* RUN OR RAISE
+
+#+BEGIN_SRC common-lisp
+  (defcommand emacs () ()
+    "run-or-raise emacs"
+    (run-or-raise "emacsclient -ca emacs" '(:class "Emacs")))
+
+  (defcommand terminal () ()
+    "run-or-raise a terminal"
+    (run-or-raise "xfce4-terminal" '(:class "Xfce4-terminal")))
+
+  (defcommand web-browser () ()
+    "run-or-raise a web browser"
+    (run-or-raise "firefox-esr" '(:class "Firefox-esr")))
+#+END_SRC

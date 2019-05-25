@@ -1,0 +1,71 @@
+#+TITLE: HACKS AND GLORY AWAIT!
+#+AUTHOR: Toby Slight
+
+#+PROPERTY: header-args :cache yes
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :results silent
+#+PROPERTY: header-args+ :padline no
+#+PROPERTY: header-args+ :tangle ~/.stumpwm.d/init.lisp
+#+PROPERTY: header-args+ :tangle-mode (identity #o644)
+
+* PRE-REQUISITES
+
+Get Quicklisp from [[https://www.quicklisp.org/beta/][here]] and then run the following commands:
+
+ ~sbcl --load quicklisp.lisp~
+
+#+BEGIN_SRC common-lisp :tangle no
+  (quicklisp-quickstart:install)
+  (ql:quickload :xembed)       ;; Required by stumptray
+  (ql:quickload :clx-truetype) ;; Required by ttf-fonts
+  (ql:quickload :swank)        ;; Required by slime-connect
+#+END_SRC
+
+Stolen from [[https://github.com/alezost/stumpwm-config/blob/master/init.lisp][here]]
+
+* Your hacking starts... NOW!
+
+#+BEGIN_SRC common-lisp
+  ;; -*- common-lisp -*-
+  (in-package :stumpwm)
+  (load "~/quicklisp/setup.lisp")
+
+  (defvar my/init-directory
+    (directory-namestring
+     (truename (merge-pathnames (user-homedir-pathname)
+                                ".stumpwm.d")))
+    "A directory with initially loaded files.")
+
+  (defun my/load (filename)
+    "Load a file FILENAME (without extension) from `my/init-directory'."
+    (let ((file (merge-pathnames (concat filename ".lisp")
+                                 my/init-directory)))
+      (if (probe-file file)
+          (load file)
+          (format *error-output* "File '~a' doesn't exist." file))))
+
+  (redirect-all-output (merge-pathnames "log" my/init-directory))
+
+  ;; (set-module-dir
+  ;;  (pathname-as-directory (concat (getenv "HOME")
+  ;;                                 "/src/stumpwm-contrib")))
+
+  (my/load "settings")
+  (my/load "cycle-mru")
+  (my/load "commands")
+  (my/load "macros")
+  (my/load "keys")
+#+END_SRC
+
+* AUTOSTART
+
+After loading all our lisp, run some shell programs to make things more comfy.
+
+#+BEGIN_SRC common-lisp
+  (run-shell-command "xsetroot -cursor_name left_ptr")
+  (run-shell-command "xfsettingsd")
+  (run-shell-command "xsetroot -solid grey9")
+  (run-shell-command "nm-applet")
+  (run-shell-command "xfce4-power-manager")
+  (run-shell-command "xfce4-clipman")
+#+END_SRC

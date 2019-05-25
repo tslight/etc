@@ -1,0 +1,96 @@
+#+TITLE: Take this REPL, brother, and may it serve you well.
+#+AUTHOR: Toby Slight
+
+#+PROPERTY: header-args :cache yes
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :results silent
+#+PROPERTY: header-args+ :padline no
+#+PROPERTY: header-args+ :tangle ~/.stumpwm.d/cycle-mru.lisp
+#+PROPERTY: header-args+ :tangle-mode (identity #o644)
+
+Stolen from [[http://nongnu.13855.n7.nabble.com/Alt-Tab-td127943.html][here]].
+
+Known Bugs: Unexpected behaviour if there are split frames without windows.
+
+* FUNCTIONS
+
+#+BEGIN_SRC common-lisp
+  (defun get-milli-secs () ()
+         "get timestamp in milliseconds"
+         (floor (* 1000 (/ (get-internal-real-time)
+                           internal-time-units-per-second))))
+
+  (defun mru-new-window (win) ()
+         "function called by new-window-hook. updates mru-list"
+         (push (window-number win)  *mru-list*))
+
+  (defun mru-destroy-window (win) ()
+         "function called by destroy-window-hook. deletes window number from
+          mru-list"
+         (setf *mru-list* (delete (window-number win) *mru-list*)))
+
+  (defun mru-focus-window (new-win old-win) ()
+         "function called by focus-window-hook. updates mru-list"
+         (when new-win
+           (setf *mru-list* (delete (window-number new-win) *mru-list*)))
+         (when old-win
+           (push (window-number old-win) *mru-list*)))
+
+  (defun mru-focus-group (to-group from-group) ()
+         "handling group switching"
+         (setf *mru-list* (mapcar 'window-number (group-windows to-group))))
+#+END_SRC
+
+* VARIABLES
+
+#+BEGIN_SRC common-lisp
+  (setf *new-window-hook* (list 'mru-new-window))
+  (setf *destroy-window-hook* (list 'mru-destroy-window))
+  (setf *focus-window-hook* (list 'mru-focus-window))
+  (setf *focus-group-hook* (list 'mru-focus-group))
+
+  (defvar *mru-list* (make-list 0))
+  (defvar *mru-cycle* (make-list 0))
+  (defvar *mru-timeout* 500) ; in milliseconds
+  (defvar *mru-index* 0)     ; in milliseconds
+  (defvar *mru-last-call* (get-milli-secs))
+#+END_SRC
+
+* COMMANDS
+
+#+BEGIN_SRC common-lisp
+  (defcommand cycle-mru () ()
+    "focus next windows according to most recently used policy"
+    (cond
+      ;; if we're still in timeout
+      ((< (- (get-milli-secs) *mru-last-call*) 500)
+       ;; cycle through windows
+       (setf *mru-index* (mod (1+ *mru-index*) (list-length *mru-cycle*)))
+       (select-window-by-number (nth *mru-index* *mru-cycle*)))
+      ;; else start anew
+      (
+       (setf *mru-index* 1)
+       (setf *mru-cycle* (copy-list *mru-list*))
+       ;; if we've fokussed a frame without window, current-window will return nil
+       ;; => select last used
+       (cond
+         ((not (current-window))
+          (select-window-by-number (first *mru-cycle*)))
+         (
+          (push (window-number (current-window)) *mru-cycle*)
+          (select-window-by-number (second *mru-cycle*))))))
+
+    ;; update timestamp
+    (setf *mru-last-call* (get-milli-secs)))
+#+END_SRC
+
+* TODO
+
+/Use hash of group-number => tab-lists to preserve mru list during group change/
+
+#+BEGIN_SRC common-lisp :tangle no
+  (defvar *mru-hash* (make-hash-table))
+  (mapcar (lambda (x) (setf (gethash x *mru-hash*)
+                       (make-list 0)))
+          (mapcar 'group-number (screen-groups (current-group))))
+#+END_SRC
