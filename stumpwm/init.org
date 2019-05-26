@@ -17,27 +17,28 @@
     (concat (getenv "HOME") "/src/stumpwm-contrib")))
 #+END_SRC
 
-Stolen from [[https://github.com/alezost/stumpwm-config/blob/master/init.lisp][here]], to allow configuration split into multiple files:
+Allow configuration split into multiple files:
 
 - [[file:settings.org][Settings]]
 - [[file:utils.org][Utilities]]
 - [[file:keys.org][Keybindings]]
 
 #+BEGIN_SRC common-lisp
-  (defvar my/init-directory
+  (defvar *stumpwm-config-dir*
     (directory-namestring
      (truename (merge-pathnames (user-homedir-pathname) ".stumpwm.d")))
-    "Path to configuration directory.")
+    "StumpWM configuration directory.")
 
-  (defun my/load (filename)
-    "Load a file FILENAME (without extension) from `my/init-directory'."
-    (let ((file (merge-pathnames (concat filename ".lisp")
-                                 my/init-directory)))
+  (defun my/load (name)
+    "Load a file FILENAME (without extension) from `*stumpwm-config-dir*'."
+    (let ((file (make-pathname :defaults *stumpwm-config-dir*
+                               :name name
+                               :type "lisp")))
       (if (probe-file file)
           (load file)
           (format *error-output* "File '~a' doesn't exist." file))))
 
-  (redirect-all-output (merge-pathnames "log" my/init-directory))
+  (redirect-all-output (merge-pathnames "log" *stumpwm-config-dir*))
 
   (my/load "settings")
   (my/load "utils")

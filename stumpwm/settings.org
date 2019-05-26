@@ -52,6 +52,7 @@
 * MODELINE
 
 https://github.com/areina/stumpwm.d/blob/master/init.lisp
+
 https://dataswamp.org/~solene/2016-06-06-stumpwm.html
 
 #+BEGIN_SRC common-lisp
