@@ -1,4 +1,4 @@
-#+TITLE: HACKS AND GLORY AWAIT!
+#+TITLE: Your hacking starts... NOW!
 #+AUTHOR: Toby Slight
 
 #+PROPERTY: header-args :cache yes
@@ -7,8 +7,6 @@
 #+PROPERTY: header-args+ :padline no
 #+PROPERTY: header-args+ :tangle ~/.stumpwm.d/init.lisp
 #+PROPERTY: header-args+ :tangle-mode (identity #o644)
-
-* Your hacking starts... NOW!
 
 #+BEGIN_SRC common-lisp
   (in-package :stumpwm)
@@ -19,7 +17,7 @@
     (concat (getenv "HOME") "/src/stumpwm-contrib")))
 #+END_SRC
 
-Stolen from [[https://github.com/alezost/stumpwm-config/blob/master/init.lisp][here]]
+Stolen from [[https://github.com/alezost/stumpwm-config/blob/master/init.lisp][here]], to allow configuration split into multiple files.
 
 #+BEGIN_SRC common-lisp
   (defvar my/init-directory
@@ -40,10 +38,10 @@ Stolen from [[https://github.com/alezost/stumpwm-config/blob/master/init.lisp][h
   (my/load "settings")
   (my/load "utils")
   (my/load "keys")
-
 #+END_SRC
 
-Nifty, encouraging startup message, inspired by Emacs' slime-mode.
+Nifty, encouraging startup message, inspired by Emacs' slime-mode. Source code
+for ~random-encouragement~ is in [[file:utils.org][utils.org]]
 
 #+BEGIN_SRC common-lisp
   (setf *startup-message* (concat

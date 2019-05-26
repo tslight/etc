@@ -1,11 +1,11 @@
-*  HACKS AND GLORY AWAIT!
+* HACKS AND GLORY AWAIT!
 
 #+BEGIN_QUOTE
-/Stumpwm is a "everything-and-the-kitchen-sink WM" or "the emacs of WMs."/
+Stumpwm is a "everything-and-the-kitchen-sink WM" or "the emacs of WMs."
 
-/StumpWM manages windows the way emacs manages buffers, or the way screen manages
+StumpWM manages windows the way emacs manages buffers, or the way screen manages
 terminals. If you want a flexible, customizable, hackable desktop experience,
-look no further./
+look no further.
 
 -- [[https://github.com/stumpwm/stumpwm][StumpWM GitHub]]
 #+END_QUOTE
