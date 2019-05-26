@@ -52,6 +52,8 @@ org-mode, literate programming and how I manage configuration files and such.
 
 ** INSPIRATIONS
 
-https://github.com/areina/stumpwm.d/blob/master/init.lisp
-
 https://dataswamp.org/~solene/2016-06-06-stumpwm.html
+
+https://github.com/areina/stumpwm.d
+
+https://github.com/stumpwm/stumpwm/wiki/Customize
