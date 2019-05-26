@@ -81,7 +81,8 @@
   (define-key *top-map* (kbd "s-r") "exec")
   (define-key *top-map* (kbd "s-m") "mode-line")
   (define-key *top-map* (kbd "s-e") "emacs")
-  (define-key *top-map* (kbd "s-c") "terminal")
+  (define-key *top-map* (kbd "s-t") "terminal")
+  (define-key *top-map* (kbd "s-c") "speedcrunch")
   (define-key *top-map* (kbd "s-w") "web-browser")
   (define-key *top-map* (kbd "C-s-r") "reinit")
   (define-key *top-map* (kbd "C-s-l") "slock")
@@ -93,7 +94,7 @@
 #+BEGIN_SRC common-lisp
   (define-key *root-map* (kbd "e") "emacs")
   (define-key *root-map* (kbd "t") "terminal")
-  (define-key *root-map* (kbd "c") "terminal")
+  (define-key *root-map* (kbd "c") "speedcrunch")
   (define-key *root-map* (kbd "T") "exec x-terminal-emulator -e tmux")
   (define-key *root-map* (kbd "w") "web-browser")
   (define-key *root-map* (kbd "Tab") "select")
