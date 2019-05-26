@@ -49,3 +49,9 @@ Finally, we need to tangle the code in the files linked to below:
 
 Please see the main [[file:../README.org][etc repo README]] for more details on Emacs tangling,
 org-mode, literate programming and how I manage configuration files and such.
+
+** INSPIRATIONS
+
+https://github.com/areina/stumpwm.d/blob/master/init.lisp
+
+https://dataswamp.org/~solene/2016-06-06-stumpwm.html
