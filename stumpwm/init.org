@@ -8,21 +8,44 @@
 #+PROPERTY: header-args+ :tangle ~/.stumpwm.d/init.lisp
 #+PROPERTY: header-args+ :tangle-mode (identity #o644)
 
+#+BEGIN_QUOTE
+/Stumpwm is a "everything-and-the-kitchen-sink WM" or "the emacs of WMs."/
+
+/StumpWM manages windows the way emacs manages buffers, or the way screen manages
+terminals. If you want a flexible, customizable, hackable desktop experience,
+look no further./
+
+-- [[https://github.com/stumpwm/stumpwm][StumpWM GitHub]]
+#+END_QUOTE
+
 * PRE-REQUISITES
 
-Get Quicklisp from [[https://www.quicklisp.org/beta/][here]] and then run the following commands to install some
-required packages:
+Get Quicklisp from [[https://www.quicklisp.org/beta/][here,]] and then load into the REPL with:
 
- ~sbcl --load quicklisp.lisp~
+ ~$ sbcl --load quicklisp.lisp~
+
+From the REPL, install it:
 
 #+BEGIN_SRC common-lisp :tangle no
   (quicklisp-quickstart:install)
+#+END_SRC
+
+And make sure you have added it to your lisp init file using:
+
+#+BEGIN_SRC common-lisp :tangle no
+  (ql:add-to-init-file)
+#+END_SRC
+
+Install stumpwm and some packages we need for niceties.
+
+#+BEGIN_SRC common-lisp :tangle no
+  (ql:quickload :stumpwm)      ;; Install stumpwm
   (ql:quickload :xembed)       ;; Required by stumptray
   (ql:quickload :clx-truetype) ;; Required by ttf-fonts
   (ql:quickload :swank)        ;; Required by slime-connect
 #+END_SRC
 
-Clone my fork of the [[https://github.com/tslight/stumpwm-contrib][stumpwm-contrib]] repository to ~$HOME/src~ be able use
+Finally, clone the [[https://github.com/tslight/stumpwm-contrib][stumpwm-contrib]] repository to ~$HOME/src~, to be able use
 ttf-fonts, cycle-mru and stumptray.
 
 * Your hacking starts... NOW!
