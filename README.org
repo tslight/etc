@@ -119,7 +119,7 @@ Windows!"
 #+NAME:fig:mac_pc
      [[./img/mac_pc.png]]
 
-*** Stumpwm
+*** StumpWM
 
 A whole directory dedicated to [[https://stumpwm.github.io/][hacks and glory]]!
 
