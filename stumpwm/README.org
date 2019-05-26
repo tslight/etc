@@ -42,8 +42,8 @@ ttf-fonts, cycle-mru and stumptray.
 
 Finally, we need to tangle the code in the files linked to below.
 
-Please see [[file:~/etc/README.org][the main README]] for more details on tangling, org-mode, literate
-programming and the way this crazy stuff works!
+Please see the main [[file:../README.org][etc repo README]] for more details on Emacs tangling,
+org-mode, literate programming and how I manage configuration files and such.
 
 - [[file:init.org][Initialisation]]
 - [[file:settings.org][Settings]]
