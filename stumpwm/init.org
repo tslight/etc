@@ -17,7 +17,11 @@
     (concat (getenv "HOME") "/src/stumpwm-contrib")))
 #+END_SRC
 
-Stolen from [[https://github.com/alezost/stumpwm-config/blob/master/init.lisp][here]], to allow configuration split into multiple files.
+Stolen from [[https://github.com/alezost/stumpwm-config/blob/master/init.lisp][here]], to allow configuration split into multiple files:
+
+- [[file:settings.org][Settings]]
+- [[file:utils.org][Utilities]]
+- [[file:keys.org][Keybindings]]
 
 #+BEGIN_SRC common-lisp
   (defvar my/init-directory
@@ -40,8 +44,9 @@ Stolen from [[https://github.com/alezost/stumpwm-config/blob/master/init.lisp][h
   (my/load "keys")
 #+END_SRC
 
-Nifty, encouraging startup message, inspired by Emacs' slime-mode. Source code
-for ~random-encouragement~ is in [[file:utils.org][utils.org]]
+Encouraging startup message, inspired by Emacs' slime-mode.
+
+Source code for ~random-encouragement~ is in [[file:utils.org][utils.org]]
 
 #+BEGIN_SRC common-lisp
   (setf *startup-message* (concat
