@@ -34,7 +34,6 @@ the org-mode manual:
 [[https://orgmode.org/worg/org-contrib/babel/intro.html][Introduction to Org Babel]]
 
 * Where can I see these mythical beasts?
-
 *** Emacs
 
 The main emacs configuration from which this strange odyssey of [[http://www.mncc.com.my/ossig/lists/general/2003-09/msg00143.html][sexp
@@ -119,6 +118,22 @@ Windows!"
 #+CAPTION: Mac vs PC
 #+NAME:fig:mac_pc
      [[./img/mac_pc.png]]
+
+*** Stumpwm
+
+A whole directory dedicated to [[https://stumpwm.github.io/][hacks and glory]]!
+
+Your hacking starts... [[file:stumpwm/README.org][NOW!]]
+
+#+BEGIN_QUOTE
+Stumpwm is a "everything-and-the-kitchen-sink WM" or "the emacs of WMs."
+
+StumpWM manages windows the way emacs manages buffers, or the way screen manages
+terminals. If you want a flexible, customizable, hackable desktop experience,
+look no further.
+
+-- [[https://github.com/stumpwm/stumpwm][StumpWM GitHub]]
+#+END_QUOTE
 
 *** Agnostic
 
