@@ -56,11 +56,11 @@ https://dataswamp.org/~solene/2016-06-06-stumpwm.html
 
 #+BEGIN_SRC common-lisp
   (toggle-mode-line (current-screen) (current-head))
-  (load-module "stumptray")
-  (stumptray::add-mode-line-hooks)
   (setf *window-format* " [%n] [%s] [%m] %c ")
   (setf *time-modeline-string* "%H:%M")
   (setf *screen-mode-line-format* (list "^3^B%d ^2[%n] ^7%v"))
+  (load-module "stumptray")
+  (stumptray::add-mode-line-hooks)
   (run-commands "stumptray")
 #+END_SRC
 

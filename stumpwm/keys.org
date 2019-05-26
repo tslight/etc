@@ -17,44 +17,35 @@
 * EMACS MAP
 
 #+BEGIN_SRC common-lisp
-(defvar *my-emacs-map*
-  (let ((m (make-sparse-keymap)))
-    (define-key m (kbd "e") "emacs")
-    (define-key m (kbd "C-e") "emacs")
-    (define-key m (kbd "n") "exec emacs")
-    (define-key m (kbd "c") "exec emacsclient -c -a ''")
-    (define-key m (kbd "q") "exec emacs --no-init-file --quick")
-    (define-key m (kbd "d") "exec emacs --debug-init")
-    (define-key m (kbd "t") "exec emacs -nw")
-    m ; NOTE: this is important
-    ))
+  (defvar *my-emacs-map* (make-sparse-keymap))
+  (define-key *my-emacs-map* (kbd "e") "emacs")
+  (define-key *my-emacs-map* (kbd "C-e") "emacs")
+  (define-key *my-emacs-map* (kbd "n") "exec emacs")
+  (define-key *my-emacs-map* (kbd "c") "exec emacsclient -c -a ''")
+  (define-key *my-emacs-map* (kbd "q") "exec emacs --no-init-file --quick")
+  (define-key *my-emacs-map* (kbd "d") "exec emacs --debug-init")
+  (define-key *my-emacs-map* (kbd "t") "exec emacs -nw")
 #+END_SRC
 
 * TERMINAL MAP
 
 #+BEGIN_SRC common-lisp
-(defvar *my-term-map*
-  (let ((m (make-sparse-keymap)))
-    (define-key m (kbd "C-t") "exec x-terminal-emulator -e tmux attach")
-    (define-key m (kbd "s") "prompt exec x-terminal-emulator -e ssh ")
-    (define-key m (kbd "r") "prompt exec x-terminal-emulator -e ")
-    m ; NOTE: this is important
-    ))
+  (defvar *my-term-map* (make-sparse-keymap))
+  (define-key *my-term-map* (kbd "C-t") "exec x-terminal-emulator -e tmux attach")
+  (define-key *my-term-map* (kbd "s") "prompt exec x-terminal-emulator -e ssh ")
+  (define-key *my-term-map* (kbd "r") "prompt exec x-terminal-emulator -e ")
 #+END_SRC
 
 * BROWSER MAP
 
 #+BEGIN_SRC common-lisp
-(defvar *my-web-map*
-  (let ((m (make-sparse-keymap)))
-    (define-key m (kbd "C-w") "exec x-www-browser")
-    (define-key m (kbd "c") "chromium")
-    (define-key m (kbd "f") "firefox")
-    (define-key m (kbd "g") "google")
-    (define-key m (kbd "i") "imdb")
-    (define-key m (kbd "u") "prompt exec x-www-browser https://")
-    m ; NOTE: this is important
-    ))
+  (defvar *my-web-map* (make-sparse-keymap))
+  (define-key *my-web-map* (kbd "C-w") "exec x-www-browser")
+  (define-key *my-web-map* (kbd "c") "chromium")
+  (define-key *my-web-map* (kbd "f") "firefox")
+  (define-key *my-web-map* (kbd "g") "google")
+  (define-key *my-web-map* (kbd "i") "imdb")
+  (define-key *my-web-map* (kbd "u") "prompt exec x-www-browser https://")
 #+END_SRC
 
 * TOP MAP
@@ -68,6 +59,7 @@
 #+END_SRC
 
 #+BEGIN_SRC common-lisp
+  (load-module "cycle-mru")
   (define-key *top-map* (kbd "M-Tab") "cycle-mru")
   (define-key *top-map* (kbd "s-Tab") "gother")
   (define-key *top-map* (kbd "M-Escape") "fnext")
