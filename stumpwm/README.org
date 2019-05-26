@@ -40,12 +40,12 @@ Install stumpwm and some packages we need for niceties.
 Next, clone the [[https://github.com/tslight/stumpwm-contrib][stumpwm-contrib]] repository to ~$HOME/src~, to be able use
 ttf-fonts, cycle-mru and stumptray.
 
-Finally, we need to tangle the code in the files linked to below.
-
-Please see the main [[file:../README.org][etc repo README]] for more details on Emacs tangling,
-org-mode, literate programming and how I manage configuration files and such.
+Finally, we need to tangle the code in the files linked to below:
 
 - [[file:init.org][Initialisation]]
 - [[file:settings.org][Settings]]
 - [[file:utils.org][Utilities]]
 - [[file:keys.org][Keybindings]]
+
+Please see the main [[file:../README.org][etc repo README]] for more details on Emacs tangling,
+org-mode, literate programming and how I manage configuration files and such.
