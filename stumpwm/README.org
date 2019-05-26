@@ -18,19 +18,19 @@ Get Quicklisp from [[https://www.quicklisp.org/beta/][here,]] and then load into
 
 From the REPL, install it:
 
-#+BEGIN_SRC common-lisp :tangle no
+#+BEGIN_SRC common-lisp
   (quicklisp-quickstart:install)
 #+END_SRC
 
 And make sure you have added it to your lisp init file using:
 
-#+BEGIN_SRC common-lisp :tangle no
+#+BEGIN_SRC common-lisp
   (ql:add-to-init-file)
 #+END_SRC
 
 Install stumpwm and some packages we need for niceties.
 
-#+BEGIN_SRC common-lisp :tangle no
+#+BEGIN_SRC common-lisp
   (ql:quickload :stumpwm)      ;; Install stumpwm
   (ql:quickload :xembed)       ;; Required by stumptray
   (ql:quickload :clx-truetype) ;; Required by ttf-fonts
