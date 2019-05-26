@@ -33,11 +33,14 @@ Stolen from [[https://github.com/alezost/stumpwm-config/blob/master/init.lisp][h
   (in-package :stumpwm)
   (load "~/quicklisp/setup.lisp")
 
+  (set-module-dir
+   (pathname-as-directory
+    (concat (getenv "HOME") "/src/stumpwm-contrib")))
+
   (defvar my/init-directory
+    "Path to configuration directory."
     (directory-namestring
-     (truename (merge-pathnames (user-homedir-pathname)
-                                ".stumpwm.d")))
-    "A directory with initially loaded files.")
+     (truename (merge-pathnames (user-homedir-pathname) ".stumpwm.d"))))
 
   (defun my/load (filename)
     "Load a file FILENAME (without extension) from `my/init-directory'."
@@ -48,10 +51,6 @@ Stolen from [[https://github.com/alezost/stumpwm-config/blob/master/init.lisp][h
           (format *error-output* "File '~a' doesn't exist." file))))
 
   (redirect-all-output (merge-pathnames "log" my/init-directory))
-
-  (set-module-dir
-   (pathname-as-directory (concat (getenv "HOME")
-                                  "/src/stumpwm-contrib")))
 
   (my/load "settings")
   (my/load "commands")
