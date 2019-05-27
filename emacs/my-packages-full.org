@@ -237,9 +237,9 @@ pip3 install autopep8 black flake8 importmagic jedi jupyter rope virtualenv yapf
     :commands (python-mode)
     :mode (("\\.py\\'" . python-mode))
     :config
-    (setq fill-column 79)
     (setq python-shell-interpreter "ipython3")
     (setq python-fill-docstring-style 'django)
+    (setq fill-column 78)
     ;; stop python interpreter from clobbering find-file...
     ;; https://answers.launchpad.net/python-mode/+question/221144
     (add-hook 'python-mode-hook
