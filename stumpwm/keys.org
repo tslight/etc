@@ -46,6 +46,8 @@
   (define-key *my-web-map* (kbd "g") "google")
   (define-key *my-web-map* (kbd "i") "imdb")
   (define-key *my-web-map* (kbd "u") "prompt exec x-www-browser https://")
+  (define-key *my-web-map* (kbd "w") "wikipedia")
+  (define-key *my-web-map* (kbd "y") "youtube")
 #+END_SRC
 
 * TOP MAP
