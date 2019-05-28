@@ -54,9 +54,9 @@
 
 #+BEGIN_SRC common-lisp
   (defvar *my-screen-map* (make-sparse-keymap))
-  (define-key *my-web-map* (kbd "n") "snext")
-  (define-key *my-web-map* (kbd "p") "sprev")
-  (define-key *my-web-map* (kbd "o") "sother")
+  (define-key *my-screen-map* (kbd "n") "snext")
+  (define-key *my-screen-map* (kbd "p") "sprev")
+  (define-key *my-screen-map* (kbd "o") "sother")
 #+END_SRC
 
 * TOP MAP
