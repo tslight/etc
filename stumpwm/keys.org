@@ -50,6 +50,15 @@
   (define-key *my-web-map* (kbd "y") "youtube")
 #+END_SRC
 
+* SCREEN MAP
+
+#+BEGIN_SRC common-lisp
+  (defvar *my-screen-map* (make-sparse-keymap))
+  (define-key *my-web-map* (kbd "n") "snext")
+  (define-key *my-web-map* (kbd "p") "sprev")
+  (define-key *my-web-map* (kbd "o") "sother")
+#+END_SRC
+
 * TOP MAP
 
 #+BEGIN_SRC common-lisp
@@ -75,9 +84,13 @@
   (define-key *top-map* (kbd "s-r") "exec")
   (define-key *top-map* (kbd "s-m") "mode-line")
   (define-key *top-map* (kbd "s-e") "emacs")
+  (define-key *top-map* (kbd "C-s-e") *my-emacs-map*)
   (define-key *top-map* (kbd "s-t") "terminal")
+  (define-key *top-map* (kbd "C-s-e") *my-terminal-map*)
   (define-key *top-map* (kbd "s-c") "speedcrunch")
   (define-key *top-map* (kbd "s-w") "web-browser")
+  (define-key *top-map* (kbd "C-s-e") *my-web-map*)
+  (define-key *top-map* (kbd "C-s-s") *my-screen-map*)
   (define-key *top-map* (kbd "C-s-r") "reinit")
   (define-key *top-map* (kbd "C-s-l") "slock")
   (define-key *top-map* (kbd "C-s-q") "quit")
@@ -110,6 +123,7 @@
   (define-key *root-map* (kbd "C-e") '*my-emacs-map*)
   (define-key *root-map* (kbd "C-t") '*my-term-map*)
   (define-key *root-map* (kbd "C-w") '*my-web-map*)
+  (define-key *root-map* (kbd "C-s") '*my-screen-map*)
 #+END_SRC
 
 * GROUP MAP

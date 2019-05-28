@@ -14,6 +14,7 @@
 #+BEGIN_SRC common-lisp
   ;; (set-font "-*-terminus-bold-*-*-*-14-*")
   (load-module "ttf-fonts")
+  (xft:cache-fonts)
   (set-font (make-instance 'xft:font
                            :family "DejaVu Sans"
                            :subfamily "Bold"
