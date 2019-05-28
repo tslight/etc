@@ -86,13 +86,14 @@
   (define-key *top-map* (kbd "s-e") "emacs")
   (define-key *top-map* (kbd "C-s-e") *my-emacs-map*)
   (define-key *top-map* (kbd "s-t") "terminal")
-  (define-key *top-map* (kbd "C-s-e") *my-terminal-map*)
+  (define-key *top-map* (kbd "C-s-e") *my-term-map*)
   (define-key *top-map* (kbd "s-c") "speedcrunch")
   (define-key *top-map* (kbd "s-w") "web-browser")
   (define-key *top-map* (kbd "C-s-e") *my-web-map*)
   (define-key *top-map* (kbd "C-s-s") *my-screen-map*)
   (define-key *top-map* (kbd "C-s-r") "reinit")
-  (define-key *top-map* (kbd "C-s-l") "slock")
+  (define-key *top-map* (kbd "C-s-l") "exec slock")
+  (define-key *top-map* (kbd "C-s-Delete") "exec slock")
   (define-key *top-map* (kbd "C-s-q") "quit")
 #+END_SRC
 
