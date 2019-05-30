@@ -31,10 +31,11 @@ And make sure you have added it to your lisp init file using:
 Install stumpwm and some packages we need for niceties.
 
 #+BEGIN_SRC common-lisp
-  (ql:quickload :stumpwm)      ;; Install stumpwm
-  (ql:quickload :xembed)       ;; Required by stumptray
-  (ql:quickload :clx-truetype) ;; Required by ttf-fonts
-  (ql:quickload :swank)        ;; Required by slime-connect
+  (ql:quickload :stumpwm)                ;; Install stumpwm
+  (ql:quickload :xembed)                 ;; Required by stumptray
+  (ql:quickload :clx-truetype)           ;; Required by ttf-fonts
+  (ql:quickload :swank)                  ;; Required by slime-connect
+  (ql:quickload :quicklisp-slime-helper) ;; Required by slime-connect
 #+END_SRC
 
 Next, clone the [[https://github.com/tslight/stumpwm-contrib][stumpwm-contrib]] repository to ~$HOME/src~, to be able use
