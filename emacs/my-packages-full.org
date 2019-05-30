@@ -87,6 +87,7 @@ All the non-essential, but nice to have stuff goes in here.
     :diminish company-mode
     :hook
     (prog-mode . company-mode)
+    (slime-mode . company-mode)
     (slime-repl-mode . company-mode))
 #+END_SRC
 * COUNSEL PROJECTILE
@@ -315,23 +316,24 @@ https://kaashif.co.uk/2015/06/28/hacking-stumpwm-with-common-lisp/
 
 https://github.com/quicklisp/quicklisp-slime-helper
 
+#+BEGIN_SRC common-lisp :tangle no
+(ql:quickload "quicklisp-slime-helper")
+#+END_SRC
+
 #+BEGIN_SRC emacs-lisp
   (use-package slime
     :ensure t
     :commands (slime-mode)
     :defer t
     :config
+    (use-package slime-company
+      :ensure t
+      :defer t)
     (load (expand-file-name "~/quicklisp/slime-helper.el"))
-    (setq inferior-lisp-program "sbcl"))
+    (setq inferior-lisp-program "sbcl")
+    (slime-setup '(slime-fancy slime-company slime-quicklisp slime-asdf)))
 #+END_SRC
 
-#+BEGIN_SRC emacs-lisp
-(use-package slime-company
-  :ensure t
-  :defer t
-  :config
-  (slime-setup '(slime-company)))
-#+END_SRC
 * SMEX
 #+BEGIN_SRC emacs-lisp
   (use-package smex
