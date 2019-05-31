@@ -152,4 +152,11 @@ it in lisp :-)
            (status (string-upcase (nth 1 output))))
       (message "^B^5VOLUME: ^n~a~%^5STATUS: ^n~a" volume status)))
 #+END_SRC
+
 * TEMPERATURE
+
+#+BEGIN_SRC common-lisp
+  (defcommand sensors () ()
+    (let ((temps (run-shell-command "sensors" t)))
+      (message "~a" temps)))
+#+END_SRC

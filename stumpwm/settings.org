@@ -43,7 +43,7 @@
 
 #+BEGIN_SRC common-lisp
   (setf *shell-program* (getenv "SHELL")) ;; getenv is not exported
-  (setf *timeout-wait* 3)
+  ;; (setf *timeout-wait* 3)
   (setf *mouse-focus-policy* :click)
   (setf *frame-number-map* "asdfghjkl")
   (setq *ignore-wm-inc-hints* t)
