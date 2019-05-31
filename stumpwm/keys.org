@@ -62,9 +62,9 @@
 * TOP MAP
 
 #+BEGIN_SRC common-lisp
-  (define-key *top-map* (kbd "XF86AudioLowerVolume") "volume 5%-")
-  (define-key *top-map* (kbd "XF86AudioRaiseVolume") "volume 5%+")
-  (define-key *top-map* (kbd "XF86AudioMute") "volume toggle")
+  (define-key *top-map* (kbd "XF86AudioLowerVolume") "volume Master 5%-")
+  (define-key *top-map* (kbd "XF86AudioRaiseVolume") "volume Master 5%+")
+  (define-key *top-map* (kbd "XF86AudioMute") "volume Master toggle")
   ;; (define-key *top-map* (kbd "XF86MonBrightnessDown") "exec xbacklight -dec 10%")
   ;; (define-key *top-map* (kbd "XF86MonBrightnessUp") "exec xbacklight -inc 10%")
 #+END_SRC
