@@ -38,8 +38,8 @@ Strings lifted from [[https://github.com/kovisoft/slimv/blob/master/slime/slime.
     (my/random-elt words-of-encouragement))
 
   (defcommand stump-encouragement () ()
-              "Print a random string of hackerish encouragement."
-              (message "~a" (random-encouragement)))
+    "Print a random string of hackerish encouragement."
+    (message "~a" (random-encouragement)))
 #+END_SRC
 
 * SWANK
@@ -117,4 +117,19 @@ Stolen from the default rc file.
   (defcommand web-browser () ()
     "run-or-raise a web browser"
     (run-or-raise "firefox-esr" '(:class "Firefox-esr")))
+#+END_SRC
+
+* VOLUME
+
+#+BEGIN_SRC common-lisp
+  (defcommand volume (action) ((:string "Enter a volume action: "))
+    "Wrap volume commands and print a message containing current volume."
+    (let ((voltype (subseq action (1- (length action))))
+          (output
+           (run-shell-command
+            (concat "amixer set Master " action "| awk '/%/ {print $5}' | uniq")
+            t)))
+      (cond ((string= voltype "+") (message "volume increased ~a" output))
+            ((string= voltype "-") (message "volume decreased ~a" output))
+            (t (message "volume toggle")))))
 #+END_SRC
