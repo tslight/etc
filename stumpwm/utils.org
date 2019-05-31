@@ -121,13 +121,27 @@ Stolen from the default rc file.
 
 * VOLUME
 
-#+BEGIN_SRC common-lisp
+Could also pipe to awk and uniq to achieve same goal, but it was more fun doing
+it in lisp :-)
+
+#+BEGIN_SRC common-lisp :tangle no
   (defun get-volume (action)
     (let ((output
            (run-shell-command
             (concat "amixer set Master " action "| awk '/%/ {print $5 $6}' | uniq")
             t)))
       (split-string output "][")))
+#+END_SRC
+
+#+BEGIN_SRC common-lisp
+  (defun get-volume (action)
+    "Return a cleaned up version of the output of the amixer command with a given
+     ACTION. Simply return the volume percentage and the status of the device."
+    (let* ((output (run-shell-command (concat "amixer set Master " action) t))
+           (start (search "[" output))
+           (end (search (concat "]" (string #\linefeed)) output))
+           (out (subseq output start end)))
+      (split-string out "] [")))
 
   (defcommand volume (action) ((:string "Enter a volume action: "))
     "Wrap volume commands and print a message containing current volume."
