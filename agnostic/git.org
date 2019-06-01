@@ -19,18 +19,19 @@
       b = branch
       c = commit
       ca = commit -a
-      C = clone
+      cl = clone
       cm = commit -m
       co = checkout
+      l = log --graph --decorate --pretty=oneline --abbrev-commit
       m = merge
       P = pull
       p = push
       pa = push --all -u
       pm = push origin master
       po = push origin
-      R = rebase
+      rb = rebase
+      rv = revert
       r = remote
-      rv = remote -v
       s = status
       ua = remote set-url --add --push origin
       ud = remote set-url --delete --push origin

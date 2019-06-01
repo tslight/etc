@@ -153,10 +153,30 @@ it in lisp :-)
       (message "^B^5VOLUME: ^n~a~%^5STATUS: ^n~a" volume status)))
 #+END_SRC
 
-* TEMPERATURE
+* SENSORS
+
+#+BEGIN_SRC bash :tangle no
+  sensors | awk -F '[(:]' '{gsub(/\s+/," ")} {gsub(/+/,"")} /Core|Exhaust/ {printf $2} END {print ""}'
+#+END_SRC
 
 #+BEGIN_SRC common-lisp
+  (defun get-cpu (output)
+    (let* ((cpu-start (search "Package id 0:" output))
+           (cpu-end (search "(high" output)))
+      (subseq output cpu-start cpu-end)))
+
+  (defun get-fan (output)
+    (let* ((fan-start (search "Exhaust" output))
+           (fan-end (search "(min" output)))
+      (subseq output fan-start fan-end)))
+
+  (defun get-sensors ()
+    (let* ((output (run-shell-command "sensors" t))
+           (cpu (get-cpu output))
+           (fan (get-fan output)))
+      (list cpu fan)))
+
   (defcommand sensors () ()
-    (let ((temps (run-shell-command "sensors" t)))
-      (message "~a" temps)))
+    (let ((my-sensors (get-sensors)))
+      (message "~a" my-sensors)))
 #+END_SRC
