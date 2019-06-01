@@ -121,6 +121,7 @@
   (define-key *root-map* (kbd "C-q") "quit")
   (define-key *root-map* (kbd "m") "mode-line")
   (define-key *root-map* (kbd "S") "swank")
+  (define-key *root-map* (kbd "M-s") "sensors")
   (define-key *root-map* (kbd "C-e") '*my-emacs-map*)
   (define-key *root-map* (kbd "C-t") '*my-term-map*)
   (define-key *root-map* (kbd "C-w") '*my-web-map*)
