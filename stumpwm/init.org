@@ -40,8 +40,8 @@ Allow configuration split into multiple files:
 
   (redirect-all-output (merge-pathnames "log" *stumpwm-config-dir*))
 
-  (my/load "settings")
   (my/load "utils")
+  (my/load "settings")
   (my/load "keys")
 #+END_SRC
 

@@ -56,7 +56,9 @@
   (mode-line)
   (setf *window-format* " [%n] [%s] [%m] %c ")
   (setf *time-modeline-string* "%H:%M")
-  (setf *screen-mode-line-format* (list "^3^B%d ^2[%n] ^7%v"))
+  (setf *screen-mode-line-format*
+        (list "^3^B%d ^2[%n] ^7%v"
+              '(:eval (get-sensors t))))
   (load-module "stumptray")
   (run-commands "stumptray")
 #+END_SRC
