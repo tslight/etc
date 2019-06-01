@@ -174,11 +174,11 @@ it in lisp :-)
            (fan (string-trim "Exhaust :" fan)))
       fan))
 
-  (defun get-sensors (&optional string)
+  (defun get-sensors (&optional return-as-string)
     (let* ((output (run-shell-command "sensors" t))
            (cpu (get-cpu output))
            (fan (get-fan output)))
-      (if string
+      (if return-as-string
           (concat cpu " " fan)
           (list cpu fan))))
 
