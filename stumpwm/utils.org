@@ -8,6 +8,11 @@
 #+PROPERTY: header-args+ :tangle ~/.stumpwm.d/utils.lisp
 #+PROPERTY: header-args+ :tangle-mode (identity #o644)
 
+My more complex utilities are in my fork of [[https://github.com/tslight/stumpwm-contrib][stumpwm-contrib]]:
+
+- [[https://github.com/tslight/stumpwm-contrib/tree/master/util/cycle-mru][cycle-mru]] gives me back glorious alt-tab behaviour.
+- [[https://github.com/tslight/stumpwm-contrib/tree/master/modeline/sensors][sensors]] allows me see just how hot my crotch is getting...
+
 * ENCOURAGEMENT
 
 /Scientifically-proven optimal words of hackerish encouragement./
@@ -124,15 +129,6 @@ Stolen from the default rc file.
 Could also pipe to awk and uniq to achieve same goal, but it was more fun doing
 it in lisp :-)
 
-#+BEGIN_SRC common-lisp :tangle no
-  (defun get-volume (action)
-    (let ((output
-           (run-shell-command
-            (concat "amixer set Master " action "| awk '/%/ {print $5 $6}' | uniq")
-            t)))
-      (split-string output "][")))
-#+END_SRC
-
 #+BEGIN_SRC common-lisp
   (defun get-volume (device action)
     "Return a cleaned up version of the output of the amixer command with a given
@@ -151,65 +147,4 @@ it in lisp :-)
            (volume (nth 0 output))
            (status (string-upcase (nth 1 output))))
       (message "^B^5VOLUME: ^n~a~%^5STATUS: ^n~a" volume status)))
-#+END_SRC
-
-* SENSORS
-
-** GET CPU TEMPERATURE
-** GET FAN RPM
-** GET SENSORS
-** REFRESH TIME
-** FORMAT SENSORS
-** SENSORS COMMAND
-
-#+BEGIN_SRC common-lisp
-  (defvar *refresh-time* 30
-    "Time in seconds between updates of sensors information.")
-
-  (defun get-cpu-temp (output)
-    (let* ((start (search "Package id 0:" output))
-           (end (search "(high" output))
-           (cpu-temp (subseq output start end))
-           (cpu-temp (string-trim "Package id 0: +" cpu-temp))
-           (int (parse-integer (remove-if #'alpha-char-p cpu-temp) :junk-allowed t)))
-      (cond ((< 60 int) (concat "^1*" cpu-temp "^n"))
-            ((< 50 int) (concat "^3*" cpu-temp "^n"))
-            (t cpu-temp))))
-
-  (defun get-fan-rpm (output)
-    (let* ((start (search "Exhaust" output))
-           (end (search "(min" output))
-           (fan-rpm (subseq output start end))
-           (fan-rpm (string-trim "Exhaust :" fan-rpm))
-           (int (parse-integer (remove-if #'alpha-char-p fan-rpm) :junk-allowed t)))
-      (cond ((< 3500 int) (concat "^1*" fan-rpm "^n"))
-            ((< 2500 int) (concat "^3*" fan-rpm "^n"))
-            (t fan-rpm))))
-
-  (defun get-sensors (&optional as-string)
-    (let* ((output (stumpwm:run-shell-command "sensors" t))
-           (cpu-temp (get-cpu-temp output))
-           (fan-rpm (get-fan-rpm output)))
-      (if as-string
-          (concat cpu-temp " " fan-rpm)
-          (list cpu-temp fan-rpm))))
-
-  (stumpwm:defcommand sensors () ()
-              (let* ((my-sensors (get-sensors))
-                     (cpu-temp (nth 0 my-sensors))
-                     (fan-rpm (nth 1 my-sensors)))
-                (message "^B^5CPU: ^n~a~%^B^5FAN: ^n~a" cpu-temp fan-rpm)))
-
-  ;; pinched from battery portable code
-  (let ((next 0)
-        (last-value ""))
-    (defun fmt-sensors (ml)
-      (declare (ignore ml))
-      (let ((now (get-universal-time)))
-        (when (< now next)
-          (return-from fmt-sensors last-value))
-        (setf next (+ now *refresh-time*)))
-      (setf last-value (get-sensors t))))
-
-  (stumpwm:add-screen-mode-line-formatter #\S #'fmt-sensors)
 #+END_SRC

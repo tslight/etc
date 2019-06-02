@@ -23,6 +23,11 @@ Allow configuration split into multiple files:
 - [[file:utils.org][Utilities]]
 - [[file:keys.org][Keybindings]]
 
+My more complex utilities are in my fork of [[https://github.com/tslight/stumpwm-contrib][stumpwm-contrib]]:
+
+- [[https://github.com/tslight/stumpwm-contrib/tree/master/util/cycle-mru][cycle-mru]] gives me back glorious alt-tab behaviour.
+- [[https://github.com/tslight/stumpwm-contrib/tree/master/modeline/sensors][sensors]] allows me see just how hot my crotch is getting...
+
 #+BEGIN_SRC common-lisp
   (defvar *stumpwm-config-dir*
     (directory-namestring
