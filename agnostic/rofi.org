@@ -7,6 +7,6 @@
 rofi.modi: window,windowcd,run,ssh,drun,combi,keys
 rofi.combi-modi: window,drun
 rofi.auto-select: False
-rofi.matching: fuzzy
+rofi.matching: glob
 rofi.theme: /usr/share/rofi/themes/android_notification.rasi
 #+END_SRC
