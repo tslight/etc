@@ -128,6 +128,13 @@
   (define-key *root-map* (kbd "C-s") '*my-screen-map*)
 #+END_SRC
 
+* MENU MAP
+
+#+BEGIN_SRC common-lisp
+(define-key *menu-map* (kbd "TAB") 'menu-down)
+(define-key *menu-map* (kbd "ISO_Left_Tab") 'menu-up)
+#+END_SRC
+
 * GROUP MAP
 
 #+BEGIN_SRC common-lisp
