@@ -155,42 +155,61 @@ it in lisp :-)
 
 * SENSORS
 
-#+BEGIN_SRC bash :tangle no
-  sensors | awk -F '[(:]' '{gsub(/\s+/," ")} {gsub(/+/,"")} /Core|Exhaust/ {printf $2} END {print ""}'
-#+END_SRC
+** GET CPU TEMPERATURE
+** GET FAN RPM
+** GET SENSORS
+** REFRESH TIME
+** FORMAT SENSORS
+** SENSORS COMMAND
 
 #+BEGIN_SRC common-lisp
-  (defun get-cpu (output)
+  (defvar *refresh-time* 30
+    "Time in seconds between updates of sensors information.")
+
+  (defun get-cpu-temp (output)
     (let* ((start (search "Package id 0:" output))
            (end (search "(high" output))
-           (cpu (subseq output start end))
-           (cpu (string-trim "Package id 0: +" cpu))
-           (int (parse-integer (remove-if #'alpha-char-p cpu) :junk-allowed t)))
-      (cond ((< 60 int) (concat "^1*" cpu "^n"))
-            ((< 50 int) (concat "^3*" cpu "^n"))
-            (t cpu))))
+           (cpu-temp (subseq output start end))
+           (cpu-temp (string-trim "Package id 0: +" cpu-temp))
+           (int (parse-integer (remove-if #'alpha-char-p cpu-temp) :junk-allowed t)))
+      (cond ((< 60 int) (concat "^1*" cpu-temp "^n"))
+            ((< 50 int) (concat "^3*" cpu-temp "^n"))
+            (t cpu-temp))))
 
-  (defun get-fan (output)
+  (defun get-fan-rpm (output)
     (let* ((start (search "Exhaust" output))
            (end (search "(min" output))
-           (fan (subseq output start end))
-           (fan (string-trim "Exhaust :" fan))
-           (int (parse-integer (remove-if #'alpha-char-p fan) :junk-allowed t)))
-      (cond ((< 3500 int) (concat "^1*" fan "^n"))
-            ((< 2500 int) (concat "^3*" fan "^n"))
-            (t fan))))
+           (fan-rpm (subseq output start end))
+           (fan-rpm (string-trim "Exhaust :" fan-rpm))
+           (int (parse-integer (remove-if #'alpha-char-p fan-rpm) :junk-allowed t)))
+      (cond ((< 3500 int) (concat "^1*" fan-rpm "^n"))
+            ((< 2500 int) (concat "^3*" fan-rpm "^n"))
+            (t fan-rpm))))
 
   (defun get-sensors (&optional as-string)
-    (let* ((output (run-shell-command "sensors" t))
-           (cpu (get-cpu output))
-           (fan (get-fan output)))
+    (let* ((output (stumpwm:run-shell-command "sensors" t))
+           (cpu-temp (get-cpu-temp output))
+           (fan-rpm (get-fan-rpm output)))
       (if as-string
-          (concat cpu " " fan)
-          (list cpu fan))))
+          (concat cpu-temp " " fan-rpm)
+          (list cpu-temp fan-rpm))))
 
-  (defcommand sensors () ()
-    (let* ((my-sensors (get-sensors))
-           (cpu (nth 0 my-sensors))
-           (fan (nth 1 my-sensors)))
-      (message "^B^5CPU: ^n~a~%^B^5FAN: ^n~a" cpu fan)))
+  (stumpwm:defcommand sensors () ()
+              (let* ((my-sensors (get-sensors))
+                     (cpu-temp (nth 0 my-sensors))
+                     (fan-rpm (nth 1 my-sensors)))
+                (message "^B^5CPU: ^n~a~%^B^5FAN: ^n~a" cpu-temp fan-rpm)))
+
+  ;; pinched from battery portable code
+  (let ((next 0)
+        (last-value ""))
+    (defun fmt-sensors (ml)
+      (declare (ignore ml))
+      (let ((now (get-universal-time)))
+        (when (< now next)
+          (return-from fmt-sensors last-value))
+        (setf next (+ now *refresh-time*)))
+      (setf last-value (get-sensors t))))
+
+  (stumpwm:add-screen-mode-line-formatter #\S #'fmt-sensors)
 #+END_SRC
