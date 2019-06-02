@@ -54,7 +54,7 @@ org-mode, literate programming and how I manage configuration files and such.
 *N.B.* My more complex utilities are in my fork of [[https://github.com/tslight/stumpwm-contrib][stumpwm-contrib]]:
 
 - [[https://github.com/tslight/stumpwm-contrib/tree/master/util/cycle-mru][cycle-mru]] gives me back glorious alt-tab behaviour.
-- [[https://github.com/tslight/stumpwm-contrib/tree/master/modeline/sensors][sensors]] allows me see just how hot my crotch is getting...
+- [[https://github.com/tslight/stumpwm-contrib/tree/master/modeline/sensors][sensors]] allows me to see just how hot my crotch is getting...
 
 ** INSPIRATIONS
 
