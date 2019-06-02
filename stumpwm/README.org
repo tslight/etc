@@ -38,8 +38,8 @@ Install stumpwm and some packages we need for niceties.
   (ql:quickload :quicklisp-slime-helper) ;; Required by slime-connect
 #+END_SRC
 
-Next, clone the [[https://github.com/tslight/stumpwm-contrib][stumpwm-contrib]] repository to ~$HOME/src~, to be able use
-ttf-fonts, cycle-mru, sensors and stumptray.
+Next, clone my fork of the [[https://github.com/tslight/stumpwm-contrib][stumpwm-contrib]] repository to ~$HOME/src~, to be able
+use ttf-fonts, cycle-mru, sensors and stumptray.
 
 Finally, we need to tangle the code in the files linked to below:
 
