@@ -39,7 +39,7 @@ Install stumpwm and some packages we need for niceties.
 #+END_SRC
 
 Next, clone the [[https://github.com/tslight/stumpwm-contrib][stumpwm-contrib]] repository to ~$HOME/src~, to be able use
-ttf-fonts, cycle-mru and stumptray.
+ttf-fonts, cycle-mru, sensors and stumptray.
 
 Finally, we need to tangle the code in the files linked to below:
 
@@ -50,6 +50,11 @@ Finally, we need to tangle the code in the files linked to below:
 
 Please see the main [[file:../README.org][etc repo README]] for more details on Emacs tangling,
 org-mode, literate programming and how I manage configuration files and such.
+
+*N.B.* My more complex utilities are in my fork of [[https://github.com/tslight/stumpwm-contrib][stumpwm-contrib]]:
+
+- [[https://github.com/tslight/stumpwm-contrib/tree/master/util/cycle-mru][cycle-mru]] gives me back glorious alt-tab behaviour.
+- [[https://github.com/tslight/stumpwm-contrib/tree/master/modeline/sensors][sensors]] allows me see just how hot my crotch is getting...
 
 ** INSPIRATIONS
 
