@@ -12,7 +12,7 @@ look no further.
 
 ** PRE-REQUISITES
 
-Get Quicklisp from [[https://www.quicklisp.org/beta/][here,]] and then load into the REPL with:
+Get Quicklisp from [[https://www.quicklisp.org/beta/][here,]] and then load it into the REPL with:
 
 ~$ sbcl --load quicklisp.lisp~
 
