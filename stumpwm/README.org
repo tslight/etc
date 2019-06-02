@@ -1,5 +1,9 @@
 * HACKS AND GLORY AWAIT!
 
+#+CAPTION: Screenshot
+#+NAME:fig:screenshot
+     [[./img/scrot.png]]
+
 #+BEGIN_QUOTE
 Stumpwm is a "everything-and-the-kitchen-sink WM" or "the emacs of WMs."
 
