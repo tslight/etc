@@ -10,8 +10,11 @@
 
 * PREFIX KEY
 
+Decided to stick with the default as having C-i for stump nad C-j for tmux is
+too confusing for my hands!
+
 #+BEGIN_SRC common-lisp
-  (set-prefix-key (kbd "C-i"))
+  ;; (set-prefix-key (kbd "C-i"))
 #+END_SRC
 
 * EMACS MAP
@@ -31,7 +34,7 @@
 
 #+BEGIN_SRC common-lisp
   (defvar *my-term-map* (make-sparse-keymap))
-  (define-key *my-term-map* (kbd "C-t") "exec x-terminal-emulator -e tmux attach")
+  (define-key *my-term-map* (kbd "C-c") "exec x-terminal-emulator -e tmux attach")
   (define-key *my-term-map* (kbd "s") "prompt exec x-terminal-emulator -e ssh ")
   (define-key *my-term-map* (kbd "r") "prompt exec x-terminal-emulator -e ")
 #+END_SRC
@@ -81,15 +84,15 @@
   (define-key *top-map* (kbd "s-o") "only")
   (define-key *top-map* (kbd "C-F11") "fullscreen")
   (define-key *top-map* (kbd "s-SPC") "exec rofi -show drun")
-  (define-key *top-map* (kbd "s-r") "exec")
+  (define-key *top-map* (kbd "s-r") "exec rofi -show drun")
   (define-key *top-map* (kbd "s-m") "mode-line")
   (define-key *top-map* (kbd "s-e") "emacs")
   (define-key *top-map* (kbd "C-s-e") *my-emacs-map*)
-  (define-key *top-map* (kbd "s-t") "terminal")
-  (define-key *top-map* (kbd "C-s-e") *my-term-map*)
-  (define-key *top-map* (kbd "s-c") "speedcrunch")
-  (define-key *top-map* (kbd "s-w") "web-browser")
-  (define-key *top-map* (kbd "C-s-e") *my-web-map*)
+  (define-key *top-map* (kbd "s-c") "terminal")
+  (define-key *top-map* (kbd "C-s-c") *my-term-map*)
+  (define-key *top-map* (kbd "s-b") "web-browser")
+  (define-key *top-map* (kbd "s-w") "exec rofi -show window")
+  (define-key *top-map* (kbd "C-s-w") "windowlist")
   (define-key *top-map* (kbd "C-s-s") *my-screen-map*)
   (define-key *top-map* (kbd "C-s-r") "reinit")
   (define-key *top-map* (kbd "C-s-l") "exec slock")
@@ -101,30 +104,25 @@
 
 #+BEGIN_SRC common-lisp
   (define-key *root-map* (kbd "e") "emacs")
-  (define-key *root-map* (kbd "t") "terminal")
-  (define-key *root-map* (kbd "c") "speedcrunch")
-  (define-key *root-map* (kbd "C-c") "stump-encouragement")
-  (define-key *root-map* (kbd "T") "exec x-terminal-emulator -e tmux")
-  (define-key *root-map* (kbd "w") "web-browser")
+  (define-key *root-map* (kbd "c") "terminal")
+  (define-key *root-map* (kbd "b") "web-browser")
   (define-key *root-map* (kbd "Tab") "select")
   (define-key *root-map* (kbd "C-o") "fother")
-  (define-key *root-map* (kbd "M-i") "other-in-frame")
   (define-key *root-map* (kbd "u") "remove")
   (define-key *root-map* (kbd "q") "only")
   (define-key *root-map* (kbd "v") "hsplit")
-  (define-key *root-map* (kbd "space") "exec rofi -show drun")
-  (define-key *root-map* (kbd "C-r") "reload")
-  (define-key *root-map* (kbd "M-r") "loadrc")
-  (define-key *root-map* (kbd "C-M-r") "restart-hard")
-  (define-key *root-map* (kbd "l") "exec rofi -show window")
+  (define-key *root-map* (kbd "C-r") "exec rofi -show drun")
+  (define-key *root-map* (kbd "M-r") "reinit")
+  (define-key *root-map* (kbd "C-w") "windowlist")
+  (define-key *root-map* (kbd "w") "exec rofi -show window")
   (define-key *root-map* (kbd "C-l") "exec slock")
-  (define-key *root-map* (kbd "C-q") "quit")
+  (define-key *root-map* (kbd "M-q") "quit")
   (define-key *root-map* (kbd "m") "mode-line")
   (define-key *root-map* (kbd "S") "swank")
   (define-key *root-map* (kbd "M-s") "sensors")
   (define-key *root-map* (kbd "C-e") '*my-emacs-map*)
-  (define-key *root-map* (kbd "C-t") '*my-term-map*)
-  (define-key *root-map* (kbd "C-w") '*my-web-map*)
+  (define-key *root-map* (kbd "C-c") '*my-term-map*)
+  (define-key *root-map* (kbd "C-b") '*my-web-map*)
   (define-key *root-map* (kbd "C-s") '*my-screen-map*)
 #+END_SRC
 
