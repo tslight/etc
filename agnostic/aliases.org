@@ -94,12 +94,12 @@
   alias j='jobs -l'
   alias lc='grep -cv "^$"' # line count ignoring empty lines
   alias lg='lazygit'
-  alias lgscp='lazygit scp | column' # add, commit, push
+  alias lgscp='lazygit scp' # add, commit, push
   alias lgb='lazygit backup'
   alias lgc='lazygit clone tslight'
   alias lgs='lazygit "status -s" | column'
   alias lgf='lazygit fetch'
-  alias lgp='lazygit pull | column'
+  alias lgp='lazygit pull'
   alias lgr='lazygit "remote -v"'
   alias lgua='lazygit urls add'
   alias lgur='lazygit urls rm'
