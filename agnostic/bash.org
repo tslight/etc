@@ -5,6 +5,8 @@
 #+PROPERTY: header-args+ :tangle-mode (identity #o600)
 * BASH PROFILE
 #+BEGIN_SRC sh :tangle ~/.bash_profile
+  [ -f ~/.profile ] && source ~/.profile
+
   export BLOCK_SIZE=human-readable
   export EDITOR="emacsclient -c -nw"
   export ALTERNATE_EDITOR=""
@@ -14,14 +16,13 @@
   export HISTIGNORE="h:history:[bf]g:exit:^ll$:^lla$:^ls$"
   export HISTSIZE=42000
   export PAGER="/usr/bin/less"
-  export PATH=$PATH:$HOME/.local/bin:$HOME/bin
+  export PATH=$PATH:$HOME/.local/bin:$HOME/.local/bin/azfuncli:$HOME/bin
 
   # https://wiki.archlinux.org/index.php/SSH_keys#Keychain
   # command -v keychain &>/dev/null && eval $(keychain --eval --quiet id_rsa)
 
   umask 022
 
-  [ -f ~/.profile ] && source ~/.profile
   [ -f ~/.bashrc ] && source ~/.bashrc
 #+END_SRC
 * BASH LOGOUT
