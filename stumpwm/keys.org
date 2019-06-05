@@ -79,6 +79,16 @@ too confusing for my hands!
   (define-key *top-map* (kbd "C-F4") "delete")
   (define-key *top-map* (kbd "M-F4") "kill")
   (define-key *top-map* (kbd "s-q") "delete")
+  (define-key *top-map* (kbd "s-j") "next")
+  (define-key *top-map* (kbd "s-k") "prev")
+  (define-key *top-map* (kbd "C-s-j") "move-window down")
+  (define-key *top-map* (kbd "C-s-k") "move-window up")
+  (define-key *top-map* (kbd "C-s-h") "move-window left")
+  (define-key *top-map* (kbd "C-s-l") "move-window right")
+  (define-key *top-map* (kbd "s-n") "gnext")
+  (define-key *top-map* (kbd "s-p") "gprev")
+  (define-key *top-map* (kbd "C-s-n") "gnext-with-window")
+  (define-key *top-map* (kbd "C-s-p") "gprev-with-window")
   (define-key *top-map* (kbd "C-F11") "fullscreen")
   ;; applications
   (define-key *top-map* (kbd "s-e") "emacs")
@@ -103,7 +113,7 @@ too confusing for my hands!
   ;; misc
   (define-key *top-map* (kbd "s-m") "mode-line")
   (define-key *top-map* (kbd "C-s-r") "reinit")
-  (define-key *top-map* (kbd "C-s-l") "exec slock")
+  (define-key *top-map* (kbd "C-s-XF86Eject") "exec slock")
   (define-key *top-map* (kbd "C-s-Delete") "exec slock")
   (define-key *top-map* (kbd "C-s-q") "quit")
 #+END_SRC
