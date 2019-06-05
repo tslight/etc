@@ -47,34 +47,6 @@ Strings lifted from [[https://github.com/kovisoft/slimv/blob/master/slime/slime.
     (message "~a" (random-encouragement)))
 #+END_SRC
 
-* SWANK
-
-Connect to StumpWM with Emacs' Slime mode
-
-https://kaashif.co.uk/2015/06/28/hacking-stumpwm-with-common-lisp/
-
-#+BEGIN_SRC common-lisp
-  (require :swank)
-  (swank-loader:init)
-  (defcommand swank () ()
-    "creates a swank server in the stumpwm lisp process"
-    (setf stumpwm:*top-level-error-action* :break)
-    (swank:create-server :port 4004
-                         :style swank:*communication-style*
-                         :dont-close t)
-    (message (concat "^B^5Getting swanky...~%^n" (random-encouragement))))
-#+END_SRC
-
-* REINIT
-
-Reload StumpWM and then re-load config.
-
-#+BEGIN_SRC common-lisp
-  (defcommand reinit () ()
-    "reload stumpwm and config."
-    (run-commands "reload" "loadrc"))
-#+END_SRC
-
 * PROMPT
 
 Taken from the example rc file.
@@ -91,23 +63,15 @@ optional initial contents.
         (eval-command cmd t))))
 #+END_SRC
 
-* WEB JUMP
+* REINIT
 
-Stolen from the default rc file.
+Reload StumpWM and then re-load config.
 
 #+BEGIN_SRC common-lisp
-  (defmacro my/web-jump (name prefix)
-    `(defcommand ,(intern name) (search)
-         ((:rest ,(concatenate 'string name ": ")))
-       (substitute #\+ #\Space search)
-       (run-shell-command (concatenate 'string ,prefix search))))
-
-  (my/web-jump "google" "x-www-browser http://www.google.co.uk/search?q=")
-  (my/web-jump "imdb" "x-www-browser http://www.imdb.com/find?q=")
-  (my/web-jump "wikipedia" "x-www-browser http://en.wikipedia.org/wiki/")
-  (my/web-jump "youtube" "x-www-browser http://youtube.com/results?search_query=")
+  (defcommand reinit () ()
+    "reload stumpwm and config."
+    (run-commands "reload" "loadrc"))
 #+END_SRC
-
 * RUN OR RAISE
 
 #+BEGIN_SRC common-lisp
@@ -122,6 +86,24 @@ Stolen from the default rc file.
   (defcommand web-browser () ()
     "run-or-raise a web browser"
     (run-or-raise "firefox-esr" '(:class "Firefox-esr")))
+#+END_SRC
+
+* SWANK
+
+Connect to StumpWM with Emacs' Slime mode
+
+https://kaashif.co.uk/2015/06/28/hacking-stumpwm-with-common-lisp/
+
+#+BEGIN_SRC common-lisp
+  (require :swank)
+  (swank-loader:init)
+  (defcommand swank () ()
+    "creates a swank server in the stumpwm lisp process"
+    (setf stumpwm:*top-level-error-action* :break)
+    (swank:create-server :port 4004
+                         :style swank:*communication-style*
+                         :dont-close t)
+    (message (concat "^B^5Getting swanky...~%^n" (random-encouragement))))
 #+END_SRC
 
 * VOLUME
@@ -147,4 +129,20 @@ it in lisp :-)
            (volume (nth 0 output))
            (status (string-upcase (nth 1 output))))
       (message "^B^5VOLUME: ^n~a~%^5STATUS: ^n~a" volume status)))
+#+END_SRC
+* WEB JUMP
+
+Stolen from the default rc file.
+
+#+BEGIN_SRC common-lisp
+  (defmacro my/web-jump (name prefix)
+    `(defcommand ,(intern name) (search)
+         ((:rest ,(concatenate 'string name ": ")))
+       (substitute #\+ #\Space search)
+       (run-shell-command (concatenate 'string ,prefix search))))
+
+  (my/web-jump "google" "x-www-browser http://www.google.co.uk/search?q=")
+  (my/web-jump "imdb" "x-www-browser http://www.imdb.com/find?q=")
+  (my/web-jump "wikipedia" "x-www-browser http://en.wikipedia.org/wiki/")
+  (my/web-jump "youtube" "x-www-browser http://youtube.com/results?search_query=")
 #+END_SRC
