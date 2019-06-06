@@ -143,7 +143,7 @@ Stolen from the default rc file.
     `(defcommand ,(intern name) (search)
          ((:rest ,(concatenate 'string name ": ")))
        (substitute #\+ #\Space search)
-       (run-shell-command (concatenate 'string ,prefix search))))
+       (run-shell-command (concatenate 'string ,prefix "\"" search "\""))))
 
   (my/web-jump "google" "x-www-browser http://www.google.co.uk/search?q=")
   (my/web-jump "imdb" "x-www-browser http://www.imdb.com/find?q=")
