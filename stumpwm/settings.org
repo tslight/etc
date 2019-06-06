@@ -54,14 +54,14 @@
 
 #+BEGIN_SRC common-lisp
   (load-module "stumptray")
-  ;; (load-module "sensors")
+  (load-module "sensors")
   ;; (setf *mode-line-position* :top)
   ;; (setf *mode-line-timeout* 2)
   (mode-line)
   (setf *window-format* " [%n] [%s] [%m] %c ")
   (setf *time-modeline-string* "^3*%H:%M^7*%d/%m")
   (setf *screen-mode-line-format*
-        (list "^B%d ^2*[%n]^n ^7*%v^n"))
+        (list "^B%d %S ^2*[%n]^n ^7*%v^n"))
   (stumptray::add-mode-line-hooks)
   (run-commands "stumptray")
 #+END_SRC
