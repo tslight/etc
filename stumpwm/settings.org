@@ -52,18 +52,26 @@
 
 * MODELINE
 
-#+BEGIN_SRC common-lisp
+Not tangling stumptray block as it's too buggy for me at the mo :-(
+
+Placeholder variable is not honoured and it disappears on ~loadrc~
+
+#+BEGIN_SRC common-lisp :tangle no
   (load-module "stumptray")
+  (stumptray:add-mode-line-hooks)
+  (setf stumptray:*tray-placeholder-pixels-per-space* 22)
+#+END_SRC
+
+#+BEGIN_SRC common-lisp
   (load-module "sensors")
-  ;; (setf *mode-line-position* :top)
-  ;; (setf *mode-line-timeout* 2)
-  (mode-line)
+  (load-module "battery-portable")
+  (setf *mode-line-pad-x* 0)
+  (setf *mode-line-pad-y* 0)
+  (setf *mode-line-border-width* 0)
   (setf *window-format* " [%n] [%s] [%m] %c ")
   (setf *time-modeline-string* "^3*%H:%M^7*%d/%m")
   (setf *screen-mode-line-format*
-        (list "^B%d %S ^2*[%n]^n ^7*%v^n"))
-  (stumptray::add-mode-line-hooks)
-  (run-commands "stumptray")
+        (list "^B%d ^2*[%n]^n ^7*%v ^>^B%B %S"))
 #+END_SRC
 
 * GROUPS

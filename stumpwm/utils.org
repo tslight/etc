@@ -13,6 +13,12 @@ My more complex utilities are in my fork of [[https://github.com/tslight/stumpwm
 - [[https://github.com/tslight/stumpwm-contrib/tree/master/util/cycle-mru][cycle-mru]] gives me back glorious alt-tab behaviour.
 - [[https://github.com/tslight/stumpwm-contrib/tree/master/modeline/sensors][sensors]] allows me see just how hot my crotch is getting...
 
+* BATTERY
+
+#+BEGIN_SRC common-lisp
+
+#+END_SRC
+
 * ENCOURAGEMENT
 
 /Scientifically-proven optimal words of hackerish encouragement./
