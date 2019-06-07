@@ -47,7 +47,7 @@
   (setf *mouse-focus-policy* :click)
   (setf *frame-number-map* "asdfghjkl")
   (setq *ignore-wm-inc-hints* t)
-  (setq *window-border-style* :thin)
+  (setq *window-border-style* :none)
 #+END_SRC
 
 * MODELINE
