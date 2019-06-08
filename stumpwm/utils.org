@@ -29,7 +29,7 @@ Use ~%B~ to add to the modeline.
             (t ""))))
 
   (defcommand battery-message () ()
-              (message (battery)))
+    (message (battery)))
 
   ;; pinched from battery portable code
   (let ((next 0)
@@ -94,21 +94,21 @@ Using [[https://github.com/sagb/alttab][alttab]] instead now, so tangling turned
   (setf *focus-window-hook* (list 'mru-focus-window))
 
   (defcommand cycle-mru () ()
-              "Focus next windows according to most recently used order."
-              (cond ((< (- (get-milliseconds) *mru-last-call*) *mru-timeout*)
-                     ;; cycle through windows
-                     (setf *mru-index* (mod (1+ *mru-index*) (list-length *mru-cycle*)))
-                     (select-window-by-number (nth *mru-index* *mru-cycle*)))
-                    ;; else start anew
-                    ((setf *mru-index* 1) (setf *mru-cycle* (copy-list *mru-list*))
-                     ;; if we've focussed a frame without window, current-window will
-                     ;; return nil => select last used
-                     (cond ((not (current-window))
-                            (select-window-by-number (first *mru-cycle*)))
-                           ((push (window-number (current-window)) *mru-cycle*)
-                            (select-window-by-number (second *mru-cycle*))))))
-              ;; update timestamp
-              (setf *mru-last-call* (get-milliseconds)))
+    "Focus next windows according to most recently used order."
+    (cond ((< (- (get-milliseconds) *mru-last-call*) *mru-timeout*)
+           ;; cycle through windows
+           (setf *mru-index* (mod (1+ *mru-index*) (list-length *mru-cycle*)))
+           (select-window-by-number (nth *mru-index* *mru-cycle*)))
+          ;; else start anew
+          ((setf *mru-index* 1) (setf *mru-cycle* (copy-list *mru-list*))
+           ;; if we've focussed a frame without window, current-window will
+           ;; return nil => select last used
+           (cond ((not (current-window))
+                  (select-window-by-number (first *mru-cycle*)))
+                 ((push (window-number (current-window)) *mru-cycle*)
+                  (select-window-by-number (second *mru-cycle*))))))
+    ;; update timestamp
+    (setf *mru-last-call* (get-milliseconds)))
 #+END_SRC
 
 * ENCOURAGEMENT
@@ -128,7 +128,7 @@ Strings lifted from [[https://github.com/kovisoft/slimv/blob/master/slime/slime.
       "May the source be with you!"
       "Take this REPL, brother, and may it serve you well."
       "Lemonodor-fame is but a hack away!"
-      (format t "~a, this could be the start of a beautiful program."
+      (format nil "~a, this could be the start of a beautiful program."
        (string-capitalize (getenv "USER")))
       "Scientifically-proven optimal words of hackerish encouragement."))
 
@@ -141,8 +141,8 @@ Strings lifted from [[https://github.com/kovisoft/slimv/blob/master/slime/slime.
     (my/random-elt words-of-encouragement))
 
   (defcommand stump-encouragement () ()
-              "Print a random string of hackerish encouragement."
-              (message "~a" (random-encouragement)))
+    "Print a random string of hackerish encouragement."
+    (message "~a" (random-encouragement)))
 #+END_SRC
 
 * PROMPT
@@ -154,11 +154,11 @@ optional initial contents.
 
 #+BEGIN_SRC common-lisp
   (defcommand prompt (&optional (initial "")) (:rest)
-              "prompt the user for an interactive command. The first arg is an optional
-               initial contents."
-              (let ((cmd (read-one-line (current-screen) ": " :initial-input initial)))
-                (when cmd
-                  (eval-command cmd t))))
+    "prompt the user for an interactive command. The first arg is an optional
+     initial contents."
+    (let ((cmd (read-one-line (current-screen) ": " :initial-input initial)))
+      (when cmd
+        (eval-command cmd t))))
 #+END_SRC
 
 * REINIT
@@ -167,28 +167,28 @@ Reload StumpWM and then re-load config.
 
 #+BEGIN_SRC common-lisp
   (defcommand reinit () ()
-              "reload stumpwm and config."
-              (run-commands "reload" "loadrc"))
+    "reload stumpwm and config."
+    (run-commands "reload" "loadrc"))
 #+END_SRC
 
 * RUN OR RAISE
 
 #+BEGIN_SRC common-lisp
   (defcommand emacs () ()
-              "run-or-raise emacs"
-              (run-or-raise "emacsclient -ca emacs" '(:class "Emacs")))
+    "run-or-raise emacs"
+    (run-or-raise "emacsclient -ca emacs" '(:class "Emacs")))
 
   (defcommand terminal () ()
-              "run-or-raise a terminal"
-              (run-or-raise "xfce4-terminal" '(:class "Xfce4-terminal")))
+    "run-or-raise a terminal"
+    (run-or-raise "xfce4-terminal" '(:class "Xfce4-terminal")))
 
   (defcommand web-browser () ()
-              "run-or-raise a web browser"
-              (run-or-raise "firefox-esr" '(:class "Firefox-esr")))
+    "run-or-raise a web browser"
+    (run-or-raise "firefox-esr" '(:class "Firefox-esr")))
 
   (defcommand file-manager () ()
-              "run-or-raise a graphical file manager"
-              (run-or-raise "thunar" '(:class "Thunar")))
+    "run-or-raise a graphical file manager"
+    (run-or-raise "thunar" '(:class "Thunar")))
 #+END_SRC
 
 * SENSORS
@@ -284,7 +284,7 @@ Finally concatenate those strings into one line.
        (if avg-rpm (concat " " avg-rpm " RPM^n")))))
 
   (defcommand sensors-message () ()
-              (message (sensors)))
+    (message (sensors)))
 
   ;; pinched from battery portable code
   (let ((next 0)
@@ -310,12 +310,12 @@ https://kaashif.co.uk/2015/06/28/hacking-stumpwm-with-common-lisp/
   (require :swank)
   (swank-loader:init)
   (defcommand swank () ()
-              "creates a swank server in the stumpwm lisp process"
-              (setf stumpwm:*top-level-error-action* :break)
-              (swank:create-server :port 4004
-                                   :style swank:*communication-style*
-                                   :dont-close t)
-              (message (concat "^B^5Getting swanky...~%^n" (random-encouragement))))
+    "creates a swank server in the stumpwm lisp process"
+    (setf stumpwm:*top-level-error-action* :break)
+    (swank:create-server :port 4004
+                         :style swank:*communication-style*
+                         :dont-close t)
+    (message (concat "^B^5Getting swanky...~%^n" (random-encouragement))))
 #+END_SRC
 
 * VOLUME
@@ -334,8 +334,8 @@ it in lisp :-)
       (split-string out "] [")))
 
   (defcommand volume (device action)
-    ((:string "Enter Device: ")
-     (:string "Enter Action: "))
+      ((:string "Enter Device: ")
+       (:string "Enter Action: "))
     "Wrap volume commands and print a message containing current volume."
     (let* ((output (get-volume device action))
            (volume (nth 0 output))
@@ -350,7 +350,7 @@ Stolen from the default rc file.
 #+BEGIN_SRC common-lisp
   (defmacro my/web-jump (name prefix)
     `(defcommand ,(intern name) (search)
-       ((:rest ,(concatenate 'string name ": ")))
+         ((:rest ,(concatenate 'string name ": ")))
        (substitute #\+ #\Space search)
        (run-shell-command (concatenate 'string ,prefix "\"" search "\""))))
 
