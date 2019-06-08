@@ -121,16 +121,16 @@ Strings lifted from [[https://github.com/kovisoft/slimv/blob/master/slime/slime.
 
 #+BEGIN_SRC common-lisp
   (defvar words-of-encouragement
-    '("Let the hacking commence!"
-      "Hacks and glory await!"
-      "Hack and be merry!"
-      "Your hacking starts... NOW!"
-      "May the source be with you!"
-      "Take this REPL, brother, and may it serve you well."
-      "Lemonodor-fame is but a hack away!"
-      (format nil "~a, this could be the start of a beautiful program."
-       (string-capitalize (getenv "USER")))
-      "Scientifically-proven optimal words of hackerish encouragement."))
+    (list "Let the hacking commence!"
+          "Hacks and glory await!"
+          "Hack and be merry!"
+          "Your hacking starts... NOW!"
+          "May the source be with you!"
+          "Take this REPL, brother, and may it serve you well."
+          "Lemonodor-fame is but a hack away!"
+          (concat (string-capitalize (getenv "USER"))
+                  ", this could be the start of a beautiful program..")
+          "Scientifically-proven optimal words of hackerish encouragement."))
 
   (defun my/random-elt (list)
     "Return a random element from a list."

@@ -68,7 +68,7 @@ Placeholder variable is not honoured and it disappears on ~loadrc~
   (setf *window-format* " [%n] [%s] [%m] %c ")
   (setf *time-modeline-string* "^3*%H:%M^7*%d/%m")
   (setf *screen-mode-line-format*
-        (list "^B%d ^2*[%n]^n ^7*%v ^>^B%B %S"))
+        (list "^B^2*[%n]^n ^7*%v ^>^B%B %S %d"))
 #+END_SRC
 
 * GROUPS
