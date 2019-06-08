@@ -5,8 +5,8 @@
 #+PROPERTY: header-args+ :padline no
 #+BEGIN_SRC conf :tangle ~/.cwmrc
   # MISC
-  borderwidth 2
-  gap 4 4 0 0
+  borderwidth 1
+  gap 0 0 36 0
   sticky yes
   snapdist
   moveamount 2
@@ -41,8 +41,8 @@
   bind-key 4C-Return 'tabbed -c xterm -into'
   bind-key 4-t 'xterm -e tmux'
   bind-key 4C-t 'xterm -e tmux attach'
-  bind-key 4-e 'xterm -e emacsclient -nw -c -a ""'
-  bind-key 4C-e 'xterm -e emacs -nw'
+  bind-key 4-e 'emacsclient -c -a ""'
+  bind-key 4C-e 'emacs'
   bind-key 4-w chrome
   bind-key 4C-w firefox
   bind-key 4-p maim
@@ -59,8 +59,8 @@
   bind-key 4-a menu-window
   bind-key 4C-a menu-window-hidden
 
-  bind-key M-Tab group-cycle
-  bind-key MS-Tab group-rcycle
+  # bind-key M-Tab group-cycle
+  # bind-key MS-Tab group-rcycle
 
   bind-key 4-1 group-only-1
   bind-key 4-2 group-only-2
@@ -95,10 +95,10 @@
   bind-key 4-0 group-toggle-all
   bind-key 4C-0 window-group
 
-  bind-key C-Tab window-cycle
-  bind-key CS-Tab window-rcycle
-  bind-key 4-Tab window-cycle-ingroup
-  bind-key 4C-Tab window-rcycle-ingroup
+  # bind-key C-Tab window-cycle
+  # bind-key CS-Tab window-rcycle
+  # bind-key 4-Tab window-cycle-ingroup
+  # bind-key 4C-Tab window-rcycle-ingroup
 
   bind-key C-F4 window-delete
   bind-key C-q window-delete
@@ -140,8 +140,8 @@
   # MENU
   command 'chrome'       'chrome'
   command 'firefox'      'firefox'
-  command 'emacs'        'xterm -e emacs -nw'
-  command 'emacsclient'  'xterm -e emacsclient -nw -c -a ""'
+  command 'emacs'        'emacs'
+  command 'emacsclient'  'emacsclient -c -a ""'
   command 'xterm'        'xterm'
   command 'xterm tabbed' 'tabbed -c xterm -into'
   command 'tmux'         'xterm -e tmux'
