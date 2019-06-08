@@ -12,6 +12,8 @@
 
 You need to install ~acpi~ for this to work.
 
+Use ~%B~ to add to the modeline.
+
 #+BEGIN_SRC common-lisp
   (defvar *battery-refresh-time* 30
     "Time in seconds between updates of battery information.")
@@ -24,7 +26,7 @@ You need to install ~acpi~ for this to work.
             ((and (> 75 int) (<= 50 int)) (concat "^2*" bat))
             ((and (> 50 int) (<= 25 int)) (concat "^3*" bat))
             ((and (> 25 int)) (concat "^1*" bat))
-            (t nil))))
+            (t ""))))
 
   (defcommand battery-message () ()
               (message (battery)))
@@ -44,6 +46,16 @@ You need to install ~acpi~ for this to work.
 #+END_SRC
 
 * CYCLE MRU
+
+Flip through a group's windows, in a fashion similar to Window's Alt-Tab or
+macOS' Command-Tab. A.K.A. Most Recently Used order.
+
+This code was lifted from [[http://nongnu.13855.n7.nabble.com/Alt-Tab-td127943.html][this thread]] on the stumpwm-devel mailing list from way
+back in 2012.
+
+I have made some minor aesthetic and semantic changes to it (ie - changing the
+name from alt-tab to cycle-mru), but full credit goes to Ruthard Baudach for the
+code.
 
 Using [[https://github.com/sagb/alttab][alttab]] instead now, so tangling turned off.
 
@@ -143,7 +155,7 @@ optional initial contents.
 #+BEGIN_SRC common-lisp
   (defcommand prompt (&optional (initial "")) (:rest)
               "prompt the user for an interactive command. The first arg is an optional
-     initial contents."
+               initial contents."
               (let ((cmd (read-one-line (current-screen) ": " :initial-input initial)))
                 (when cmd
                   (eval-command cmd t))))
@@ -180,6 +192,17 @@ Reload StumpWM and then re-load config.
 #+END_SRC
 
 * SENSORS
+
+View the average temperature and fan RPM from the ~sensors~ command on Linux, in
+the modeline. Use ~%S~ to view sensors info in the modeline.
+
+Transforms the output of the sensors command into two lists of integers. One for
+temperatures and one for fan speeds.
+
+Calculate the average values of the lists (and the maximum for temperatures),
+then cast those values back to strings with appropriate color formatting.
+
+Finally concatenate those strings into one line.
 
 #+BEGIN_SRC common-lisp
   (defvar *sensors-refresh-time* 30
@@ -275,7 +298,6 @@ Reload StumpWM and then re-load config.
       (setf last-value (sensors))))
 
   (add-screen-mode-line-formatter #\S #'get-sensors)
-
 #+END_SRC
 
 * SWANK
