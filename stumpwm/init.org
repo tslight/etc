@@ -62,6 +62,7 @@ After loading all our lisp, run some shell programs to make things more comfy.
   (run-shell-command "xsetroot -cursor_name left_ptr")
   (run-shell-command "xfsettingsd")
   (run-shell-command "xsetroot -solid grey9")
+  (run-shell-command "alttab -mk Alt_R")
   (run-shell-command "nm-applet")
   (run-shell-command "xfce4-power-manager")
   (run-shell-command "xfce4-clipman")

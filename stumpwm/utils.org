@@ -8,11 +8,6 @@
 #+PROPERTY: header-args+ :tangle ~/.stumpwm.d/utils.lisp
 #+PROPERTY: header-args+ :tangle-mode (identity #o644)
 
-My more complex utilities are in my fork of [[https://github.com/tslight/stumpwm-contrib][stumpwm-contrib]]:
-
-- [[https://github.com/tslight/stumpwm-contrib/tree/master/util/cycle-mru][cycle-mru]] gives me back glorious alt-tab behaviour.
-- [[https://github.com/tslight/stumpwm-contrib/tree/master/modeline/sensors][sensors]] allows me see just how hot my crotch is getting...
-
 * BATTERY
 
 You need to install ~acpi~ for this to work.
@@ -46,6 +41,62 @@ You need to install ~acpi~ for this to work.
       (setf last-value (battery))))
 
   (add-screen-mode-line-formatter #\B #'get-battery)
+#+END_SRC
+
+* CYCLE MRU
+
+Using [[https://github.com/sagb/alttab][alttab]] instead now, so tangling turned off.
+
+#+BEGIN_SRC common-lisp :tangle no
+  (defun get-milliseconds () ()
+         "Get timestamp in milliseconds."
+         (floor
+          (* 1000
+             (/ (get-internal-real-time)
+                internal-time-units-per-second))))
+
+  (defvar *mru-last-call* (get-milliseconds))
+  (defvar *mru-list* (make-list 0))
+  (defvar *mru-cycle* (make-list 0))
+  (defvar *mru-timeout* 500) ; in milliseconds
+  (defvar *mru-index* 0)     ; in milliseconds
+
+  (defun mru-new-window (win) ()
+         "Function called by new-window-hook. Updates mru-list."
+         (push (window-number win) *mru-list*))
+
+  (defun mru-destroy-window (win) ()
+         "Function called by destroy-window-hook. Deletes window number from
+          mru-list."
+         (setf *mru-list* (delete (window-number win) *mru-list*)))
+
+  (defun mru-focus-window (new-win old-win) ()
+         "Function called by focus-window-hook. Updates mru-list."
+         (when new-win
+           (setf *mru-list* (delete (window-number new-win) *mru-list*)))
+         (when old-win
+           (push (window-number old-win) *mru-list*)))
+
+  (setf *new-window-hook* (list 'mru-new-window))
+  (setf *destroy-window-hook* (list 'mru-destroy-window))
+  (setf *focus-window-hook* (list 'mru-focus-window))
+
+  (defcommand cycle-mru () ()
+              "Focus next windows according to most recently used order."
+              (cond ((< (- (get-milliseconds) *mru-last-call*) *mru-timeout*)
+                     ;; cycle through windows
+                     (setf *mru-index* (mod (1+ *mru-index*) (list-length *mru-cycle*)))
+                     (select-window-by-number (nth *mru-index* *mru-cycle*)))
+                    ;; else start anew
+                    ((setf *mru-index* 1) (setf *mru-cycle* (copy-list *mru-list*))
+                     ;; if we've focussed a frame without window, current-window will
+                     ;; return nil => select last used
+                     (cond ((not (current-window))
+                            (select-window-by-number (first *mru-cycle*)))
+                           ((push (window-number (current-window)) *mru-cycle*)
+                            (select-window-by-number (second *mru-cycle*))))))
+              ;; update timestamp
+              (setf *mru-last-call* (get-milliseconds)))
 #+END_SRC
 
 * ENCOURAGEMENT
@@ -126,6 +177,105 @@ Reload StumpWM and then re-load config.
   (defcommand file-manager () ()
               "run-or-raise a graphical file manager"
               (run-or-raise "thunar" '(:class "Thunar")))
+#+END_SRC
+
+* SENSORS
+
+#+BEGIN_SRC common-lisp
+  (defvar *sensors-refresh-time* 30
+    "Time in seconds between updates of sensors information.")
+
+  (defvar *red-above-temp* 60
+    "Temperature to turn red at.")
+
+  (defvar *yellow-above-temp* 50
+    "Temperature to turn yellow at.")
+
+  (defvar *display-above-temp* 40
+    "Temperature to start displaying at.")
+
+  (defvar *red-above-rpm* 4000
+    "Fan RPM to turn red at.")
+
+  (defvar *yellow-above-rpm* 3000
+    "Fan RPM to turn yellow at.")
+
+  (defvar *display-above-rpm* 2000
+    "Fan RPM to start displaying at.")
+
+  (defvar *ignore-below* 20
+    "Ignore temperatures below this temperature when calculating average.")
+
+  (defvar *temp-regex* "(?<=\\+).*[0-9]+(?=\\..*)"
+    "A regex that captures all temperatures.")
+
+  (defvar *fan-regex* "(?<=\\:).*?(?=RPM)"
+    "A regex that captures all fans.")
+
+  (defun sensors-as-ints (output regex)
+    "Use REGEX to extract sensor values from OUTPUT, and then cast them to a list
+     of integers if they are greater than *IGNORE-BELOW*."
+    (let ((strings (ppcre:all-matches-as-strings regex output)))
+      (mapcan ;; https://stackoverflow.com/a/13269952
+       (lambda (s)
+         (let ((i (parse-integer (remove-if #'alpha-char-p s) :junk-allowed t)))
+           ;; low readings can skew the average too much
+           (if (< *ignore-below* i)
+               (list i))))
+       strings)))
+
+  (defun fmt-sensor (value &optional
+                             (high *red-above-temp*)
+                             (mid *yellow-above-temp*)
+                             (low *display-above-temp*))
+    "If VALUE is greater than HIGH, MID or LOW, return it as a red, yellow or
+     normal coloured string, respectively. If value is lower than LOW, don't
+     return anything."
+    (cond ((< high value) (concat "^1*" (write-to-string value)))
+          ((< mid value) (concat "^3*" (write-to-string value)))
+          ((< low value) (write-to-string value))
+          (t nil)))
+
+  (defun sensors ()
+    "Transforms the output of the sensors command into two lists of integers. One
+     for temperatures and one for fan speeds. Calculate the average values of the
+     lists (and the maximum for temperatures), then cast those values back to
+     strings with appropriate color formatting. Finally concatenate those strings
+     into one line."
+    (let* ((output (run-shell-command "sensors" t))
+           (temps (sensors-as-ints output *temp-regex*))
+           (fans (sensors-as-ints output *fan-regex*))
+           (max-temp (fmt-sensor (reduce #'max temps)))
+           (avg-temp (fmt-sensor
+                      (handler-case
+                          (floor (apply #'+ temps) (length temps))
+                        (division-by-zero () 0))))
+           (avg-rpm (fmt-sensor
+                     (handler-case
+                         (floor (apply #'+ fans) (length fans))
+                       (division-by-zero () 0))
+                     ,*red-above-rpm* *yellow-above-rpm* *display-above-rpm*)))
+      (concat
+       (if max-temp (concat max-temp (string (code-char 176)) "C^n"))
+       (if avg-temp (concat " " avg-temp (string (code-char 176)) "C^n"))
+       (if avg-rpm (concat " " avg-rpm " RPM^n")))))
+
+  (defcommand sensors-message () ()
+              (message (sensors)))
+
+  ;; pinched from battery portable code
+  (let ((next 0)
+        (last-value ""))
+    (defun get-sensors (ml)
+      (declare (ignore ml))
+      (let ((now (get-universal-time)))
+        (when (< now next)
+          (return-from get-sensors last-value))
+        (setf next (+ now *sensors-refresh-time*)))
+      (setf last-value (sensors))))
+
+  (add-screen-mode-line-formatter #\S #'get-sensors)
+
 #+END_SRC
 
 * SWANK

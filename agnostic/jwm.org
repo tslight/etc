@@ -8,6 +8,7 @@
   <?xml version="1.0"?>
   <JWM>
     <!-- Autostart application -->
+    <StartupCommand>alttab -mk Alt_R &</StartupCommand>
     <StartupCommand>nm-applet</StartupCommand>
     <StartupCommand>xfce4-power-manager</StartupCommand>
     <StartupCommand>xfce4-clipman</StartupCommand>
@@ -191,8 +192,8 @@
     <Key mask="4C" key="space">window</Key>
     <Key mask="A" key="F1">window</Key>
 
-    <Key mask="A" key="Tab">nextstacked</Key>
-    <Key mask="AS" key="Tab">prevstacked</Key>
+    <!-- <Key mask="A" key="Tab">nextstacked</Key> -->
+    <!-- <Key mask="AS" key="Tab">prevstacked</Key> -->
     <Key mask="C" key="F4">close</Key>
     <Key mask="C" key="F10">maximize</Key>
     <Key mask="C" key="F11">fullscreen</Key>

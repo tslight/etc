@@ -62,7 +62,6 @@ Placeholder variable is not honoured and it disappears on ~loadrc~
 #+END_SRC
 
 #+BEGIN_SRC common-lisp
-  (load-module "sensors")
   (setf *mode-line-pad-x* 0)
   (setf *mode-line-pad-y* 0)
   (setf *mode-line-border-width* 0)
