@@ -43,7 +43,6 @@
 
 #+BEGIN_SRC common-lisp
   (setf *shell-program* (getenv "SHELL")) ;; getenv is not exported
-  ;; (setf *timeout-wait* 3)
   (setf *mouse-focus-policy* :click)
   (setf *frame-number-map* "asdfghjkl")
   (setq *ignore-wm-inc-hints* t)
@@ -64,7 +63,6 @@ Placeholder variable is not honoured and it disappears on ~loadrc~
 
 #+BEGIN_SRC common-lisp
   (load-module "sensors")
-  (load-module "battery-portable")
   (setf *mode-line-pad-x* 0)
   (setf *mode-line-pad-y* 0)
   (setf *mode-line-border-width* 0)

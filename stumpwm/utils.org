@@ -16,7 +16,34 @@ My more complex utilities are in my fork of [[https://github.com/tslight/stumpwm
 * BATTERY
 
 #+BEGIN_SRC common-lisp
+  (defvar *battery-refresh-time* 30
+    "Time in seconds between updates of battery information.")
 
+  (defun battery ()
+    (let* ((bat (run-shell-command "acpi" t))
+           (bat (ppcre:scan-to-strings "[0-9]+%" bat))
+           (int (parse-integer bat :junk-allowed t)))
+      (cond ((and (> 95 int) (<= 75 int)) bat)
+            ((and (> 75 int) (<= 50 int)) (concat "^2*" bat))
+            ((and (> 50 int) (<= 25 int)) (concat "^3*" bat))
+            ((and (> 25 int)) (concat "^1*" bat))
+            (t nil))))
+
+  (defcommand battery-message () ()
+              (message (battery)))
+
+  ;; pinched from battery portable code
+  (let ((next 0)
+        (last-value ""))
+    (defun get-battery (ml)
+      (declare (ignore ml))
+      (let ((now (get-universal-time)))
+        (when (< now next)
+          (return-from get-battery last-value))
+        (setf next (+ now *battery-refresh-time*)))
+      (setf last-value (battery))))
+
+  (add-screen-mode-line-formatter #\B #'get-battery)
 #+END_SRC
 
 * ENCOURAGEMENT
@@ -49,8 +76,8 @@ Strings lifted from [[https://github.com/kovisoft/slimv/blob/master/slime/slime.
     (my/random-elt words-of-encouragement))
 
   (defcommand stump-encouragement () ()
-    "Print a random string of hackerish encouragement."
-    (message "~a" (random-encouragement)))
+              "Print a random string of hackerish encouragement."
+              (message "~a" (random-encouragement)))
 #+END_SRC
 
 * PROMPT
@@ -62,11 +89,11 @@ optional initial contents.
 
 #+BEGIN_SRC common-lisp
   (defcommand prompt (&optional (initial "")) (:rest)
-    "prompt the user for an interactive command. The first arg is an optional
+              "prompt the user for an interactive command. The first arg is an optional
      initial contents."
-    (let ((cmd (read-one-line (current-screen) ": " :initial-input initial)))
-      (when cmd
-        (eval-command cmd t))))
+              (let ((cmd (read-one-line (current-screen) ": " :initial-input initial)))
+                (when cmd
+                  (eval-command cmd t))))
 #+END_SRC
 
 * REINIT
@@ -75,28 +102,28 @@ Reload StumpWM and then re-load config.
 
 #+BEGIN_SRC common-lisp
   (defcommand reinit () ()
-    "reload stumpwm and config."
-    (run-commands "reload" "loadrc"))
+              "reload stumpwm and config."
+              (run-commands "reload" "loadrc"))
 #+END_SRC
 
 * RUN OR RAISE
 
 #+BEGIN_SRC common-lisp
   (defcommand emacs () ()
-    "run-or-raise emacs"
-    (run-or-raise "emacsclient -ca emacs" '(:class "Emacs")))
+              "run-or-raise emacs"
+              (run-or-raise "emacsclient -ca emacs" '(:class "Emacs")))
 
   (defcommand terminal () ()
-    "run-or-raise a terminal"
-    (run-or-raise "xfce4-terminal" '(:class "Xfce4-terminal")))
+              "run-or-raise a terminal"
+              (run-or-raise "xfce4-terminal" '(:class "Xfce4-terminal")))
 
   (defcommand web-browser () ()
-    "run-or-raise a web browser"
-    (run-or-raise "firefox-esr" '(:class "Firefox-esr")))
+              "run-or-raise a web browser"
+              (run-or-raise "firefox-esr" '(:class "Firefox-esr")))
 
   (defcommand file-manager () ()
-    "run-or-raise a graphical file manager"
-    (run-or-raise "thunar" '(:class "Thunar")))
+              "run-or-raise a graphical file manager"
+              (run-or-raise "thunar" '(:class "Thunar")))
 #+END_SRC
 
 * SWANK
@@ -109,12 +136,12 @@ https://kaashif.co.uk/2015/06/28/hacking-stumpwm-with-common-lisp/
   (require :swank)
   (swank-loader:init)
   (defcommand swank () ()
-    "creates a swank server in the stumpwm lisp process"
-    (setf stumpwm:*top-level-error-action* :break)
-    (swank:create-server :port 4004
-                         :style swank:*communication-style*
-                         :dont-close t)
-    (message (concat "^B^5Getting swanky...~%^n" (random-encouragement))))
+              "creates a swank server in the stumpwm lisp process"
+              (setf stumpwm:*top-level-error-action* :break)
+              (swank:create-server :port 4004
+                                   :style swank:*communication-style*
+                                   :dont-close t)
+              (message (concat "^B^5Getting swanky...~%^n" (random-encouragement))))
 #+END_SRC
 
 * VOLUME
@@ -133,8 +160,8 @@ it in lisp :-)
       (split-string out "] [")))
 
   (defcommand volume (device action)
-      ((:string "Enter Device: ")
-       (:string "Enter Action: "))
+    ((:string "Enter Device: ")
+     (:string "Enter Action: "))
     "Wrap volume commands and print a message containing current volume."
     (let* ((output (get-volume device action))
            (volume (nth 0 output))
@@ -149,7 +176,7 @@ Stolen from the default rc file.
 #+BEGIN_SRC common-lisp
   (defmacro my/web-jump (name prefix)
     `(defcommand ,(intern name) (search)
-         ((:rest ,(concatenate 'string name ": ")))
+       ((:rest ,(concatenate 'string name ": ")))
        (substitute #\+ #\Space search)
        (run-shell-command (concatenate 'string ,prefix "\"" search "\""))))
 
