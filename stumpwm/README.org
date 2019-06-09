@@ -14,11 +14,21 @@ look no further.
 -- [[https://github.com/stumpwm/stumpwm][StumpWM GitHub]]
 #+END_QUOTE
 
-** PRE-REQUISITES
+** INSTALLATION
 
-Get Quicklisp from [[https://www.quicklisp.org/beta/][here,]] and then load it into the REPL with:
+Get Quicklisp from [[https://www.quicklisp.org/beta/][here]]:
 
-~$ sbcl --load quicklisp.lisp~
+#+BEGIN_SRC bash
+curl -O https://beta.quicklisp.org/quicklisp.lisp
+curl -O https://beta.quicklisp.org/quicklisp.lisp.asc
+gpg --verify quicklisp.lisp.asc quicklisp.lisp
+#+END_SRC
+
+Then load it into the REPL with:
+
+#+BEGIN_SRC bash
+sbcl --load quicklisp.lisp
+#+END_SRC
 
 From the REPL, install it:
 
@@ -42,10 +52,44 @@ Install stumpwm and some packages we need for niceties.
   (ql:quickload :quicklisp-slime-helper) ;; Required by slime-connect
 #+END_SRC
 
-Next, clone my fork of the [[https://github.com/tslight/stumpwm-contrib][stumpwm-contrib]] repository to ~$HOME/src~, to be able
-use ttf-fonts, cycle-mru, sensors and stumptray.
+Tangle this block to create a lisp file to start StumpWM in ~/usr/local/bin~:
 
-Finally, we need to tangle the code in the files linked to below:
+#+BEGIN_SRC common-lisp :tangle /sudo::/usr/local/bin/stumpwm.lisp :tangle-mode (identity #o644)
+  (require :stumpwm)
+  (stumpwm:stumpwm)
+#+END_SRC
+
+This block creates a script in ~/usr/local/bin~ that loads the lisp above into
+~sbcl~:
+
+#+BEGIN_SRC common-lisp :tangle /sudo::/usr/local/bin/stumpwm.sh :tangle-mode (identity #o755)
+  sbcl --load /usr/local/bin/stumpwm.lisp
+#+END_SRC
+
+Next add the following line to your .xinitrc to be able to run with ~startx~:
+
+#+BEGIN_SRC bash :tangle ~/.xinitrc
+exec /usr/local/bin/stumpwm.sh
+#+END_SRC
+
+And/or tangle the block below to create a .desktop file to be read by your display
+manager.
+
+#+BEGIN_SRC conf :tangle /sudo::/usr/share/xsessions/stumpwm.desktop
+  [Desktop Entry]
+  Encoding=UTF-8
+  Name=StumpWM
+  Comment=Hacks and glory await!
+  TryExec=stumpwm
+  Exec=/usr/local/bin/stumpwm
+  Type=Application
+  [X-Window Manager]
+  SessionManaged=true
+#+END_SRC
+
+Finally, now that we have StumpWM installed and ready to be started with either
+~startx~ or from a display manager, we need to tangle the code in the files
+linked below:
 
 - [[file:init.org][Initialisation]]
 - [[file:settings.org][Settings]]
@@ -54,11 +98,6 @@ Finally, we need to tangle the code in the files linked to below:
 
 Please see the main [[file:../README.org][etc repo README]] for more details on Emacs tangling,
 org-mode, literate programming and how I manage configuration files and such.
-
-*N.B.* My more complex utilities are in my fork of [[https://github.com/tslight/stumpwm-contrib][stumpwm-contrib]]:
-
-- [[https://github.com/tslight/stumpwm-contrib/tree/master/util/cycle-mru][cycle-mru]] gives me back glorious alt-tab behaviour.
-- [[https://github.com/tslight/stumpwm-contrib/tree/master/modeline/sensors][sensors]] allows me to see just how hot my crotch is getting...
 
 ** INSPIRATIONS
 
