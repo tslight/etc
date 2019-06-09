@@ -19,7 +19,6 @@ built-in Emacs ones, and my own local custom minor mode packages.
 - [[#melpa-packages][MELPA PACKAGES]]
    - [[#ace-window][ACE WINDOW]]
    - [[#async][ASYNC]]
-   - [[#autohotkey-mode][AUTOHOTKEY MODE]]
    - [[#avy][AVY]]
    - [[#bind-key][BIND-KEY]]
    - [[#change-inner][CHANGE INNER]]
@@ -110,34 +109,6 @@ bindings. The default ones are shift+arrows, which are hard to reach.
 This package aims to take the speed and predictability of windmove and
 pack it into a single key binding, similar to other-window.
 
-*Setup*
-
-Just assign ace-window to a short key binding, as switching windows is
-a common task. I suggest M-o, as it's short and not bound to anything
-important in the default Emacs.
-
-*Usage*
-
-When there are two windows, ace-window will call other-window (unless
-aw-dispatch-always is set non-nil). If there are more, each window
-will have the first character of its window label highlighted at the
-upper left of the window. Pressing that character will either switch
-to that window or filter to the next character needed to select a
-specific window. Note that, unlike ace-jump-mode, the position of
-point will not be changed, i.e. the same behavior as that of
-other-window.
-
-A special character defined by aw-make-frame-char (default = z) means
-create a new frame and use its window as the target. The new frame's
-location is set relative to the prior selected frame's location and
-given by aw-frame-offset. The new frame's size is given by
-aw-frame-size. See their documentation strings for more information.
-
-The windows are ordered top-down, left-to-right. This means that if
-you remember your window layouts, you can switch windows without even
-looking at the leading char. For instance, the top left window will
-always be 1 (or a if you use letters for window characters).
-
 -- [[https://github.com/abo-abo/ace-window][Abo-Abo GitHub Link]]
 #+END_QUOTE
 
@@ -166,15 +137,6 @@ always be 1 (or a if you use letters for window characters).
     :config
     (async-bytecomp-package-mode 1)
     (dired-async-mode 1))
-#+END_SRC
-
-** AUTOHOTKEY MODE
-
-#+BEGIN_SRC emacs-lisp
-  (use-package ahk-mode
-    :if (eq system-type 'windows-nt)
-    :ensure t
-    :mode "\\.ahk\\'")
 #+END_SRC
 
 ** AVY
@@ -331,25 +293,15 @@ kill.
 ** COUNSEL
 
 #+BEGIN_QUOTE
-Toggle Counsel mode on or off.
+ivy-mode ensures that any Emacs command using completing-read-function uses ivy
+for completion.
 
-Turn Counsel mode on if ARG is positive, off otherwise. Counsel mode
-remaps built-in emacs functions that have counsel replacements.
+Counsel takes this further, providing versions of common Emacs commands that are
+customised to make the best use of ivy. For example, counsel-find-file has some
+additional keybindings. Pressing DEL will move you to the parent directory.
 
--- [[help:counsel-mode][Help Page]]
-#+END_QUOTE
-
-#+BEGIN_QUOTE
-ivy-mode ensures that any Emacs command using completing-read-function
-uses ivy for completion.
-
-Counsel takes this further, providing versions of common Emacs
-commands that are customised to make the best use of ivy. For example,
-counsel-find-file has some additional keybindings. Pressing DEL will
-move you to the parent directory.
-
-Enabling counsel-mode remaps built-in Emacs functions that have
-counsel replacements:
+Enabling counsel-mode remaps built-in Emacs functions that have counsel
+replacements:
 
 |--------------------------+----------------------------|
 | Emacs command            | Counsel equivalent         |
