@@ -1,38 +1,1322 @@
-#+TITLE: PERSONAL PACKAGE CONFIGURATION
+#+TITLE: PACKAGE CONFIGURATION
 #+AUTHOR: Toby Slight
 
 #+PROPERTY: header-args :cache yes
 #+PROPERTY: header-args+ :mkdirp yes
 #+PROPERTY: header-args+ :padline no
 #+PROPERTY: header-args+ :results silent
-#+PROPERTY: header-args+ :tangle ~/.emacs.d/site-lisp/my-packages.el
+#+PROPERTY: header-args+ :tangle ~/.emacs.d/my-packages.el
 #+PROPERTY: header-args+ :tangle-mode (identity #o600)
 
 #+OPTIONS: toc:t
 
-Please see the [[file:README.org][README]] and/or [[file:my-tangles.org][my-tangles.org]] for instructions on how to
-install.
+Please see the [[file:README.org][README]] and/or [[file:my-tangles.org][my-tangles.org]] for instructions on how to install.
 
-My library of minor-modes and functions called via use-package.
+I am using [[https://github.com/jwiegley][John Wiegley's]] amazing [[https://github.com/jwiegley/use-package][use-package]] macro to configure MELPA packages,
+built-in Emacs ones, and my own local custom minor mode packages.
 
 * CONTENTS                                                         :TOC_5_gh:
-- [[#buffers][BUFFERS]]
-- [[#edits][EDITS]]
-- [[#dired][DIRED]]
-- [[#files][FILES]]
-- [[#misc][MISC]]
-- [[#org][ORG]]
-- [[#settings][SETTINGS]]
-- [[#tangles][TANGLES]]
-- [[#windows][WINDOWS]]
+- [[#melpa-packages][MELPA PACKAGES]]
+   - [[#ace-window][ACE WINDOW]]
+   - [[#async][ASYNC]]
+   - [[#autohotkey-mode][AUTOHOTKEY MODE]]
+   - [[#avy][AVY]]
+   - [[#bind-key][BIND-KEY]]
+   - [[#change-inner][CHANGE INNER]]
+   - [[#company-mode][COMPANY MODE]]
+   - [[#counsel][COUNSEL]]
+   - [[#counsel-projectile][COUNSEL PROJECTILE]]
+   - [[#diminish][DIMINISH]]
+   - [[#emmet-mode][EMMET MODE]]
+   - [[#evil][EVIL]]
+   - [[#exec-path-from-shell][EXEC PATH FROM SHELL]]
+   - [[#expand-region][EXPAND REGION]]
+   - [[#flx][FLX]]
+   - [[#flycheck][FLYCHECK]]
+   - [[#git-timemachine][GIT TIMEMACHINE]]
+   - [[#hungry-delete][HUNGRY DELETE]]
+   - [[#hydra][HYDRA]]
+   - [[#iedit][IEDIT]]
+   - [[#ivy][IVY]]
+   - [[#magit][MAGIT]]
+   - [[#markdown][MARKDOWN]]
+   - [[#paredit][PAREDIT]]
+   - [[#pc-buffer-switch][PC BUFFER SWITCH]]
+   - [[#powershell][POWERSHELL]]
+   - [[#projectile][PROJECTILE]]
+   - [[#python][PYTHON]]
+   - [[#elpy][ELPY]]
+   - [[#pep8][PEP8]]
+   - [[#jedi][JEDI]]
+   - [[#slime][SLIME]]
+   - [[#smex][SMEX]]
+   - [[#ssh-agency][SSH-AGENCY]]
+   - [[#undo-tree][UNDO TREE]]
+   - [[#web-mode][WEB MODE]]
+   - [[#wgrep][WGREP]]
+   - [[#which-key][WHICH KEY]]
+   - [[#yasnippets][YASNIPPETS]]
+- [[#emacs-packages][EMACS PACKAGES]]
+   - [[#abbrev-mode][ABBREV MODE]]
+   - [[#autofill][AUTOFILL]]
+   - [[#dired][DIRED]]
+   - [[#electric][ELECTRIC]]
+   - [[#erc][ERC]]
+   - [[#eldoc][ELDOC]]
+   - [[#eshell][ESHELL]]
+   - [[#flyspell][FLYSPELL]]
+   - [[#gnus][GNUS]]
+   - [[#linum-mode][LINUM MODE]]
+   - [[#lisp-mode][LISP MODE]]
+   - [[#misc][MISC]]
+   - [[#org][ORG]]
+   - [[#recentf][RECENTF]]
+   - [[#subword][SUBWORD]]
+   - [[#term][TERM]]
+   - [[#uniquify][UNIQUIFY]]
+   - [[#whitespace][WHITESPACE]]
+   - [[#winner-mode][WINNER MODE]]
+- [[#local-packages][LOCAL PACKAGES]]
+   - [[#buffers][BUFFERS]]
+   - [[#edits][EDITS]]
+   - [[#dired-1][DIRED]]
+   - [[#files][FILES]]
+   - [[#misc-1][MISC]]
+   - [[#org-1][ORG]]
+   - [[#settings][SETTINGS]]
+   - [[#tangles][TANGLES]]
+   - [[#windows][WINDOWS]]
 
-* BUFFERS
+* MELPA PACKAGES
+
+This section contains the configuration for the third-party MELPA packages I
+use.
+
+** ACE WINDOW
+
+#+BEGIN_QUOTE
+*What and why*
+
+I'm sure you're aware of the other-window command. While it's great
+for two windows, it quickly loses its value when there are more
+windows. You need to call it many times, and since it's not easily
+predictable, you have to check each time if you're in the window that
+you wanted.
+
+Another approach is to use windmove-left, windmove-up, etc. These are
+fast and predictable. Their disadvantage is that they need 4 key
+bindings. The default ones are shift+arrows, which are hard to reach.
+
+This package aims to take the speed and predictability of windmove and
+pack it into a single key binding, similar to other-window.
+
+*Setup*
+
+Just assign ace-window to a short key binding, as switching windows is
+a common task. I suggest M-o, as it's short and not bound to anything
+important in the default Emacs.
+
+*Usage*
+
+When there are two windows, ace-window will call other-window (unless
+aw-dispatch-always is set non-nil). If there are more, each window
+will have the first character of its window label highlighted at the
+upper left of the window. Pressing that character will either switch
+to that window or filter to the next character needed to select a
+specific window. Note that, unlike ace-jump-mode, the position of
+point will not be changed, i.e. the same behavior as that of
+other-window.
+
+A special character defined by aw-make-frame-char (default = z) means
+create a new frame and use its window as the target. The new frame's
+location is set relative to the prior selected frame's location and
+given by aw-frame-offset. The new frame's size is given by
+aw-frame-size. See their documentation strings for more information.
+
+The windows are ordered top-down, left-to-right. This means that if
+you remember your window layouts, you can switch windows without even
+looking at the leading char. For instance, the top left window will
+always be 1 (or a if you use letters for window characters).
+
+-- [[https://github.com/abo-abo/ace-window][Abo-Abo GitHub Link]]
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package ace-window
+    :after bind-key
+    :ensure t
+    :bind
+    ("C-x o" . ace-window)
+    ("C-x 0" . ace-delete-window)
+    ("C-x 1" . ace-delete-other-windows)
+    :config
+    (set-face-attribute 'aw-leading-char-face nil :foreground "deep sky blue" :weight 'bold :height 3.0)
+    (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
+#+END_SRC
+
+** ASYNC
+#+BEGIN_SRC emacs-lisp
+  (use-package async
+    :ensure t
+    :defer t
+    :config
+    (async-bytecomp-package-mode 1)
+    (dired-async-mode 1))
+#+END_SRC
+** AUTOHOTKEY MODE
+#+BEGIN_SRC emacs-lisp
+  (use-package ahk-mode
+    :if (eq system-type 'windows-nt)
+    :ensure t
+    :mode "\\.ahk\\'")
+#+END_SRC
+** AVY
+#+BEGIN_SRC emacs-lisp
+  (use-package avy
+    :after bind-key
+    :ensure t
+    :bind
+    ("C-c j j" . avy-goto-char)
+    ("C-c j c" . avy-goto-char-2)
+    ("C-c j l" . avy-goto-line)
+    ("M-g l" . avy-goto-line)
+    ("M-g w" . avy-goto-word-0)
+    ("C-c j w" . avy-goto-word-0)
+    ("C-c j W" . avy-goto-word-1)
+    :config
+    (setq avy-dispatch-alist '((?c . avy-action-copy)
+                               (?k . avy-action-kill-move)
+                               (?K . avy-action-kill-stay)
+                               (?m . avy-action-mark)
+                               (?z . avy-action-zap-to-char))))
+#+END_SRC
+** BIND-KEY
+
+#+BEGIN_QUOTE
+To bind multiple keys in a `bind-key*' way (to be sure that your
+bindings will not be overridden by other modes), you may use
+`bind-keys*' macro:
+
+-- [[https://emacs.stackexchange.com/questions/352/how-to-override-major-mode-bindings][How to override major-mode bindings]]
+#+END_QUOTE
+
+#+BEGIN_QUOTE
+=:bind*=
+
+Bind keys, and define autoloads for the bound commands,
+*overriding all minor mode bindings*.
+
+-- [[help:use-package][Help Page]]
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package bind-key
+    :demand t
+    :bind*
+    ("C-s" . isearch-forward-regexp)
+    ("C-r" . isearch-backward-regexp)
+    ("C-c i" . imenu)
+    ;; evaluation keymap
+    ("C-x C-e" . pp-eval-last-sexp)
+    ("C-c e s" . pp-eval-last-sexp)
+    ("C-c e f" . eval-defun)
+    ("C-c e c" . eval-current-buffer)
+    ("C-c e b" . eval-buffer)
+    ("C-c e e" . pp-eval-expression)
+    ("C-c e r" . eval-region)
+    ("C-c e m" . lisp-interaction-mode)
+    ;; org mode keymap
+    ("C-c o a" . org-agenda)
+    ("C-c o c" . org-capture)
+    ;; toggle bindings
+    ("C-c t a" . toggle-text-mode-autofill)
+    ("C-c t d e" . toggle-debug-on-error)
+    ("C-c t d E" . toggle-debug-on-entry)
+    ("C-c t d q" . toggle-debug-on-quit)
+    ("C-c t l" . linum-mode)
+    ("C-c t t" . toggle-truncate-lines)
+    ("C-c t C-t" . (lambda () (interactive) (mapc #'disable-theme custom-enabled-themes)))
+    ;; emacs space rebindings
+    ("C-:" . pp-eval-expression)
+    ("C-;" . comment-line)
+    ("M-;" . comment-or-uncomment-region)
+    ("C-x C" . save-buffers-kill-emacs)
+    ("C-x C-S-J" . dired-jump-other-window)
+    ("C-x C-b" . ibuffer)
+    ("C-x C-j" . dired-jump)
+    ("C-x j" . jump-to-register)
+    ("C-x K" . kill-buffer)
+    ("C-x k" . kill-this-buffer)
+    ("C-x p" . pop-to-mark-command)
+    ("M-/" . hippie-expand)
+    ("M-SPC" . cycle-spacing)
+    ("M-<escape>" . other-frame)
+    ;; spacecadet rebindings
+    ("C-w" . kill-ring-save)
+    ("M-w" . kill-region)
+    ("C-c x" . execute-extended-command)
+    ("C-<" . beginning-of-buffer)
+    ("C->" . end-of-buffer)
+    ("C-(" . insert-parentheses)
+    ("C-)" . move-past-close-and-reindent)
+    ("C-^" . delete-indentation)
+    ("C-%" . query-replace)
+    ("C-$" . ispell-word)
+    ("C-!" . shell-command)
+    ("C-~" . not-modified)
+    ("C-S-v" . scroll-other-window)
+    ("C-M-v" . scroll-other-window-down)
+    ;; function keys
+    ("<f6>" . desktop-read)
+    ("S-<f6>" . desktop-save)
+    ("S-<f10>" . menu-bar-mode)
+    ("C-<f10>" . toggle-frame-maximized)
+    ("C-s-m" . toggle-frame-maximized)
+    ("C-<f11>" . toggle-frame-fullscreen)
+    ("C-s-f" . toggle-frame-fullscreen))
+#+END_SRC
+
+** CHANGE INNER
+#+BEGIN_QUOTE
+change-inner gives you vim's ci command, building on expand-region. It
+is most easily explained by example:
+
+=function test() { return "semantic kill";}=
+
+With point after the word semantic
+
+change-inner " would kill the contents of the string
+change-outer " would kill the entire string
+change-inner { would kill the return-statement
+change-outer { would kill the entire block
+
+I use M-i and M-o for this.
+
+Giving these commands a prefix argument C-u means copy instead of
+kill.
+
+-- [[https://github.com/magnars/change-inner.el][GitHub Repo]]
+#+END_QUOTE
+#+BEGIN_SRC emacs-lisp
+  (use-package change-inner
+    :ensure t
+    :bind
+    ("M-i" . change-inner)
+    ("M-o" . change-outer))
+#+END_SRC
+** COMPANY MODE
+#+BEGIN_SRC emacs-lisp
+  (use-package company
+    :ensure t
+    :defer t
+    :diminish company-mode
+    :hook
+    (prog-mode . company-mode)
+    (slime-mode . company-mode)
+    (slime-repl-mode . company-mode))
+#+END_SRC
+** COUNSEL
+
+#+BEGIN_QUOTE
+Toggle Counsel mode on or off.
+
+Turn Counsel mode on if ARG is positive, off otherwise. Counsel mode
+remaps built-in emacs functions that have counsel replacements.
+
+-- [[help:counsel-mode][Help Page]]
+#+END_QUOTE
+
+#+BEGIN_QUOTE
+ivy-mode ensures that any Emacs command using completing-read-function
+uses ivy for completion.
+
+Counsel takes this further, providing versions of common Emacs
+commands that are customised to make the best use of ivy. For example,
+counsel-find-file has some additional keybindings. Pressing DEL will
+move you to the parent directory.
+
+Enabling counsel-mode remaps built-in Emacs functions that have
+counsel replacements:
+
+|--------------------------+----------------------------|
+| Emacs command            | Counsel equivalent         |
+|--------------------------+----------------------------|
+| execute-extended-command | counsel-M-x                |
+| describe-bindings        | counsel-descbinds          |
+| describe-function        | counsel-describe-function  |
+| describe-variable        | counsel-describe-variable  |
+| describe-face            | counsel-describe-face      |
+| list-faces-display       | counsel-faces              |
+| find-file                | counsel-find-file          |
+| find-library             | counsel-find-library       |
+| imenu                    | counsel-imenu              |
+| load-library             | counsel-load-library       |
+| load-theme               | counsel-load-theme         |
+| yank-pop                 | counsel-yank-pop           |
+| info-lookup-symbol       | counsel-info-lookup-symbol |
+| pop-to-mark-command      | counsel-mark-ring          |
+| bookmark-jump            | counsel-bookmark           |
+|--------------------------+----------------------------|
+
+-- [[https://github.com/abo-abo/swiper][Abo-Abo GitHub]]
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package counsel
+    :ensure t
+    :diminish
+    :bind
+    ("C-x C-f" . counsel-find-file)
+    ("M-x" . counsel-M-x)
+    ("M-y" . counsel-yank-pop)
+    ("C-h a" . counsel-apropos)
+    ("C-h f" . counsel-describe-function)
+    ("C-h v" . counsel-describe-variable)
+    ("C-h l" . counsel-load-library)
+    ("C-h i" . counsel-info-lookup-symbol)
+    ("C-h u" . counsel-unicode-char)
+    ("C-c g c" . counsel-git)
+    ("C-c C-g" . counsel-git-grep)
+    ("C-c M-g" . counsel-ag)
+    ("C-c l" . counsel-locate)
+    ("C-x r b" . counsel-bookmark)
+    ("C-c f l" . counsel-find-library)
+    ("C-c f f" . counsel-file-jump)
+    ("C-c f j" . counsel-dired-jump)
+    :config
+    (counsel-mode 1))
+#+END_SRC
+
+** COUNSEL PROJECTILE
+#+BEGIN_SRC emacs-lisp
+  (use-package counsel-projectile
+    :ensure t
+    :defer t
+    :after (counsel projectile)
+    :config
+    (counsel-projectile-mode))
+#+END_SRC
+** DIMINISH
+#+BEGIN_SRC emacs-lisp
+  (use-package diminish
+    :defer 4
+    :ensure t)
+#+END_SRC
+** EMMET MODE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package emmet-mode
+    :defer t
+    :ensure t
+    :diminish
+    :after web-mode
+    :hook
+    (sgml-mode)
+    (html-mode)
+    (css-mode)
+    (web-mode))
+#+END_SRC
+
+** EVIL
+
+[[https://stackoverflow.com/a/28985130][Make insert state into emacs state]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package evil
+    :ensure t
+    :bind
+    ("C-c M-e" . evil-mode)
+    :config
+    ;; (evil-mode 1)
+    (setq evil-insert-state-map (make-sparse-keymap))
+    (define-key evil-insert-state-map (kbd "<escape>") 'evil-normal-state)
+    (setq evil-insert-state-cursor '(box "yellow")
+          evil-emacs-state-cursor '(box "green")
+          evil-normal-state-cursor '(box "purple")))
+#+END_SRC
+
+** EXEC PATH FROM SHELL
+
+https://github.com/purcell/exec-path-from-shell
+
+#+BEGIN_SRC emacs-lisp
+  (use-package exec-path-from-shell
+    :ensure t
+    :init
+    (exec-path-from-shell-initialize)
+    (exec-path-from-shell-copy-env "PYTHONPATH"))
+#+END_SRC
+
+** EXPAND REGION
+
+https://spwhitton.name/blog/entry/expandregionlines/
+
+#+BEGIN_SRC emacs-lisp
+  (use-package expand-region
+    :ensure t
+    :bind
+    ("C-=" . er/expand-region)
+    ("C--" . er/contract-region)
+    :config
+    (defadvice er/expand-region (around fill-out-region activate)
+      (if (or (not (region-active-p))
+              (eq last-command 'er/expand-region))
+          ad-do-it
+        (if (< (point) (mark))
+            (let ((beg (point)))
+              (goto-char (mark))
+              (end-of-line)
+              (forward-char 1)
+              (push-mark)
+              (goto-char beg)
+              (beginning-of-line))
+          (let ((end (point)))
+            (goto-char (mark))
+            (beginning-of-line)
+            (push-mark)
+            (goto-char end)
+            (end-of-line)
+            (forward-char 1))))))
+#+END_SRC
+** FLX
+#+BEGIN_SRC emacs-lisp
+  (use-package flx
+    :defer t
+    :ensure t
+    :after (counsel ivy))
+#+END_SRC
+** FLYCHECK
+#+BEGIN_SRC emacs-lisp
+  (use-package flycheck
+    :ensure t
+    :defer t
+    :diminish flycheck-mode
+    :hook
+    (prog-mode . flycheck-mode))
+#+END_SRC
+** GIT TIMEMACHINE
+
+[[https://github.com/pidu/git-timemachine][GitHub Repo]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package git-timemachine
+    :defer t
+    :ensure t)
+#+END_SRC
+** HUNGRY DELETE
+#+BEGIN_SRC emacs-lisp
+  (use-package hungry-delete
+    :defer 6
+    :ensure t
+    :diminish hungry-delete-mode
+    :config
+    (global-hungry-delete-mode))
+#+END_SRC
+** HYDRA
+
+#+BEGIN_QUOTE
+This is a package for GNU Emacs that can be used to tie related
+commands into a family of short bindings with a common prefix - a
+Hydra.
+
+*Description for Poets*
+
+Once you summon the Hydra through the prefixed binding (the body + any
+one head), all heads can be called in succession with only a short
+extension.
+
+The Hydra is vanquished once Hercules, any binding that isn't the
+Hydra's head, arrives. Note that Hercules, besides vanquishing the
+Hydra, will still serve his original purpose, calling his proper
+command. This makes the Hydra very seamless, it's like a minor mode
+that disables itself auto-magically.
+
+-- [[https://github.com/abo-abo/hydra][Abo-Abo GitHub]]
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package hydra
+    :ensure t
+    :defer t
+    :config
+    (use-package hydra-examples
+      :defer t)
+
+    (defhydra hydra-buffers (:idle 1.0)
+      "BUFFERS"
+      ("b" my/last-buffer "last" :exit t)
+      ("C-b" my/last-buffer)
+      ("n" next-buffer "next")
+      ("C-n" next-buffer :exit t)
+      ("p" previous-buffer "prev")
+      ("C-p" previous-buffer :exit t)
+      ("i" my/indent-buffer "indent" :exit t)
+      ("C-i" my/indent-buffer)
+      ("k" my/nuke-buffers "nuke" :exit t)
+      ("C-k" my/nuke-buffers)
+      ("q" my/fill-buffer "fill" :exit t)
+      ("C-q" my/fill-buffer )
+      ("s" my/save-buffers-silently "save" :exit t)
+      ("C-s" my/save-buffers-silently)
+      ("g" nil "cancel")
+      ("<escape>" nil "cancel"))
+
+    (defhydra hydra-marks (:idle 1.0)
+      "MARK"
+      ("m" counsel-mark-ring :exit t)
+      ("p" my/push-mark-no-activate "push" :exit t)
+      ("j" my/jump-to-mark "jump")
+      ("g" nil "cancel")
+      ("<escape>" nil "cancel"))
+
+    (defhydra hydra-windows (:idle 1.0)
+      "WINDOWS"
+      ("w" ace-window "ace" :exit t)
+      ("n" other-window "next")
+      ("N" other-window :exit t)
+      ("p" my/prev-window "prev")
+      ("P" m/prev-window :exit t)
+      ("v" split-window-right "split |" :exit t)
+      ("C-v" split-window-right)
+      ("h" split-window-below "split -" :exit t)
+      ("C-h" split-window-below)
+      ("H" my/hsplit-last-buffer "split last -" :exit t)
+      ("C-H" my/hsplit-last-buffer)
+      ("V" my/vsplit-last-buffer "split last |" :exit t)
+      ("C-V" my/vsplit-last-buffer)
+      ("l" my/last-window "last" :exit t)
+      ("x" ace-delete-window "delete" :exit t)
+      ("C-x" ace-delete-window)
+      ("m" ace-delete-other-windows "maximize" :exit t)
+      ("C-m" ace-delete-other-windows)
+      ("s" ace-swap-window "swap" :exit t)
+      ("C-s" ace-swap-window)
+      ("u" winner-undo "undo")
+      ("r" winner-redo "redo")
+      ("h" windmove-left "<-")
+      ("j" windmove-down "v")
+      ("k" windmove-up "^")
+      ("l" windmove-right "->")
+      ("C-h" hydra-move-splitter-left "resize <-")
+      ("C-j" hydra-move-splitter-down "resize v")
+      ("C-k" hydra-move-splitter-up "resize ^")
+      ("C-l" hydra-move-splitter-right "resize ->")
+      ("b" ivy-switch-buffer-other-window "buffer" :exit t)
+      ("d" dired-jump-other-window :exit t)
+      ("f" find-file-other-window "file" :exit t)
+      ("C-b" ivy-switch-buffer-other-window)
+      ("C-f" find-file-other-window)
+      ("C-d" dired-jump-other-window)
+      ("g" nil "cancel")
+      ("<escape>" nil "cancel"))
+
+    (defhydra hydra-zoom (:idle 1.0)
+      "ZOOM"
+      ("i" text-scale-increase "in")
+      ("o" text-scale-decrease "out")
+      ("g" nil "cancel")
+      ("<escape>" nil "cancel"))
+
+    :bind
+    ("C-c b" . hydra-buffers/body)
+    ("C-c m" . hydra-marks/body)
+    ("C-c w" . hydra-windows/body)
+    ("C-c z" . hydra-zoom/body))
+#+END_SRC
+
+** IEDIT
+#+BEGIN_SRC emacs-lisp
+  (use-package iedit
+    :ensure t
+    :bind
+    ("M-%" . iedit-mode))
+#+END_SRC
+** IVY
+
+#+BEGIN_SRC emacs-lisp
+  (use-package ivy
+    :ensure t
+    :diminish
+    :bind
+    ("C-x b" . ivy-switch-buffer)
+    ("C-M-r" . swiper)
+    ("C-M-s" . swiper)
+    ("C-S-s" . swiper-multi)
+    ("C-c C-r" . ivy-resume)
+    :config
+    (ivy-mode 1)
+    (setq ivy-wrap t)
+    (setq ivy-use-virtual-buffers t)
+    (setq ivy-height 20)
+    (setq ivy-initial-inputs-alist nil) ;; no ^
+    (setq ivy-re-builders-alist
+          '((swiper . ivy--regex-plus)
+            (t      . ivy--regex-fuzzy)))
+    (define-key ivy-minibuffer-map (kbd "C-s") 'ivy-next-line)
+    (define-key ivy-minibuffer-map (kbd "C-r") 'ivy-previous-line))
+#+END_SRC
+
+** MAGIT
+
+[[https://github.com/magit/magit/issues/2971][Batch operation wontfix]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package magit
+    :ensure t
+    :bind
+    ("C-x g" . magit-status)
+    ("C-c g d" . magit-dispatch)
+    ("C-c g l" . magit-list-repositories)
+    :init
+    (setq magit-repository-directories `(("~/" . 3)))
+    (setq magit-repolist-columns
+          '(("Name" 10 magit-repolist-column-ident nil)
+            ("Version" 25 magit-repolist-column-version nil)
+            ("Pull" 6 magit-repolist-column-unpulled-from-upstream)
+            ("Push" 6 magit-repolist-column-unpushed-to-upstream)
+            ("Commit" 8 magit-repolist-column-dirty)
+            ("Path" 99 magit-repolist-column-path nil)))
+    :config
+    (setq magit-completing-read-function 'ivy-completing-read))
+#+END_SRC
+
+** MARKDOWN
+
+#+BEGIN_SRC emacs-lisp
+  (use-package markdown-mode
+    :ensure t
+    :defer t
+    :commands (markdown-mode gfm-mode)
+    :mode (("README\\.md\\'" . gfm-mode)
+           ("\\.md\\'" . markdown-mode)
+           ("\\.markdown\\'" . markdown-mode))
+    :init (setq markdown-command "multimarkdown"))
+#+END_SRC
+
+** PAREDIT
+#+BEGIN_SRC emacs-lisp
+  (use-package paredit
+    :defer t
+    :bind
+    ("C-c t p" . paredit-mode))
+#+END_SRC
+** PC BUFFER SWITCH
+#+BEGIN_SRC emacs-lisp
+  (use-package pc-bufsw
+    :if window-system
+    :ensure t
+    :bind
+    ("C-<escape>" . pc-bufsw-mru)
+    ("C-S-<escape>" . pc-bufsw-lru)
+    :config
+    (setq pc-bufsw-quit-time 1))
+#+END_SRC
+** POWERSHELL
+#+BEGIN_SRC emacs-lisp
+  (use-package powershell
+    :ensure t
+    :defer t)
+#+END_SRC
+** PROJECTILE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package projectile
+    :ensure t
+    :diminish projectile-mode
+    :bind-keymap
+    ("C-c p" . projectile-command-map)
+    :config
+    (projectile-mode)
+    (setq projectile-completion-system 'ivy)
+    (when (require 'magit nil t)
+      (mapc #'projectile-add-known-project
+            (mapcar #'file-name-as-directory (magit-list-repos)))
+      ;; Optionally write to persistent `projectile-known-projects-file'
+      (projectile-save-known-projects)))
+#+END_SRC
+
+** PYTHON
+
+Make sure the following python packages are installed with ~pip install~:
+
+- *autopep8* /pep8 style formatter/
+- *black* /uncompromising formatter/
+- *flake8* /style guide enforcement/
+- *importmagic* /automatic imports/
+- *jedi* /lightweight autocomplete/
+- *jupyter* /ipython successor/
+- *rope* /refactoring library/
+- *virtualenv* /sandboxed python environments/
+- *yapf* /yet another python formatter/
+
+#+BEGIN_SRC sh :tangle no
+pip3 install autopep8 black flake8 importmagic jedi jupyter rope virtualenv yapf pylint
+#+END_SRC
+
+[[https://emacs.stackexchange.com/questions/2745/make-fill-paragraph-in-python-docstring-leave-the-triple-quotes-on-separate-line/2758][Docstring Fill Column Mode]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package python-mode
+    :ensure t
+    :commands (python-mode)
+    :mode (("\\.py\\'" . python-mode))
+    :config
+    (setq python-shell-interpreter "ipython3")
+    (setq python-fill-docstring-style 'django)
+    (setq fill-column 78)
+    ;; stop python interpreter from clobbering find-file...
+    ;; https://answers.launchpad.net/python-mode/+question/221144
+    (add-hook 'python-mode-hook
+              (lambda ()
+                ;; remove python-mode's ffap things that slow down find-file
+                (setq ffap-alist (remove '(python-mode . py-ffap-module-path) ffap-alist))
+                (setq ffap-alist (remove '(python-mode . py-module-path) ffap-alist))
+                (setq ffap-alist (remove '(inferior-python-mode . py-ffap-module-path) ffap-alist))
+                )))
+#+END_SRC
+
+https://realpython.com/emacs-the-best-python-editor/
+
+** ELPY
+
+https://elpy.readthedocs.io/en/latest/
+
+Run ~elpy-config~ to check python dependencies
+
+#+BEGIN_SRC emacs-lisp
+  (use-package elpy
+    :ensure t
+    :defer t
+    :hook
+    (python-mode . elpy-mode)
+    :config
+    (elpy-enable)
+    (setq elpy-rpc-backend "jedi")
+    (setq python-shell-interpreter "jupyter"
+          python-shell-interpreter-args "console --simple-prompt"
+          python-shell-prompt-detect-failure-warning nil)
+    (add-to-list 'python-shell-completion-native-disabled-interpreters"jupyter"))
+#+END_SRC
+
+** PEP8
+
+https://pypi.org/project/autopep8/
+
+#+BEGIN_SRC emacs-lisp
+  (use-package py-autopep8
+    :ensure t
+    :defer t
+    :hook
+    (python-mode . py-autopep8-enable-on-save))
+#+END_SRC
+
+** JEDI
+
+https://github.com/anschwa/emacs.d#python
+
+#+BEGIN_SRC emacs-lisp
+  (use-package jedi
+    :ensure t
+    :defer t
+    :init
+    (setq jedi:complete-on-dot t)
+    :hook
+    (python-mode . jedi:setup))
+#+END_SRC
+
+** SLIME
+
+https://kaashif.co.uk/2015/06/28/hacking-stumpwm-with-common-lisp/
+
+https://github.com/quicklisp/quicklisp-slime-helper
+
+#+BEGIN_SRC common-lisp :tangle no
+(ql:quickload "quicklisp-slime-helper")
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package slime
+    :ensure t
+    :commands (slime-mode)
+    :defer t
+    :config
+    (use-package slime-company
+      :ensure t
+      :defer t)
+    (load (expand-file-name "~/quicklisp/slime-helper.el"))
+    (setq inferior-lisp-program "sbcl")
+    (slime-setup '(slime-fancy slime-company slime-quicklisp slime-asdf)))
+#+END_SRC
+
+** SMEX
+
+#+BEGIN_SRC emacs-lisp
+  (use-package smex
+    :ensure t
+    :defer t
+    :after counsel)
+#+END_SRC
+
+** SSH-AGENCY
+#+BEGIN_SRC emacs-lisp :tangle no
+  (use-package ssh-agency
+    :if (eq system-type 'windows-nt)
+    :ensure t
+    :defer t
+    :init
+    (setenv "SSH_ASKPASS" "git-gui--askpass"))
+#+END_SRC
+** UNDO TREE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package undo-tree
+    :defer 4
+    :ensure t
+    :diminish undo-tree-mode
+    :bind
+    ("C-x u" . undo-tree-visualize)
+    :config
+    (global-undo-tree-mode 1)
+    (setq undo-tree-auto-save-history t)
+    (setq undo-tree-history-directory-alist
+          `(("." . ,(expand-file-name "~/.emacs.d/undos/")))))
+#+END_SRC
+** WEB MODE
+#+BEGIN_SRC emacs-lisp
+  (use-package web-mode
+    :ensure t
+    :mode
+    "\\.phtml\\'"
+    "\\.tpl\\.php\\'"
+    "\\.[agj]sp\\'"
+    "\\.as[cp]x\\'"
+    "\\.erb\\'"
+    "\\.mustache\\'"
+    "\\.djhtml\\'"
+    "\\.html\\.twig\\'"
+    "\\.html?\\'"
+    "\\.php?\\'"
+    "\\.css?\\'"
+    :config
+    (setq web-mode-markup-indent-offset 2)
+    (setq web-mode-css-indent-offset 2)
+    (setq web-mode-code-indent-offset 2)
+    (setq web-mode-enable-auto-pairing t)
+    (setq web-mode-enable-css-colorization t)
+    (setq web-mode-enable-block-face t)
+    (setq web-mode-enable-part-face t)
+    (setq web-mode-enable-comment-keywords t))
+#+END_SRC
+** WGREP
+#+BEGIN_SRC emacs-lisp
+  (use-package wgrep
+    :ensure t
+    :defer t)
+#+END_SRC
+** WHICH KEY
+#+BEGIN_SRC emacs-lisp
+  (use-package which-key
+    :ensure t
+    :defer t
+    :diminish which-key-mode
+    :init
+    (which-key-mode))
+#+END_SRC
+
+** YASNIPPETS
+#+BEGIN_SRC emacs-lisp
+  (use-package yasnippet
+    :ensure t
+    :defer t
+    :diminish yas-minor-mode
+    :hook
+    (prog-mode . yas-minor-mode)
+    :config
+    (use-package yasnippet-snippets
+      :defer t
+      :ensure t
+      :after yasnippet
+      ))
+#+END_SRC
+* EMACS PACKAGES
+
+This section contains configuration for built in Emacs packages.
+
+** ABBREV MODE
+
+#+BEGIN_QUOTE
+Emacs has a nice feature to expand abbreviations. If for example, you
+wanted an abbreviation for ‘Your Name’ to be ‘yn’, just type ‘yn’ and
+with your point after the ‘n’ do C-x a i g (mnemonic add inverse
+global) and enter the expansion, in this case ‘Your Name’. In the
+future, whenever you type ‘yn’ your name will be inserted. The abbrevs
+are automatically saved between sessions in a file ~/.abbrev_defs.
+
+I find this most useful for fixing typos. Whenever you have a typo (I
+type ‘becasue’ almost every time) if you are religious (see
+alt.religion.emacs) and never correct it but instead do C-x a i g and
+enter the correct spelling, emacs will fix all your typos, and you can
+type like a reckless madman and emacs will clean up the mess behind
+you. See AutoCorrection.
+
+If you don’t like an abbrev that you have set up, then do M-x
+edit-abbrevs. You can have different abbrevs for each mode (cperl,
+c++, Message); the g in C-x a i g is for global, meaning every mode.
+
+-- https://www.emacswiki.org/emacs/AbbrevMode
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package abbrev
+    :diminish abbrev-mode
+    :defer t
+    :hook
+    (text-mode . abbrev-mode)
+    :config
+    (setq-default abbrev-mode t)
+    (setq abbrev-file-name (concat user-emacs-directory "abbrevs"))
+    (setq save-abbrevs 'silently))
+#+END_SRC
+** AUTOFILL
+
+#+BEGIN_SRC emacs-lisp
+  (use-package auto-fill-mode
+    :bind
+    ("C-c q" . auto-fill-mode)
+    :hook
+    text-mode
+    org-mode)
+#+END_SRC
+
+** DIRED
+
+#+BEGIN_SRC emacs-lisp
+  (use-package dired
+    :bind
+    (:map
+     dired-mode-map
+     (")" .'dired-omit-mode)
+     ("b" . (lambda () (interactive) (find-alternate-file "..")))
+     ("c" . dired-do-compress)
+     ("f" . dired-find-alternate-file)
+     ("C-q" . kill-this-buffer)
+     ("c" . dired-do-compress-to))
+    :init
+    (autoload 'dired-jump "dired-x" t)
+    :config
+    (when (eq system-type 'berkeley-unix)
+      (progn
+        (setq dired-listing-switches "-alhpL")))
+    (setq dired-dwim-target t)
+    (setq dired-use-ls-dired nil)
+    (setq dired-omit-mode t)
+    (setq dired-recursive-copies 'always)
+    (setq dired-recursive-deletes 'always))
+#+END_SRC
+
+** ELECTRIC
+
+#+BEGIN_QUOTE
+Toggle on-the-fly reindentation (Electric Indent mode).  With a prefix
+argument ARG, enable Electric Indent mode if ARG is positive, and
+disable it otherwise.  If called from Lisp, enable the mode if ARG is
+omitted or nil.
+
+When enabled, this reindents whenever the hook
+‘electric-indent-functions’ returns non-nil, or if you insert a
+character from ‘electric-indent-chars’.
+
+This is a global minor mode.  To toggle the mode in a single buffer,
+use ‘electric-indent-local-mode’.
+
+-- [[help:electric-indent-mode][Help Page]]
+#+END_QUOTE
+
+#+BEGIN_QUOTE
+Toggle automatic parens pairing (Electric Pair mode).  With a prefix
+argument ARG, enable Electric Pair mode if ARG is positive, and
+disable it otherwise.  If called from Lisp, enable the mode if ARG is
+omitted or nil.
+
+Electric Pair mode is a global minor mode.  When enabled, typing an
+open parenthesis automatically inserts the corresponding closing
+parenthesis.  (Likewise for brackets, etc.). To toggle the mode in a
+single buffer, use ‘electric-pair-local-mode’.
+
+-- [[help:electric-pair-mode][Help Page]]
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package electric
+    :defer t
+    :hook
+    (prog-mode . electric-pair-mode)
+    (prog-mode . electric-indent-mode)
+    :config
+    (electric-pair-mode 1)
+    (electric-indent-mode 1))
+#+END_SRC
+
+** ERC
+#+BEGIN_SRC emacs-lisp
+  (use-package erc
+    :defer t
+    :config
+    (setq erc-autojoin-channels-alist '(("freenode.net"
+                                         "#org-mode"
+                                         "#emacs")))
+    (setq erc-fill-column 80)
+    (setq erc-hide-list '("JOIN" "PART" "QUIT"))
+    (setq erc-input-line-position -2)
+    (setq erc-keywords '("not2b"))
+    (setq erc-nick "not2b")
+    (setq erc-prompt-for-password t)
+    (setq erc-track-enable-keybindings t))
+#+END_SRC
+** ELDOC
+#+BEGIN_SRC emacs-lisp
+  (use-package eldoc
+    :defer t
+    :after lisp-mode
+    :hook
+    (lisp-mode . eldoc-mode)
+    (lisp-interaction-mode . eldoc-mode)
+    (emacs-lisp-mode . eldoc-mode))
+#+END_SRC
+** ESHELL
+
+[[https://www.masteringemacs.org/article/complete-guide-mastering-eshell][Mastering Eshell]]
+
+[[https://github.com/bling/dotemacs/blob/master/config/init-eshell.el][Eshell Config]]
+
+[[http://www.howardism.org/Technical/Emacs/eshell-fun.html][Howardism Eshell]]
+
+[[https://github.com/magnars/.emacs.d/blob/master/settings/setup-shell.el][Magnars Shell Setup]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package eshell
+    :defer t
+    :bind
+    ("C-c a s" . eshell)
+    :config
+    (use-package em-smart)
+    (setq eshell-history-size 1024)
+    (setq eshell-where-to-jump 'begin)
+    (setq eshell-review-quick-commands nil)
+    (setq eshell-smart-space-goes-to-end t))
+#+END_SRC
+** FLYSPELL
+#+BEGIN_SRC emacs-lisp
+  (use-package flyspell
+    :defer t
+    :diminish flyspell-mode
+    :hook
+    (text-mode . flyspell-mode)
+    (org-mode . flyspell-mode)
+    (prog-mode . flyspell-prog-mode)
+    :config
+    (when (eq system-type 'darwin) ;; mac specific settings
+      (setq ispell-program-name "/usr/local/bin/ispell")))
+#+END_SRC
+** GNUS
+#+BEGIN_SRC emacs-lisp
+  (use-package gnus
+    :defer t
+    :config
+    (setq gnus-init-file "~/.emacs.d/init.el")
+    (setq gnus-home-directory "~/.emacs.d/")
+    (setq gnus-completing-read-function 'gnus-ido-completing-read)
+    (use-package nnir)
+    (setq message-directory "~/.emacs.d/mail")
+    (setq gnus-directory "~/.emacs.d/news")
+    (setq nnfolder-directory "~/.emacs.d/mail/archive")
+    (setq gnus-use-full-window nil)
+    (setq gnus-select-method '(nntp "news.gnus.org"))
+    (setq gnus-summary-thread-gathering-function
+          'gnus-gather-threads-by-subject)
+    (setq gnus-thread-hide-subtree t)
+    (setq gnus-thread-ignore-subject t))
+#+END_SRC
+** LINUM MODE
+#+BEGIN_SRC emacs-lisp
+  (use-package linum
+    :defer t
+    :hook
+    (prog-mode . linum-mode)
+    (shell-script-mode . linum-mode)
+    (sh-mode . linum-mode))
+#+END_SRC
+** LISP MODE
+#+BEGIN_SRC emacs-lisp
+  (use-package lisp-mode
+    :defer t
+    :hook ((emacs-lisp-mode lisp-mode)
+           . (lambda ()
+               (add-hook 'after-save-hook 'check-parens nil t))))
+#+END_SRC
+** MISC
+#+BEGIN_SRC emacs-lisp
+  (use-package misc
+    :bind
+    ("C-z" . zap-up-to-char)
+    ("M-z" . zap-to-char))
+#+END_SRC
+** ORG
+
+Attempt to get org-mode to allow emphasis across multiple lines when
+auto-fill is turned on.
+
+*Two different ways to do the same thing:*
+
+https://emacs.stackexchange.com/questions/18101/org-mode-multi-line-emphasis-and-bold
+https://emacs.stackexchange.com/questions/27892/italic-paragraphs-in-org-mode
+
+I then found out from [[https://lists.gnu.org/archive/html/emacs-orgmode/2013-03/msg01172.html][this]] mailing list thread that:
+
+*We need to set this variable BEFORE we load org* via use-package in
+[[file:packages.org::*ORG][the org section of packages.org]]
+
+#+BEGIN_QUOTE
+This should probably happen before org is loaded, according to the
+docstring.
+
+> Mebbe I just forgot some setting to get it working, though I'd like the
+> exporter to recognize the org-emphasis-regexp-components settings...
+
+The exporter relies on the parser, which relies on `org-emph-re', which
+is built from `org-emphasis-regexp-components'.
+#+END_QUOTE
+
+I don't like how org-mode inserts a new line before and after each
+heading when a file is tangled.
+
+#+BEGIN_QUOTE
+The default value is '((heading . auto) (plain-list-item . auto)), so
+it normally will insert a newline before a heading (the auto part in
+the heading). You can specify Never when you customize the variable,
+and it will not insert a newline.
+
+-- [[https://stackoverflow.com/questions/28351465/emacs-orgmode-do-not-insert-line-between-headers][Stackexchange Question]]
+#+END_QUOTE
+
+[[file:my-org.org][Org Configuration File]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package org
+    :diminish
+    :bind
+    ("C-c o l" . org-store-link)
+    :mode ("\\.org\\'" . org-mode)
+    :init
+    (setf org-blank-before-new-entry '((heading . nil) (plain-list-item . nil)))
+    (setq org-emphasis-regexp-components '(" \t('\"{" "- \t.,:!?;'\")}\\" " \t\r\n,\"'" "." 300))
+    :config
+    (setq org-confirm-babel-evaluate t)
+    (setq org-agenda-files (file-expand-wildcards "~/*.org"))
+    (setq org-agenda-files (quote ("~/org/todo.org")))
+    (setq org-default-notes-file "~/org/notes.org")
+    (setq org-directory "~/org")
+    (setq org-export-with-toc t)
+    (setq org-completion-use-ido t)
+    (setq org-indent-indentation-per-level 1)
+    (setq org-list-allow-alphabetical t)
+    (setq org-list-indent-offset 1)
+    ;; (setq org-replace-disputed-keys t) ;; fix windmove conflicts
+    (setq org-return-follows-link t)
+    (setq org-refile-use-outline-path 'file)
+    (setq org-outline-path-complete-in-steps nil)
+    (setq org-refile-allow-creating-parent-nodes 'confirm)
+    (setq org-refile-targets '((nil :maxlevel . 9)))
+    (setq org-speed-commands-user (quote (("N" . org-down-element)
+                                          ("P" . org-up-element))))
+    (setq org-src-fontify-natively t)
+    (setq org-src-tab-acts-natively t)
+    (setq org-src-window-setup 'current-window)
+    (setq org-startup-indented t)
+    (setq org-use-fast-todo-selection t)
+    (setq org-use-speed-commands t))
+#+END_SRC
+** RECENTF
+
+[[https://www.reddit.com/r/emacs/comments/3g468d/stop_recent_files_showing_elpa_packages/][Stop Recent Files showing elpa packages?]]
+
+[[https://regexr.com/][RegEx WebApp]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package recentf
+    :bind
+    ("<f12>" . recentf-open-files)
+    :config
+    (recentf-mode 1)
+    (setq recentf-exclude '(".*init\.el"
+                            ".*\/my-.*\.el"
+                            "^/var/folders\\.*"
+                            "COMMIT_EDITMSG\\'"
+                            ".*-autoloads\\.el\\'"
+                            "[/\\]\\.elpa/"))
+    (setq recentf-max-menu-items 128)
+    (setq recentf-max-saved-items 256))
+#+END_SRC
+
+** SUBWORD
+#+BEGIN_SRC emacs-lisp
+  (use-package subword
+    :defer 4
+    :diminish subword-mode
+    :config
+    (global-subword-mode 1))
+#+END_SRC
+** TERM
+
+[[https://stackoverflow.com/questions/9983731/emacs-and-ansi-term-elisp-iterate-through-a-list-of-buffers][StackOverflow Term Cycle]]
+
+[[http://www.enigmacurry.com/2008/12/26/emacs-ansi-term-tricks/][Ansi Term Tricks]]
+
+[[https://www.reddit.com/r/emacs/comments/46l1mu/how_to_make_ansiterm_go_to_the_same_buffer/][Switch to ansi-term]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package term
+    :defer t
+    :config
+    (setq term-buffer-maximum-size 200000)
+    (defadvice term-handle-exit
+        (after term-kill-buffer-on-exit activate)
+      (kill-buffer)))
+#+END_SRC
+** UNIQUIFY
+#+BEGIN_SRC emacs-lisp
+
+  (use-package uniquify
+    :defer t
+    :config
+    (setq uniquify-buffer-name-style 'forward))
+#+END_SRC
+
+** WHITESPACE
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'before-save-hook 'whitespace-cleanup)
+#+END_SRC
+** WINNER MODE
+#+BEGIN_SRC emacs-lisp
+  (use-package winner
+    :bind
+    ("C-c C-/" . winner-undo)
+    ("C-c C-?" . winner-redo)
+    :config
+    (winner-mode t))
+#+END_SRC
+
+* LOCAL PACKAGES
+
+This section contains the configuration for my library of minor-modes and
+functions.
+
+** BUFFERS
 
 [[file:my-buffers.org][My Buffers Functions]]
 
 #+BEGIN_SRC emacs-lisp
   (use-package my-buffers
-    :after my-packages-melpa
     :commands
     my/fill-buffer
     my/indent-buffer
@@ -47,7 +1331,7 @@ My library of minor-modes and functions called via use-package.
     ("C-c t s" . (lambda () (interactive) (my/toggle-buffer "*scratch*"))))
 #+END_SRC
 
-* EDITS
+** EDITS
 
 [[file:my-edits.org][My Editing Functions]]
 
@@ -80,7 +1364,7 @@ My library of minor-modes and functions called via use-package.
     (add-hook 'find-file-hooks 'my/remove-dos-junk))
 #+END_SRC
 
-* DIRED
+** DIRED
 
 [[file:my-dired.org][My Dired Functions]]
 
@@ -95,7 +1379,7 @@ My library of minor-modes and functions called via use-package.
      ("C-o" . my/dired-view-current)))
 #+END_SRC
 
-* FILES
+** FILES
 
 [[file:my-files.org][My Files Functions]]
 
@@ -110,7 +1394,7 @@ My library of minor-modes and functions called via use-package.
     ("C-c f s" . my/sudoedit))
 #+END_SRC
 
-* MISC
+** MISC
 
 [[file:my-misc.org][My Miscellanous Functions]]
 
@@ -128,7 +1412,7 @@ My library of minor-modes and functions called via use-package.
       (my/after-make-frame(selected-frame))))
 #+END_SRC
 
-* ORG
+** ORG
 
 [[file:my-org.org][My Org Mode Functions]]
 
@@ -137,7 +1421,7 @@ My library of minor-modes and functions called via use-package.
     :after org)
 #+END_SRC
 
-* SETTINGS
+** SETTINGS
 
 [[file:my-settings.org][My Settings]]
 
@@ -145,7 +1429,7 @@ My library of minor-modes and functions called via use-package.
   (use-package my-settings)
 #+END_SRC
 
-* TANGLES
+** TANGLES
 
 [[file:my-tangles.org][My Tangling Functions]]
 
@@ -167,7 +1451,7 @@ My library of minor-modes and functions called via use-package.
     (add-hook 'after-save-hook 'my/auto-tangle))
 #+END_SRC
 
-* WINDOWS
+** WINDOWS
 
 [[file:my-windows.org][My Windows Functions]]
 

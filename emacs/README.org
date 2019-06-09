@@ -15,23 +15,21 @@ Running that function will tangle all the src code blocks contained in
 all the files in the current directory. Since we are in the Emacs
 directory, this will create the following elisp configuration files:
 
-|-----------------------+-------------------------------------------|
-| ORG SOURCE FILE       | TANGLED ELISP FILE                        |
-|-----------------------+-------------------------------------------|
-| [[file:my-init.org][my-init.org]]           | ~/.emacs.d/init.el                        |
-| [[file:my-packages-melpa.org][my-packages-melpa.org]] | ~/.emacs.d/site-lisp/my-packages-melpa.el |
-| [[file:my-packages-emacs.org][my-packages-emacs.org]] | ~/.emacs.d/site-lisp/my-packages-emacs.el |
-| [[file:my-packages.org][my-packages.org]]       | ~/.emacs.d/site-lisp/my-packages.el       |
-| [[file:my-buffers.org][my-buffers.org]]        | ~/.emacs.d/site-lisp/my-buffers.el        |
-| [[file:my-dired.org][my-dired.org]]          | ~/.emacs.d/site-lisp/my-dired.el          |
-| [[file:my-edits.org][my-edits.org]]          | ~/.emacs.d/site-lisp/my-edits.el          |
-| [[file:my-files.org][my-files.org]]          | ~/.emacs.d/site-lisp/my-files.el          |
-| [[file:my-misc.org][my-misc.org]]           | ~/.emacs.d/site-lisp/my-misc.el           |
-| [[file:my-org.org][my-org.org]]            | ~/.emacs.d/site-lisp/my-org.el            |
-| [[file:my-settings.org][my-settings.org]]       | ~/.emacs.d/site-lisp/my-settings.el       |
-| [[file:my-tangles.org][my-tangles.org]]        | ~/.emacs.d/site-lisp/my-tangles.el        |
-| [[file:my-windows.org][my-windows.org]]        | ~/.emacs.d/site-lisp/my-windows.el        |
-|-----------------------+-------------------------------------------|
+|-----------------+-------------------------------------|
+| ORG SOURCE FILE | TANGLED ELISP FILE                  |
+|-----------------+-------------------------------------|
+| [[file:my-init.org][my-init.org]]     | ~/.emacs.d/init.el                  |
+| [[file:my-packages.org][my-packages.org]] | ~/.emacs.d/my-packages.el           |
+| [[file:./site/lisp/my-buffers.org][my-buffers.org]]  | ~/.emacs.d/site-lisp/my-buffers.el  |
+| [[file:./site/lisp/my-dired.org][my-dired.org]]    | ~/.emacs.d/site-lisp/my-dired.el    |
+| [[file:./site/lisp/my-edits.org][my-edits.org]]    | ~/.emacs.d/site-lisp/my-edits.el    |
+| [[file:./site/lisp/my-files.org][my-files.org]]    | ~/.emacs.d/site-lisp/my-files.el    |
+| [[file:./site/lisp/my-misc.org][my-misc.org]]     | ~/.emacs.d/site-lisp/my-misc.el     |
+| [[file:./site/lisp/my-org.org][my-org.org]]      | ~/.emacs.d/site-lisp/my-org.el      |
+| [[file:./site/lisp/my-settings.org][my-settings.org]] | ~/.emacs.d/site-lisp/my-settings.el |
+| [[file:./site/lisp/my-tangles.org][my-tangles.org]]  | ~/.emacs.d/site-lisp/my-tangles.el  |
+| [[file:./site/lisp/my-windows.org][my-windows.org]]  | ~/.emacs.d/site-lisp/my-windows.el  |
+|-----------------+-------------------------------------|
 
 The function then byte compiles and loads the new configuration files,
 pulling in third party packages via the magic of [[https://github.com/jwiegley/use-package][use-package]].
