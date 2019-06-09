@@ -774,8 +774,9 @@ Run ~elpy-config~ to check python dependencies
     :defer t
     :hook
     (python-mode . elpy-mode)
-    :config
+    :init
     (elpy-enable)
+    :config
     (setq elpy-rpc-backend "jedi")
     (setq python-shell-interpreter "jupyter"
           python-shell-interpreter-args "console --simple-prompt"
