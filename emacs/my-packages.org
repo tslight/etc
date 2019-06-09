@@ -1512,7 +1512,8 @@ functions.
     :bind
     ("C-c v d" . my/tangle-directory)
     ("C-c v a" . my/tangle-all)
-    ("C-c v i" . (lambda () (interactive) (my/tangle-directory my/emacs-config-directory)))
+    ("C-c v i" . (lambda () (interactive)
+                   (my/tangle-directory my/emacs-config-directory)))
     :init
     (add-hook 'after-save-hook 'my/auto-tangle))
 #+END_SRC

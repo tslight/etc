@@ -10,8 +10,7 @@
 
 #+OPTIONS: toc:t
 
-To install this Emacs configuration we need to evaluate this buffer
-with:
+To install this Emacs configuration we need to evaluate this buffer with:
 
 =org-babel-execute-buffer= /(C-c C-v b)/
 
@@ -19,12 +18,12 @@ Then run the following newly defined function:
 
 =my/tangle-directory= with  =execute-extended-command= /(M-x)/
 
-You will be prompted to enter a directory. All org mode files in the
-entered directory will be tangled.
+You will be prompted to enter a directory. All org mode files in the entered
+directory will be tangled.
 
-Since we are visiting this file in the emacs configuration directory,
-we simply need to press enter and all our emacs configuration org
-files will be tangled, compiled and loaded.
+Since we are visiting this file in the emacs configuration directory, we simply
+need to press enter and all our emacs configuration org files will be tangled,
+compiled and loaded.
 
 * CONTENTS                                                         :TOC_5_gh:
 - [[#babel-no-confirm][BABEL NO CONFIRM]]
@@ -126,61 +125,17 @@ functions, such as my/compile-and-load-file.
 [[http://ergoemacs.org/emacs/elisp_buffer_file_functions.html][Ergoemacs Buffer File Functions]]
 [[https://superuser.com/questions/297774/how-do-i-get-emacs-to-insert-text-into-an-arbitrary-file][Superuser - How to insert text into a file]]
 
-#+BEGIN_QUOTE
-Do BODYFORM, protecting with UNWINDFORMS.
-If BODYFORM completes normally, its value is returned
-after executing the UNWINDFORMS.
-If BODYFORM exits nonlocally, the UNWINDFORMS are executed anyway.
-
--- [[help:unwind-protect][Help Page]]
-#+END_QUOTE
-
-#+BEGIN_QUOTE
-unwind-protect executes body-form with a guarantee that the
-cleanup-forms will be evaluated if control leaves body-form, no matter
-how that happens. body-form may complete normally, or execute a throw
-out of the unwind-protect, or cause an error; in all cases, the
-cleanup-forms will be evaluated.
-
-If body-form finishes normally, unwind-protect returns the value of
-body-form, after it evaluates the cleanup-forms. If body-form does not
-finish, unwind-protect does not return any value in the normal sense.
-
-Only body-form is protected by the unwind-protect. If any of the
-cleanup-forms themselves exits nonlocally (via a throw or an error),
-unwind-protect is not guaranteed to evaluate the rest of them. If the
-failure of one of the cleanup-forms has the potential to cause
-trouble, then protect it with another unwind-protect around that form.
-
-The number of currently active unwind-protect forms counts, together
-with the number of local variable bindings, against the limit
-max-specpdl-size
-
-You might think that we could just as well write (kill-buffer
-(current-buffer)) and dispense with the variable buffer. However, the
-way shown above is safer, if body-form happens to get an error after
-switching to a different buffer! (Alternatively, you could write a
-save-current-buffer around body-form, to ensure that the temporary
-buffer becomes current again in time to kill it.)
-
-Emacs includes a standard macro called with-temp-buffer which expands
-into more or less the code shown above (see Current Buffer). Several
-of the macros defined in this manual use unwind-protect in this way.
-
--- [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Cleanups.html][Cleanups - Gnu Manual]]
-#+END_QUOTE
-
 #+BEGIN_SRC emacs-lisp
   (defun my/insert-boilerplate (file)
     "Take a FILE as an argument & insert elisp header and footer
-     comments into it, if it's an elisp FILE.
+       comments into it, if it's an elisp FILE.
 
-     If the file is in my site-lisp directory also insert a
-     provide expression, so that the FILE can be loaded as a
-     package.
+       If the file is in my site-lisp directory also insert a
+       provide expression, so that the FILE can be loaded as a
+       package.
 
-     Return the file name, so that this function can be piped to
-     other functions, such as my/compile-and-load-file."
+       Return the file name, so that this function can be piped to
+       other functions, such as my/compile-and-load-file."
     (interactive "FFile: ")
     (when (equal (file-name-extension file) "el")
       (let ((temp-buffer (set-buffer (find-file-noselect file))))
@@ -195,7 +150,11 @@ of the macros defined in this manual use unwind-protect in this way.
 		  (insert (concat "(provide '"provide-string")")))
 		(message (concat "Inserted boilerplate into " file)))
 	    (save-buffer temp-buffer)
-	    (kill-buffer temp-buffer)))))
+	    (kill-buffer temp-buffer))))
+      (message (concat "Cleaning up " file"~ backup file..."))
+      (when (file-readable-p (concat file "~"))
+	(delete-file (concat file "~"))
+	(message (concat "Deleted " file "~ backup file"))))
     file)
 #+END_SRC
 
@@ -340,13 +299,13 @@ another OS.
 #+BEGIN_SRC emacs-lisp
   (defun my/auto-tangle ()
     "Auto tangle files in the directories specified below when they
-      are edited. Providing the system-type value is correct.
+     are edited. Providing the system-type value is correct.
 
-      It doesn't make sense to tangle openbsd configurations files
-      on to a linux box, for example.
+     It doesn't make sense to tangle openbsd configurations files
+     on to a linux box, for example.
 
-      However, I may want to be able to edit them without auto
-      tangling from another OS."
+     However, I may want to be able to edit them without auto
+     tangling from another OS."
     (when (equal (file-name-directory (directory-file-name buffer-file-name))
 		 (expand-file-name my/agnostic-config-directory))
       (org-babel-tangle))
@@ -415,7 +374,5 @@ Inspired by https://emacs.stackexchange.com/a/14034
 
 #+BEGIN_SRC emacs-lisp
   (defun my/os-tangle (os)
-    (when (not (equal system-type os))
-      "no")
-    )
+    (when (not (equal system-type os)) "no"))
 #+END_SRC
