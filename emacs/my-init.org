@@ -139,9 +139,8 @@ set everything else up.
           my/stumpwm-config-directory  (concat my/config-directory "stumpwm/")
           my/windows-config-directory  (concat my/config-directory "windows/"))
     (add-to-list 'load-path my/site-lisp)
-    (require 'my-packages-minimal)
+    (require 'my-packages-melpa)
     (require 'my-packages-emacs)
-    (require 'my-packages-full)
     (require 'my-packages))
 #+END_SRC
 

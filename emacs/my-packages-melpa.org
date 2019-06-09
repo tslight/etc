@@ -1,11 +1,11 @@
-#+TITLE: MINIMAL PACKAGE CONFIGURATION
+#+TITLE: MELPA PACKAGE CONFIGURATION
 #+AUTHOR: Toby Slight
 
 #+PROPERTY: header-args :cache yes
 #+PROPERTY: header-args+ :mkdirp yes
 #+PROPERTY: header-args+ :padline no
 #+PROPERTY: header-args+ :results silent
-#+PROPERTY: header-args+ :tangle ~/.emacs.d/site-lisp/my-packages-minimal.el
+#+PROPERTY: header-args+ :tangle ~/.emacs.d/site-lisp/my-packages-melpa.el
 #+PROPERTY: header-args+ :tangle-mode (identity #o600)
 
 #+OPTIONS: toc:t
@@ -13,26 +13,47 @@
 Please see the [[file:README.org][README]] and/or [[file:my-tangles.org][my-tangles.org]] for instructions on how to
 install.
 
-This file contains the configuration for third-party MELPA packages I
-can't really live without.
-
-Sometimes, I just want to have nice minimal Emacs setup, in which case
-I set the :tangle no flag on the [[help:use-package][use-package]] [[file:my-packages-full.org][my-packages-full]]
-declaration in [[file:my-packages.org][my-packages]].
+This file contains the configuration for the third-party MELPA packages I use.
 
 * CONTENTS                                                         :TOC_5_gh:
 - [[#ace-window][ACE WINDOW]]
+- [[#async][ASYNC]]
+- [[#autohotkey-mode][AUTOHOTKEY MODE]]
+- [[#avy][AVY]]
 - [[#bind-key][BIND-KEY]]
 - [[#change-inner][CHANGE INNER]]
+- [[#company-mode][COMPANY MODE]]
 - [[#counsel][COUNSEL]]
+- [[#counsel-projectile][COUNSEL PROJECTILE]]
+- [[#diminish][DIMINISH]]
+- [[#emmet-mode][EMMET MODE]]
 - [[#evil][EVIL]]
+- [[#exec-path-from-shell][EXEC PATH FROM SHELL]]
 - [[#expand-region][EXPAND REGION]]
+- [[#flx][FLX]]
+- [[#flycheck][FLYCHECK]]
+- [[#git-timemachine][GIT TIMEMACHINE]]
 - [[#hungry-delete][HUNGRY DELETE]]
 - [[#hydra][HYDRA]]
 - [[#iedit][IEDIT]]
 - [[#ivy][IVY]]
 - [[#magit][MAGIT]]
+- [[#markdown][MARKDOWN]]
+- [[#paredit][PAREDIT]]
+- [[#pc-buffer-switch][PC BUFFER SWITCH]]
+- [[#powershell][POWERSHELL]]
+- [[#projectile][PROJECTILE]]
+- [[#python][PYTHON]]
+   - [[#elpy][ELPY]]
+   - [[#pep8][PEP8]]
+   - [[#jedi][JEDI]]
+   - [[#company-jedi][COMPANY JEDI]]
+- [[#slime][SLIME]]
+- [[#smex][SMEX]]
+- [[#ssh-agency][SSH-AGENCY]]
 - [[#undo-tree][UNDO TREE]]
+- [[#web-mode][WEB MODE]]
+- [[#wgrep][WGREP]]
 - [[#which-key][WHICH KEY]]
 - [[#yasnippets][YASNIPPETS]]
 
@@ -98,6 +119,42 @@ always be 1 (or a if you use letters for window characters).
     (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
 #+END_SRC
 
+* ASYNC
+#+BEGIN_SRC emacs-lisp
+  (use-package async
+    :ensure t
+    :defer t
+    :config
+    (async-bytecomp-package-mode 1)
+    (dired-async-mode 1))
+#+END_SRC
+* AUTOHOTKEY MODE
+#+BEGIN_SRC emacs-lisp
+  (use-package ahk-mode
+    :if (eq system-type 'windows-nt)
+    :ensure t
+    :mode "\\.ahk\\'")
+#+END_SRC
+* AVY
+#+BEGIN_SRC emacs-lisp
+  (use-package avy
+    :after bind-key
+    :ensure t
+    :bind
+    ("C-c j j" . avy-goto-char)
+    ("C-c j c" . avy-goto-char-2)
+    ("C-c j l" . avy-goto-line)
+    ("M-g l" . avy-goto-line)
+    ("M-g w" . avy-goto-word-0)
+    ("C-c j w" . avy-goto-word-0)
+    ("C-c j W" . avy-goto-word-1)
+    :config
+    (setq avy-dispatch-alist '((?c . avy-action-copy)
+                               (?k . avy-action-kill-move)
+                               (?K . avy-action-kill-stay)
+                               (?m . avy-action-mark)
+                               (?z . avy-action-zap-to-char))))
+#+END_SRC
 * BIND-KEY
 
 #+BEGIN_QUOTE
@@ -212,6 +269,17 @@ kill.
     ("M-i" . change-inner)
     ("M-o" . change-outer))
 #+END_SRC
+* COMPANY MODE
+#+BEGIN_SRC emacs-lisp
+  (use-package company
+    :ensure t
+    :defer t
+    :diminish company-mode
+    :hook
+    (prog-mode . company-mode)
+    (slime-mode . company-mode)
+    (slime-repl-mode . company-mode))
+#+END_SRC
 * COUNSEL
 
 #+BEGIN_QUOTE
@@ -284,6 +352,36 @@ counsel replacements:
     (counsel-mode 1))
 #+END_SRC
 
+* COUNSEL PROJECTILE
+#+BEGIN_SRC emacs-lisp
+  (use-package counsel-projectile
+    :ensure t
+    :defer t
+    :after (counsel projectile)
+    :config
+    (counsel-projectile-mode))
+#+END_SRC
+* DIMINISH
+#+BEGIN_SRC emacs-lisp
+  (use-package diminish
+    :defer 4
+    :ensure t)
+#+END_SRC
+* EMMET MODE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package emmet-mode
+    :defer t
+    :ensure t
+    :diminish
+    :after web-mode
+    :hook
+    (sgml-mode)
+    (html-mode)
+    (css-mode)
+    (web-mode))
+#+END_SRC
+
 * EVIL
 
 [[https://stackoverflow.com/a/28985130][Make insert state into emacs state]]
@@ -300,6 +398,18 @@ counsel replacements:
     (setq evil-insert-state-cursor '(box "yellow")
           evil-emacs-state-cursor '(box "green")
           evil-normal-state-cursor '(box "purple")))
+#+END_SRC
+
+* EXEC PATH FROM SHELL
+
+https://github.com/purcell/exec-path-from-shell
+
+#+BEGIN_SRC emacs-lisp
+  (use-package exec-path-from-shell
+    :ensure t
+    :init
+    (exec-path-from-shell-initialize)
+    (exec-path-from-shell-copy-env "PYTHONPATH"))
 #+END_SRC
 
 * EXPAND REGION
@@ -332,6 +442,31 @@ https://spwhitton.name/blog/entry/expandregionlines/
             (goto-char end)
             (end-of-line)
             (forward-char 1))))))
+#+END_SRC
+* FLX
+#+BEGIN_SRC emacs-lisp
+  (use-package flx
+    :defer t
+    :ensure t
+    :after (counsel ivy))
+#+END_SRC
+* FLYCHECK
+#+BEGIN_SRC emacs-lisp
+  (use-package flycheck
+    :ensure t
+    :defer t
+    :diminish flycheck-mode
+    :hook
+    (prog-mode . flycheck-mode))
+#+END_SRC
+* GIT TIMEMACHINE
+
+[[https://github.com/pidu/git-timemachine][GitHub Repo]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package git-timemachine
+    :defer t
+    :ensure t)
 #+END_SRC
 * HUNGRY DELETE
 #+BEGIN_SRC emacs-lisp
@@ -510,6 +645,199 @@ that disables itself auto-magically.
     (setq magit-completing-read-function 'ivy-completing-read))
 #+END_SRC
 
+* MARKDOWN
+
+#+BEGIN_SRC emacs-lisp
+  (use-package markdown-mode
+    :ensure t
+    :defer t
+    :commands (markdown-mode gfm-mode)
+    :mode (("README\\.md\\'" . gfm-mode)
+           ("\\.md\\'" . markdown-mode)
+           ("\\.markdown\\'" . markdown-mode))
+    :init (setq markdown-command "multimarkdown"))
+#+END_SRC
+
+* PAREDIT
+#+BEGIN_SRC emacs-lisp
+  (use-package paredit
+    :defer t
+    :bind
+    ("C-c t p" . paredit-mode))
+#+END_SRC
+* PC BUFFER SWITCH
+#+BEGIN_SRC emacs-lisp
+  (use-package pc-bufsw
+    :if window-system
+    :ensure t
+    :bind
+    ("C-<escape>" . pc-bufsw-mru)
+    ("C-S-<escape>" . pc-bufsw-lru)
+    :config
+    (setq pc-bufsw-quit-time 1))
+#+END_SRC
+* POWERSHELL
+#+BEGIN_SRC emacs-lisp
+  (use-package powershell
+    :ensure t
+    :defer t)
+#+END_SRC
+* PROJECTILE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package projectile
+    :ensure t
+    :diminish projectile-mode
+    :bind-keymap
+    ("C-c p" . projectile-command-map)
+    :config
+    (projectile-mode)
+    (setq projectile-completion-system 'ivy)
+    (when (require 'magit nil t)
+      (mapc #'projectile-add-known-project
+            (mapcar #'file-name-as-directory (magit-list-repos)))
+      ;; Optionally write to persistent `projectile-known-projects-file'
+      (projectile-save-known-projects)))
+#+END_SRC
+
+* PYTHON
+
+Make sure the following python packages are installed with ~pip install~:
+
+- *autopep8* /pep8 style formatter/
+- *black* /uncompromising formatter/
+- *flake8* /style guide enforcement/
+- *importmagic* /automatic imports/
+- *jedi* /lightweight autocomplete/
+- *jupyter* /ipython successor/
+- *rope* /refactoring library/
+- *virtualenv* /sandboxed python environments/
+- *yapf* /yet another python formatter/
+
+#+BEGIN_SRC sh :tangle no
+pip3 install autopep8 black flake8 importmagic jedi jupyter rope virtualenv yapf pylint
+#+END_SRC
+
+[[https://emacs.stackexchange.com/questions/2745/make-fill-paragraph-in-python-docstring-leave-the-triple-quotes-on-separate-line/2758][Docstring Fill Column Mode]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package python-mode
+    :ensure t
+    :commands (python-mode)
+    :mode (("\\.py\\'" . python-mode))
+    :config
+    (setq python-shell-interpreter "ipython3")
+    (setq python-fill-docstring-style 'django)
+    (setq fill-column 78)
+    ;; stop python interpreter from clobbering find-file...
+    ;; https://answers.launchpad.net/python-mode/+question/221144
+    (add-hook 'python-mode-hook
+              (lambda ()
+                ;; remove python-mode's ffap things that slow down find-file
+                (setq ffap-alist (remove '(python-mode . py-ffap-module-path) ffap-alist))
+                (setq ffap-alist (remove '(python-mode . py-module-path) ffap-alist))
+                (setq ffap-alist (remove '(inferior-python-mode . py-ffap-module-path) ffap-alist))
+                )))
+#+END_SRC
+
+https://realpython.com/emacs-the-best-python-editor/
+
+** ELPY
+
+https://elpy.readthedocs.io/en/latest/
+
+Run ~elpy-config~ to check python dependencies
+
+#+BEGIN_SRC emacs-lisp
+  (use-package elpy
+    :ensure t
+    :defer t
+    :hook
+    (python-mode . elpy-mode)
+    :config
+    (elpy-enable)
+    (setq elpy-rpc-backend "jedi")
+    (setq python-shell-interpreter "jupyter"
+          python-shell-interpreter-args "console --simple-prompt"
+          python-shell-prompt-detect-failure-warning nil)
+    (add-to-list 'python-shell-completion-native-disabled-interpreters"jupyter"))
+#+END_SRC
+
+** PEP8
+
+https://pypi.org/project/autopep8/
+
+#+BEGIN_SRC emacs-lisp
+  (use-package py-autopep8
+    :ensure t
+    :defer t
+    :hook
+    (python-mode . py-autopep8-enable-on-save))
+#+END_SRC
+
+** JEDI
+
+https://github.com/anschwa/emacs.d#python
+
+#+BEGIN_SRC emacs-lisp
+  (use-package jedi
+    :ensure t
+    :defer t
+    :init
+    (setq jedi:complete-on-dot t)
+    :hook
+    (python-mode . jedi:setup))
+#+END_SRC
+
+** COMPANY JEDI
+
+#+BEGIN_SRC emacs-lisp
+  (use-package company-jedi
+    :ensure t
+    :defer t
+    :config
+    (add-to-list 'company-backends 'company-jedi))
+#+END_SRC
+* SLIME
+
+https://kaashif.co.uk/2015/06/28/hacking-stumpwm-with-common-lisp/
+
+https://github.com/quicklisp/quicklisp-slime-helper
+
+#+BEGIN_SRC common-lisp :tangle no
+(ql:quickload "quicklisp-slime-helper")
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package slime
+    :ensure t
+    :commands (slime-mode)
+    :defer t
+    :config
+    (use-package slime-company
+      :ensure t
+      :defer t)
+    (load (expand-file-name "~/quicklisp/slime-helper.el"))
+    (setq inferior-lisp-program "sbcl")
+    (slime-setup '(slime-fancy slime-company slime-quicklisp slime-asdf)))
+#+END_SRC
+
+* SMEX
+#+BEGIN_SRC emacs-lisp
+  (use-package smex
+    :ensure t
+    :defer t
+    :after counsel)
+#+END_SRC
+* SSH-AGENCY
+#+BEGIN_SRC emacs-lisp :tangle no
+  (use-package ssh-agency
+    :if (eq system-type 'windows-nt)
+    :ensure t
+    :defer t
+    :init
+    (setenv "SSH_ASKPASS" "git-gui--askpass"))
+#+END_SRC
 * UNDO TREE
 
 #+BEGIN_SRC emacs-lisp
@@ -524,6 +852,38 @@ that disables itself auto-magically.
     (setq undo-tree-auto-save-history t)
     (setq undo-tree-history-directory-alist
           `(("." . ,(expand-file-name "~/.emacs.d/undos/")))))
+#+END_SRC
+* WEB MODE
+#+BEGIN_SRC emacs-lisp
+  (use-package web-mode
+    :ensure t
+    :mode
+    "\\.phtml\\'"
+    "\\.tpl\\.php\\'"
+    "\\.[agj]sp\\'"
+    "\\.as[cp]x\\'"
+    "\\.erb\\'"
+    "\\.mustache\\'"
+    "\\.djhtml\\'"
+    "\\.html\\.twig\\'"
+    "\\.html?\\'"
+    "\\.php?\\'"
+    "\\.css?\\'"
+    :config
+    (setq web-mode-markup-indent-offset 2)
+    (setq web-mode-css-indent-offset 2)
+    (setq web-mode-code-indent-offset 2)
+    (setq web-mode-enable-auto-pairing t)
+    (setq web-mode-enable-css-colorization t)
+    (setq web-mode-enable-block-face t)
+    (setq web-mode-enable-part-face t)
+    (setq web-mode-enable-comment-keywords t))
+#+END_SRC
+* WGREP
+#+BEGIN_SRC emacs-lisp
+  (use-package wgrep
+    :ensure t
+    :defer t)
 #+END_SRC
 * WHICH KEY
 #+BEGIN_SRC emacs-lisp

@@ -1,4 +1,4 @@
-#+TITLE: MY PACKAGE CONFIGURATION
+#+TITLE: PERSONAL PACKAGE CONFIGURATION
 #+AUTHOR: Toby Slight
 
 #+PROPERTY: header-args :cache yes
@@ -32,7 +32,7 @@ My library of minor-modes and functions called via use-package.
 
 #+BEGIN_SRC emacs-lisp
   (use-package my-buffers
-    :after my-packages-minimal
+    :after my-packages-melpa
     :commands
     my/fill-buffer
     my/indent-buffer
