@@ -10,75 +10,19 @@
 
 #+OPTIONS: toc:t
 
-Please see the [[file:README.org][README]] and/or [[file:my-tangles.org][my-tangles.org]] for instructions on how to install.
+Please see the [[file:README.org][README]] and/or [[file:./site-lisp/my-tangles.org][my-tangles.org]] for instructions on how to install.
 
 This initialisation file wraps our configuration in some speed hacks found on
 the interwebs with let expressions.
 
-It also sets the stage for John Wiegley's amazing [[https://github.com/jwiegley/use-package][use-package]] macro to load the
-rest of the configuration files, additional packages and modes.
-
-* STARTUP SPEED TIPS
+It also sets the stage for John Wiegley's amazing [[https://github.com/jwiegley/use-package][use-package]] macro to load
+the rest of the configuration files, additional packages and modes.
 
 [[https://www.reddit.com/r/emacs/comments/3kqt6e/2_easy_little_known_steps_to_speed_up_emacs_start/][Reddit Thread on Startup Speed]]
 
-*Doom Tricks:*
+[[https://github.com/hlissner/doom-emacs/wiki/FAQ#how-is-dooms-startup-so-fast][Doom Fast Startup Explanation from FAQ]]
 
-#+BEGIN_QUOTE
-Doom employs a few techniques to achieve its speed (as well as a ton of
-premature optimization). Here are some of its more important secrets:
-
-- The garbage collector eats up a lot of time during startup, so turn up its
-  memory threshold to prevent it from getting triggered.
-
-  Avoid garbage collection during startup. The GC eats up quite a bit of time,
-  easily doubling startup time. The trick is to turn up the memory threshold to
-  prevent it from running.
-
-- Unrelated to GC, but I also temporarily unset file-name-handler-alist, which
-  Emacs looks through every time it loads a file; this gives me a modest
-  90-120ms boost.
-
-  Like we did with the garbage collector, unset file-name-handler-alist too
-  (temporarily). Every file opened and loaded by Emacs will run through this
-  list to check for a proper handler for the file, but during startup, it won’t
-  need any of them. Doom doesn’t, at least.
-
-- Every time you load or require a package, Emacs does an O(n) equal lookup on
-  load-path. Little you can do about this, but where I can I let-bind load-path
-  to a subset of itself (like in doom-initialize).
-
-- I also use load! to load all of Doom's module files, which expands to (load
-  ABSOLUTE_PATH nil t) without a load-path lookup.
-
-- package.el initialization loads every package autoloads file and populates
-  load-path. That makes (package-initialize) a great target for premature
-  optimizers like me! Besides, i don't need those autoloads (I define them
-  manually), so turn it off, and then I populate load-path manually.
-
-- Lazy load everything. Packages are an obvious one; use-package defers 90% of
-  Doom's packages at startup. Package checking isn't done either (as you've
-  noticed, it's done externally), which is a large savings.
-
-- Exploit byte-compilation. Many expensive things are cached, or even cut out,
-  at compile time. I get a ~40% improvement in startup time with make
-  compile-core. You can byte-compile the whole config with make compile but that
-  takes much longer and you get significantly diminished returns.
-
-- Use lexical-binding everywhere. Add ;; -*- lexical-binding: t; -*- to the top
-  of your elisp files. This can cause code breakage if your code depends on
-  dynamic variables, but I've written Doom not to.
-
-- Avoid lambdas by preferring cl-loop or dolist over mapcar and mapc. Lambdas
-  add a little overhead each time they're executed in loops (and the
-  byte-compiler has trouble inlining them; especially when lexical-binding is
-  on!).
-
--- [[https://github.com/hlissner/doom-emacs/wiki/FAQ#how-is-dooms-startup-so-fast][Doom Fast Startup Explanation from FAQ]]
--- [[https://github.com/hlissner/doom-emacs/issues/310][Doom Fast Startup Explanation from GitHub Issue]]
-#+END_QUOTE
-
-* MAGIC UNICORN SUMMONING SPELL
+[[https://github.com/hlissner/doom-emacs/issues/310][Doom Fast Startup Explanation from GitHub Issue]]
 
 Wrap everything in a let expression that sets garbage collection variables to
 extremely high values and unsets file-name-handler-list.
@@ -92,7 +36,7 @@ Set up package.el, add melpa repository, add package autoloads, then install
 Set some use-package variables, and then add our configuration file directory to
 the [[help:load-path][load path]].
 
-Finally [[help:require][require]] our package configuration, which calls use-package to set
+Finally load our package configuration, which calls use-package to set
 everything else up.
 
 #+BEGIN_SRC emacs-lisp
@@ -104,14 +48,10 @@ everything else up.
           package--init-file-ensured t)
     (setq package-archives
           '(("melpa" . "https://melpa.org/packages/")
-            ("melpa-stable" . "https://stable.melpa.org/packages/")
-            ("gnu" . "https://elpa.gnu.org/packages/")
-            ("marmalade" . "https://marmalade-repo.org/packages/"))
+            ("gnu" . "https://elpa.gnu.org/packages/"))
           package-archive-priorities
-          '(("melpa" . 10)
-            ("melpa-stable" . 8)
-            ("gnu". 4)
-            ("marmalade" . 2)))
+          '(("melpa" . 2)
+            ("gnu". 1)))
     (package-initialize)
     (unless (package-installed-p 'use-package)
       (package-refresh-contents)
