@@ -45,6 +45,7 @@ align the section based upon the = sign:
     (interactive "r")
     (align-regexp begin end "\\(\\s-*\\)=" 1 1))
 #+END_SRC
+
 * CHANGE PAIRS
 
 Taken from [[http://ergoemacs.org/emacs/elisp_change_brackets.html][here]].
