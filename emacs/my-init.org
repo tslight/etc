@@ -25,7 +25,7 @@ the rest of the configuration files, additional packages and modes.
 [[https://github.com/hlissner/doom-emacs/issues/310][Doom Fast Startup Explanation from GitHub Issue]]
 
 Wrap everything in a let expression that sets garbage collection variables to
-extremely high values and unsets file-name-handler-list.
+extremely high values and unset file-name-handler-list.
 
 However, have them be restored once the init code has run, since let only sets
 local variables.

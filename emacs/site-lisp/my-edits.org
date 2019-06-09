@@ -132,39 +132,33 @@ align the section based upon the = sign:
                 (goto-char (point-min))
                 (while
                     (re-search-forward "`\\([^`]+?\\)`" nil t)
-                  (overlay-put (make-overlay (match-beginning 0) (match-end 0)) 'face 'highlight)
                   (replace-match (concat $toLeft "\\1" $toRight ) "FIXEDCASE" ))))
              ((string-match "tilde" @from-chars)
               (progn
                 (goto-char (point-min))
                 (while
                     (re-search-forward "~\\([^~]+?\\)~" nil t)
-                  (overlay-put (make-overlay (match-beginning 0) (match-end 0)) 'face 'highlight)
                   (replace-match (concat $toLeft "\\1" $toRight ) "FIXEDCASE" ))))
              ((string-match "ascii quote" @from-chars)
               (progn
                 (goto-char (point-min))
                 (while
                     (re-search-forward "\"\\([^\"]+?\\)\"" nil t)
-                  (overlay-put (make-overlay (match-beginning 0) (match-end 0)) 'face 'highlight)
                   (replace-match (concat $toLeft "\\1" $toRight ) "FIXEDCASE" ))))
              ((string-match "equal" @from-chars)
               (progn
                 (goto-char (point-min))
                 (while
                     (re-search-forward "=\\([^=]+?\\)=" nil t)
-                  (overlay-put (make-overlay (match-beginning 0) (match-end 0)) 'face 'highlight)
                   (replace-match (concat $toLeft "\\1" $toRight ) "FIXEDCASE" ))))
              (t (progn
                   (progn
                     (goto-char (point-min))
                     (while (search-forward $fromLeft nil t)
-                      (overlay-put (make-overlay (match-beginning 0) (match-end 0)) 'face 'highlight)
                       (replace-match $toLeft "FIXEDCASE" "LITERAL")))
                   (progn
                     (goto-char (point-min))
                     (while (search-forward $fromRight nil t)
-                      (overlay-put (make-overlay (match-beginning 0) (match-end 0)) 'face 'highlight)
                       (replace-match $toRight "FIXEDCASE" "LITERAL")))))))))))
 #+END_SRC
 * COPY OR CUT LINE OR REGION
