@@ -15,6 +15,7 @@ look no further.
 #+END_QUOTE
 
 ** INSTALLATION
+*** QUICKLISP
 
 Get Quicklisp from [[https://www.quicklisp.org/beta/][here]]:
 
@@ -52,6 +53,8 @@ Install stumpwm and some packages we need for niceties.
   (ql:quickload :quicklisp-slime-helper) ;; Required by slime-connect
 #+END_SRC
 
+*** STARTUP FILES
+
 Tangle this block to create a lisp file to start StumpWM in ~/usr/local/bin~:
 
 #+BEGIN_SRC common-lisp :tangle /sudo::/usr/local/bin/stumpwm.lisp :tangle-mode (identity #o644)
@@ -69,7 +72,7 @@ This block creates a script in ~/usr/local/bin~ that loads the lisp above into
 Next add the following line to your .xinitrc to be able to run with ~startx~:
 
 #+BEGIN_SRC bash :tangle ~/.xinitrc
-exec /usr/local/bin/stumpwm.sh
+  exec /usr/local/bin/stumpwm.sh
 #+END_SRC
 
 And/or tangle the block below to create a .desktop file to be read by your display
@@ -80,12 +83,14 @@ manager.
   Encoding=UTF-8
   Name=StumpWM
   Comment=Hacks and glory await!
-  TryExec=stumpwm
-  Exec=/usr/local/bin/stumpwm
+  TryExec=stumpwm.sh
+  Exec=/usr/local/bin/stumpwm.sh
   Type=Application
   [X-Window Manager]
   SessionManaged=true
 #+END_SRC
+
+*** CONFIG
 
 Finally, now that we have StumpWM installed and ready to be started with either
 ~startx~ or from a display manager, we need to tangle the code in the files
