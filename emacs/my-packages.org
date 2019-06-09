@@ -150,11 +150,15 @@ always be 1 (or a if you use letters for window characters).
     ("C-x 0" . ace-delete-window)
     ("C-x 1" . ace-delete-other-windows)
     :config
-    (set-face-attribute 'aw-leading-char-face nil :foreground "deep sky blue" :weight 'bold :height 3.0)
+    (set-face-attribute 'aw-leading-char-face nil
+                        :foreground "deep sky blue"
+                        :weight 'bold
+                        :height 3.0)
     (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
 #+END_SRC
 
 ** ASYNC
+
 #+BEGIN_SRC emacs-lisp
   (use-package async
     :ensure t
@@ -163,14 +167,18 @@ always be 1 (or a if you use letters for window characters).
     (async-bytecomp-package-mode 1)
     (dired-async-mode 1))
 #+END_SRC
+
 ** AUTOHOTKEY MODE
+
 #+BEGIN_SRC emacs-lisp
   (use-package ahk-mode
     :if (eq system-type 'windows-nt)
     :ensure t
     :mode "\\.ahk\\'")
 #+END_SRC
+
 ** AVY
+
 #+BEGIN_SRC emacs-lisp
   (use-package avy
     :after bind-key
@@ -190,12 +198,12 @@ always be 1 (or a if you use letters for window characters).
                                (?m . avy-action-mark)
                                (?z . avy-action-zap-to-char))))
 #+END_SRC
+
 ** BIND-KEY
 
 #+BEGIN_QUOTE
-To bind multiple keys in a `bind-key*' way (to be sure that your
-bindings will not be overridden by other modes), you may use
-`bind-keys*' macro:
+To bind multiple keys in a `bind-key*' way (to be sure that your bindings will
+not be overridden by other modes), you may use `bind-keys*' macro:
 
 -- [[https://emacs.stackexchange.com/questions/352/how-to-override-major-mode-bindings][How to override major-mode bindings]]
 #+END_QUOTE
@@ -203,8 +211,8 @@ bindings will not be overridden by other modes), you may use
 #+BEGIN_QUOTE
 =:bind*=
 
-Bind keys, and define autoloads for the bound commands,
-*overriding all minor mode bindings*.
+Bind keys, and define autoloads for the bound commands, *overriding all minor
+mode bindings*.
 
 -- [[help:use-package][Help Page]]
 #+END_QUOTE
@@ -235,7 +243,8 @@ Bind keys, and define autoloads for the bound commands,
     ("C-c t d q" . toggle-debug-on-quit)
     ("C-c t l" . linum-mode)
     ("C-c t t" . toggle-truncate-lines)
-    ("C-c t C-t" . (lambda () (interactive) (mapc #'disable-theme custom-enabled-themes)))
+    ("C-c t C-t" . (lambda () (interactive)
+                     (mapc #'disable-theme custom-enabled-themes)))
     ;; emacs space rebindings
     ("C-:" . pp-eval-expression)
     ("C-;" . comment-line)
@@ -277,6 +286,7 @@ Bind keys, and define autoloads for the bound commands,
 #+END_SRC
 
 ** CHANGE INNER
+
 #+BEGIN_QUOTE
 change-inner gives you vim's ci command, building on expand-region. It
 is most easily explained by example:
@@ -304,7 +314,9 @@ kill.
     ("M-i" . change-inner)
     ("M-o" . change-outer))
 #+END_SRC
+
 ** COMPANY MODE
+
 #+BEGIN_SRC emacs-lisp
   (use-package company
     :ensure t
@@ -315,6 +327,7 @@ kill.
     (slime-mode . company-mode)
     (slime-repl-mode . company-mode))
 #+END_SRC
+
 ** COUNSEL
 
 #+BEGIN_QUOTE
@@ -388,6 +401,7 @@ counsel replacements:
 #+END_SRC
 
 ** COUNSEL PROJECTILE
+
 #+BEGIN_SRC emacs-lisp
   (use-package counsel-projectile
     :ensure t
@@ -396,12 +410,15 @@ counsel replacements:
     :config
     (counsel-projectile-mode))
 #+END_SRC
+
 ** DIMINISH
+
 #+BEGIN_SRC emacs-lisp
   (use-package diminish
     :defer 4
     :ensure t)
 #+END_SRC
+
 ** EMMET MODE
 
 #+BEGIN_SRC emacs-lisp
@@ -478,14 +495,18 @@ https://spwhitton.name/blog/entry/expandregionlines/
             (end-of-line)
             (forward-char 1))))))
 #+END_SRC
+
 ** FLX
+
 #+BEGIN_SRC emacs-lisp
   (use-package flx
     :defer t
     :ensure t
     :after (counsel ivy))
 #+END_SRC
+
 ** FLYCHECK
+
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck
     :ensure t
@@ -494,6 +515,7 @@ https://spwhitton.name/blog/entry/expandregionlines/
     :hook
     (prog-mode . flycheck-mode))
 #+END_SRC
+
 ** GIT TIMEMACHINE
 
 [[https://github.com/pidu/git-timemachine][GitHub Repo]]
@@ -503,7 +525,9 @@ https://spwhitton.name/blog/entry/expandregionlines/
     :defer t
     :ensure t)
 #+END_SRC
+
 ** HUNGRY DELETE
+
 #+BEGIN_SRC emacs-lisp
   (use-package hungry-delete
     :defer 6
@@ -512,6 +536,7 @@ https://spwhitton.name/blog/entry/expandregionlines/
     :config
     (global-hungry-delete-mode))
 #+END_SRC
+
 ** HYDRA
 
 #+BEGIN_QUOTE
@@ -625,12 +650,14 @@ that disables itself auto-magically.
 #+END_SRC
 
 ** IEDIT
+
 #+BEGIN_SRC emacs-lisp
   (use-package iedit
     :ensure t
     :bind
     ("M-%" . iedit-mode))
 #+END_SRC
+
 ** IVY
 
 #+BEGIN_SRC emacs-lisp
@@ -694,13 +721,16 @@ that disables itself auto-magically.
 #+END_SRC
 
 ** PAREDIT
+
 #+BEGIN_SRC emacs-lisp
   (use-package paredit
     :defer t
     :bind
     ("C-c t p" . paredit-mode))
 #+END_SRC
+
 ** PC BUFFER SWITCH
+
 #+BEGIN_SRC emacs-lisp
   (use-package pc-bufsw
     :if window-system
@@ -711,12 +741,15 @@ that disables itself auto-magically.
     :config
     (setq pc-bufsw-quit-time 1))
 #+END_SRC
+
 ** POWERSHELL
+
 #+BEGIN_SRC emacs-lisp
   (use-package powershell
     :ensure t
     :defer t)
 #+END_SRC
+
 ** PROJECTILE
 
 #+BEGIN_SRC emacs-lisp
@@ -858,6 +891,7 @@ https://github.com/quicklisp/quicklisp-slime-helper
 #+END_SRC
 
 ** SSH-AGENCY
+
 #+BEGIN_SRC emacs-lisp :tangle no
   (use-package ssh-agency
     :if (eq system-type 'windows-nt)
@@ -866,6 +900,7 @@ https://github.com/quicklisp/quicklisp-slime-helper
     :init
     (setenv "SSH_ASKPASS" "git-gui--askpass"))
 #+END_SRC
+
 ** UNDO TREE
 
 #+BEGIN_SRC emacs-lisp
@@ -881,7 +916,9 @@ https://github.com/quicklisp/quicklisp-slime-helper
     (setq undo-tree-history-directory-alist
           `(("." . ,(expand-file-name "~/.emacs.d/undos/")))))
 #+END_SRC
+
 ** WEB MODE
+
 #+BEGIN_SRC emacs-lisp
   (use-package web-mode
     :ensure t
@@ -907,13 +944,17 @@ https://github.com/quicklisp/quicklisp-slime-helper
     (setq web-mode-enable-part-face t)
     (setq web-mode-enable-comment-keywords t))
 #+END_SRC
+
 ** WGREP
+
 #+BEGIN_SRC emacs-lisp
   (use-package wgrep
     :ensure t
     :defer t)
 #+END_SRC
+
 ** WHICH KEY
+
 #+BEGIN_SRC emacs-lisp
   (use-package which-key
     :ensure t
@@ -924,6 +965,7 @@ https://github.com/quicklisp/quicklisp-slime-helper
 #+END_SRC
 
 ** YASNIPPETS
+
 #+BEGIN_SRC emacs-lisp
   (use-package yasnippet
     :ensure t
@@ -938,6 +980,7 @@ https://github.com/quicklisp/quicklisp-slime-helper
       :after yasnippet
       ))
 #+END_SRC
+
 * EMACS PACKAGES
 
 This section contains configuration for built in Emacs packages.
@@ -977,6 +1020,7 @@ c++, Message); the g in C-x a i g is for global, meaning every mode.
     (setq abbrev-file-name (concat user-emacs-directory "abbrevs"))
     (setq save-abbrevs 'silently))
 #+END_SRC
+
 ** AUTOFILL
 
 #+BEGIN_SRC emacs-lisp
@@ -1058,6 +1102,7 @@ single buffer, use ‘electric-pair-local-mode’.
 #+END_SRC
 
 ** ERC
+
 #+BEGIN_SRC emacs-lisp
   (use-package erc
     :defer t
@@ -1073,7 +1118,9 @@ single buffer, use ‘electric-pair-local-mode’.
     (setq erc-prompt-for-password t)
     (setq erc-track-enable-keybindings t))
 #+END_SRC
+
 ** ELDOC
+
 #+BEGIN_SRC emacs-lisp
   (use-package eldoc
     :defer t
@@ -1083,6 +1130,7 @@ single buffer, use ‘electric-pair-local-mode’.
     (lisp-interaction-mode . eldoc-mode)
     (emacs-lisp-mode . eldoc-mode))
 #+END_SRC
+
 ** ESHELL
 
 [[https://www.masteringemacs.org/article/complete-guide-mastering-eshell][Mastering Eshell]]
@@ -1105,7 +1153,9 @@ single buffer, use ‘electric-pair-local-mode’.
     (setq eshell-review-quick-commands nil)
     (setq eshell-smart-space-goes-to-end t))
 #+END_SRC
+
 ** FLYSPELL
+
 #+BEGIN_SRC emacs-lisp
   (use-package flyspell
     :defer t
@@ -1118,7 +1168,9 @@ single buffer, use ‘electric-pair-local-mode’.
     (when (eq system-type 'darwin) ;; mac specific settings
       (setq ispell-program-name "/usr/local/bin/ispell")))
 #+END_SRC
+
 ** GNUS
+
 #+BEGIN_SRC emacs-lisp
   (use-package gnus
     :defer t
@@ -1137,7 +1189,9 @@ single buffer, use ‘electric-pair-local-mode’.
     (setq gnus-thread-hide-subtree t)
     (setq gnus-thread-ignore-subject t))
 #+END_SRC
+
 ** LINUM MODE
+
 #+BEGIN_SRC emacs-lisp
   (use-package linum
     :defer t
@@ -1146,7 +1200,9 @@ single buffer, use ‘electric-pair-local-mode’.
     (shell-script-mode . linum-mode)
     (sh-mode . linum-mode))
 #+END_SRC
+
 ** LISP MODE
+
 #+BEGIN_SRC emacs-lisp
   (use-package lisp-mode
     :defer t
@@ -1154,13 +1210,16 @@ single buffer, use ‘electric-pair-local-mode’.
            . (lambda ()
                (add-hook 'after-save-hook 'check-parens nil t))))
 #+END_SRC
+
 ** MISC
+
 #+BEGIN_SRC emacs-lisp
   (use-package misc
     :bind
     ("C-z" . zap-up-to-char)
     ("M-z" . zap-to-char))
 #+END_SRC
+
 ** ORG
 
 Attempt to get org-mode to allow emphasis across multiple lines when
@@ -1236,6 +1295,7 @@ and it will not insert a newline.
     (setq org-use-fast-todo-selection t)
     (setq org-use-speed-commands t))
 #+END_SRC
+
 ** RECENTF
 
 [[https://www.reddit.com/r/emacs/comments/3g468d/stop_recent_files_showing_elpa_packages/][Stop Recent Files showing elpa packages?]]
@@ -1259,6 +1319,7 @@ and it will not insert a newline.
 #+END_SRC
 
 ** SUBWORD
+
 #+BEGIN_SRC emacs-lisp
   (use-package subword
     :defer 4
@@ -1266,6 +1327,7 @@ and it will not insert a newline.
     :config
     (global-subword-mode 1))
 #+END_SRC
+
 ** TERM
 
 [[https://stackoverflow.com/questions/9983731/emacs-and-ansi-term-elisp-iterate-through-a-list-of-buffers][StackOverflow Term Cycle]]
@@ -1283,6 +1345,7 @@ and it will not insert a newline.
         (after term-kill-buffer-on-exit activate)
       (kill-buffer)))
 #+END_SRC
+
 ** UNIQUIFY
 #+BEGIN_SRC emacs-lisp
 
@@ -1293,10 +1356,13 @@ and it will not insert a newline.
 #+END_SRC
 
 ** WHITESPACE
+
 #+BEGIN_SRC emacs-lisp
   (add-hook 'before-save-hook 'whitespace-cleanup)
 #+END_SRC
+
 ** WINNER MODE
+
 #+BEGIN_SRC emacs-lisp
   (use-package winner
     :bind
