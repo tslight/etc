@@ -849,7 +849,7 @@ https://github.com/quicklisp/quicklisp-slime-helper
 
 ** SSH-AGENCY
 
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle (my/os-tangle 'windows-nt)
   (use-package ssh-agency
     :if (eq system-type 'windows-nt)
     :ensure t
