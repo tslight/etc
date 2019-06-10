@@ -10,8 +10,10 @@
 
 #+OPTIONS: toc:t
 
-Please see the [[file:README.org][README]] and/or [[file:my-tangles.org][my-tangles.org]] for instructions on how to
-install.
+Please see the [[file:README.org][README]] and/or [[file:my-tangles.org][my-tangles.org]] for instructions on how to install.
+
+As the name might suggest, this file mainly toggles various built in Emacs
+variables to what I consider to be slightly saner defaults...
 
 * CONTENTS                                                         :TOC_5_gh:
 - [[#apropos][APROPOS]]
@@ -50,7 +52,6 @@ install.
 - [[#show-paren][SHOW PAREN]]
 - [[#split-threshold][SPLIT THRESHOLD]]
 - [[#startup][STARTUP]]
-- [[#tramp][TRAMP]]
 - [[#truncate-lines][TRUNCATE LINES]]
 - [[#undo-limit][UNDO LIMIT]]
 - [[#version-control][VERSION CONTROL]]
@@ -563,7 +564,7 @@ https://emacs.stackexchange.com/a/12231
 * FILL COLUMN
 
 #+BEGIN_SRC emacs-lisp
-  (setq-default fill-column 80)
+  (setq-default fill-column 79)
 #+END_SRC
 
 * HIDE SHOW
@@ -641,7 +642,7 @@ Turn off tooltips if bound.
 
 * MACOS MODIFIERS
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle (my/os-tangle 'darwin)
   (when (eq system-type 'darwin) ;; mac specific settings
     (setq mac-option-modifier 'meta)
     ;; (setq mac-command-modifier 'control)
@@ -688,10 +689,12 @@ Increase the number of messages in the Messages buffer.
 #+END_SRC
 
 * PERSONAL INFO
+
 #+BEGIN_SRC emacs-lisp
   (setq user-full-name "Toby Slight"
         user-mail-address "tslight@pm.me")
 #+END_SRC
+
 * PRETTY SYMBOLS
 
 http://ergoemacs.org/emacs/emacs_pretty_lambda.html
@@ -849,13 +852,6 @@ Major mode command symbol to use for the initial ‘*scratch*’ buffer.
 
 #+BEGIN_SRC emacs-lisp
   (setq initial-major-mode 'fundamental-mode)
-#+END_SRC
-
-* TRAMP
-
-#+BEGIN_SRC emacs-lisp
-  (setq tramp-backup-directory-alist backup-directory-alist)
-  (setq tramp-default-method "ssh")
 #+END_SRC
 
 * TRUNCATE LINES

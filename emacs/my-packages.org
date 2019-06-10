@@ -59,6 +59,7 @@ built-in Emacs ones, and my own local custom minor mode packages.
    - [[#abbrev-mode][ABBREV MODE]]
    - [[#autofill][AUTOFILL]]
    - [[#dired][DIRED]]
+   - [[#dired-x][DIRED X]]
    - [[#electric][ELECTRIC]]
    - [[#erc][ERC]]
    - [[#eldoc][ELDOC]]
@@ -73,6 +74,7 @@ built-in Emacs ones, and my own local custom minor mode packages.
    - [[#recentf][RECENTF]]
    - [[#subword][SUBWORD]]
    - [[#term][TERM]]
+   - [[#tramp][TRAMP]]
    - [[#uniquify][UNIQUIFY]]
    - [[#whitespace][WHITESPACE]]
    - [[#winner-mode][WINNER MODE]]
@@ -991,6 +993,7 @@ c++, Message); the g in C-x a i g is for global, meaning every mode.
 
 #+BEGIN_SRC emacs-lisp
   (use-package dired
+    :after dired-x
     :bind
     (:map
      dired-mode-map
@@ -1007,11 +1010,16 @@ c++, Message); the g in C-x a i g is for global, meaning every mode.
         (setq dired-listing-switches "-alhpL")))
     (setq dired-dwim-target t)
     (setq dired-use-ls-dired nil)
+    (setq dired-omit-files (concat dired-omit-files "\\|^\\..+$"))
     (setq dired-omit-mode t)
     (setq dired-recursive-copies 'always)
-    (setq dired-recursive-deletes 'always)
-    ;; omit hidden files with dired-omit
-    (setq dired-omit-files (concat dired-omit-files "\\|^\\..+$")))
+    (setq dired-recursive-deletes 'always))
+#+END_SRC
+
+** DIRED X
+
+#+BEGIN_SRC emacs-lisp
+  (use-package dired-x :defer t)
 #+END_SRC
 
 ** ELECTRIC
@@ -1310,6 +1318,18 @@ and it will not insert a newline.
     (defadvice term-handle-exit
         (after term-kill-buffer-on-exit activate)
       (kill-buffer)))
+#+END_SRC
+
+** TRAMP
+
+#+BEGIN_SRC emacs-lisp
+  (use-package tramp
+    :defer t
+    :config
+    (setq tramp-backup-directory-alist backup-directory-alist)
+    (setq tramp-default-method "ssh")
+    (setf tramp-persistency-file-name
+          (concat temporary-file-directory "tramp-" (user-login-name))))
 #+END_SRC
 
 ** UNIQUIFY
