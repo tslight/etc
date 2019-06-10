@@ -10,7 +10,7 @@
 
 #+OPTIONS: toc:t
 
-Please see the [[file:README.org][README]] and/or [[file:my-tangles.org][my-tangles.org]] for instructions on how to install.
+Please see the [[file:README.org][README]] and/or [[file:./site-lisp/my-tangles.org][my-tangles.org]] for instructions on how to install.
 
 I am using [[https://github.com/jwiegley][John Wiegley's]] amazing [[https://github.com/jwiegley/use-package][use-package]] macro to configure MELPA packages,
 built-in Emacs ones, and my own local custom minor mode packages.

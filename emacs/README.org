@@ -15,23 +15,27 @@ Running that function will tangle all the src code blocks contained in all the
 files in the current directory. Since we are in the Emacs directory, this will
 create the following elisp configuration files:
 
-|-----------------+-------------------------------------|
-| ORG SOURCE FILE | TANGLED ELISP FILE                  |
-|-----------------+-------------------------------------|
-| [[file:my-init.org][my-init.org]]     | ~/.emacs.d/init.el                  |
-| [[file:my-packages.org][my-packages.org]] | ~/.emacs.d/my-packages.el           |
-| [[file:./site-lisp/my-buffers.org][my-buffers.org]]  | ~/.emacs.d/site-lisp/my-buffers.el  |
-| [[file:./site-lisp/my-dired.org][my-dired.org]]    | ~/.emacs.d/site-lisp/my-dired.el    |
-| [[file:./site-lisp/my-edits.org][my-edits.org]]    | ~/.emacs.d/site-lisp/my-edits.el    |
-| [[file:./site-lisp/my-files.org][my-files.org]]    | ~/.emacs.d/site-lisp/my-files.el    |
-| [[file:./site-lisp/my-misc.org][my-misc.org]]     | ~/.emacs.d/site-lisp/my-misc.el     |
-| [[file:./site-lisp/my-org.org][my-org.org]]      | ~/.emacs.d/site-lisp/my-org.el      |
-| [[file:./site-lisp/my-settings.org][my-settings.org]] | ~/.emacs.d/site-lisp/my-settings.el |
-| [[file:./site-lisp/my-tangles.org][my-tangles.org]]  | ~/.emacs.d/site-lisp/my-tangles.el  |
-| [[file:./site-lisp/my-windows.org][my-windows.org]]  | ~/.emacs.d/site-lisp/my-windows.el  |
-|-----------------+-------------------------------------|
+|-----------------+-------------------------------------+--------------------------------------------------------------------|
+| ORG SOURCE FILE | TANGLED ELISP FILE                  | DESCRIPTION                                                        |
+|-----------------+-------------------------------------+--------------------------------------------------------------------|
+| [[file:my-init.org][my-init.org]]     | ~/.emacs.d/init.el                  | Initialisation file. Wrap config in speed hacks.                   |
+| [[file:my-packages.org][my-packages.org]] | ~/.emacs.d/my-packages.el           | Lazily configure as much as possible as a package with use-package |
+| [[file:./site-lisp/my-buffers.org][my-buffers.org]]  | ~/.emacs.d/site-lisp/my-buffers.el  | Custom functions for manipulating buffers.                         |
+| [[file:./site-lisp/my-dired.org][my-dired.org]]    | ~/.emacs.d/site-lisp/my-dired.el    | Custom functions for extending Dired.                              |
+| [[file:./site-lisp/my-edits.org][my-edits.org]]    | ~/.emacs.d/site-lisp/my-edits.el    | Custom functions for extending Emacs' editing capacity.            |
+| [[file:./site-lisp/my-files.org][my-files.org]]    | ~/.emacs.d/site-lisp/my-files.el    | Custom functions for working with files.                           |
+| [[file:./site-lisp/my-misc.org][my-misc.org]]     | ~/.emacs.d/site-lisp/my-misc.el     | Miscellaneous custom functions.                                    |
+| [[file:./site-lisp/my-org.org][my-org.org]]      | ~/.emacs.d/site-lisp/my-org.el      | Custom functions that extend org-mode.                             |
+| [[file:./site-lisp/my-settings.org][my-settings.org]] | ~/.emacs.d/site-lisp/my-settings.el | Toggle various built-in Emacs variables to (imho) better defaults. |
+| [[file:./site-lisp/my-tangles.org][my-tangles.org]]  | ~/.emacs.d/site-lisp/my-tangles.el  | Custom functions for tangling files and directories.               |
+| [[file:./site-lisp/my-windows.org][my-windows.org]]  | ~/.emacs.d/site-lisp/my-windows.el  | Custom functions for working with windows.                         |
+|-----------------+-------------------------------------+--------------------------------------------------------------------|
 
 The function then byte compiles and loads the new configuration files, pulling
 in third party packages via the magic of [[https://github.com/jwiegley/use-package][use-package]].
 
-Please see the [[file:my-init.org][my-init.org]], [[file:my-tangles.org][my-tangles.org]] and [[file:packages.org][my-packages.org]] for more details.
+Please see the [[file:my-init.org][my-init.org]], [[file:my-tangles.org][my-tangles.org]] and [[file:packages.org][my-packages.org]] for more
+details.
+
+/Alternatively, simply running [[file:tangle.sh][tangle.sh]] from a terminal should do all of the
+above, automagically, without even having to open Emacs.../
