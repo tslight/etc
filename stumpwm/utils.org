@@ -176,7 +176,7 @@ Reload StumpWM and then re-load config.
 #+BEGIN_SRC common-lisp
   (defcommand emacs () ()
     "run-or-raise emacs"
-    (run-or-raise "emacsclient -ca emacs" '(:class "Emacs")))
+    (run-or-raise "emacsclient -c -a ''" '(:class "Emacs")))
 
   (defcommand terminal () ()
     "run-or-raise a terminal"
