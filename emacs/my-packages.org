@@ -1009,7 +1009,9 @@ c++, Message); the g in C-x a i g is for global, meaning every mode.
     (setq dired-use-ls-dired nil)
     (setq dired-omit-mode t)
     (setq dired-recursive-copies 'always)
-    (setq dired-recursive-deletes 'always))
+    (setq dired-recursive-deletes 'always)
+    ;; omit hidden files with dired-omit
+    (setq dired-omit-files (concat dired-omit-files "\\|^\\..+$")))
 #+END_SRC
 
 ** ELECTRIC
