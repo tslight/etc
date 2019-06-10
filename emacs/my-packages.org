@@ -699,7 +699,6 @@ that disables itself auto-magically.
 #+BEGIN_SRC emacs-lisp
   (use-package paredit
     :ensure t
-    :defer t
     :bind
     ("C-c t p" . paredit-mode)
     :hook
