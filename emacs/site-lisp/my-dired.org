@@ -12,7 +12,6 @@
 
 * CONTENTS                                                         :TOC_5_gh:
 - [[#compress-to][COMPRESS TO]]
-- [[#find-dired][FIND DIRED]]
 - [[#get-size][GET SIZE]]
 - [[#open-marked][OPEN MARKED]]
 - [[#sort][SORT]]
@@ -37,16 +36,6 @@ https://oremacs.com/2015/10/23/dired-compress/
 
         Within CMD, %i denotes the input file(s), and %o denotes the
         output file. %i path(s) are relative, while %o is absolute.")
-#+END_SRC
-
-* FIND DIRED
-
-#+BEGIN_SRC emacs-lisp
-  (use-package find-dired
-    :defer t
-    :after dired
-    :config
-    (setq find-ls-option '("-print0 | xargs -0 ls -ld" . "-ld")))
 #+END_SRC
 
 * GET SIZE
@@ -85,31 +74,29 @@ Note: this may not work in Mac OS X or *BSD. You need to have GNU's version of l
 
 #+BEGIN_SRC emacs-lisp
   (defun my/dired-sort ()
-    "Sort dired dir listing in different ways.
-     Prompt for a choice."
+    "Sort dired dir listing in different ways. Prompt for a choice."
     (interactive)
     (let (-sort-by -arg)
       (if (eq system-type 'berkeley-unix)
           (progn
-            (setq -sort-by (ido-completing-read "Sort by:" '( "date" "size" "name")))
-            (cond
-             ((equal -sort-by "name") (setq -arg "-alhpL"))
-             ((equal -sort-by "date") (setq -arg "-alhpLt"))
-             ((equal -sort-by "size") (setq -arg "-alhpLS "))
-             (t (error "logic error 09535" ))
-             )
-            )
+            (setq -sort-by (ido-completing-read
+                            "Sort by:" '( "date" "size" "name")))
+            (cond ((equal -sort-by "name") (setq -arg "-alhpL"))
+                  ((equal -sort-by "date") (setq -arg "-alhpLt"))
+                  ((equal -sort-by "size") (setq -arg "-alhpLS "))
+                  (t (error "logic error 09535" ))))
         (progn
-          (setq -sort-by (ido-completing-read "Sort by:" '( "date" "size" "name" "dir")))
-          (cond
-           ((equal -sort-by "name") (setq -arg "-Al --si --time-style long-iso "))
-           ((equal -sort-by "date") (setq -arg "-Al --si --time-style long-iso -t"))
-           ((equal -sort-by "size") (setq -arg "-Al --si --time-style long-iso -S"))
-           ((equal -sort-by "dir") (setq -arg "-Al --si --time-style long-iso --group-directories-first"))
-           (t (error "logic error 09535" ))
-           )
-          )
-        )
+          (setq -sort-by (ido-completing-read
+                          "Sort by:" '( "date" "size" "name" "dir")))
+          (cond ((equal -sort-by "name")
+                 (setq -arg "-Al --si --time-style long-iso "))
+                ((equal -sort-by "date")
+                 (setq -arg "-Al --si --time-style long-iso -t"))
+                ((equal -sort-by "size")
+                 (setq -arg "-Al --si --time-style long-iso -S"))
+                ((equal -sort-by "dir")
+                 (setq -arg "-Al --si --time-style long-iso --group-directories-first"))
+                (t (error "logic error 09535" )))))
       (dired-sort-other -arg )))
 #+END_SRC
 

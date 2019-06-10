@@ -63,6 +63,7 @@ built-in Emacs ones, and my own local custom minor mode packages.
    - [[#erc][ERC]]
    - [[#eldoc][ELDOC]]
    - [[#eshell][ESHELL]]
+   - [[#find-dired][FIND DIRED]]
    - [[#flyspell][FLYSPELL]]
    - [[#gnus][GNUS]]
    - [[#linum-mode][LINUM MODE]]
@@ -995,7 +996,6 @@ c++, Message); the g in C-x a i g is for global, meaning every mode.
      dired-mode-map
      (")" .'dired-omit-mode)
      ("b" . (lambda () (interactive) (find-alternate-file "..")))
-     ("c" . dired-do-compress)
      ("f" . dired-find-alternate-file)
      ("C-q" . kill-this-buffer)
      ("c" . dired-do-compress-to))
@@ -1108,6 +1108,16 @@ single buffer, use ‘electric-pair-local-mode’.
     (setq eshell-where-to-jump 'begin)
     (setq eshell-review-quick-commands nil)
     (setq eshell-smart-space-goes-to-end t))
+#+END_SRC
+
+** FIND DIRED
+
+#+BEGIN_SRC emacs-lisp
+  (use-package find-dired
+    :defer t
+    :after dired
+    :config
+    (setq find-ls-option '("-print0 | xargs -0 ls -ld" . "-ld")))
 #+END_SRC
 
 ** FLYSPELL
