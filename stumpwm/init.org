@@ -60,7 +60,7 @@ After loading all our lisp, run some shell programs to make things more comfy.
 #+BEGIN_SRC common-lisp
   ;; (run-shell-command "xmodmap -e 'keycode 113 = Super_R'")
   (run-shell-command "xsetroot -cursor_name left_ptr -solid grey9")
-  (run-shell-command "alttab")
+  (run-shell-command "alttab -vp pointer")
   (run-shell-command "xfsettingsd")
   (run-shell-command "xfce4-power-manager")
 #+END_SRC
