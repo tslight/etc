@@ -1,5 +1,5 @@
-* HACKS AND GLORY AWAIT!
-
+#+TITLE: HACKS AND GLORY AWAIT!
+#+AUTHOR: Toby Slight
 #+CAPTION: Screenshot
 #+NAME:fig:screenshot
      [[./img/scrot.png]]
@@ -14,7 +14,7 @@ look no further.
 -- [[https://github.com/stumpwm/stumpwm][StumpWM GitHub]]
 #+END_QUOTE
 
-** INSTALLATION
+* INSTALLATION
 *** QUICKLISP
 
 Get Quicklisp from [[https://www.quicklisp.org/beta/][here]]:
@@ -104,7 +104,7 @@ linked below:
 Please see the main [[file:../README.org][etc repo README]] for more details on Emacs tangling,
 org-mode, literate programming and how I manage configuration files and such.
 
-** INSPIRATIONS
+* INSPIRATIONS
 
 https://dataswamp.org/~solene/2016-06-06-stumpwm.html
 

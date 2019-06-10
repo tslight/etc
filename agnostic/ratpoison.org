@@ -1,7 +1,7 @@
 #+TITLE: RATPOISON CONFIGURATION
 #+PROPERTY: header-args :cache yes
 #+PROPERTY: header-args+ :mkdirp yes
-#+PROPERTY: header-args+ :tangle-mode (identity #o600)
+#+PROPERTY: header-args+ :tangle-mode (identity #o644)
 #+PROPERTY: header-args+ :results silent
 #+PROPERTY: header-args+ :padline no
 #+PROPERTY: header-args+ :tangle ~/.ratpoisonrc
@@ -10,7 +10,7 @@ Say good-bye to the rodent!
 
 * XSESSION
 
-#+BEGIN_SRC conf :tangle /sudo::/usr/share/xsessions/ratpoison.desktop
+#+BEGIN_SRC conf :tangle /sudo::/usr/share/xsessions/ratpoison.desktop :tangle-mode (identity #o644)
   [Desktop Entry]
   Encoding=UTF-8
   Name=Ratpoison
