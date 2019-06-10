@@ -25,7 +25,7 @@ Since we are visiting this file in the emacs configuration directory, we simply
 need to press enter and all our emacs configuration org files will be tangled,
 compiled and loaded.
 
-/Alternatively, simply running [[file:~/etc/emacs/tangle.sh][tangle.sh]] from a terminal should do all of the
+/Alternatively, simply running [[file:../tangle.sh][tangle.sh]] from a terminal should do all of the
 above, automagically, without even having to open Emacs.../
 
 * CONTENTS                                                         :TOC_5_gh:
