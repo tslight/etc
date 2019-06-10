@@ -711,7 +711,6 @@ that disables itself auto-magically.
 
 #+BEGIN_SRC emacs-lisp
   (use-package pc-bufsw
-    :if window-system
     :ensure t
     :bind*
     ("C-<tab>" . pc-bufsw-mru)
