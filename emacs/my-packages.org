@@ -713,9 +713,9 @@ that disables itself auto-magically.
   (use-package pc-bufsw
     :if window-system
     :ensure t
-    :bind
-    ("C-<escape>" . pc-bufsw-mru)
-    ("C-S-<escape>" . pc-bufsw-lru)
+    :bind*
+    ("C-<tab>" . pc-bufsw-mru)
+    ("C-<iso-lefttab>" . pc-bufsw-lru)
     :config
     (setq pc-bufsw-quit-time 1))
 #+END_SRC

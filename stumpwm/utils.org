@@ -312,7 +312,7 @@ https://kaashif.co.uk/2015/06/28/hacking-stumpwm-with-common-lisp/
   (swank-loader:init)
   (defcommand swank () ()
     "creates a swank server in the stumpwm lisp process"
-    (setf stumpwm:*top-level-error-action* :break)
+    (setf *top-level-error-action* :break)
     (swank:create-server :port 4004
                          :style swank:*communication-style*
                          :dont-close t)

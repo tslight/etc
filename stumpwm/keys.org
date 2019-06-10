@@ -166,3 +166,19 @@ too confusing for my hands!
   (define-key *groups-map* (kbd "l") "grouplist")
   (define-key *groups-map* (kbd "s") "gselect")
 #+END_SRC
+* RAT MAP
+
+Cycle windows by scrolling on the modeline.
+
+#+BEGIN_SRC common-lisp
+  (setf *mode-line-click-hook*
+        (list (lambda (&rest args)
+                (cond ((eq (second args) 1)
+                       (run-commands "next"))
+                      ((eq (second args) 3)
+                       (run-commands "prev"))
+                      ((eq (second args) 5)
+                       (run-commands "next"))
+                      ((eq (second args) 4)
+                       (run-commands "prev"))))))
+#+END_SRC
