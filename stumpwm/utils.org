@@ -10,7 +10,8 @@
 
 * BATTERY
 
-You need to install ~acpi~ for this to work.
+Add basic battery information to the modeline. Depends on Linux's ~acpi~
+package.
 
 Use ~%B~ to add to the modeline.
 
