@@ -26,6 +26,7 @@ built-in Emacs ones, and my own local custom minor mode packages.
    - [[#counsel][COUNSEL]]
    - [[#counsel-projectile][COUNSEL PROJECTILE]]
    - [[#diminish][DIMINISH]]
+   - [[#dumb-jump][DUMB JUMP]]
    - [[#emmet-mode][EMMET MODE]]
    - [[#evil][EVIL]]
    - [[#exec-path-from-shell][EXEC PATH FROM SHELL]]
@@ -373,6 +374,23 @@ replacements:
     :defer 4
     :ensure t)
 #+END_SRC
+** DUMB JUMP
+
+Install [[https://github.com/ggreer/the_silver_searcher][The Silver Searcher]] or [[https://github.com/BurntSushi/ripgrep][ripgrep]] first.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package dumb-jump
+    :ensure t
+    :bind (("M-g o" . dumb-jump-go-other-window)
+           ("M-g j" . dumb-jump-go)
+           ("M-g i" . dumb-jump-go-prompt)
+           ("M-g x" . dumb-jump-go-prefer-external)
+           ("M-g z" . dumb-jump-go-prefer-external-other-window))
+    :hook
+    (prog-mode . dumb-jump-mode)
+    :config
+    (setq dumb-jump-selector 'ivy))
+#+END_SRC
 
 ** EMMET MODE
 
@@ -680,9 +698,14 @@ that disables itself auto-magically.
 
 #+BEGIN_SRC emacs-lisp
   (use-package paredit
+    :ensure t
     :defer t
     :bind
-    ("C-c t p" . paredit-mode))
+    ("C-c t p" . paredit-mode)
+    :hook
+    (lisp-mode . paredit-mode)
+    (emacs-lisp-mode . paredit-mode)
+    (common-lisp-mode . paredit-mode))
 #+END_SRC
 
 ** PC BUFFER SWITCH
