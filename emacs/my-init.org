@@ -69,7 +69,6 @@ everything else up.
           my/freebsd-config-directory  (concat my/config-directory "freebsd/")
           my/netbsd-config-directory   (concat my/config-directory "netbsd/")
           my/openbsd-config-directory  (concat my/config-directory "openbsd/")
-          my/stumpwm-config-directory  (concat my/config-directory "stumpwm/")
           my/windows-config-directory  (concat my/config-directory "windows/"))
     (add-to-list 'load-path my/site-lisp)
     (load my/packages))
