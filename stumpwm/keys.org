@@ -176,7 +176,7 @@ Cycle windows by scrolling on the modeline.
                     (ppcre:scan-to-strings
                      "[0-9]+(?=x[0-9]+x[0-9]+)"
                      (write-to-string (current-screen)))))
-           (min 30) ;; pixels
+           (min 50) ;; pixels
            (mid (floor screen 2))
            (max (- screen min)))
       (cond
