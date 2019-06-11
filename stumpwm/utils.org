@@ -23,14 +23,17 @@ Use ~%B~ to add to the modeline.
     (let* ((bat (run-shell-command "acpi" t))
            (bat (ppcre:scan-to-strings "[0-9]+%" bat))
            (int (parse-integer bat :junk-allowed t)))
-      (cond ((and (> 95 int) (<= 75 int)) bat)
+      (cond ((and (> 96 int) (<= 75 int)) bat)
             ((and (> 75 int) (<= 50 int)) (concat "^2*" bat))
             ((and (> 50 int) (<= 25 int)) (concat "^3*" bat))
             ((and (> 25 int)) (concat "^1*" bat))
             (t ""))))
 
   (defcommand battery-message () ()
-    (message (battery)))
+    (let ((bat (battery)))
+      (if (string= bat "")
+          (message "Charged")
+          (message bat))))
 
   ;; pinched from battery portable code
   (let ((next 0)
