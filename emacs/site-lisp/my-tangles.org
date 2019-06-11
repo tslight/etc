@@ -317,8 +317,7 @@ another OS.
            (expand-file-name my/emacs-config-directory)
            (file-name-directory (directory-file-name buffer-file-name)))
       (byte-compile-file
-       (my/insert-boilerplate (format "%s" (car (org-babel-tangle)))) 0))
-
+       (my/insert-boilerplate (expand-file-name (car (org-babel-tangle)))) 0))
     (when (and (string-prefix-p
                 (expand-file-name my/linux-config-directory)
                 (file-name-directory (directory-file-name buffer-file-name)))
