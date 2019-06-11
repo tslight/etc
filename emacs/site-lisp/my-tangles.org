@@ -302,49 +302,56 @@ another OS.
 #+BEGIN_SRC emacs-lisp
   (defun my/auto-tangle ()
     "Auto tangle files in the directories specified below when they
-     are edited. Providing the system-type value is correct.
+      are edited. Providing the system-type value is correct.
 
-     It doesn't make sense to tangle openbsd configurations files
-     on to a linux box, for example.
+      It doesn't make sense to tangle openbsd configurations files
+      on to a linux box, for example.
 
-     However, I may want to be able to edit them without auto
-     tangling from another OS."
-    (when (string-prefix-p (file-name-directory (directory-file-name buffer-file-name))
-                 (expand-file-name my/agnostic-config-directory))
+      However, I may want to be able to edit them without auto
+      tangling from another OS."
+    (when (string-prefix-p
+           (expand-file-name my/agnostic-config-directory)
+           (file-name-directory (directory-file-name buffer-file-name)))
       (org-babel-tangle))
-    (when (string-prefix-p (expand-file-name my/emacs-config-directory)
-                           (file-name-directory
-                            (directory-file-name buffer-file-name)))
+    (when (string-prefix-p
+           (expand-file-name my/emacs-config-directory)
+           (file-name-directory (directory-file-name buffer-file-name)))
       (byte-compile-file
-       (my/insert-boilerplate
-        (format "%s" (car (org-babel-tangle))))
-       0))
-    (when (and (string-prefix-p (file-name-directory (directory-file-name buffer-file-name))
-                      (expand-file-name my/linux-config-directory))
+       (my/insert-boilerplate (format "%s" (car (org-babel-tangle)))) 0))
+
+    (when (and (string-prefix-p
+                (expand-file-name my/linux-config-directory)
+                (file-name-directory (directory-file-name buffer-file-name)))
                (equal system-type 'gnu/linux))
       (org-babel-tangle))
-    (when (and (string-prefix-p (file-name-directory (directory-file-name buffer-file-name))
-                      (expand-file-name my/macos-config-directory))
+    (when (and (string-prefix-p
+                (expand-file-name my/macos-config-directory)
+                (file-name-directory (directory-file-name buffer-file-name)))
                (equal system-type 'darwin))
       (org-babel-tangle))
-    (when (and (string-prefix-p (file-name-directory (directory-file-name buffer-file-name))
-                      (expand-file-name my/freebsd-config-directory))
+    (when (and (string-prefix-p
+                (expand-file-name my/freebsd-config-directory)
+                (file-name-directory (directory-file-name buffer-file-name)))
                (cl-search "freebsd" system-configuration))
       (org-babel-tangle))
-    (when (and (string-prefix-p (file-name-directory (directory-file-name buffer-file-name))
-                      (expand-file-name my/netbsd-config-directory))
+    (when (and (string-prefix-p
+                (expand-file-name my/netbsd-config-directory)
+                (file-name-directory (directory-file-name buffer-file-name)))
                (cl-search "netbsd" system-configuration))
       (org-babel-tangle))
-    (when (and (string-prefix-p (file-name-directory (directory-file-name buffer-file-name))
-                      (expand-file-name my/openbsd-config-directory))
+    (when (and (string-prefix-p
+                (expand-file-name my/openbsd-config-directory)
+                (file-name-directory (directory-file-name buffer-file-name)))
                (cl-search "openbsd" system-configuration))
       (org-babel-tangle))
-    (when (and (string-prefix-p (file-name-directory (directory-file-name buffer-file-name))
-                      (expand-file-name my/netbsd-config-directory))
+    (when (and (string-prefix-p
+                (expand-file-name my/netbsd-config-directory)
+                (file-name-directory (directory-file-name buffer-file-name)))
                (equal system-type 'berkeley-unix))
       (org-babel-tangle))
-    (when (and (string-prefix-p (file-name-directory (directory-file-name buffer-file-name))
-                      (expand-file-name my/windows-config-directory))
+    (when (and (string-prefix-p
+                (expand-file-name my/windows-config-directory)
+                (file-name-directory (directory-file-name buffer-file-name)))
                (equal system-type 'windows-nt))
       (org-babel-tangle)))
 #+END_SRC
