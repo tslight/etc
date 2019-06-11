@@ -153,8 +153,8 @@ too confusing for my hands!
 * MENU MAP
 
 #+BEGIN_SRC common-lisp
-(define-key *menu-map* (kbd "TAB") 'menu-down)
-(define-key *menu-map* (kbd "ISO_Left_Tab") 'menu-up)
+  (define-key *menu-map* (kbd "TAB") 'menu-down)
+  (define-key *menu-map* (kbd "ISO_Left_Tab") 'menu-up)
 #+END_SRC
 
 * GROUP MAP
@@ -171,14 +171,51 @@ too confusing for my hands!
 Cycle windows by scrolling on the modeline.
 
 #+BEGIN_SRC common-lisp
-  (setf *mode-line-click-hook*
-        (list (lambda (&rest args)
-                (cond ((eq (second args) 1)
-                       (run-commands "next"))
-                      ((eq (second args) 3)
-                       (run-commands "prev"))
-                      ((eq (second args) 5)
-                       (run-commands "next"))
-                      ((eq (second args) 4)
-                       (run-commands "prev"))))))
+  (defun modeline-click (modeline button x y)
+    (let* ((screen (parse-integer
+                    (ppcre:scan-to-strings
+                     "[0-9]+(?=x[0-9]+x[0-9]+)"
+                     (write-to-string (current-screen)))))
+           (min 30) ;; pixels
+           (mid (floor screen 2))
+           (max (- screen min)))
+      (cond
+        ;; left corner of screen
+        ((and (eq button 1) (<= x min))
+         (run-commands "gprev"))
+        ((and (eq button 3) (<= x min))
+         (run-commands "gnext"))
+        ((and (eq button 5) (<= x min))
+         (run-commands "gnext"))
+        ((and (eq button 4) (<= x min))
+         (run-commands "gprev"))
+        ;; left side of screen
+        ((and (eq button 1) (> x min) (< x mid))
+         (run-commands "prev"))
+        ((and (eq button 3) (> x min) (< x mid))
+         (run-commands "next"))
+        ((and (eq button 4) (> x min) (< x mid))
+         (run-commands "prev"))
+        ((and (eq button 5) (> x min) (< x mid))
+         (run-commands "next"))
+        ;; right side of screen
+        ((and (eq button 1) (> x mid) (< x max))
+         (run-commands "next"))
+        ((and (eq button 3) (> x mid) (< x max))
+         (run-commands "prev"))
+        ((and (eq button 4) (> x mid) (< x max))
+         (run-commands "prev"))
+        ((and (eq button 5) (> x mid) (< x max))
+         (run-commands "next"))
+        ;; right corner of screen
+        ((and (eq button 1) (>= x max))
+         (run-commands "gnext"))
+        ((and (eq button 3) (<= x min))
+         (run-commands "gprev"))
+        ((and (eq button 5) (>= x max))
+         (run-commands "gnext"))
+        ((and (eq button 4) (>= x max))
+         (run-commands "gprev")))))
+
+  (add-hook *mode-line-click-hook* 'modeline-click)
 #+END_SRC
