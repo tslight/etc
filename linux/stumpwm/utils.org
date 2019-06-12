@@ -148,6 +148,14 @@ Strings lifted from [[https://github.com/kovisoft/slimv/blob/master/slime/slime.
     "Print a random string of hackerish encouragement."
     (message "~a" (random-encouragement)))
 #+END_SRC
+* MENU
+
+#+BEGIN_SRC common-lisp :tangle no
+  (select-from-menu (current-screen)
+                    (map 'list
+                         (lambda (e) (list (pathname-name e)))
+                         (directory "/usr/share/*/*.desktop")))
+#+END_SRC
 
 * PROMPT
 
