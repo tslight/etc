@@ -188,7 +188,7 @@ Reload StumpWM and then re-load config.
 
   (defcommand web-browser () ()
     "run-or-raise a web browser"
-    (run-or-raise "firefox-esr" '(:class "Firefox-esr")))
+    (run-or-raise "x-www-browser" '(:role "browser")))
 
   (defcommand file-manager () ()
     "run-or-raise a graphical file manager"
