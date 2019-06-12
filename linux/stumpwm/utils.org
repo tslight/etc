@@ -155,6 +155,66 @@ Strings lifted from [[https://github.com/kovisoft/slimv/blob/master/slime/slime.
                     (map 'list
                          (lambda (e) (list (pathname-name e)))
                          (directory "/usr/share/*/*.desktop")))
+
+  (select-from-menu (current-screen)
+                    (map 'list
+                         (lambda (e) (ppcre:all-matches-as-strings
+                                 "(?<=\\n(Name|Exec)\\=).*"
+                                 (uiop:read-file-string
+                                  (pathname-name e))))
+                         (directory "/usr/share/*/*.desktop")))
+
+  (ppcre:all-matches-as-strings
+   "(?<=\\n(Name|Exec)\\=).*"
+   (uiop:read-file-string
+    (pathname-name e)))
+
+  (select-from-menu (current-screen)
+                    (map 'list
+                         (lambda (e) (ppcre:all-matches-as-strings
+                                 "(?<=\\n(Name|Exec)\\=).*"
+                                 (uiop:read-file-string
+                                  (pathname e))))
+                         (apply #'append
+                                (map 'list
+                                     (lambda (e) (directory
+                                             (concat e "/applications/*.desktop")))
+                                     (split-seq (getenv "XDG_DATA_DIRS") ":")))))
+
+
+  (select-from-menu (current-screen)
+                    (map 'list
+                         (lambda (e) (list (ppcre:scan-to-strings
+                                       "(?<=\\nExec\\=).*(?=\\s\\%.*)"
+                                       (uiop:read-file-string
+                                        (pathname e)))))
+                         (apply #'append
+                                (map 'list
+                                     (lambda (e) (directory
+                                             (concat e "/applications/*.desktop")))
+                                     (split-seq (getenv "XDG_DATA_DIRS") ":")))))
+
+  (ppcre:all-matches-as-strings
+   "(?<=\\n(Name|Exec)\\=).*"
+   (uiop:read-file-string
+    "/usr/share/applications/firefox-esr"))
+
+  (define-stumpwm-command "mymenu" ()
+    (labels ((pick (options)
+               (let ((selection (stumpwm::select-from-menu (current-screen) options "")))
+                 (cond
+                   ((null selection)
+                    (throw 'stumpwm::error "Abort."))
+                   ((stringp (second selection))
+                    (second selection))
+                   (t
+                    (pick (cdr selection)))))))
+      (let ((choice (pick *app-menu*)))
+        (run-shell-command choice))))
+
+  (setq menu '(("INTERNET" "internet")
+               ("FUN" "fun")
+               ("WORK" "work")))
 #+END_SRC
 
 * PROMPT
