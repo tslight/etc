@@ -104,6 +104,7 @@ too confusing for my hands!
   (define-key *top-map* (kbd "s-Tab") "gother")
   ;; frames
   (define-key *top-map* (kbd "M-Escape") "fnext")
+  (define-key *top-map* (kbd "M-S-Escape") "fprev")
   (define-key *top-map* (kbd "C-F10") "only")
   (define-key *top-map* (kbd "s-o") "only")
   (define-key *top-map* (kbd "s-a") "exec rofi -show windowcd")
