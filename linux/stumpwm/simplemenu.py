@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
 import os
-import fnmatch
+# import fnmatch
+import glob
 import xdg.DesktopEntry as dentry
 import xdg.Exceptions as exc
 import xdg.BaseDirectory as bd
@@ -70,17 +71,23 @@ def get_desktop_files():
     # with and once without a trailing /
     dirs = set([d.rstrip('/') for d in bd.xdg_data_dirs])
     filelist = []
-    df_temp = []
+    # df_temp = []
+
     for d in dirs:
-        xdgdir = '{}/applications'.format(d)
-        if os.path.isdir(xdgdir):
-            for root, dirnames, filenames in os.walk(xdgdir):
-                for i in fnmatch.filter(filenames, '*.desktop'):
-                    # for duplicate .desktop files that exist in more
-                    # than one locations, only keep the first occurrence.
-                    if i not in df_temp:
-                        df_temp.append(i)
-                        filelist.append(os.path.join(root, i))
+        files = glob.glob(os.path.join(d, 'applications/*.desktop'))
+        for f in files:
+            filelist.append(f)
+
+    # for d in dirs:
+    #     xdgdir = '{}/applications'.format(d)
+    #     if os.path.isdir(xdgdir):
+    #         for root, dirnames, filenames in os.walk(xdgdir):
+    #             for i in fnmatch.filter(filenames, '*.desktop'):
+    #                 # for duplicate .desktop files that exist in more
+    #                 # than one locations, only keep the first occurrence.
+    #                 if i not in df_temp:
+    #                     df_temp.append(i)
+    #                     filelist.append(os.path.join(root, i))
     return filelist
 
 
