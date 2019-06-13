@@ -32,7 +32,7 @@ def remove_command_keys(command, desktopfile):
     return command
 
 
-def get_entry_info(desktopfile):
+def get_desktop_info(desktopfile):
     de = dentry.DesktopEntry(filename=desktopfile)
 
     # skip processing the entry if any of these attributes are set.
@@ -65,7 +65,7 @@ def get_entry_info(desktopfile):
     return name, command
 
 
-def desktopfilelist():
+def get_desktop_files():
     # some directories are mentioned twice in bd.xdg_data_dirs, once
     # with and once without a trailing /
     dirs = set([d.rstrip('/') for d in bd.xdg_data_dirs])
@@ -86,9 +86,9 @@ def desktopfilelist():
 
 def menu():
     applist = []
-    for desktopfile in desktopfilelist():
+    for desktopfile in get_desktop_files():
         try:
-            entry = get_entry_info(desktopfile)
+            entry = get_desktop_info(desktopfile)
             if entry is not None:
                 applist.append(entry)
         except exc.ParsingError:
