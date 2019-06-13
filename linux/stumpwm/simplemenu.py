@@ -34,8 +34,8 @@ def remove_command_keys(command, desktopfile):
 
 def get_entry_info(desktopfile):
     de = dentry.DesktopEntry(filename=desktopfile)
-    # skip processing the rest of the desktop entry if the item is to not be
-    # displayed anyway
+
+    # skip processing the entry if any of these attributes are set.
     only = de.getOnlyShowIn()
     hidden = de.getHidden()
     nodisplay = de.getNoDisplay()
@@ -77,10 +77,7 @@ def desktopfilelist():
             for root, dirnames, filenames in os.walk(xdgdir):
                 for i in fnmatch.filter(filenames, '*.desktop'):
                     # for duplicate .desktop files that exist in more
-                    # than one locations, only keep the first occurence.
-                    # That one should have precedence anyway (e.g.
-                    # ~/.local/share/applications has precedence over
-                    # /usr/share/applications
+                    # than one locations, only keep the first occurrence.
                     if i not in df_temp:
                         df_temp.append(i)
                         filelist.append(os.path.join(root, i))
@@ -98,12 +95,7 @@ def menu():
             pass
 
     # https://stackoverflow.com/a/10695161
-    sortedapplist = sorted(applist, key=lambda x: x[0].lower())
-
-    menu = []
-    for i in sortedapplist:
-        menu.append(i)
-    return menu
+    return sorted(applist, key=lambda x: x[0].lower())
 
 
 def main():
