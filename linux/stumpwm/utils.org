@@ -151,112 +151,30 @@ Strings lifted from [[https://github.com/kovisoft/slimv/blob/master/slime/slime.
 * MENU
 
 #+BEGIN_SRC common-lisp :tangle no
-  (defcommand show-menu () ()
-    "Show the application menu"
-    (labels
-        ((pick (options)
-           (let ((selection
-                  (select-from-menu
-                   (current-screen) ; screen
-                   options          ; table
-                   nil              ; prompt
-                   0                ; initial-selection
-                   )))
-             (cond
-               ((null selection)
-                nil)
-               ((stringp (second selection))
-                (run-shell-command (second selection)))
-               ((and (symbolp (second selection))
-                     (commandp (second selection)))
-                (funcall (second selection)))
-               (t
-                (if (equalp ".." (first selection))
-                    (pick (second selection))
-                    (pick (append (list (list ".." options))
-                                  (cdr selection)))))))))
-      (pick *app-menu*)))
+  (defun desktop-files ()
+    (apply #'append
+           (mapcar (lambda (d)
+                     (directory
+                      (uiop:merge-pathnames*
+                       "applications/*.desktop" d)))
+                   (uiop:xdg-data-pathnames))))
 
-  (select-from-menu (current-screen)
-                    (map 'list
-                         (lambda (e) (list (pathname-name e)))
-                         (directory "/usr/share/*/*.desktop")))
+  (defun remove-keys (exec file)
+    (let* ((c (ppcre:regex-replace-all " -caption.*\%c(\'|\"|)" exec ""))
+           (k (ppcre:regex-replace-all "(\"|\'|)\%k(\"|\'|)" c file)))
+      (first (split-string k " %"))))
 
-  (select-from-menu (current-screen)
-                    (map 'list
-                         (lambda (e) (ppcre:all-matches-as-strings
-                                 "(?<=\\n(Name|Exec)\\=).*"
-                                 (uiop:read-file-string
-                                  (pathname-name e))))
-                         (directory "/usr/share/*/*.desktop")))
+  (defun parse-desktop-file (file)
+    (let* ((contents (uiop:read-file-string (pathname file)))
+           (name (ppcre:scan-to-strings "(?<=\\nName\\=).*" contents))
+           (exec (ppcre:scan-to-strings "(?<=\\nExec\\=).*" contents))
+           (cmd (remove-keys exec file)))
+      (list name cmd)))
 
-  (ppcre:all-matches-as-strings
-   "(?<=\\n(Name|Exec)\\=).*"
-   (uiop:read-file-string
-    (pathname-name e)))
+  (defun menu ()
+    (mapcar #'parse-desktop-file (desktop-files)))
 
-  (select-from-menu (current-screen)
-                    (map 'list
-                         (lambda (e) (ppcre:all-matches-as-strings
-                                 "(?<=\\n(Name|Exec)\\=).*"
-                                 (uiop:read-file-string
-                                  (pathname e))))
-                         (apply #'append
-                                (map 'list
-                                     (lambda (e) (directory
-                                             (concat e "/applications/*.desktop")))
-                                     (split-seq (getenv "XDG_DATA_DIRS") ":")))))
-
-
-  (select-from-menu (current-screen)
-                    (map 'list
-                         (lambda (e) (list (ppcre:scan-to-strings
-                                       "(?<=\\nExec\\=).*(?=\\s\\%.*)"
-                                       (uiop:read-file-string
-                                        (pathname e)))))
-                         (apply #'append
-                                (map 'list
-                                     (lambda (e) (directory
-                                             (concat e "/applications/*.desktop")))
-                                     (split-seq (getenv "XDG_DATA_DIRS") ":")))))
-
-  (ppcre:all-matches-as-strings
-   "(?<=\\n(Name|Exec)\\=).*"
-   (uiop:read-file-string
-    "/usr/share/applications/firefox-esr"))
-
-  (define-stumpwm-command "mymenu" ()
-    (labels ((pick (options)
-               (let ((selection (stumpwm::select-from-menu (current-screen) options "")))
-                 (cond
-                   ((null selection)
-                    (throw 'stumpwm::error "Abort."))
-                   ((stringp (second selection))
-                    (second selection))
-                   (t
-                    (pick (cdr selection)))))))
-      (let ((choice (pick *app-menu*)))
-        (run-shell-command choice))))
-
-  (setq menu '(("INTERNET" "internet")
-               ("FUN" "fun")
-               ("WORK" "work")))
-
-  (defparameter *app-menu* '(("INTERNET"
-                              ;; sub menu
-                              ("Firefox" "firefox")
-                              ("Skype" "skype"))
-                             ("FUN"
-                              ;; sub menu
-                              ("option 2" "xlogo")
-                              ("GnuChess" "xboard"))
-                             ("WORK"
-                              ;;submenu
-                              ("OpenOffice.org" "openoffice"))
-                             ("GRAPHICS"
-                              ;;submenu
-                              ("GIMP" "gimp"))
-                             ("K3B" "k3b")))
+  (select-from-menu (current-screen) (menu))
 #+END_SRC
 
 * PROMPT
