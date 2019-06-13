@@ -151,6 +151,32 @@ Strings lifted from [[https://github.com/kovisoft/slimv/blob/master/slime/slime.
 * MENU
 
 #+BEGIN_SRC common-lisp :tangle no
+  (defcommand show-menu () ()
+    "Show the application menu"
+    (labels
+        ((pick (options)
+           (let ((selection
+                  (select-from-menu
+                   (current-screen) ; screen
+                   options          ; table
+                   nil              ; prompt
+                   0                ; initial-selection
+                   )))
+             (cond
+               ((null selection)
+                nil)
+               ((stringp (second selection))
+                (run-shell-command (second selection)))
+               ((and (symbolp (second selection))
+                     (commandp (second selection)))
+                (funcall (second selection)))
+               (t
+                (if (equalp ".." (first selection))
+                    (pick (second selection))
+                    (pick (append (list (list ".." options))
+                                  (cdr selection)))))))))
+      (pick *app-menu*)))
+
   (select-from-menu (current-screen)
                     (map 'list
                          (lambda (e) (list (pathname-name e)))
@@ -215,6 +241,22 @@ Strings lifted from [[https://github.com/kovisoft/slimv/blob/master/slime/slime.
   (setq menu '(("INTERNET" "internet")
                ("FUN" "fun")
                ("WORK" "work")))
+
+  (defparameter *app-menu* '(("INTERNET"
+                              ;; sub menu
+                              ("Firefox" "firefox")
+                              ("Skype" "skype"))
+                             ("FUN"
+                              ;; sub menu
+                              ("option 2" "xlogo")
+                              ("GnuChess" "xboard"))
+                             ("WORK"
+                              ;;submenu
+                              ("OpenOffice.org" "openoffice"))
+                             ("GRAPHICS"
+                              ;;submenu
+                              ("GIMP" "gimp"))
+                             ("K3B" "k3b")))
 #+END_SRC
 
 * PROMPT
