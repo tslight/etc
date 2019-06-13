@@ -79,12 +79,11 @@ def get_categories():
 
 def clean_up_categories(app_categories):
     categories = get_categories()
-    category = categories.get('Other')
     for candidate in app_categories:
-        if candidate in categories:
-            category = categories.get(candidate)
-            break
-    return category
+        name = candidate.decode()
+        if name in categories and candidate != 'Other':
+            return candidate
+    return app_categories[0]
 
 
 def remove_command_keys(command, desktopfile):
@@ -108,29 +107,21 @@ def remove_command_keys(command, desktopfile):
     command = command.replace('%k', desktopfile)
     # removing any remaining keys from the command. That can potentially remove
     # any other trailing options after the keys,
-    command = command.partition('%')[0]
+    command = command.partition(' %')[0]
     return command
 
 
 def get_entry_info(desktopfile):
     de = dentry.DesktopEntry(filename=desktopfile)
-
     # skip processing the rest of the desktop entry if the item is to not be
     # displayed anyway
-    onlyshowin = de.getOnlyShowIn()
-    # notshowin = de.getNotShowIn()
+    only = de.getOnlyShowIn()
     hidden = de.getHidden()
     nodisplay = de.getNoDisplay()
-    # none of the freedesktop registered environments are supported by
-    # OnlyShowIn anyway:
-    # http://standards.freedesktop.org/menu-spec/latest/apb.html
-    # So if OnlyShowIn is set, it certainly isn't for any of the WMs
-    # xdgmenumaker supports.
-    if (onlyshowin != []) or hidden or nodisplay:
+    if (only != []) or hidden or nodisplay:
         return None
 
     name = de.getName().encode('utf-8')
-
     command = de.getExec()
     command = remove_command_keys(command, desktopfile)
 
@@ -150,18 +141,18 @@ def get_entry_info(desktopfile):
     if not path:
         path = None
 
-    category = de.getCategories()
+    categories = de.getCategories()
+    category = clean_up_categories(categories)
 
     app = App(name, command, path)
-    mentry = MenuEntry(category, app)
-    return mentry
+    return MenuEntry(category, app)
 
 
 def sortedcategories(applist):
     categories = []
     for e in applist:
         categories.append(e.category)
-    categories = sorted(set(categories))
+    categories = set(sorted(categories))
     return categories
 
 
