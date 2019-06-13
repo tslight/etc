@@ -31,8 +31,7 @@
   if [ "$SHLVL" = 1 ]; then
       [ -x /usr/bin/clear_console ] && /usr/bin/clear_console -q
   fi
-
-  pgrep -u "$USER" ssh-agent && pkill -u "$USER" ssh-agent
+  # pgrep -u "$USER" ssh-agent && pkill -u "$USER" ssh-agent
 #+END_SRC
 * BASHRC
 #+BEGIN_SRC sh :tangle ~/.bashrc
