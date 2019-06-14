@@ -152,7 +152,7 @@ Strings lifted from [[https://github.com/kovisoft/slimv/blob/master/slime/slime.
 
 Generate a menu using [[https://freedesktop.org/wiki/Howto_desktop_files/][freedesktop.org]] .desktop files.
 
-#+BEGIN_SRC common-lisp :tangle no
+#+BEGIN_SRC common-lisp
   (defun desktop-files ()
     (mapcan (lambda (d)
               (directory
@@ -165,9 +165,16 @@ Generate a menu using [[https://freedesktop.org/wiki/Howto_desktop_files/][freed
            (k (ppcre:regex-replace-all "(\"|\'|)\%k(\"|\'|)" c file)))
       (first (split-string k " %"))))
 
+  (defun is-terminal-app (cmd contents)
+    (let ((terminal (string-downcase
+                     (ppcre:scan-to-strings "(?<=\\nTerminal\\=).*" contents))))
+      (if (string= terminal "true")
+          (concat "x-terminal-emulator -e " cmd)
+          cmd)))
+
   (defun do-show (contents)
     (let* ((nodisplay (string-downcase
-                       (ppcre:scan-to-strings "(?<=\\nName\\=).*" contents)))
+                       (ppcre:scan-to-strings "(?<=\\nNoDisplay\\=).*" contents)))
            (hidden (string-downcase
                     (ppcre:scan-to-strings "(?<=\\nHidden\\=).*" contents)))
            (only (ppcre:scan-to-strings "(?<=\\nOnlyShowIn\\=).*" contents)))
@@ -181,13 +188,15 @@ Generate a menu using [[https://freedesktop.org/wiki/Howto_desktop_files/][freed
       (if (do-show contents)
           (let* ((name (ppcre:scan-to-strings "(?<=\\nName\\=).*" contents))
                  (exec (ppcre:scan-to-strings "(?<=\\nExec\\=).*" contents))
-                 (cmd (remove-keys exec file)))
+                 (cmd (remove-keys exec file))
+                 (cmd (is-terminal-app cmd contents)))
             (list name cmd)))))
 
   (defun menu ()
     (remove nil (mapcar #'parse-desktop-file (desktop-files))))
 
-  (select-from-menu (current-screen) (menu))
+  (defcommand xdgmenu () ()
+    (run-shell-command (second (select-from-menu (current-screen) (menu)))))
 #+END_SRC
 
 * PROMPT
