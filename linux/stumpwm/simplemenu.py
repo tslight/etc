@@ -9,9 +9,9 @@ import xdg.BaseDirectory as bd
 
 def remove_keys(cmd, desktopfile):
     '''
-    Some KDE apps have this "-caption %c" in a few variations. %c is "The
-    translated name of the application as listed in the appropriate Name key
-    in the desktop entry" according to freedesktop.
+    Some KDE apps have this -caption %c in a few variations. %c is The
+    translated name of the application as listed in the appropriate Name key in
+    the desktop entry.
 
     The location of the desktop file as either a URI (if for example gotten
     from the vfolder system) or a local filename or empty if no location is

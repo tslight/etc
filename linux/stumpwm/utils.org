@@ -153,6 +153,22 @@ Strings lifted from [[https://github.com/kovisoft/slimv/blob/master/slime/slime.
 Generate a menu using [[https://freedesktop.org/wiki/Howto_desktop_files/][freedesktop.org]] .desktop files.
 
 #+BEGIN_SRC common-lisp
+  (defvar *main-categories*
+    (list "AudioVideo"
+          "Audio"
+          "Video"
+          "Development"
+          "Education"
+          "Game"
+          "Graphics"
+          "Network"
+          "Office"
+          "Science"
+          "Settings"
+          "System"
+          "Utility")
+    "https://standards.freedesktop.org/menu-spec/latest/apa.html")
+
   (defun desktop-files ()
     (mapcan (lambda (d)
               (directory
@@ -161,18 +177,42 @@ Generate a menu using [[https://freedesktop.org/wiki/Howto_desktop_files/][freed
             (uiop:xdg-data-pathnames)))
 
   (defun remove-keys (exec file)
+    "Some KDE apps have this -caption %c in a few variations. %c is The
+     translated name of the application as listed in the appropriate Name key in
+     the desktop entry.
+
+     %k is the location of the desktop file as either a URI (if for example
+     gotten from the vfolder system) or a local filename or empty if no location
+     is known.
+
+     Remove any remaining keys and trailing options from the command."
     (let* ((c (ppcre:regex-replace-all " -caption.*\%c(\'|\"|)" exec ""))
            (k (ppcre:regex-replace-all "(\"|\'|)\%k(\"|\'|)" c file)))
       (first (split-string k " %"))))
 
   (defun is-terminal-app (cmd contents)
+    "If the Terminal attribute is set to true append a terminal emulater to the
+     command."
     (let ((terminal (string-downcase
                      (ppcre:scan-to-strings "(?<=\\nTerminal\\=).*" contents))))
       (if (string= terminal "true")
           (concat "x-terminal-emulator -e " cmd)
           cmd)))
 
+  (defun get-category (contents)
+    "Get the first value from the Categories field that matches one of the main
+     freedesktop.org categories."
+    (first (intersection
+            ,*main-categories*
+            (split-string
+             (ppcre:scan-to-strings "(?<=\\Categories\\=).*" contents)
+             ";")
+            :test 'equalp)))
+
   (defun do-show (contents)
+    "Return true so long as the NoDisplay or Hidden field is not set to true or
+     the OnlyShowIn field doesn't contain anything. If OnlyShowIn has a value,
+     it's likely this is a desktop specific application."
     (let* ((nodisplay (string-downcase
                        (ppcre:scan-to-strings "(?<=\\nNoDisplay\\=).*" contents)))
            (hidden (string-downcase
@@ -194,13 +234,17 @@ Generate a menu using [[https://freedesktop.org/wiki/Howto_desktop_files/][freed
       (if (do-show contents)
           (let* ((name (ppcre:scan-to-strings "(?<=\\nName\\=).*" contents))
                  (exec (ppcre:scan-to-strings "(?<=\\nExec\\=).*" contents))
+                 (category (get-category contents))
                  (cmd (remove-keys exec file))
                  (cmd (is-terminal-app cmd contents)))
-            (list name cmd)))))
+            (list name cmd category)))))
 
-  (defun menu ()
-    (sort (remove nil (mapcar #'parse-desktop-file (desktop-files)))
-          #'string-lessp :key #'first))
+  (defun menu (&optional (categorise nil))
+    (if categorise
+        (sort (remove nil (mapcar #'parse-desktop-file (desktop-files)))
+              #'string-lessp :key #'third)
+        (sort (remove nil (mapcar #'parse-desktop-file (desktop-files)))
+              #'string-lessp :key #'first)))
 
   (defcommand xdgmenu () ()
     (run-shell-command (second (select-from-menu (current-screen) (menu)))))
