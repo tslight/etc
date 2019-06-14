@@ -93,8 +93,8 @@ too confusing for my hands!
   (define-key *top-map* (kbd "s-c") "terminal")
   (define-key *top-map* (kbd "s-w") "web-browser")
   (define-key *top-map* (kbd "s-d") "file-manager")
-  (define-key *top-map* (kbd "s-r") "exec rofi -show drun")
-  (define-key *top-map* (kbd "s-SPC") "exec rofi -show drun")
+  (define-key *top-map* (kbd "s-r") "xdgmenu")
+  (define-key *top-map* (kbd "s-SPC") "xdgmenu")
   ;; maps
   (define-key *top-map* (kbd "C-s-e") *my-emacs-map*)
   (define-key *top-map* (kbd "C-s-c") *my-term-map*)
@@ -107,8 +107,8 @@ too confusing for my hands!
   (define-key *top-map* (kbd "M-S-Escape") "fprev")
   (define-key *top-map* (kbd "C-F10") "only")
   (define-key *top-map* (kbd "s-o") "only")
-  (define-key *top-map* (kbd "s-a") "exec rofi -show windowcd")
-  (define-key *top-map* (kbd "C-s-a") "exec rofi -show window")
+  (define-key *top-map* (kbd "s-a") "windowlist")
+  (define-key *top-map* (kbd "C-s-a") "windowlist")
   ;; misc
   (define-key *top-map* (kbd "s-m") "mode-line")
   (define-key *top-map* (kbd "C-s-r") "reinit")
@@ -125,7 +125,7 @@ too confusing for my hands!
   (define-key *root-map* (kbd "c") "terminal")
   (define-key *root-map* (kbd "w") "web-browser")
   (define-key *root-map* (kbd "d") "file-manager")
-  (define-key *root-map* (kbd "r") "exec rofi -show drun")
+  (define-key *root-map* (kbd "r") "xdgmenu")
   ;; maps
   (define-key *root-map* (kbd "C-e") '*my-emacs-map*)
   (define-key *root-map* (kbd "C-c") '*my-term-map*)
@@ -140,8 +140,8 @@ too confusing for my hands!
   ;; windows
   (define-key *root-map* (kbd "Tab") "select")
   (define-key *root-map* (kbd "M-r") "reinit")
-  (define-key *root-map* (kbd "a") "exec rofi -show windowcd")
-  (define-key *root-map* (kbd "C-a") "exec rofi -show window")
+  (define-key *root-map* (kbd "a") "windowlist")
+  (define-key *root-map* (kbd "C-a") "windowlist")
   ;; misc
   (define-key *root-map* (kbd "C-l") "exec slock")
   (define-key *root-map* (kbd "M-q") "quit")
