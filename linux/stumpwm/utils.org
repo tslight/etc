@@ -148,31 +148,44 @@ Strings lifted from [[https://github.com/kovisoft/slimv/blob/master/slime/slime.
     "Print a random string of hackerish encouragement."
     (message "~a" (random-encouragement)))
 #+END_SRC
-* MENU
+* XDGMENU
+
+Generate a menu using [[https://freedesktop.org/wiki/Howto_desktop_files/][freedesktop.org]] .desktop files.
 
 #+BEGIN_SRC common-lisp :tangle no
   (defun desktop-files ()
-    (apply #'append
-           (mapcar (lambda (d)
-                     (directory
-                      (uiop:merge-pathnames*
-                       "applications/*.desktop" d)))
-                   (uiop:xdg-data-pathnames))))
+    (mapcan (lambda (d)
+              (directory
+               (uiop:merge-pathnames*
+                "applications/*.desktop" d)))
+            (uiop:xdg-data-pathnames)))
 
   (defun remove-keys (exec file)
     (let* ((c (ppcre:regex-replace-all " -caption.*\%c(\'|\"|)" exec ""))
            (k (ppcre:regex-replace-all "(\"|\'|)\%k(\"|\'|)" c file)))
       (first (split-string k " %"))))
 
+  (defun do-show (contents)
+    (let* ((nodisplay (string-downcase
+                       (ppcre:scan-to-strings "(?<=\\nName\\=).*" contents)))
+           (hidden (string-downcase
+                    (ppcre:scan-to-strings "(?<=\\nHidden\\=).*" contents)))
+           (only (ppcre:scan-to-strings "(?<=\\nOnlyShowIn\\=).*" contents)))
+      (if (not (or (string= hidden "true")
+                   (string= nodisplay "true")
+                   (> (length only) 0)))
+          t)))
+
   (defun parse-desktop-file (file)
-    (let* ((contents (uiop:read-file-string (pathname file)))
-           (name (ppcre:scan-to-strings "(?<=\\nName\\=).*" contents))
-           (exec (ppcre:scan-to-strings "(?<=\\nExec\\=).*" contents))
-           (cmd (remove-keys exec file)))
-      (list name cmd)))
+    (let ((contents (uiop:read-file-string (pathname file))))
+      (if (do-show contents)
+          (let* ((name (ppcre:scan-to-strings "(?<=\\nName\\=).*" contents))
+                 (exec (ppcre:scan-to-strings "(?<=\\nExec\\=).*" contents))
+                 (cmd (remove-keys exec file)))
+            (list name cmd)))))
 
   (defun menu ()
-    (mapcar #'parse-desktop-file (desktop-files)))
+    (remove nil (mapcar #'parse-desktop-file (desktop-files))))
 
   (select-from-menu (current-screen) (menu))
 #+END_SRC
