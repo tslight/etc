@@ -193,7 +193,8 @@ Generate a menu using [[https://freedesktop.org/wiki/Howto_desktop_files/][freed
             (list name cmd)))))
 
   (defun menu ()
-    (remove nil (mapcar #'parse-desktop-file (desktop-files))))
+    (sort (remove nil (mapcar #'parse-desktop-file (desktop-files)))
+          #'string-lessp :key #'first))
 
   (defcommand xdgmenu () ()
     (run-shell-command (second (select-from-menu (current-screen) (menu)))))
