@@ -239,6 +239,25 @@ Generate a menu using [[https://freedesktop.org/wiki/Howto_desktop_files/][freed
                  (cmd (is-terminal-app cmd contents)))
             (list name cmd category)))))
 
+  (defun categorise (categories applications)
+    (mapcan
+     (lambda (c)
+       (mapcar
+        (lambda (a)
+          (if (equal (third a) (first c))
+              (push a (cdr (last c)))))
+        applications))
+     categories))
+
+  (let* ((apps (remove nil (mapcar #'parse-desktop-file (desktop-files))))
+         (cats (mapcar (lambda (c) (list c)) *main-categories*)))
+    (categorise cats apps))
+
+  (loop for c in *main-categories*
+     collect (list c (loop for a in apps
+                        collect (if (equal (third a) c)
+                                    a))))
+
   (defun menu (&optional (categorise nil))
     (if categorise
         (sort (remove nil (mapcar #'parse-desktop-file (desktop-files)))
