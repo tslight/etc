@@ -259,8 +259,8 @@ Generate a menu using [[https://freedesktop.org/wiki/Howto_desktop_files/][freed
       (if categorise
           (loop for c in *main-categories*
              collect (list c (loop for a in apps
-                                collect (if (equal (third a) c)
-                                            a))))
+                                unless (not (equal (third a) c))
+                                collect a)))
           apps)))
 
   (defcommand xdgmenu () ()
