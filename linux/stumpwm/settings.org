@@ -61,7 +61,7 @@ Requires [[https://github.com/tslight/stumpwm-contrib/blob/master/modeline/stump
   (setf stumptray:*tray-placeholder-pixels-per-space* 22)
 #+END_SRC
 
-Requires [[https://github.com/tslight/stumpwm-contrib/blob/merged/modeline/sensors/README.org][Sensors]] and [[https://github.com/tslight/stumpwm-contrib/blob/merged/modeline/acpi/README.org][ACPI]] modules.
+Requires my [[https://github.com/tslight/stumpwm-contrib/blob/merged/modeline/sensors/README.org][Sensors]] and my [[https://github.com/tslight/stumpwm-contrib/blob/merged/modeline/acpi/README.org][ACPI]] modules.
 
 #+BEGIN_SRC common-lisp
   (setf *mode-line-pad-x* 0)
