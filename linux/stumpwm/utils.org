@@ -261,7 +261,7 @@ Generate a menu using [[https://freedesktop.org/wiki/Howto_desktop_files/][freed
                         (if (equal c (third a))
                             a))
                       applications))))
-     ,*main-categories*))
+     *main-categories*))
 
   (defun menu (&optional (categorise nil))
     (let ((apps (sort (remove nil (mapcar #'parse-desktop-file (desktop-files)))
