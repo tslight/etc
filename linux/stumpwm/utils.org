@@ -243,10 +243,16 @@ Generate a menu using [[https://freedesktop.org/wiki/Howto_desktop_files/][freed
     (let ((apps (sort (remove nil (mapcar #'parse-desktop-file (desktop-files)))
                       #'string-lessp :key #'first)))
       (if categorise
-          (loop for c in *main-categories*
-             collect (list c (loop for a in apps
-                                unless (not (equal (third a) c))
-                                collect a)))
+          (mapcar
+           (lambda (c)
+             (list c
+                   (remove nil
+                           (mapcar
+                            (lambda (a)
+                              (if (equal c (third a))
+                                  a))
+                            apps))))
+           ,*main-categories*)
           apps)))
 
   (defun commandp (command-name)
