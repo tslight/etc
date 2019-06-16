@@ -239,20 +239,6 @@ Generate a menu using [[https://freedesktop.org/wiki/Howto_desktop_files/][freed
                  (cmd (is-terminal-app cmd contents)))
             (list name cmd category)))))
 
-  (defun categorise (categories applications)
-    (mapcan
-     (lambda (c)
-       (mapcar
-        (lambda (a)
-          (if (equal (third a) (first c))
-              (push a (cdr (last c)))))
-        applications))
-     categories))
-
-  ;; (let* ((apps (remove nil (mapcar #'parse-desktop-file (desktop-files))))
-  ;;        (cats (mapcar (lambda (c) (list c)) *main-categories*)))
-  ;;   (categorise cats apps))
-
   (defun menu (&optional (categorise nil))
     (let ((apps (sort (remove nil (mapcar #'parse-desktop-file (desktop-files)))
                       #'string-lessp :key #'first)))
@@ -263,8 +249,27 @@ Generate a menu using [[https://freedesktop.org/wiki/Howto_desktop_files/][freed
                                 collect a)))
           apps)))
 
-  (defcommand xdgmenu () ()
-              (run-shell-command (second (select-from-menu (current-screen) (menu)))))
+  (defun category-menu ()
+    (labels
+        ((pick (options)
+           (let ((selection (select-from-menu (current-screen) options nil)))
+             (cond
+               ((null selection) nil)
+               ((stringp (second selection))
+                (run-shell-command (second selection)))
+               ((and (symbolp (second selection))
+                     (commandp (second selection)))
+                (funcall (second selection)))
+               (t (if (equalp ".." (first selection))
+                      (pick (second selection))
+                      (pick (append (list (list ".." options))
+                                    (cdr selection)))))))))
+      (pick (menu t))))
+
+  (defcommand xdgmenu (&optional (categorise nil)) ((:string))
+    (if categorise
+        (category-menu)
+        (run-shell-command (second (select-from-menu (current-screen) (menu))))))
 #+END_SRC
 
 * PROMPT
