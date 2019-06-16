@@ -36,7 +36,7 @@ Please see the relevant READMEs in the fork for more details.
   (load-module "cycle-mru")
   (load-module "encouragement")
   (load-module "sensors")
-  (load-module "stumptray")
+  ;; (load-module "stumptray")
   (load-module "ttf-fonts")
   (load-module "volume")
   (load-module "xdgmenu")
