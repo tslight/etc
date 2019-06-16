@@ -8,6 +8,8 @@
 #+PROPERTY: header-args+ :tangle ~/.stumpwm.d/init.lisp
 #+PROPERTY: header-args+ :tangle-mode (identity #o644)
 
+* STUMP JUMP
+
 Jump into the Stump, and set the module directory to wherever you cloned my
 fork of [[https://github.com/tslight/stumpwm-contrib/tree/merged][StumpWM Contrib]].
 
@@ -19,6 +21,8 @@ fork of [[https://github.com/tslight/stumpwm-contrib/tree/merged][StumpWM Contri
    (pathname-as-directory
     (concat (getenv "HOME") "/src/stumpwm-contrib")))
 #+END_SRC
+
+* LOCK & LOAD
 
 Load modules from the ~merged~ branch of my fork of [[https://github.com/tslight/stumpwm-contrib/tree/merged][StumpWM Contrib]].
 
@@ -37,6 +41,8 @@ Please see the relevant READMEs in the fork for more details.
   (load-module "volume")
   (load-module "xdgmenu")
 #+END_SRC
+
+* CONFIG LOADING
 
 Allow configuration split into multiple files:
 
@@ -66,6 +72,8 @@ Allow configuration split into multiple files:
   (my/load "keys")
 #+END_SRC
 
+* ENCOURAGEMENT
+
 Encouraging startup message, inspired by Emacs' slime-mode.
 
 Requires my [[https://github.com/tslight/stumpwm-contrib/blob/merged/fun/encouragement/README.org][Encouragement]] module.
@@ -75,6 +83,8 @@ Requires my [[https://github.com/tslight/stumpwm-contrib/blob/merged/fun/encoura
                            "^B^5Welcome to StumpWM~%^n"
                            (encouragement:random-encouragement)))
 #+END_SRC
+
+* RUN SHELL COMMANDS
 
 After loading all our lisp, run some shell programs to make things more comfy.
 
