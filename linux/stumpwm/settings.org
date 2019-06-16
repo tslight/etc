@@ -54,16 +54,6 @@ Requires [[https://github.com/tslight/stumpwm-contrib/tree/merged/util/ttf-fonts
 
 * MODELINE
 
-Requires [[https://github.com/tslight/stumpwm-contrib/blob/master/modeline/stumptray/README.org][StumpTray]] module.
-
-Putting this on ice for a while since it's a bit buggy and doesn't properly
-respect the other modeline items..
-
-#+BEGIN_SRC common-lisp :tangle no
-  ;; (stumptray:add-mode-line-hooks)
-  ;; (setf stumptray:*tray-placeholder-pixels-per-space* 22)
-#+END_SRC
-
 Requires my [[https://github.com/tslight/stumpwm-contrib/blob/merged/modeline/sensors/README.org][Sensors]] and my [[https://github.com/tslight/stumpwm-contrib/blob/merged/modeline/acpi/README.org][ACPI]] modules.
 
 #+BEGIN_SRC common-lisp
@@ -73,7 +63,7 @@ Requires my [[https://github.com/tslight/stumpwm-contrib/blob/merged/modeline/se
   (setf *window-format* " [%n] [%s] [%m] %c ")
   (setf *time-modeline-string* "^7*%H:%M %d/%m")
   (setf *screen-mode-line-format*
-        (list "^B^2*[%n]^n ^7*%v ^>^B%B %S %d %T"))
+        (list "^B^2*[%n]^n ^7*%v ^>^B%B %S %d"))
 #+END_SRC
 
 * GROUPS
