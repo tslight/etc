@@ -84,4 +84,5 @@ Requires my [[https://github.com/tslight/stumpwm-contrib/blob/merged/modeline/se
   (gnewbg "Teta")
   (gnewbg "Phi")
   (gnewbg "Rho")
+  (gnewbg "Lambda")
 #+END_SRC
