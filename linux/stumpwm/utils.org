@@ -249,6 +249,13 @@ Generate a menu using [[https://freedesktop.org/wiki/Howto_desktop_files/][freed
                                 collect a)))
           apps)))
 
+  (defun commandp (command-name)
+    (loop
+       :for command :being :the :hash-keys :of *command-hash*
+       :when (string= (symbol-name command-name)
+                      (symbol-name command))
+       :return command))
+
   (defun category-menu ()
     (labels
         ((pick (options)
