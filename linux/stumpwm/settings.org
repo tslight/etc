@@ -7,13 +7,16 @@
 #+PROPERTY: header-args+ :tangle ~/.stumpwm.d/settings.lisp
 #+PROPERTY: header-args+ :tangle-mode (identity #o644)
 
+StumpWM global variable configuration.
+
 * FONTS
 
 [[https://wiki.archlinux.org/index.php/Stumpwm#Set_font_for_messages_and_modeline][Arch Linux Wiki - How to set Xft font]]
 
+Requires [[https://github.com/tslight/stumpwm-contrib/tree/merged/util/ttf-fonts][ttf-fonts]] module.
+
 #+BEGIN_SRC common-lisp
   ;; (set-font "-*-terminus-bold-*-*-*-14-*")
-  (load-module "ttf-fonts")
   (xft:cache-fonts)
   (set-font (make-instance 'xft:font
                            :family "DejaVu Sans"
@@ -51,15 +54,14 @@
 
 * MODELINE
 
-Not tangling stumptray block as it's too buggy for me at the mo :-(
-
-Placeholder variable is not honoured and it disappears on ~loadrc~
+Requires [[https://github.com/tslight/stumpwm-contrib/blob/master/modeline/stumptray/README.org][StumpTray]] module.
 
 #+BEGIN_SRC common-lisp :tangle no
-  (load-module "stumptray")
   (stumptray:add-mode-line-hooks)
   (setf stumptray:*tray-placeholder-pixels-per-space* 22)
 #+END_SRC
+
+Requires [[https://github.com/tslight/stumpwm-contrib/blob/merged/modeline/sensors/README.org][Sensors]] and [[https://github.com/tslight/stumpwm-contrib/blob/merged/modeline/acpi/README.org][ACPI]] modules.
 
 #+BEGIN_SRC common-lisp
   (setf *mode-line-pad-x* 0)

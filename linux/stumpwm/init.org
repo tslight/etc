@@ -45,9 +45,23 @@ Allow configuration split into multiple files:
   (my/load "keys")
 #+END_SRC
 
-Encouraging startup message, inspired by Emacs' slime-mode.
+Load modules from the ~merged~ branch of my fork of [[https://github.com/tslight/stumpwm-contrib/tree/merged][StumpWM Contrib]].
 
-Source code for ~random-encouragement~ is in [[file:utils.org][utils.org]]
+Please see the relevant READMEs in the fork for more details.
+
+#+BEGIN_SRC common-lisp
+  (load-module "acpi")
+  (load-module "command-history")
+  (load-module "cycle-mru")
+  (load-module "encouragement")
+  (load-module "sensors")
+  (load-module "stumptray")
+  (load-module "ttf-fonts")
+  (load-module "volume")
+  (load-module "xdgmenu")
+#+END_SRC
+
+Encouraging startup message, inspired by Emacs' slime-mode.
 
 #+BEGIN_SRC common-lisp
   (setf *startup-message* (concat
@@ -58,10 +72,8 @@ Source code for ~random-encouragement~ is in [[file:utils.org][utils.org]]
 After loading all our lisp, run some shell programs to make things more comfy.
 
 #+BEGIN_SRC common-lisp
-  ;; (run-shell-command "xmodmap -e 'keycode 113 = Super_R'")
   (run-shell-command "xsetroot -cursor_name left_ptr -solid grey9")
   (run-shell-command "xfsettingsd")
   (run-shell-command "xfce4-power-manager")
   (run-shell-command "xfce4-clipman")
-  ;; (run-shell-command "alttab -mk Control_R -kk Escape -vp pointer")
 #+END_SRC

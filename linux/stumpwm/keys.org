@@ -8,12 +8,14 @@
 #+PROPERTY: header-args+ :tangle ~/.stumpwm.d/keys.lisp
 #+PROPERTY: header-args+ :tangle-mode (identity #o644)
 
+Keybinding stuff goes in here.
+
 * PREFIX KEY
 
 Decided to stick with the default as having C-i for stump nad C-j for tmux is
 too confusing for my hands!
 
-#+BEGIN_SRC common-lisp
+#+BEGIN_SRC common-lisp :tangle no
   ;; (set-prefix-key (kbd "C-i"))
 #+END_SRC
 
@@ -64,6 +66,8 @@ too confusing for my hands!
 
 * TOP MAP
 
+Requires my [[https://github.com/tslight/stumpwm-contrib/blob/merged/util/volume/README.org][Volume]] module.
+
 #+BEGIN_SRC common-lisp
   (define-key *top-map* (kbd "XF86AudioLowerVolume") "volume Master 5%-")
   (define-key *top-map* (kbd "XF86AudioRaiseVolume") "volume Master 5%+")
@@ -71,6 +75,8 @@ too confusing for my hands!
   ;; (define-key *top-map* (kbd "XF86MonBrightnessDown") "exec xbacklight -dec 10%")
   ;; (define-key *top-map* (kbd "XF86MonBrightnessUp") "exec xbacklight -inc 10%")
 #+END_SRC
+
+Requires my [[https://github.com/tslight/stumpwm-contrib/blob/merged/util/xdgmenu/README.org][XDGMenu]] and [[https://github.com/tslight/stumpwm-contrib/blob/merged/util/cycle-mru/README.org][CycleMRU]] modules.
 
 #+BEGIN_SRC common-lisp
   ;; windows
@@ -120,6 +126,8 @@ too confusing for my hands!
 
 * ROOT MAP
 
+Requires my [[https://github.com/tslight/stumpwm-contrib/blob/merged/util/xdgmenu/README.org][XDGMenu]] and [[https://github.com/tslight/stumpwm-contrib/blob/merged/modeline/sensors/README.org][Sensors]] modules.
+
 #+BEGIN_SRC common-lisp
   ;; applications
   (define-key *root-map* (kbd "e") "emacs")
@@ -168,58 +176,4 @@ too confusing for my hands!
   (define-key *groups-map* (kbd "C-p") "gprev-with-window")
   (define-key *groups-map* (kbd "l") "grouplist")
   (define-key *groups-map* (kbd "s") "gselect")
-#+END_SRC
-
-* RAT MAP
-
-Cycle windows by scrolling on the modeline.
-
-#+BEGIN_SRC common-lisp
-  (defun modeline-click (modeline button x y)
-    (let* ((screen (parse-integer
-                    (ppcre:scan-to-strings
-                     "[0-9]+(?=x[0-9]+x[0-9]+)"
-                     (write-to-string (current-screen)))))
-           (min 50) ;; pixels
-           (mid (floor screen 2))
-           (max (- screen min)))
-      (cond
-        ;; left corner of screen
-        ((and (eq button 1) (<= x min))
-         (run-commands "gprev"))
-        ((and (eq button 3) (<= x min))
-         (run-commands "gnext"))
-        ((and (eq button 5) (<= x min))
-         (run-commands "gnext"))
-        ((and (eq button 4) (<= x min))
-         (run-commands "gprev"))
-        ;; left side of screen
-        ((and (eq button 1) (> x min) (< x mid))
-         (run-commands "prev"))
-        ((and (eq button 3) (> x min) (< x mid))
-         (run-commands "next"))
-        ((and (eq button 4) (> x min) (< x mid))
-         (run-commands "prev"))
-        ((and (eq button 5) (> x min) (< x mid))
-         (run-commands "next"))
-        ;; right side of screen
-        ((and (eq button 1) (> x mid) (< x max))
-         (run-commands "next"))
-        ((and (eq button 3) (> x mid) (< x max))
-         (run-commands "prev"))
-        ((and (eq button 4) (> x mid) (< x max))
-         (run-commands "prev"))
-        ((and (eq button 5) (> x mid) (< x max))
-         (run-commands "next"))
-        ;; right corner of screen
-        ((and (eq button 1) (>= x max))
-         (run-commands "gnext"))
-        ((and (eq button 3) (<= x min))
-         (run-commands "gprev"))
-        ((and (eq button 5) (>= x max))
-         (run-commands "gnext"))
-        ((and (eq button 4) (>= x max))
-         (run-commands "gprev")))))
-
-  (add-hook *mode-line-click-hook* 'modeline-click)
 #+END_SRC

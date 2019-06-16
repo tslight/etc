@@ -90,11 +90,24 @@ manager.
   SessionManaged=true
 #+END_SRC
 
+*** CONTRIB
+
+Clone my fork of the [[https://github.com/tslight/stumpwm-contrib/tree/merged][StumpWM Contrib]] repo to ~~/src/~, then switch to it's
+~merged~ branch, in order to access much of the code that does the interesting
+things present in my config.
+
+#+BEGIN_SRC bash
+mkdir ~/src
+git clone https://github.com/tslight/stumpwm-contrib.git ~/src/stumpwm-contrib
+cd ~/src/stumpwm-contrib
+git checkout merged
+#+END_SRC
+
 *** CONFIG
 
-Finally, now that we have StumpWM installed and ready to be started with either
-~startx~ or from a display manager, we need to tangle the code in the files
-linked below:
+Finally, now that we have StumpWM & StumpWM contrib installed and ready to be
+started with either ~startx~ or from a display manager, we need to tangle the
+code in the files linked below:
 
 - [[file:init.org][Initialisation]]
 - [[file:settings.org][Settings]]

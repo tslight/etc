@@ -8,298 +8,63 @@
 #+PROPERTY: header-args+ :tangle ~/.stumpwm.d/utils.lisp
 #+PROPERTY: header-args+ :tangle-mode (identity #o644)
 
-* BATTERY
+Collection of functions & commands not complex enough to warrant turning into
+modules.
 
-Add basic battery information to the modeline. Depends on Linux's ~acpi~
-package.
+* MODELINE RAT
 
-Use ~%B~ to add to the modeline.
-
-#+BEGIN_SRC common-lisp
-  (defvar *battery-refresh-time* 30
-    "Time in seconds between updates of battery information.")
-
-  (defun battery ()
-    (let* ((bat (run-shell-command "acpi" t))
-           (bat (ppcre:scan-to-strings "[0-9]+%" bat))
-           (int (parse-integer bat :junk-allowed t)))
-      (cond ((and (> 96 int) (<= 75 int)) bat)
-            ((and (> 75 int) (<= 50 int)) (concat "^2*" bat))
-            ((and (> 50 int) (<= 25 int)) (concat "^3*" bat))
-            ((and (> 25 int)) (concat "^1*" bat))
-            (t ""))))
-
-  (defcommand battery-message () ()
-    (let ((bat (battery)))
-      (if (string= bat "")
-          (message "Charged")
-          (message bat))))
-
-  ;; pinched from battery portable code
-  (let ((next 0)
-        (last-value ""))
-    (defun get-battery (ml)
-      (declare (ignore ml))
-      (let ((now (get-universal-time)))
-        (when (< now next)
-          (return-from get-battery last-value))
-        (setf next (+ now *battery-refresh-time*)))
-      (setf last-value (battery))))
-
-  (add-screen-mode-line-formatter #\B #'get-battery)
-#+END_SRC
-
-* CYCLE MRU
-
-Flip through a group's windows, in a fashion similar to Window's Alt-Tab or
-macOS' Command-Tab. A.K.A. Most Recently Used order.
-
-This code was lifted from [[http://nongnu.13855.n7.nabble.com/Alt-Tab-td127943.html][this thread]] on the stumpwm-devel mailing list from way
-back in 2012.
-
-I have made some minor aesthetic and semantic changes to it (ie - changing the
-name from alt-tab to cycle-mru), but full credit goes to Ruthard Baudach for the
-code.
-
-Using [[https://github.com/sagb/alttab][alttab]] instead now, so tangling turned off.
+Cycle windows by scrolling and clicking on the modeline.
 
 #+BEGIN_SRC common-lisp
-  (defun get-milliseconds () ()
-         "Get timestamp in milliseconds."
-         (floor
-          (* 1000
-             (/ (get-internal-real-time)
-                internal-time-units-per-second))))
+  (defun modeline-click (modeline button x y)
+    "Cycle windows by scrolling and clicking on the modeline."
+    (let* ((screen (parse-integer
+                    (ppcre:scan-to-strings
+                     "[0-9]+(?=x[0-9]+x[0-9]+)"
+                     (write-to-string (current-screen)))))
+           (min 50) ;; pixels
+           (mid (floor screen 2))
+           (max (- screen min)))
+      (cond
+        ;; left corner of screen
+        ((and (eq button 1) (<= x min))
+         (run-commands "gprev"))
+        ((and (eq button 3) (<= x min))
+         (run-commands "gnext"))
+        ((and (eq button 5) (<= x min))
+         (run-commands "gnext"))
+        ((and (eq button 4) (<= x min))
+         (run-commands "gprev"))
+        ;; left side of screen
+        ((and (eq button 1) (> x min) (< x mid))
+         (run-commands "prev"))
+        ((and (eq button 3) (> x min) (< x mid))
+         (run-commands "next"))
+        ((and (eq button 4) (> x min) (< x mid))
+         (run-commands "prev"))
+        ((and (eq button 5) (> x min) (< x mid))
+         (run-commands "next"))
+        ;; right side of screen
+        ((and (eq button 1) (> x mid) (< x max))
+         (run-commands "next"))
+        ((and (eq button 3) (> x mid) (< x max))
+         (run-commands "prev"))
+        ((and (eq button 4) (> x mid) (< x max))
+         (run-commands "prev"))
+        ((and (eq button 5) (> x mid) (< x max))
+         (run-commands "next"))
+        ;; right corner of screen
+        ((and (eq button 1) (>= x max))
+         (run-commands "gnext"))
+        ((and (eq button 3) (<= x min))
+         (run-commands "gprev"))
+        ((and (eq button 5) (>= x max))
+         (run-commands "gnext"))
+        ((and (eq button 4) (>= x max))
+         (run-commands "gprev")))))
 
-  (defvar *mru-last-call* (get-milliseconds))
-  (defvar *mru-list* (make-list 0))
-  (defvar *mru-cycle* (make-list 0))
-  (defvar *mru-timeout* 500) ; in milliseconds
-  (defvar *mru-index* 0)     ; in milliseconds
-
-  (defun mru-new-window (win) ()
-         "Function called by new-window-hook. Updates mru-list."
-         (push (window-number win) *mru-list*))
-
-  (defun mru-destroy-window (win) ()
-         "Function called by destroy-window-hook. Deletes window number from
-          mru-list."
-         (setf *mru-list* (delete (window-number win) *mru-list*)))
-
-  (defun mru-focus-window (new-win old-win) ()
-         "Function called by focus-window-hook. Updates mru-list."
-         (when new-win
-           (setf *mru-list* (delete (window-number new-win) *mru-list*)))
-         (when old-win
-           (push (window-number old-win) *mru-list*)))
-
-  (setf *new-window-hook* (list 'mru-new-window))
-  (setf *destroy-window-hook* (list 'mru-destroy-window))
-  (setf *focus-window-hook* (list 'mru-focus-window))
-
-  (defcommand cycle-mru () ()
-    "Focus next windows according to most recently used order."
-    (cond ((< (- (get-milliseconds) *mru-last-call*) *mru-timeout*)
-           ;; cycle through windows
-           (setf *mru-index* (mod (1+ *mru-index*) (list-length *mru-cycle*)))
-           (select-window-by-number (nth *mru-index* *mru-cycle*)))
-          ;; else start anew
-          ((setf *mru-index* 1) (setf *mru-cycle* (copy-list *mru-list*))
-           ;; if we've focussed a frame without window, current-window will
-           ;; return nil => select last used
-           (cond ((not (current-window))
-                  (select-window-by-number (first *mru-cycle*)))
-                 ((push (window-number (current-window)) *mru-cycle*)
-                  (select-window-by-number (second *mru-cycle*))))))
-    ;; update timestamp
-    (setf *mru-last-call* (get-milliseconds)))
+  (add-hook *mode-line-click-hook* 'modeline-click)
 #+END_SRC
-
-* ENCOURAGEMENT
-
-/Scientifically-proven optimal words of hackerish encouragement./
-
-Inspired my the messages printed when starting Emacs' slime mode.
-
-Strings lifted from [[https://github.com/kovisoft/slimv/blob/master/slime/slime.el][here]] and [[https://github.com/kovisoft/slimv/blob/master/slime/slime.el][here]].
-
-#+BEGIN_SRC common-lisp
-  (defvar words-of-encouragement
-    (list "Let the hacking commence!"
-          "Hacks and glory await!"
-          "Hack and be merry!"
-          "Your hacking starts... NOW!"
-          "May the source be with you!"
-          "Take this REPL, brother, and may it serve you well."
-          "Lemonodor-fame is but a hack away!"
-          (concat (string-capitalize (getenv "USER"))
-                  ", this could be the start of a beautiful program..")
-          "Scientifically-proven optimal words of hackerish encouragement."))
-
-  (defun my/random-elt (list)
-    "Return a random element from a list."
-    (elt list (random (length list))))
-
-  (defun random-encouragement ()
-    "Return a random string of hackerish encouragement."
-    (my/random-elt words-of-encouragement))
-
-  (defcommand stump-encouragement () ()
-    "Print a random string of hackerish encouragement."
-    (message "~a" (random-encouragement)))
-#+END_SRC
-* XDGMENU
-
-Generate a menu using [[https://freedesktop.org/wiki/Howto_desktop_files/][freedesktop.org]] .desktop files.
-
-#+BEGIN_SRC common-lisp
-  (defvar *main-categories*
-    (list "AudioVideo"
-          "Audio"
-          "Video"
-          "Development"
-          "Education"
-          "Game"
-          "Graphics"
-          "Multimedia"
-          "Network"
-          "Office"
-          "Other"
-          "Science"
-          "Settings"
-          "System"
-          "Utility")
-    "Use https://standards.freedesktop.org/menu-spec/latest/apa.html as base, but
-    add Multimedia and other, as I don't want 3 categories for media, and I want
-    to catch any applications that don't have a category with other.")
-
-  (defun desktop-files ()
-    "Get all the dot desktop files in all XDG applications directories."
-    (mapcan (lambda (d)
-              (directory
-               (uiop:merge-pathnames*
-                "applications/*.desktop" d)))
-            (uiop:xdg-data-pathnames)))
-
-  (defun remove-keys (exec file)
-    "Some KDE apps have this -caption %c in a few variations. %c is The
-     translated name of the application as listed in the appropriate Name key in
-     the desktop entry.
-
-     %k is the location of the desktop file as either a URI (if for example
-     gotten from the vfolder system) or a local filename or empty if no location
-     is known.
-
-     Remove any remaining keys and trailing options from the command."
-    (let* ((c (ppcre:regex-replace-all " -caption.*\%c(\'|\"|)" exec ""))
-           (k (ppcre:regex-replace-all "(\"|\'|)\%k(\"|\'|)" c file)))
-      (first (split-string k " %"))))
-
-  (defun terminalp (cmd contents)
-    "If the Terminal attribute is set to true append a terminal emulater to the
-     command."
-    (let ((terminal (string-downcase
-                     (ppcre:scan-to-strings "(?<=\\nTerminal\\=).*" contents))))
-      (if (string= terminal "true")
-          (concat "x-terminal-emulator -e " cmd)
-          cmd)))
-
-  (defun get-category (contents)
-    "Get the first value from the Categories field that matches one of the main
-     freedesktop.org categories."
-    (let ((category (first (intersection
-                            ,*main-categories*
-                            (split-string
-                             (ppcre:scan-to-strings
-                              "(?<=\\Categories\\=).*"
-                              contents)
-                             ";")
-                            :test 'equalp))))
-      (cond ((ppcre:scan "Audio|Video" category) "Multimedia")
-            (nil "Other")
-            (t category))))
-
-  (defun do-show (contents)
-    "Return true so long as the NoDisplay or Hidden field is not set to true or
-     the OnlyShowIn field doesn't contain anything. If OnlyShowIn has a value,
-     it's likely this is a desktop specific application."
-    (let* ((nodisplay (string-downcase
-                       (ppcre:scan-to-strings "(?<=\\nNoDisplay\\=).*" contents)))
-           (hidden (string-downcase
-                    (ppcre:scan-to-strings "(?<=\\nHidden\\=).*" contents)))
-           (only (ppcre:scan-to-strings "(?<=\\nOnlyShowIn\\=).*" contents)))
-      (if (not (or (string= hidden "true")
-                   (string= nodisplay "true")
-                   (> (length only) 0)))
-          t)))
-
-  ;; not using this just an idea to make my own way of parsing .desktop files
-  ;; instead of relying on regex...
-  (defun load-desktop-file (file)
-    (remove nil (mapcar (lambda (l)
-                          (if (match-all-regexps "=" l)
-                              (split-string l "=")))
-                        (uiop:read-file-lines file))))
-
-  (defun parse-desktop-file (file)
-    (let ((contents (uiop:read-file-string (pathname file))))
-      (if (do-show contents)
-          (let* ((name (ppcre:scan-to-strings "(?<=\\nName\\=).*" contents))
-                 (exec (ppcre:scan-to-strings "(?<=\\nExec\\=).*" contents))
-                 (category (get-category contents))
-                 (cmd (remove-keys exec file))
-                 (cmd (terminalp cmd contents)))
-            (list name cmd category)))))
-
-  (defun make-categories (applications)
-    (mapcar
-     (lambda (c)
-       (cons c
-             (remove nil
-                     (mapcar
-                      (lambda (a)
-                        (if (equal c (third a))
-                            a))
-                      applications))))
-     *main-categories*))
-
-  (defun menu (&optional (categorise nil))
-    (let ((apps (sort (remove nil (mapcar #'parse-desktop-file (desktop-files)))
-                      #'string-lessp :key #'first)))
-      (if categorise
-          (remove-if (lambda (c) (<= (length c) 1)) (make-categories apps))
-          apps)))
-
-  (defun commandp (command-name)
-    (loop
-       :for command :being :the :hash-keys :of *command-hash*
-       :when (string= (symbol-name command-name)
-                      (symbol-name command))
-       :return command))
-
-  (defun category-menu ()
-    (labels
-        ((pick (options)
-           (let ((selection (select-from-menu (current-screen) options nil)))
-             (cond
-               ((null selection) nil)
-               ((stringp (second selection))
-                (run-shell-command (second selection)))
-               ((and (symbolp (second selection))
-                     (commandp (second selection)))
-                (funcall (second selection)))
-               (t (if (equalp ".." (first selection))
-                      (pick (second selection))
-                      (pick (append (list (list ".." options))
-                                    (cdr selection)))))))))
-      (pick (menu t))))
-
-  (defcommand xdgmenu (&optional (categorise nil)) ((:string))
-    (if categorise
-        (category-menu)
-        (run-shell-command (second (select-from-menu (current-screen) (menu))))))
-#+END_SRC
-
 * PROMPT
 
 Taken from the example rc file.
@@ -346,115 +111,6 @@ Reload StumpWM and then re-load config.
     (run-or-raise "thunar" '(:class "Thunar")))
 #+END_SRC
 
-* SENSORS
-
-View the average temperature and fan RPM from the ~sensors~ command on Linux, in
-the modeline. Use ~%S~ to view sensors info in the modeline.
-
-Transforms the output of the sensors command into two lists of integers. One for
-temperatures and one for fan speeds.
-
-Calculate the average values of the lists (and the maximum for temperatures),
-then cast those values back to strings with appropriate color formatting.
-
-Finally concatenate those strings into one line.
-
-#+BEGIN_SRC common-lisp
-  (defvar *sensors-refresh-time* 30
-    "Time in seconds between updates of sensors information.")
-
-  (defvar *red-above-temp* 60
-    "Temperature to turn red at.")
-
-  (defvar *yellow-above-temp* 50
-    "Temperature to turn yellow at.")
-
-  (defvar *display-above-temp* 40
-    "Temperature to start displaying at.")
-
-  (defvar *red-above-rpm* 4000
-    "Fan RPM to turn red at.")
-
-  (defvar *yellow-above-rpm* 3000
-    "Fan RPM to turn yellow at.")
-
-  (defvar *display-above-rpm* 2000
-    "Fan RPM to start displaying at.")
-
-  (defvar *ignore-below* 20
-    "Ignore temperatures below this temperature when calculating average.")
-
-  (defvar *temp-regex* "(?<=\\+).*[0-9]+(?=\\..*)"
-    "A regex that captures all temperatures.")
-
-  (defvar *fan-regex* "(?<=\\:).*?(?=RPM)"
-    "A regex that captures all fans.")
-
-  (defun sensors-as-ints (output regex)
-    "Use REGEX to extract sensor values from OUTPUT, and then cast them to a list
-     of integers if they are greater than *IGNORE-BELOW*."
-    (let ((strings (ppcre:all-matches-as-strings regex output)))
-      (mapcan ;; https://stackoverflow.com/a/13269952
-       (lambda (s)
-         (let ((i (parse-integer (remove-if #'alpha-char-p s) :junk-allowed t)))
-           ;; low readings can skew the average too much
-           (if (< *ignore-below* i)
-               (list i))))
-       strings)))
-
-  (defun fmt-sensor (value &optional
-                             (high *red-above-temp*)
-                             (mid *yellow-above-temp*)
-                             (low *display-above-temp*))
-    "If VALUE is greater than HIGH, MID or LOW, return it as a red, yellow or
-     normal coloured string, respectively. If value is lower than LOW, don't
-     return anything."
-    (cond ((< high value) (concat "^1*" (write-to-string value)))
-          ((< mid value) (concat "^3*" (write-to-string value)))
-          ((< low value) (write-to-string value))
-          (t nil)))
-
-  (defun sensors ()
-    "Transforms the output of the sensors command into two lists of integers. One
-     for temperatures and one for fan speeds. Calculate the average values of the
-     lists (and the maximum for temperatures), then cast those values back to
-     strings with appropriate color formatting. Finally concatenate those strings
-     into one line."
-    (let* ((output (run-shell-command "sensors" t))
-           (temps (sensors-as-ints output *temp-regex*))
-           (fans (sensors-as-ints output *fan-regex*))
-           (max-temp (fmt-sensor (reduce #'max temps)))
-           (avg-temp (fmt-sensor
-                      (handler-case
-                          (floor (apply #'+ temps) (length temps))
-                        (division-by-zero () 0))))
-           (avg-rpm (fmt-sensor
-                     (handler-case
-                         (floor (apply #'+ fans) (length fans))
-                       (division-by-zero () 0))
-                     ,*red-above-rpm* *yellow-above-rpm* *display-above-rpm*)))
-      (concat
-       (if max-temp (concat max-temp (string (code-char 176)) "C^n"))
-       (if avg-temp (concat " " avg-temp (string (code-char 176)) "C^n"))
-       (if avg-rpm (concat " " avg-rpm " RPM^n")))))
-
-  (defcommand sensors-message () ()
-    (message (sensors)))
-
-  ;; pinched from battery portable code
-  (let ((next 0)
-        (last-value ""))
-    (defun get-sensors (ml)
-      (declare (ignore ml))
-      (let ((now (get-universal-time)))
-        (when (< now next)
-          (return-from get-sensors last-value))
-        (setf next (+ now *sensors-refresh-time*)))
-      (setf last-value (sensors))))
-
-  (add-screen-mode-line-formatter #\S #'get-sensors)
-#+END_SRC
-
 * SWANK
 
 Connect to StumpWM with Emacs' Slime mode
@@ -471,31 +127,6 @@ https://kaashif.co.uk/2015/06/28/hacking-stumpwm-with-common-lisp/
                          :style swank:*communication-style*
                          :dont-close t)
     (message (concat "^B^5Getting swanky...~%^n" (random-encouragement))))
-#+END_SRC
-
-* VOLUME
-
-Could also pipe to awk and uniq to achieve same goal, but it was more fun doing
-it in lisp :-)
-
-#+BEGIN_SRC common-lisp
-  (defun get-volume (device action)
-    "Return a cleaned up version of the output of the amixer command with a given
-       ACTION. Simply return the volume percentage and the status of the device."
-    (let* ((output (run-shell-command (concat "amixer set " device " " action) t))
-           (start (search "[" output))
-           (end (search (concat "]" (string #\linefeed)) output))
-           (out (subseq output start end)))
-      (split-string out "] [")))
-
-  (defcommand volume (device action)
-      ((:string "Enter Device: ")
-       (:string "Enter Action: "))
-    "Wrap volume commands and print a message containing current volume."
-    (let* ((output (get-volume device action))
-           (volume (nth 0 output))
-           (status (string-upcase (nth 1 output))))
-      (message "^B^5VOLUME: ^n~a~%^5STATUS: ^n~a" volume status)))
 #+END_SRC
 
 * WEB JUMP
