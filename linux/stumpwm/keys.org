@@ -131,6 +131,7 @@ Requires my [[https://github.com/tslight/stumpwm-contrib/blob/merged/util/xdgmen
 #+BEGIN_SRC common-lisp
   ;; applications
   (define-key *root-map* (kbd "e") "emacs")
+  (define-key *root-map* (kbd "E") "stump-encouragement")
   (define-key *root-map* (kbd "c") "terminal")
   (define-key *root-map* (kbd "w") "web-browser")
   (define-key *root-map* (kbd "d") "file-manager")
