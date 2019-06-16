@@ -254,14 +254,13 @@ Generate a menu using [[https://freedesktop.org/wiki/Howto_desktop_files/][freed
   (defun make-categories (applications)
     (mapcar
      (lambda (c)
-       (append
-        (list c)
-        (remove nil
-                (mapcar
-                 (lambda (a)
-                   (if (equal c (third a))
-                       a))
-                 applications))))
+       (cons c
+             (remove nil
+                     (mapcar
+                      (lambda (a)
+                        (if (equal c (third a))
+                            a))
+                      applications))))
      ,*main-categories*))
 
   (defun menu (&optional (categorise nil))
