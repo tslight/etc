@@ -74,6 +74,7 @@ too confusing for my hands!
 
 #+BEGIN_SRC common-lisp
   ;; windows
+  (define-key *top-map* (kbd "C-Escape") "cycle-mru")
   (define-key *top-map* (kbd "C-F4") "delete")
   (define-key *top-map* (kbd "M-F4") "kill")
   (define-key *top-map* (kbd "s-q") "delete")
@@ -94,6 +95,7 @@ too confusing for my hands!
   (define-key *top-map* (kbd "s-w") "web-browser")
   (define-key *top-map* (kbd "s-d") "file-manager")
   (define-key *top-map* (kbd "s-SPC") "xdgmenu")
+  (define-key *top-map* (kbd "s-.") "xdgmenu categories")
   ;; maps
   (define-key *top-map* (kbd "C-s-e") *my-emacs-map*)
   (define-key *top-map* (kbd "C-s-c") *my-term-map*)
@@ -167,6 +169,7 @@ too confusing for my hands!
   (define-key *groups-map* (kbd "l") "grouplist")
   (define-key *groups-map* (kbd "s") "gselect")
 #+END_SRC
+
 * RAT MAP
 
 Cycle windows by scrolling on the modeline.

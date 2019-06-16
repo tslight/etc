@@ -63,7 +63,7 @@ code.
 
 Using [[https://github.com/sagb/alttab][alttab]] instead now, so tangling turned off.
 
-#+BEGIN_SRC common-lisp :tangle no
+#+BEGIN_SRC common-lisp
   (defun get-milliseconds () ()
          "Get timestamp in milliseconds."
          (floor
@@ -161,15 +161,20 @@ Generate a menu using [[https://freedesktop.org/wiki/Howto_desktop_files/][freed
           "Education"
           "Game"
           "Graphics"
+          "Multimedia"
           "Network"
           "Office"
+          "Other"
           "Science"
           "Settings"
           "System"
           "Utility")
-    "https://standards.freedesktop.org/menu-spec/latest/apa.html")
+    "Use https://standards.freedesktop.org/menu-spec/latest/apa.html as base, but
+    add Multimedia and other, as I don't want 3 categories for media, and I want
+    to catch any applications that don't have a category with other.")
 
   (defun desktop-files ()
+    "Get all the dot desktop files in all XDG applications directories."
     (mapcan (lambda (d)
               (directory
                (uiop:merge-pathnames*
@@ -190,7 +195,7 @@ Generate a menu using [[https://freedesktop.org/wiki/Howto_desktop_files/][freed
            (k (ppcre:regex-replace-all "(\"|\'|)\%k(\"|\'|)" c file)))
       (first (split-string k " %"))))
 
-  (defun is-terminal-app (cmd contents)
+  (defun terminalp (cmd contents)
     "If the Terminal attribute is set to true append a terminal emulater to the
      command."
     (let ((terminal (string-downcase
@@ -202,12 +207,17 @@ Generate a menu using [[https://freedesktop.org/wiki/Howto_desktop_files/][freed
   (defun get-category (contents)
     "Get the first value from the Categories field that matches one of the main
      freedesktop.org categories."
-    (first (intersection
-            ,*main-categories*
-            (split-string
-             (ppcre:scan-to-strings "(?<=\\Categories\\=).*" contents)
-             ";")
-            :test 'equalp)))
+    (let ((category (first (intersection
+                            ,*main-categories*
+                            (split-string
+                             (ppcre:scan-to-strings
+                              "(?<=\\Categories\\=).*"
+                              contents)
+                             ";")
+                            :test 'equalp))))
+      (cond ((ppcre:scan "Audio|Video" category) "Multimedia")
+            (nil "Other")
+            (t category))))
 
   (defun do-show (contents)
     "Return true so long as the NoDisplay or Hidden field is not set to true or
@@ -223,6 +233,8 @@ Generate a menu using [[https://freedesktop.org/wiki/Howto_desktop_files/][freed
                    (> (length only) 0)))
           t)))
 
+  ;; not using this just an idea to make my own way of parsing .desktop files
+  ;; instead of relying on regex...
   (defun load-desktop-file (file)
     (remove nil (mapcar (lambda (l)
                           (if (match-all-regexps "=" l)
@@ -236,23 +248,27 @@ Generate a menu using [[https://freedesktop.org/wiki/Howto_desktop_files/][freed
                  (exec (ppcre:scan-to-strings "(?<=\\nExec\\=).*" contents))
                  (category (get-category contents))
                  (cmd (remove-keys exec file))
-                 (cmd (is-terminal-app cmd contents)))
+                 (cmd (terminalp cmd contents)))
             (list name cmd category)))))
+
+  (defun make-categories (applications)
+    (mapcar
+     (lambda (c)
+       (append
+        (list c)
+        (remove nil
+                (mapcar
+                 (lambda (a)
+                   (if (equal c (third a))
+                       a))
+                 applications))))
+     ,*main-categories*))
 
   (defun menu (&optional (categorise nil))
     (let ((apps (sort (remove nil (mapcar #'parse-desktop-file (desktop-files)))
                       #'string-lessp :key #'first)))
       (if categorise
-          (mapcar
-           (lambda (c)
-             (list c
-                   (remove nil
-                           (mapcar
-                            (lambda (a)
-                              (if (equal c (third a))
-                                  a))
-                            apps))))
-           *main-categories*)
+          (remove-if (lambda (c) (<= (length c) 1)) (make-categories apps))
           apps)))
 
   (defun commandp (command-name)

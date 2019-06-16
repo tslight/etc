@@ -63,5 +63,5 @@ After loading all our lisp, run some shell programs to make things more comfy.
   (run-shell-command "xfsettingsd")
   (run-shell-command "xfce4-power-manager")
   (run-shell-command "xfce4-clipman")
-  (run-shell-command "alttab -mk Control_R -kk Escape -vp pointer")
+  ;; (run-shell-command "alttab -mk Control_R -kk Escape -vp pointer")
 #+END_SRC
