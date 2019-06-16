@@ -8,6 +8,9 @@
 #+PROPERTY: header-args+ :tangle ~/.stumpwm.d/init.lisp
 #+PROPERTY: header-args+ :tangle-mode (identity #o644)
 
+Jump into the Stump, and set the module directory to wherever you cloned my
+fork of [[https://github.com/tslight/stumpwm-contrib/tree/merged][StumpWM Contrib]].
+
 #+BEGIN_SRC common-lisp
   (in-package :stumpwm)
   (load "~/quicklisp/setup.lisp")
@@ -15,6 +18,24 @@
   (set-module-dir
    (pathname-as-directory
     (concat (getenv "HOME") "/src/stumpwm-contrib")))
+#+END_SRC
+
+Load modules from the ~merged~ branch of my fork of [[https://github.com/tslight/stumpwm-contrib/tree/merged][StumpWM Contrib]].
+
+Please see the relevant READMEs in the fork for more details.
+
+*THIS CONFIGURATION WILL BE TH0ROUGHLY INGLORIOUS WITHOUT THESE HACKS!*
+
+#+BEGIN_SRC common-lisp
+  (load-module "acpi")
+  (load-module "command-history")
+  (load-module "cycle-mru")
+  (load-module "encouragement")
+  (load-module "sensors")
+  (load-module "stumptray")
+  (load-module "ttf-fonts")
+  (load-module "volume")
+  (load-module "xdgmenu")
 #+END_SRC
 
 Allow configuration split into multiple files:
@@ -45,28 +66,14 @@ Allow configuration split into multiple files:
   (my/load "keys")
 #+END_SRC
 
-Load modules from the ~merged~ branch of my fork of [[https://github.com/tslight/stumpwm-contrib/tree/merged][StumpWM Contrib]].
-
-Please see the relevant READMEs in the fork for more details.
-
-#+BEGIN_SRC common-lisp
-  (load-module "acpi")
-  (load-module "command-history")
-  (load-module "cycle-mru")
-  (load-module "encouragement")
-  (load-module "sensors")
-  (load-module "stumptray")
-  (load-module "ttf-fonts")
-  (load-module "volume")
-  (load-module "xdgmenu")
-#+END_SRC
-
 Encouraging startup message, inspired by Emacs' slime-mode.
+
+Requires my [[https://github.com/tslight/stumpwm-contrib/blob/merged/fun/encouragement/README.org][Encouragement]] module.
 
 #+BEGIN_SRC common-lisp
   (setf *startup-message* (concat
                            "^B^5Welcome to StumpWM~%^n"
-                           (random-encouragement)))
+                           (encouragement:random-encouragement)))
 #+END_SRC
 
 After loading all our lisp, run some shell programs to make things more comfy.

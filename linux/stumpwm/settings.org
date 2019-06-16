@@ -70,7 +70,7 @@ Requires my [[https://github.com/tslight/stumpwm-contrib/blob/merged/modeline/se
   (setf *window-format* " [%n] [%s] [%m] %c ")
   (setf *time-modeline-string* "^7*%H:%M %d/%m")
   (setf *screen-mode-line-format*
-        (list "^B^2*[%n]^n ^7*%v ^>^B%B %S %d"))
+        (list "^B^2*[%n]^n ^7*%v ^>^B%B %S %d %T"))
 #+END_SRC
 
 * GROUPS
