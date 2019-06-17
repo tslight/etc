@@ -126,7 +126,8 @@ https://kaashif.co.uk/2015/06/28/hacking-stumpwm-with-common-lisp/
     (swank:create-server :port 4004
                          :style swank:*communication-style*
                          :dont-close t)
-    (message (concat "^B^5Getting swanky...~%^n" (random-encouragement))))
+    (message (concat "^B^5Getting swanky...~%^n"
+                     (encouragement:random-encouragement))))
 #+END_SRC
 
 * WEB JUMP
