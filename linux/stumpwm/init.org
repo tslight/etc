@@ -32,9 +32,11 @@ Please see the relevant READMEs in the fork for more details.
 
 #+BEGIN_SRC common-lisp
   (load-module "acpi")
+  (load-module "clipboard-history")
   (load-module "command-history")
   (load-module "cycle-mru")
   (load-module "encouragement")
+  (load-module "end-session")
   (load-module "sensors")
   (load-module "ttf-fonts")
   (load-module "volume")
@@ -91,5 +93,6 @@ After loading all our lisp, run some shell programs to make things more comfy.
   (run-shell-command "xsetroot -cursor_name left_ptr -solid grey9")
   (run-shell-command "xfsettingsd")
   (run-shell-command "xfce4-power-manager")
-  (run-shell-command "xfce4-clipman")
+  ;; (run-shell-command "xfce4-clipman")
+  (clipboard-history:start-clipboard-manager)
 #+END_SRC

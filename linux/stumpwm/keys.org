@@ -126,7 +126,7 @@ Requires my [[https://github.com/tslight/stumpwm-contrib/blob/merged/util/xdgmen
 
 * ROOT MAP
 
-Requires my [[https://github.com/tslight/stumpwm-contrib/blob/merged/util/xdgmenu/README.org][XDGMenu]] and [[https://github.com/tslight/stumpwm-contrib/blob/merged/modeline/sensors/README.org][Sensors]] modules.
+Requires [[https://github.com/tslight/stumpwm-contrib/blob/merged/util/xdgmenu/README.org][XDGMenu]], [[https://github.com/tslight/stumpwm-contrib/blob/merged/modeline/sensors/README.org][Sensors]], [[https://github.com/stumpwm/stumpwm-contrib/blob/master/util/end-session/end-session.lisp][EndSession]] & [[https://github.com/stumpwm/stumpwm-contrib/tree/master/util/clipboard-history][ClipboardHistory]] modules.
 
 #+BEGIN_SRC common-lisp
   ;; applications
@@ -137,6 +137,7 @@ Requires my [[https://github.com/tslight/stumpwm-contrib/blob/merged/util/xdgmen
   (define-key *root-map* (kbd "d") "file-manager")
   (define-key *root-map* (kbd "r") "xdgmenu")
   (define-key *root-map* (kbd ".") "xdgmenu categories")
+  (define-key *root-map* (kbd "y") "show-clipboard-history")
   ;; maps
   (define-key *root-map* (kbd "C-e") '*my-emacs-map*)
   (define-key *root-map* (kbd "C-c") '*my-term-map*)
@@ -155,6 +156,7 @@ Requires my [[https://github.com/tslight/stumpwm-contrib/blob/merged/util/xdgmen
   (define-key *root-map* (kbd "C-a") "windowlist")
   ;; misc
   (define-key *root-map* (kbd "C-l") "exec slock")
+  (define-key *root-map* (kbd "C-q") "end-session")
   (define-key *root-map* (kbd "M-q") "quit")
   (define-key *root-map* (kbd "m") "mode-line")
   (define-key *root-map* (kbd "S") "swank")
