@@ -366,7 +366,6 @@ replacements:
     :config
     (counsel-projectile-mode))
 #+END_SRC
-
 ** DIMINISH
 
 #+BEGIN_SRC emacs-lisp
@@ -374,6 +373,7 @@ replacements:
     :defer 4
     :ensure t)
 #+END_SRC
+
 ** DUMB JUMP
 
 Install [[https://github.com/ggreer/the_silver_searcher][The Silver Searcher]] or [[https://github.com/BurntSushi/ripgrep][ripgrep]] first.
@@ -613,6 +613,7 @@ that disables itself auto-magically.
       "ZOOM"
       ("i" text-scale-increase "in")
       ("o" text-scale-decrease "out")
+      ("r" (text-scale-adjust 0) "reset")
       ("g" nil "cancel")
       ("<escape>" nil "cancel"))
 
@@ -1340,7 +1341,6 @@ and it will not insert a newline.
         (after term-kill-buffer-on-exit activate)
       (kill-buffer)))
 #+END_SRC
-
 ** TRAMP
 
 #+BEGIN_SRC emacs-lisp
