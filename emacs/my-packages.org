@@ -1404,6 +1404,7 @@ functions.
     my/sort-lines-nocase
     my/untabify-buffer
     :bind*
+    ("C-S-SPC" . my/push-mark-no-activate)
     ("C-a" . my/smart-beginning-of-line)
     ("C-w" . my/copy-line-or-region)
     ("M-w" . my/cut-line-or-region)
