@@ -128,7 +128,7 @@ pack it into a single key binding, similar to other-window.
     (set-face-attribute 'aw-leading-char-face nil
                         :foreground "deep sky blue"
                         :weight 'bold
-                        :height 3.0)
+                        :height 2.0)
     (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
 #+END_SRC
 
@@ -150,14 +150,13 @@ pack it into a single key binding, similar to other-window.
     :after bind-key
     :ensure t
     :bind
-    ("C-c j j" . avy-goto-char)
-    ("C-c j c" . avy-goto-char-2)
-    ("C-c j l" . avy-goto-line)
+    ("C-c j" . avy-goto-char-2)
+    ("M-g t" . avy-goto-char-timer)
+    ("C-c r" . avy-resume)
     ("M-g l" . avy-goto-line)
-    ("M-g w" . avy-goto-word-0)
-    ("C-c j w" . avy-goto-word-0)
-    ("C-c j W" . avy-goto-word-1)
+    ("M-g w" . avy-goto-word-1)
     :config
+    (avy-setup-default)
     (setq avy-dispatch-alist '((?c . avy-action-copy)
                                (?k . avy-action-kill-move)
                                (?K . avy-action-kill-stay)
@@ -703,9 +702,11 @@ that disables itself auto-magically.
     :bind
     ("C-c t p" . paredit-mode)
     :hook
-    (lisp-mode . paredit-mode)
+    (common-lisp-mode . paredit-mode)
     (emacs-lisp-mode . paredit-mode)
-    (common-lisp-mode . paredit-mode))
+    (lisp-mode . paredit-mode)
+    (slime-mode . paredit-mode)
+    (slime-repl-mode . paredit-mode))
 #+END_SRC
 
 ** PC BUFFER SWITCH
