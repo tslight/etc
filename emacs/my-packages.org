@@ -1020,7 +1020,7 @@ c++, Message); the g in C-x a i g is for global, meaning every mode.
     :bind
     (:map
      dired-mode-map
-     (")" .'dired-omit-mode)
+     (")" . dired-omit-mode)
      ("b" . (lambda () (interactive) (find-alternate-file "..")))
      ("f" . dired-find-alternate-file)
      ("C-q" . kill-this-buffer)
@@ -1048,27 +1048,12 @@ c++, Message); the g in C-x a i g is for global, meaning every mode.
 ** ELECTRIC
 
 #+BEGIN_QUOTE
-Toggle on-the-fly reindentation (Electric Indent mode).  With a prefix
-argument ARG, enable Electric Indent mode if ARG is positive, and
-disable it otherwise.  If called from Lisp, enable the mode if ARG is
-omitted or nil.
-
-When enabled, this reindents whenever the hook
-‘electric-indent-functions’ returns non-nil, or if you insert a
-character from ‘electric-indent-chars’.
-
-This is a global minor mode.  To toggle the mode in a single buffer,
-use ‘electric-indent-local-mode’.
+Toggle on-the-fly re-indentation (Electric Indent mode).
 
 -- [[help:electric-indent-mode][Help Page]]
 #+END_QUOTE
 
 #+BEGIN_QUOTE
-Toggle automatic parens pairing (Electric Pair mode).  With a prefix
-argument ARG, enable Electric Pair mode if ARG is positive, and
-disable it otherwise.  If called from Lisp, enable the mode if ARG is
-omitted or nil.
-
 Electric Pair mode is a global minor mode.  When enabled, typing an
 open parenthesis automatically inserts the corresponding closing
 parenthesis.  (Likewise for brackets, etc.). To toggle the mode in a
@@ -1342,6 +1327,7 @@ and it will not insert a newline.
         (after term-kill-buffer-on-exit activate)
       (kill-buffer)))
 #+END_SRC
+
 ** TRAMP
 
 #+BEGIN_SRC emacs-lisp
@@ -1417,7 +1403,7 @@ functions.
     my/insert-date
     my/sort-lines-nocase
     my/untabify-buffer
-    :bind
+    :bind*
     ("C-a" . my/smart-beginning-of-line)
     ("C-w" . my/copy-line-or-region)
     ("M-w" . my/cut-line-or-region)

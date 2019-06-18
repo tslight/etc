@@ -165,6 +165,7 @@ Taken from [[http://ergoemacs.org/emacs/elisp_change_brackets.html][here]].
                     (while (search-forward $fromRight nil t)
                       (replace-match $toRight "FIXEDCASE" "LITERAL")))))))))))
 #+END_SRC
+
 * COPY OR CUT LINE OR REGION
 
 Not sure where these versions come from but they seems to work better
@@ -210,7 +211,9 @@ Perhaps here:
                (setq p2 (point-max))))
       (kill-region p1 p2)))
 #+END_SRC
+
 * DELETE IN
+
 #+BEGIN_SRC emacs-lisp
   (defun my/delete-in-quotes () "Deletes the text inside of quotes."
          (interactive)
@@ -239,7 +242,9 @@ Perhaps here:
            (backward-char)
            (kill-region lstart (point))))
 #+END_SRC
+
 * GENERATE NUMBERED LIST
+
 #+BEGIN_SRC emacs-lisp
   (defun my/generate-numbered-list (start end char)
     "Creates a numbered list from provided start to provided end."
@@ -250,20 +255,25 @@ Perhaps here:
         (newline)
         (setq x (+ x 1)))))
 #+END_SRC
+
 * INSERT FORTUNE
+
 #+BEGIN_SRC emacs-lisp
   (defun my/insert-fortune ()
     "Inserts output of the fortune command into the buffer, before the point."
     (interactive)
     (insert (shell-command-to-string "fortune")))
 #+END_SRC
+
 * INSERT DATE
+
 #+BEGIN_SRC emacs-lisp
 (defun my/insert-date ()
   "Insert a time-stamp according to locale's date and time format."
   (interactive)
   (insert (format-time-string "%c" (current-time))))
 #+END_SRC
+
 * KILL ISEARCH MATCH
 
 [[https://github.com/purcell/emacs.d/blob/master/lisp/init-utils.el][Steve Purcell's Utils]]
@@ -274,6 +284,7 @@ Perhaps here:
     (interactive)
     (kill-region isearch-other-end (point)))
 #+END_SRC
+
 * MARK PUSHING & JUMPING
 
 [[https://www.masteringemacs.org/article/fixing-mark-commands-transient-mark-mode][Mastering Emacs Article]]
@@ -292,7 +303,9 @@ Perhaps here:
     (interactive)
     (set-mark-command 1))
 #+END_SRC
+
 * NARROW & WIDEN DWIM
+
 #+BEGIN_SRC emacs-lisp
   (defun my/narrow-or-widen-dwim (p)
     "If the buffer is narrowed, it widens. Otherwise, it narrows intelligently.
@@ -323,6 +336,7 @@ Perhaps here:
   ;; how much I like this command. Only copy it if that's what you want.
   (define-key ctl-x-map "n" #'my/narrow-or-widen-dwim)
 #+END_SRC
+
 * OPEN LINES SANELY
 
 [[https://github.com/ocodo/.emacs.d/blob/master/custom/handy-functions.el][Handy Functions]]
@@ -365,7 +379,9 @@ Perhaps here:
       (move-end-of-line nil)
       (newline-and-indent)))
 #+END_SRC
+
 * REMOVE DOS JUNK
+
 #+BEGIN_SRC emacs-lisp
   (defun my/remove-dos-junk ()
     (interactive)
@@ -373,6 +389,7 @@ Perhaps here:
       (when (string-match "-\\(?:dos\\|mac\\)$" coding-str)
         (set-buffer-file-coding-system 'unix))))
 #+END_SRC
+
 * SMART BEGINNING OF LINE
 
 [[http://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/][Emacs Redux Article]]
@@ -387,7 +404,9 @@ Perhaps here:
         (beginning-of-line)
       (back-to-indentation)))
 #+END_SRC
+
 * SORT LINES NOCASE
+
 #+BEGIN_SRC emacs-lisp
   (defun my/sort-lines-nocase ()
     "Sorts marked lines with case sensitivity."
@@ -395,6 +414,7 @@ Perhaps here:
     (let ((sort-fold-case t))
       (call-interactively 'sort-lines)))
 #+END_SRC
+
 * UNFILL REGION
 
 [[https://www.emacswiki.org/emacs/UnfillParagraph][Emacs Wiki]]
@@ -408,6 +428,7 @@ Perhaps here:
           (emacs-lisp-docstring-fill-column t))
       (fill-paragraph nil region)))
 #+END_SRC
+
 * UNTABIFY BUFFER
 
 [[https://github.com/magnars/.emacs.d/blob/master/defuns/buffer-defuns.el][Magnar's Buffer fun]]
@@ -417,6 +438,7 @@ Perhaps here:
     (interactive)
     (untabify (point-min) (point-max)))
 #+END_SRC
+
 * YANK POP FORWARDS
 
 [[http://www.emacswiki.org/emacs/KillingAndYanking][Emacs Wiki Killing & Yanking]]
@@ -426,6 +448,7 @@ Perhaps here:
     (interactive "p")
     (yank-pop (- arg)))
 #+END_SRC
+
 * ZAP TO ISEARCH
 
 [[http://www.emacswiki.org/emacs/ZapToISearch][Emacs Wiki Entry]]
