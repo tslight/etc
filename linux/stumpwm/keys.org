@@ -109,6 +109,12 @@ Requires my [[https://github.com/tslight/stumpwm-contrib/blob/merged/util/xdgmen
   (define-key *top-map* (kbd "C-s-w") *my-web-map*)
   ;; groups
   (define-key *top-map* (kbd "s-Tab") "gother")
+  (define-key *top-map* (kbd "s-Escape") "gnext")
+  (define-key *top-map* (kbd "s-S-Escape") "gprev")
+  (dotimes (i 9)
+    (unless (eq i 0)
+      (define-key *top-map* (kbd (format nil "s-~a" i))
+        (format nil "gselect ~a" i))))
   ;; frames
   (define-key *top-map* (kbd "M-Escape") "fnext")
   (define-key *top-map* (kbd "M-S-Escape") "fprev")
@@ -179,4 +185,28 @@ Requires [[https://github.com/tslight/stumpwm-contrib/blob/merged/util/xdgmenu/R
   (define-key *groups-map* (kbd "C-p") "gprev-with-window")
   (define-key *groups-map* (kbd "l") "grouplist")
   (define-key *groups-map* (kbd "s") "gselect")
+#+END_SRC
+* APPLICATION MAP
+
+https://stumpwm.github.io/git/stumpwm-git_2.html#Remapped-Keys
+
+#+BEGIN_SRC common-lisp
+  (define-remapped-keys
+      '(("(Firefox|Chrome|Chromium|Thunar)"
+         ("C-n" . "Down")
+         ("C-p" . "Up")
+         ("C-f" . "Right")
+         ("C-b" . "Left")
+         ("C-v" . "Next")
+         ("M-v" . "Prior")
+         ("C-w" . "C-c")
+         ("M-w" . "C-x")
+         ("C-y" . "C-v")
+         ("C-<" . "Home")
+         ("C->" . "End")
+         ("C-k" . "C-w")
+         ("M-b" . "C-Left")
+         ("M-f" . "C-Right")
+         ("C-M-b" . "M-Left")
+         ("C-M-f" . "M-Right"))))
 #+END_SRC
