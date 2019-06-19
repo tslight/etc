@@ -30,17 +30,18 @@ https://forum.manjaro.org/t/solved-manjaro-brightness-hotkey-is-writing-to-intel
 https://wiki.archlinux.org/index.php/Libinput#Via_Xorg_configuration_file
 #+NAME: libinput
 #+BEGIN_SRC conf :tangle (my/hardware-tangle "Apple Inc" "/sudo::/usr/share/X11/xorg.conf.d/30-touchpad.conf")
-Section "InputClass"
-    Identifier "Touchpad"
-    Driver "libinput"
-    MatchIsPointer "on"
-    Option "Tapping" "false"
-    Option "ClickMethod" "clickfinger"
-    Option "HorizontalScrolling" "true"
-    Option "NaturalScrolling" "false"
-    Option "ScrollMethod" "twofinger"
-    Option "DisableWhileTyping" "true"
-EndSection
+  Section "InputClass"
+      Identifier "Touchpad"
+      Driver "libinput"
+      MatchIsPointer "on"
+      Option "Tapping" "false"
+      Option "ClickMethod" "clickfinger"
+      Option "HorizontalScrolling" "true"
+      Option "NaturalScrolling" "false"
+      Option "ScrollMethod" "twofinger"
+      Option "DisableWhileTyping" "true"
+      Option "ButtonMapping" "1 3 2"
+  EndSection
 #+END_SRC
 #+BEGIN_SRC conf :noweb yes :tangle (my/hardware-tangle "Apple Inc" "/sudo::/etc/X11/xorg.conf.d/30-touchpad.conf")
   <<libinput>>
@@ -146,4 +147,24 @@ https://howchoo.com/g/mdy0ngziogm/the-perfect-almost-touchpad-settings-on-linux-
 #+END_SRC
 #+BEGIN_SRC conf :noweb yes :tangle (my/hardware-tangle "Apple Inc" "/sudo::/etc/X11/xorg.conf.d/50-mtrack.conf")
   <<mtrack>>
+#+END_SRC
+* MONITOR
+
+#+NAME: monitor
+#+BEGIN_SRC conf :tangle /sudo::/usr/share/X11/xorg.conf.d/10-monitor.conf
+Section "Monitor"
+    Identifier "LVDS0"
+    Option "DPMS" "true"
+EndSection
+
+Section "ServerLayout"
+    Identifier "ServerLayout0"
+    Option "StandbyTime" "4"
+    Option "SuspendTime" "8"
+    Option "OffTime"     "10"
+    Option "BlankTime"   "2"
+EndSection
+#+END_SRC
+#+BEGIN_SRC conf :noweb yes :tangle /sudo::/etc/X11/xorg.conf.d/10-monitor.conf
+  <<monitor>>
 #+END_SRC

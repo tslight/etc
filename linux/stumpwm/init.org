@@ -90,9 +90,9 @@ Requires my [[https://github.com/tslight/stumpwm-contrib/blob/merged/fun/encoura
 After loading all our lisp, run some shell programs to make things more comfy.
 
 #+BEGIN_SRC common-lisp
-  (run-shell-command "xsetroot -cursor_name left_ptr -solid grey9")
-  (run-shell-command "xfsettingsd")
-  (run-shell-command "xfce4-power-manager")
-  ;; (run-shell-command "xfce4-clipman")
-  (clipboard-history:start-clipboard-manager)
+    (run-shell-command "xsetroot -cursor_name left_ptr -solid grey9")
+    ;; (run-shell-command "xfsettingsd")
+    ;; (run-shell-command "xfce4-power-manager")
+    ;; (run-shell-command "xfce4-clipman")
+    (clipboard-history:start-clipboard-manager)
 #+END_SRC
