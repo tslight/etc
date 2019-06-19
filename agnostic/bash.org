@@ -24,6 +24,9 @@
   umask 022
 
   [ -f ~/.bashrc ] && source ~/.bashrc
+
+  # startx on tty1
+  [[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && exec startx
 #+END_SRC
 * BASH LOGOUT
 #+BEGIN_SRC sh :tangle ~/.bash_logout

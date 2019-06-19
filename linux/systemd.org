@@ -21,7 +21,23 @@ https://wiki.archlinux.org/index.php/Getty#Automatic_login_to_virtual_console
   ExecStart=-/sbin/agetty --skip-login --login-options toby --noclear %I 38400 linux
 #+END_SRC
 
+#+BEGIN_SRC conf :tangle /sudo::/etc/systemd/system/getty@tty3.service.d/override.conf
+  [Service]
+  ExecStart=
+  ExecStart=-/sbin/agetty --skip-login --login-options toby --noclear %I 38400 linux
+#+END_SRC
+
+https://unix.stackexchange.com/a/401798
+
+In order for this to run, you must also run the following command:
+
+#+BEGIN_SRC sh
+systemctl enable getty@tty1.service getty@tty2.service getty@tty3.service
+#+END_SRC
+
 * EMACS DAEMON
+
+https://www.emacswiki.org/emacs/EmacsAsDaemon
 
 #+BEGIN_SRC conf :tangle ~/.config/systemd/user/emacs.service
   [Unit]
@@ -37,6 +53,12 @@ https://wiki.archlinux.org/index.php/Getty#Automatic_login_to_virtual_console
 
   [Install]
   WantedBy=default.target
+#+END_SRC
+
+In order for this to run, you must also run the following command:
+
+#+BEGIN_SRC
+systemctl enable --user emacs
 #+END_SRC
 
 * JOURNALD
