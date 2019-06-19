@@ -80,7 +80,9 @@ Requires my [[https://github.com/tslight/stumpwm-contrib/blob/merged/util/xdgmen
 
 #+BEGIN_SRC common-lisp
   ;; windows
-  (define-key *top-map* (kbd "C-Escape") "cycle-mru")
+  (define-key *top-map* (kbd "M-Tab") "cycle-mru")
+  (define-key *top-map* (kbd "C-Escape") "cycle-npo pull-hidden-next")
+  (define-key *top-map* (kbd "C-S-Escape") "cycle-npo pull-hidden-previous")
   (define-key *top-map* (kbd "C-F4") "delete")
   (define-key *top-map* (kbd "M-F4") "kill")
   (define-key *top-map* (kbd "s-q") "delete")
@@ -127,7 +129,8 @@ Requires my [[https://github.com/tslight/stumpwm-contrib/blob/merged/util/xdgmen
   (define-key *top-map* (kbd "C-s-r") "reinit")
   (define-key *top-map* (kbd "C-s-XF86Eject") "exec slock")
   (define-key *top-map* (kbd "C-s-Delete") "exec slock")
-  (define-key *top-map* (kbd "C-s-q") "quit")
+  (define-key *top-map* (kbd "C-s-q") "end-session")
+  (define-key *top-map* (kbd "C-M-S-q") "quit")
 #+END_SRC
 
 * ROOT MAP
@@ -162,8 +165,8 @@ Requires [[https://github.com/tslight/stumpwm-contrib/blob/merged/util/xdgmenu/R
   (define-key *root-map* (kbd "C-a") "windowlist")
   ;; misc
   (define-key *root-map* (kbd "C-l") "exec slock")
-  (define-key *root-map* (kbd "C-q") "end-session")
-  (define-key *root-map* (kbd "M-q") "quit")
+  (define-key *root-map* (kbd "M-q") "end-session")
+  (define-key *root-map* (kbd "Q") "quit")
   (define-key *root-map* (kbd "m") "mode-line")
   (define-key *root-map* (kbd "S") "swank")
   (define-key *root-map* (kbd "M-s") "sensors")
@@ -204,9 +207,9 @@ https://stumpwm.github.io/git/stumpwm-git_2.html#Remapped-Keys
          ("C-y" . "C-v")
          ("C-<" . "Home")
          ("C->" . "End")
-         ("C-k" . "C-w")
          ("M-b" . "C-Left")
          ("M-f" . "C-Right")
          ("C-M-b" . "M-Left")
          ("C-M-f" . "M-Right"))))
+  (define-key *root-map* (kbd "C-q") "send-raw-key")
 #+END_SRC

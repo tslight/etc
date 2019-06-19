@@ -11,6 +11,26 @@
 Collection of functions & commands not complex enough to warrant turning into
 modules.
 
+* CYCLE NPO
+
+#+BEGIN_SRC common-lisp
+  (defun get-milliseconds () ()
+         "Get timestamp in milliseconds."
+         (floor
+          (* 1000
+             (/ (get-internal-real-time)
+                internal-time-units-per-second))))
+
+  (defvar *npo-last-call* (get-milliseconds))
+  (defvar *npo-timeout* 500) ; in milliseconds
+
+  (defcommand cycle-npo (direction) ((:function))
+    (if (< (- (get-milliseconds) *npo-last-call*) *npo-timeout*)
+        (funcall direction)
+        (pull-hidden-other))
+    (setf *npo-last-call* (get-milliseconds)))
+#+END_SRC
+
 * MODELINE RAT
 
 Cycle windows by scrolling and clicking on the modeline.
