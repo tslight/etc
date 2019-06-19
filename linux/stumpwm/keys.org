@@ -80,12 +80,9 @@ Requires my [[https://github.com/tslight/stumpwm-contrib/blob/merged/util/xdgmen
 
 #+BEGIN_SRC common-lisp
   ;; windows
-  ;; (define-key *top-map* (kbd "M-Tab") "cycle-mru")
-  ;; (define-key *top-map* (kbd "C-Escape") "cycle-npo pull-hidden-next")
-  ;; (define-key *top-map* (kbd "C-S-Escape") "cycle-npo pull-hidden-previous")
-  (define-key *top-map* (kbd "C-Escape") "pull-hidden-next")
-  (define-key *top-map* (kbd "C-S-Escape") "pull-hidden-previous")
-  (define-key *top-map* (kbd "C-M-Escape") "pull-hidden-other")
+  (define-key *top-map* (kbd "C-M-Escape") "cycle-mru")
+  (define-key *top-map* (kbd "C-Escape") "cycle-npo pull-hidden-next")
+  (define-key *top-map* (kbd "C-S-Escape") "cycle-npo pull-hidden-previous")
   (define-key *top-map* (kbd "C-F4") "delete")
   (define-key *top-map* (kbd "M-F4") "kill")
   (define-key *top-map* (kbd "s-q") "delete")

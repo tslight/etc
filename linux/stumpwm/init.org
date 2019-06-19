@@ -34,7 +34,7 @@ Please see the relevant READMEs in the fork for more details.
   (load-module "acpi")
   (load-module "clipboard-history")
   (load-module "command-history")
-  ;; (load-module "cycle-mru")
+  (load-module "cycle-mru")
   (load-module "encouragement")
   (load-module "end-session")
   (load-module "sensors")
@@ -90,9 +90,7 @@ Requires my [[https://github.com/tslight/stumpwm-contrib/blob/merged/fun/encoura
 After loading all our lisp, run some shell programs to make things more comfy.
 
 #+BEGIN_SRC common-lisp
-    (run-shell-command "xsetroot -cursor_name left_ptr -solid grey9")
-    ;; (run-shell-command "xfsettingsd")
-    ;; (run-shell-command "xfce4-power-manager")
-    ;; (run-shell-command "xfce4-clipman")
-    (clipboard-history:start-clipboard-manager)
+  (run-shell-command "xsetroot -cursor_name left_ptr -solid grey9")
+  (run-shell-command "xset r rate 200 40 s 80 dpms 120 180 300")
+  (clipboard-history:start-clipboard-manager)
 #+END_SRC

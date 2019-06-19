@@ -15,24 +15,12 @@ https://wiki.archlinux.org/index.php/Getty#Automatic_login_to_virtual_console
   ExecStart=-/sbin/agetty --autologin toby --noclear %I 38400 linux
 #+END_SRC
 
-#+BEGIN_SRC conf :tangle /sudo::/etc/systemd/system/getty@tty2.service.d/override.conf
-  [Service]
-  ExecStart=
-  ExecStart=-/sbin/agetty --skip-login --login-options toby --noclear %I 38400 linux
-#+END_SRC
-
-#+BEGIN_SRC conf :tangle /sudo::/etc/systemd/system/getty@tty3.service.d/override.conf
-  [Service]
-  ExecStart=
-  ExecStart=-/sbin/agetty --skip-login --login-options toby --noclear %I 38400 linux
-#+END_SRC
-
 https://unix.stackexchange.com/a/401798
 
 In order for this to run, you must also run the following command:
 
 #+BEGIN_SRC sh
-systemctl enable getty@tty1.service getty@tty2.service getty@tty3.service
+  systemctl enable getty@tty1.service
 #+END_SRC
 
 * EMACS DAEMON
@@ -57,8 +45,8 @@ https://www.emacswiki.org/emacs/EmacsAsDaemon
 
 In order for this to run, you must also run the following command:
 
-#+BEGIN_SRC
-systemctl enable --user emacs
+#+BEGIN_SRC sh
+  systemctl enable --user emacs
 #+END_SRC
 
 * JOURNALD
@@ -96,33 +84,29 @@ systemctl enable --user emacs
   #ReadKMsg=yes
 #+END_SRC
 
-* LOGIND
+* KBD REPEAT RATE
 
-#+BEGIN_SRC conf :tangle /sudo::/etc/systemd/logind.conf
-  [Login]
-  #NAutoVTs=6
-  #ReserveVT=6
-  #KillUserProcesses=no
-  #KillOnlyUsers=
-  #KillExcludeUsers=root
-  #InhibitDelayMaxSec=5
-  HandlePowerKey=poweroff
-  HandleSuspendKey=suspend
-  HandleHibernateKey=hibernate
-  HandleLidSwitch=suspend
-  #HandleLidSwitchExternalPower=suspend
-  #HandleLidSwitchDocked=ignore
-  #PowerKeyIgnoreInhibited=no
-  #SuspendKeyIgnoreInhibited=no
-  #HibernateKeyIgnoreInhibited=no
-  #LidSwitchIgnoreInhibited=yes
-  #HoldoffTimeoutSec=30s
-  IdleAction=suspend
-  IdleActionSec=30min
-  #RuntimeDirectorySize=10%
-  #RemoveIPC=yes
-  #InhibitorsMax=8192
-  #SessionsMax=8192
+[[https://wiki.archlinux.org/index.php/Linux_console/Keyboard_configuration#Adjusting_typematic_delay_and_rate][Arch Wiki]]
+
+#+BEGIN_SRC conf /sudo::/etc/systemd/system/kbdrate.service
+  [Unit]
+  Description=Keyboard repeat rate in tty.
+
+  [Service]
+  Type=oneshot
+  RemainAfterExit=yes
+  StandardInput=tty
+  StandardOutput=tty
+  ExecStart=/usr/bin/kbdrate -s -d 200 -r 40
+
+  [Install]
+  WantedBy=multi-user.target
+#+END_SRC
+
+Then run:
+
+#+BEGIN_SRC sh
+  systemctl enable kbdrate.service
 #+END_SRC
 
 * NO CLEAR
@@ -132,25 +116,4 @@ https://wiki.archlinux.org/index.php/Getty#Have_boot_messages_stay_on_tty1
 #+BEGIN_SRC conf :tangle /sudo::/etc/systemd/system/getty@.service.d/nodisallocate.conf
 [Service]
 TTYVTDisallocate=no
-#+END_SRC
-
-* SLEEP
-
-#+BEGIN_SRC conf :tangle /sudo::/etc/systemd/sleep.conf
-  [Sleep]
-  # AllowSuspend=yes
-  # AllowHibernation=yes
-  # AllowSuspendThenHibernate=yes
-  # AllowHybridSleep=yes
-  #SuspendMode=
-  #SuspendState=mem standby freeze
-  #HibernateMode=platform shutdown
-  #HibernateState=disk
-  #HybridSleepMode=suspend platform shutdown
-  #HybridSleepState=disk
-  # HibernateDelaySec=180min
-  # suspend=hybrid-sleep
-  # Hibernate=hybrid-sleep
-  # HibernateMode=hybrid-sleep
-  # HibernateState=disk
 #+END_SRC

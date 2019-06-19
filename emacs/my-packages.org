@@ -1016,6 +1016,7 @@ c++, Message); the g in C-x a i g is for global, meaning every mode.
 
 #+BEGIN_SRC emacs-lisp
   (use-package dired
+    :after dired-x
     :bind
     (:map
      dired-mode-map
@@ -1041,7 +1042,7 @@ c++, Message); the g in C-x a i g is for global, meaning every mode.
 ** DIRED X
 
 #+BEGIN_SRC emacs-lisp
-  (use-package dired-x :commands dired-jump)
+  (use-package dired-x)
 #+END_SRC
 
 ** ELECTRIC
