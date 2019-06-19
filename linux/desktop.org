@@ -21,13 +21,26 @@ MimeType=inode/directory;
 Keywords=Terminal
 #+END_SRC
 
+#+BEGIN_SRC conf :tangle ~/.local/share/applications/tmux.desktop
+[Desktop Entry]
+Type=Application
+Name=Tmux Attach
+Comment=Attaches to a currently running tmux session
+Icon=utilities-terminal
+Terminal=true
+Exec=tmux attach
+Categories=ConsoleOnly;System;Utility
+MimeType=inode/directory;
+Keywords=Terminal
+#+END_SRC
+
 * EMACS
 
 #+BEGIN_SRC conf :tangle ~/.local/share/applications/emacsclient.desktop
 [Desktop Entry]
 Name=Emacsclient
 GenericName=Text Editor
-Comment=Edit text
+Comment=Launch or connect to an Emacs daemon
 MimeType=text/english;text/plain;text/x-makefile;text/x-c++hdr;text/x-c++src;text/x-chdr;text/x-csrc;text/x-java;text/x-moc;text/x-pascal;text/x-tcl;text/x-tex;application/x-shellscript;text/x-c;text/x-c++;
 Exec=emacsclient -c -a ""
 Icon=emacs
@@ -42,7 +55,7 @@ Keywords=Text;Editor;
 [Desktop Entry]
 Name=Emacs Quick
 GenericName=Text Editor
-Comment=Edit text
+Comment=Run Emacs with no configuration
 MimeType=text/english;text/plain;text/x-makefile;text/x-c++hdr;text/x-c++src;text/x-chdr;text/x-csrc;text/x-java;text/x-moc;text/x-pascal;text/x-tcl;text/x-tex;application/x-shellscript;text/x-c;text/x-c++;
 Exec=emacs --quick
 Icon=emacs
@@ -57,7 +70,7 @@ Keywords=Text;Editor;
 [Desktop Entry]
 Name=Emacs Debug
 GenericName=Text Editor
-Comment=Edit text
+Comment=Run Emacs in debug mode
 MimeType=text/english;text/plain;text/x-makefile;text/x-c++hdr;text/x-c++src;text/x-chdr;text/x-csrc;text/x-java;text/x-moc;text/x-pascal;text/x-tcl;text/x-tex;application/x-shellscript;text/x-c;text/x-c++;
 Exec=emacs --debug-init
 Icon=emacs
@@ -72,7 +85,7 @@ Keywords=Text;Editor;
 [Desktop Entry]
 Name=Emacs NOX
 GenericName=Text Editor
-Comment=Edit text
+Comment=Emacs in a terminal
 MimeType=text/english;text/plain;text/x-makefile;text/x-c++hdr;text/x-c++src;text/x-chdr;text/x-csrc;text/x-java;text/x-moc;text/x-pascal;text/x-tcl;text/x-tex;application/x-shellscript;text/x-c;text/x-c++;
 Exec=emacs -nw
 Icon=emacs
@@ -87,7 +100,7 @@ Keywords=Text;Editor;
 [Desktop Entry]
 Name=Emacsclient NOX
 GenericName=Text Editor
-Comment=Edit text
+Comment=Launch or connect to the Emacs daemon in a terminal
 MimeType=text/english;text/plain;text/x-makefile;text/x-c++hdr;text/x-c++src;text/x-chdr;text/x-csrc;text/x-java;text/x-moc;text/x-pascal;text/x-tcl;text/x-tex;application/x-shellscript;text/x-c;text/x-c++;
 Exec=emacsclient -c -a "" -nw
 Icon=emacs
