@@ -1042,7 +1042,7 @@ c++, Message); the g in C-x a i g is for global, meaning every mode.
 ** DIRED X
 
 #+BEGIN_SRC emacs-lisp
-  (use-package dired-x :defer t)
+  (use-package dired-x :commands dired-jump)
 #+END_SRC
 
 ** ELECTRIC
