@@ -34,7 +34,7 @@ Please see the relevant READMEs in the fork for more details.
   (load-module "acpi")
   (load-module "clipboard-history")
   (load-module "command-history")
-  (load-module "cycle-mru")
+  ;; (load-module "cycle-mru")
   (load-module "encouragement")
   (load-module "end-session")
   (load-module "sensors")
