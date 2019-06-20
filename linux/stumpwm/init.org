@@ -34,7 +34,7 @@ Please see the relevant READMEs in the fork for more details.
   (load-module "acpi")
   (load-module "clipboard-history")
   (load-module "command-history")
-  (load-module "cycle-mru")
+  ;; (load-module "cycle-mru")
   (load-module "encouragement")
   (load-module "end-session")
   (load-module "sensors")
@@ -93,5 +93,6 @@ After loading all our lisp, run some shell programs to make things more comfy.
   (run-shell-command "xsetroot -cursor_name left_ptr -solid grey9")
   (run-shell-command "xset r rate 200 40 s 80 dpms 120 180 300")
   (run-shell-command "xrdb ~/.Xresources")
+  (run-shell-command "alttab -mk Control_R -kk Escape -vp pointer")
   (clipboard-history:start-clipboard-manager)
 #+END_SRC

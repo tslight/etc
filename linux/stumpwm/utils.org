@@ -13,7 +13,7 @@ modules.
 
 * CYCLE NPO
 
-#+BEGIN_SRC common-lisp
+#+BEGIN_SRC common-lisp :tangle no
   (defun get-milliseconds () ()
          "Get timestamp in milliseconds."
          (floor
