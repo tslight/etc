@@ -6,32 +6,46 @@
 
 Collection of custom XDG desktop entries.
 
+* TABBED
+#+BEGIN_SRC conf :tangle ~/.local/share/applications/tmux.desktop
+  [Desktop Entry]
+  Type=Application
+  Name=Tabbed
+  Comment=Launches a tabbed xterm
+  Icon=utilities-terminal
+  Terminal=true
+  Exec=tabbed -c xterm -into
+  Categories=ConsoleOnly;System;Utility
+  MimeType=inode/directory;
+  Keywords=Terminal
+#+END_SRC
+
 * TMUX
 
 #+BEGIN_SRC conf :tangle ~/.local/share/applications/tmux.desktop
-[Desktop Entry]
-Type=Application
-Name=Tmux
-Comment=Launches a terminal multiplexer
-Icon=utilities-terminal
-Terminal=true
-Exec=tmux
-Categories=ConsoleOnly;System;Utility
-MimeType=inode/directory;
-Keywords=Terminal
+  [Desktop Entry]
+  Type=Application
+  Name=Tmux
+  Comment=Launches a terminal multiplexer
+  Icon=utilities-terminal
+  Terminal=true
+  Exec=tmux
+  Categories=ConsoleOnly;System;Utility
+  MimeType=inode/directory;
+  Keywords=Terminal
 #+END_SRC
 
 #+BEGIN_SRC conf :tangle ~/.local/share/applications/tmux.desktop
-[Desktop Entry]
-Type=Application
-Name=Tmux Attach
-Comment=Attaches to a currently running tmux session
-Icon=utilities-terminal
-Terminal=true
-Exec=tmux attach
-Categories=ConsoleOnly;System;Utility
-MimeType=inode/directory;
-Keywords=Terminal
+  [Desktop Entry]
+  Type=Application
+  Name=Tmux Attach
+  Comment=Attaches to a currently running tmux session
+  Icon=utilities-terminal
+  Terminal=true
+  Exec=tmux attach
+  Categories=ConsoleOnly;System;Utility
+  MimeType=inode/directory;
+  Keywords=Terminal
 #+END_SRC
 
 * EMACS

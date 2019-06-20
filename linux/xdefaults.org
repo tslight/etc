@@ -6,6 +6,11 @@
 
 #+NAME: Xdefaults
 #+BEGIN_SRC conf :tangle ~/.Xdefaults
+  URxvt.font: xft: Monospace: size=9
+  URxvt.letterSpace: -1
+  URxvt.reverseVideo: on
+  URxvt.scrollBar: off
+
   XClock*analog: false
   XClock*reverseVideo: true
   XClock*foreground: white
@@ -27,20 +32,20 @@
 
   Xcursor.size: 24
 
-  XTerm*utf8: 1
-  XTerm*BorderWidth: 0
-  XTerm*faceName: Monospace: size=9
-  XTerm*allowBoldFonts: false
-  XTerm*backarrowKeyIsErase: true
-  XTerm*fullscreen: never
-  XTerm*locale: true
-  XTerm*loginShell: true
-  XTerm*metaSendsEscape: true
-  XTerm*reverseVideo: on
-  XTerm*scrollBar: off
-  XTerm*selectToClipboard: true
-  XTerm*termName: xterm-256color
-  XTerm*ttyModes: erase^? kill ^U
+  XTerm.utf8: 1
+  XTerm.BorderWidth: 0
+  XTerm.faceName: Monospace: size=9
+  XTerm.allowBoldFonts: false
+  XTerm.backarrowKeyIsErase: true
+  XTerm.fullscreen: never
+  XTerm.locale: true
+  XTerm.loginShell: true
+  XTerm.metaSendsEscape: true
+  XTerm.reverseVideo: on
+  XTerm.scrollBar: off
+  XTerm.selectToClipboard: true
+  XTerm.termName: xterm-256color
+  XTerm.ttyModes: erase^? kill ^U
 #+END_SRC
 #+BEGIN_SRC conf :noweb yes :tangle ~/.Xresources
 <<Xdefaults>>
