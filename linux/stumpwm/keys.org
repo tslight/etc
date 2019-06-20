@@ -195,7 +195,7 @@ https://stumpwm.github.io/git/stumpwm-git_2.html#Remapped-Keys
 
 #+BEGIN_SRC common-lisp
   (define-remapped-keys
-      '(("(Firefox|Chrome|Chromium|Thunar)"
+      '(("(Firefox|Chrome|Chromium|Spacefm|Thunar)"
          ("C-n" . "Down")
          ("C-p" . "Up")
          ("C-f" . "Right")
