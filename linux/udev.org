@@ -4,7 +4,6 @@
 #+PROPERTY: header-args+ :tangle-mode (identity #o644)
 #+PROPERTY: header-args+ :results silent
 #+PROPERTY: header-args+ :padline no
-#+PROPERTY: header-args+ :tangle /sudo::/etc/udev/hwdb.d/90-kbd.hwdb
 
 * HARDWARE DATABASE
 
@@ -18,6 +17,10 @@ To find the correct keycodes use the evtest utility with the path to the input
 device as the parameter, eg. /dev/input/event0. The keycode is the unique
 identifier after the string "value".
 
+#+BEGIN_SRC sh
+  sudo evtest /dev/input/event0
+#+END_SRC
+
 However, it may also work with the values from running showkey from a tty...
 
 For examples of how to derive the first keyboard type matching rule, check
@@ -25,12 +28,15 @@ either /lib/udev/hwdb.d/60-keyboard.hwdb or the same path with a /usr prefix.
 
 Also, /usr/include/linux/input.h may be of use... Good luck
 
-Finally one needs to run ~udevadm hwdb --update~, ~systemd-hwdb update~,
-~udevadm trigger~
+Finally one needs to run:
 
-** PRE-BUTTERFLY MACBOOK KEYBOARD MODS
+#+BEGIN_SRC sh
+  udevadm hwdb --update
+  systemd-hwdb update
+  udevadm trigger
+#+END_SRC
 
-*** EMACS INSPIRED SPACE CADET SETUP
+** OG MACBOOK
 
 This doesn't work :-(
 
@@ -47,13 +53,11 @@ This doesn't work :-(
    KEYBOARD_KEY_105=rightmeta       # leftarrow --> super
 #+END_SRC
 
-** NU SKOOL THINKPAD KEYBOARD MODS
+** NS THINKPAD
 
 WORKS WITH POST *30 (2012) SERIES THINKPADS
 
-*** EMACS INSPIRED SPACE CADET SETUP
-
-#+BEGIN_SRC conf :tangle no
+#+BEGIN_SRC conf :tangle (my/hardware-tangle "Lenovo" "/sudo::/etc/udev/hwdb.d/90-kbd.hwdb")
   #keyboard:dmi:*                # only works on udev versions 208-215
   evdev:atkbd:dmi:*              # only works with udev versions > 215
    KEYBOARD_KEY_01=capslock      # esc   --> caps
@@ -66,36 +70,11 @@ WORKS WITH POST *30 (2012) SERIES THINKPADS
    KEYBOARD_KEY_9d=rightmeta     # ctrl  --> super
 #+END_SRC
 
-*** CLASSIC CTRL ALT SETUP (NO SUPER KEYS)
-
-#+BEGIN_SRC conf :tangle no
-  #keyboard:dmi:*                # only works on udev versions 208-215
-  evdev:atkbd:dmi:*              # only works with udev versions > 215
-   KEYBOARD_KEY_01=capslock      # esc   --> caps
-   KEYBOARD_KEY_3a=esc           # caps  --> esc
-   KEYBOARD_KEY_b7=rightctrl     # prtsc --> super
-   KEYBOARD_KEY_db=leftctrl      # meta  --> control
-   KEYBOARD_KEY_b8=leftalt       # altgr --> a
-#+END_SRC
-
-*** SWAPCAPSESCAPE PRTSC_RWIN
-
-#+BEGIN_SRC conf :tangle no
-  #keyboard:dmi:*                # only works on udev versions 208-215
-  evdev:atkbd:dmi:*              # only works with udev versions > 215
-   KEYBOARD_KEY_01=capslock      # esc   --> caps
-   KEYBOARD_KEY_3a=esc           # caps  --> esc
-   KEYBOARD_KEY_b7=rightmeta     # prtsc --> super
-   KEYBOARD_KEY_b8=leftalt       # altgr --> alt
-#+END_SRC
-
-** OLD SKOOL THINKPAD KEYBOARD MODS
+** OG THINKPAD
 
 WORKS WITH PRE *30 (2012) SERIES THINKPADS
 
-*** SPACE CADET
-
-#+BEGIN_SRC conf :tangle no
+#+BEGIN_SRC conf :tangle (my/hardware-tangle "Lenovo" "/sudo::/etc/udev/hwdb.d/90-kbd.hwdb")
 #keyboard:dmi:*            # only works on udev versions 208-215
 evdev:atkbd:dmi:*          # only works with udev versions > 215
  KEYBOARD_KEY_01=capslock  # esc   --> caps
@@ -108,39 +87,9 @@ evdev:atkbd:dmi:*          # only works with udev versions > 215
  KEYBOARD_KEY_1d=leftmeta  # lctrl --> lwin
 #+END_SRC
 
-*** SYMMETRICAL SUPER KEY SETUP
+** NS PROBOOK
 
-#+BEGIN_SRC conf :tangle no
-#keyboard:dmi:*            # only works on udev versions 208-215
-evdev:atkbd:dmi:*          # only works with udev versions > 215
- KEYBOARD_KEY_01=capslock  # esc   --> caps
- KEYBOARD_KEY_3a=esc       # caps  --> esc
- KEYBOARD_KEY_dd=rightmeta # menu  --> super
- KEYBOARD_KEY_b8=leftalt   # altgr --> alt
-#+END_SRC
-
-** SHITTY HP BLUETOOTH THING MODS!
-
-WORKS WITH SHITTY HP BLUETOOTH THING!
-
-#+BEGIN_SRC conf :tangle no
-  #keyboard:dmi:*            # only works on udev versions 208-215
-  #evdev:atkbd:dmi:*         # only works with udev versions > 215 atkbd means built-in
-  evdev:*:dmi:*              # only works with udev versions > 215 pattern match for usb and bluetooth keyboards
-   KEYBOARD_KEY_70029=capslock  # esc    --> caps
-   KEYBOARD_KEY_70039=esc       # caps   --> esc
-   KEYBOARD_KEY_700e6=rightctrl # altgr  --> ctrl
-   KEYBOARD_KEY_700e2=leftctrl  # alt    --> ctrl
-   KEYBOARD_KEY_70065=leftalt   # menu   --> alt (leftalt so altgr doesn't activate)
-   KEYBOARD_KEY_700e3=leftalt   # super  --> alt
-   KEYBOARD_KEY_700e4=rightmeta # ctrl   --> super
-   KEYBOARD_KEY_700e0=leftmeta  # ctrl   --> super
-#+END_SRC
-
-** PROBOOK
-
-
-#+BEGIN_SRC conf
+#+BEGIN_SRC conf :tangle (my/hardware-tangle "HP" "/sudo::/etc/udev/hwdb.d/90-kbd.hwdb")
   #keyboard:dmi:*                # only works on udev versions 208-215
   evdev:atkbd:dmi:*              # only works with udev versions > 215
    KEYBOARD_KEY_01=capslock      # esc   --> caps
