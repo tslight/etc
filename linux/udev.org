@@ -23,7 +23,7 @@ However, it may also work with the values from running showkey from a tty...
 For examples of how to derive the first keyboard type matching rule, check
 either /lib/udev/hwdb.d/60-keyboard.hwdb or the same path with a /usr prefix.
 
-Also, /usr/include/linux/input.h may be of use... Good luck!
+Also, /usr/include/linux/input.h may be of use... Good luck
 
 Finally one needs to run ~udevadm hwdb --update~, ~systemd-hwdb update~,
 ~udevadm trigger~
@@ -135,6 +135,21 @@ WORKS WITH SHITTY HP BLUETOOTH THING!
    KEYBOARD_KEY_700e3=leftalt   # super  --> alt
    KEYBOARD_KEY_700e4=rightmeta # ctrl   --> super
    KEYBOARD_KEY_700e0=leftmeta  # ctrl   --> super
+#+END_SRC
+
+** PROBOOK
+
+
+#+BEGIN_SRC conf
+  #keyboard:dmi:*                # only works on udev versions 208-215
+  evdev:atkbd:dmi:*              # only works with udev versions > 215
+   KEYBOARD_KEY_01=capslock      # esc   --> caps
+   KEYBOARD_KEY_3a=esc           # caps  --> esc
+   KEYBOARD_KEY_38=leftctrl      # alt   --> leftctrl
+   KEYBOARD_KEY_db=leftalt       # super --> leftalt
+   KEYBOARD_KEY_1d=leftmeta      # ctrl  --> super
+   KEYBOARD_KEY_b8=rightctrl     # altgr --> rightctrl
+   KEYBOARD_KEY_9d=leftalt       # ctrl  --> leftalt (otherwise altgr)
 #+END_SRC
 
 * RULES DIRECTORY

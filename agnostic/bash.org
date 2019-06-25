@@ -121,6 +121,21 @@
   [ -f /usr/share/bash-completion/bash_completion ] && . /usr/share/bash-completion/bash_completion
   [ -f ~/.aliases ] && . ~/.aliases
   [ -f ~/.functions ] && . ~/.functions
+
+  # >>> conda initialize >>>
+  # !! Contents within this block are managed by 'conda init' !!
+  __conda_setup="$('/home/toby/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+  if [ $? -eq 0 ]; then
+      eval "$__conda_setup"
+  else
+      if [ -f "/home/toby/miniconda3/etc/profile.d/conda.sh" ]; then
+          . "/home/toby/miniconda3/etc/profile.d/conda.sh"
+      else
+          export PATH="/home/toby/miniconda3/bin:$PATH"
+      fi
+  fi
+  unset __conda_setup
+  # <<< conda initialize <<<
 #+END_SRC
 * INPUTRC
 #+BEGIN_SRC sh :tangle ~/.inputrc
