@@ -130,8 +130,8 @@ Requires my [[https://github.com/tslight/stumpwm-contrib/blob/merged/util/xdgmen
   ;; misc
   (define-key *top-map* (kbd "s-m") "mode-line")
   (define-key *top-map* (kbd "C-s-r") "reinit")
-  (define-key *top-map* (kbd "C-s-XF86Eject") "exec slock")
-  (define-key *top-map* (kbd "C-s-Delete") "exec slock")
+  (define-key *top-map* (kbd "C-s-XF86Eject") "exec physlock")
+  (define-key *top-map* (kbd "C-s-Delete") "exec physlock")
   (define-key *top-map* (kbd "C-s-q") "end-session")
   (define-key *top-map* (kbd "C-M-S-q") "quit")
 #+END_SRC
@@ -167,7 +167,7 @@ Requires [[https://github.com/tslight/stumpwm-contrib/blob/merged/util/xdgmenu/R
   (define-key *root-map* (kbd "a") "windowlist")
   (define-key *root-map* (kbd "C-a") "windowlist")
   ;; misc
-  (define-key *root-map* (kbd "C-l") "exec slock")
+  (define-key *root-map* (kbd "C-l") "exec physlock")
   (define-key *root-map* (kbd "M-q") "end-session")
   (define-key *root-map* (kbd "Q") "quit")
   (define-key *root-map* (kbd "m") "mode-line")
