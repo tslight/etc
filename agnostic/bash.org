@@ -99,16 +99,16 @@
   BG_BOLD_WHITE="\[$(tput setab 15)\]"
 
   read -rd '' ROOT_PS1 << EOM
-  ${FG_BOLD_RED}\u@\H \
-  ${FG_BOLD_CYAN}\$?${FG_BOLD_YELLOW}:${FG_BOLD_CYAN}\!/\#${FG_BOLD_YELLOW}:${FG_BOLD_CYAN}\j
-  ${FG_BOLD_MAGENTA}\w ${FG_BOLD_YELLOW}\$ ${RESET}
-  EOM
+    ${FG_BOLD_RED}\u@\H \
+    ${FG_BOLD_CYAN}\$?${FG_BOLD_YELLOW}:${FG_BOLD_CYAN}\!/\#${FG_BOLD_YELLOW}:${FG_BOLD_CYAN}\j
+    ${FG_BOLD_MAGENTA}\w ${FG_BOLD_YELLOW}\$ ${RESET}
+    EOM
 
   read -rd '' USER_PS1 << EOM
-  ${FG_BOLD_BOLD}${FG_BOLD_GREEN}\u@\H \
-  ${FG_BOLD_MAGENTA}\$?${FG_BOLD_YELLOW}:${FG_BOLD_MAGENTA}\!/\#${FG_BOLD_YELLOW}:${FG_BOLD_MAGENTA}\j
-  ${FG_BOLD_CYAN}\w ${FG_BOLD_YELLOW}\$ ${RESET}
-  EOM
+    ${FG_BOLD_BOLD}${FG_BOLD_GREEN}\u@\H \
+    ${FG_BOLD_MAGENTA}\$?${FG_BOLD_YELLOW}:${FG_BOLD_MAGENTA}\!/\#${FG_BOLD_YELLOW}:${FG_BOLD_MAGENTA}\j
+    ${FG_BOLD_CYAN}\w ${FG_BOLD_YELLOW}\$ ${RESET}
+    EOM
 
   if [ $(id -u) -eq 0 ]; then
       export PS1="$ROOT_PS1"
@@ -136,6 +136,10 @@
   fi
   unset __conda_setup
   # <<< conda initialize <<<
+
+  export NVM_DIR="$HOME/.nvm"
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 #+END_SRC
 * INPUTRC
 #+BEGIN_SRC sh :tangle ~/.inputrc
