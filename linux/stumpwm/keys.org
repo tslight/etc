@@ -210,7 +210,6 @@ https://stumpwm.github.io/git/stumpwm-git_2.html#Remapped-Keys
          ("M-b" . "C-Left")
          ("M-f" . "C-Right")
          ("C-M-b" . "M-Left")
-         ("C-M-f" . "M-Right")
-         ("C-M-k" . "C-w"))))
+         ("C-M-f" . "M-Right"))))
   (define-key *root-map* (kbd "C-q") "send-raw-key")
 #+END_SRC

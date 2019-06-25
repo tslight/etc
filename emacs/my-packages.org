@@ -51,10 +51,12 @@ built-in Emacs ones, and my own local custom minor mode packages.
    - [[#slime][SLIME]]
    - [[#smex][SMEX]]
    - [[#ssh-agency][SSH-AGENCY]]
+   - [[#terraform-mode][TERRAFORM MODE]]
    - [[#undo-tree][UNDO TREE]]
    - [[#web-mode][WEB MODE]]
    - [[#wgrep][WGREP]]
    - [[#which-key][WHICH KEY]]
+   - [[#yaml-mode][YAML MODE]]
    - [[#yasnippets][YASNIPPETS]]
 - [[#emacs-packages][EMACS PACKAGES]]
    - [[#abbrev-mode][ABBREV MODE]]
@@ -881,6 +883,18 @@ https://github.com/quicklisp/quicklisp-slime-helper
     (setenv "SSH_ASKPASS" "git-gui--askpass"))
 #+END_SRC
 
+** TERRAFORM MODE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package terraform-mode
+    :ensure t
+    :defer t
+    :config
+    (use-package company-terraform
+      :ensure t
+      :defer t))
+#+END_SRC
+
 ** UNDO TREE
 
 #+BEGIN_SRC emacs-lisp
@@ -942,6 +956,14 @@ https://github.com/quicklisp/quicklisp-slime-helper
     :diminish which-key-mode
     :init
     (which-key-mode))
+#+END_SRC
+
+** YAML MODE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package yaml-mode
+    :ensure t
+    :defer t)
 #+END_SRC
 
 ** YASNIPPETS
