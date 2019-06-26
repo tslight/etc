@@ -36,6 +36,11 @@ Finally one needs to run:
       sudo udevadm trigger
 #+END_SRC
 
+These links may come in handy:
+
+https://github.com/systemd/systemd/blob/master/hwdb/60-keyboard.hwdb
+https://yulistic.gitlab.io/2017/12/linux-keymapping-with-udev-hwdb/
+
 ** OG MACBOOK
 
 This doesn't work :-(
@@ -90,17 +95,19 @@ evdev:atkbd:dmi:*          # only works with udev versions > 215
 ** NS PROBOOK
 
 #+BEGIN_SRC conf :tangle (my/hardware-tangle "HP ProBook 430 G6" "product_name" "/sudo::/etc/udev/hwdb.d/90-kbd.hwdb")
+  # Microsoft Wired USB Keyboard
   evdev:input:b0003v045ep0752*
-    KEYBOARD_KEY_70029=capslock      # esc   --> caps
-    KEYBOARD_KEY_70039=esc           # caps  --> esc
-    KEYBOARD_KEY_700e2=leftctrl      # alt   --> leftctrl
-    KEYBOARD_KEY_700e3=leftalt       # super --> leftalt
-    KEYBOARD_KEY_700e0=leftmeta      # ctrl  --> super
-    KEYBOARD_KEY_700e6=rightctrl     # altgr --> rightctrl
-    KEYBOARD_KEY_700e7=leftalt       # super --> leftalt
-    KEYBOARD_KEY_70065=rightmeta     # menu  --> rightmeta
+   KEYBOARD_KEY_70029=capslock      # esc   --> caps
+   KEYBOARD_KEY_70039=esc           # caps  --> esc
+   KEYBOARD_KEY_700e2=leftctrl      # alt   --> leftctrl
+   KEYBOARD_KEY_700e3=leftalt       # super --> leftalt
+   KEYBOARD_KEY_700e0=leftmeta      # ctrl  --> super
+   KEYBOARD_KEY_700e6=rightctrl     # altgr --> rightctrl
+   KEYBOARD_KEY_700e7=leftalt       # super --> leftalt
+   KEYBOARD_KEY_70065=rightmeta     # menu  --> rightmeta
 
-  evdev:atkbd:dmi:*
+  # HP Probook 430 G6
+  evdev:atkbd:dmi:bvn*:bvr*:svnHP*:pnHP*ProBook*430*G6*
    KEYBOARD_KEY_01=capslock      # esc   --> caps
    KEYBOARD_KEY_3a=esc           # caps  --> esc
    KEYBOARD_KEY_38=leftctrl      # alt   --> leftctrl
