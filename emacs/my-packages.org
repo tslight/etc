@@ -18,6 +18,7 @@ built-in Emacs ones, and my own local custom minor mode packages.
 * CONTENTS                                                         :TOC_5_gh:
 - [[#melpa-packages][MELPA PACKAGES]]
    - [[#ace-window][ACE WINDOW]]
+   - [[#ansible][ANSIBLE]]
    - [[#async][ASYNC]]
    - [[#avy][AVY]]
    - [[#bind-key][BIND-KEY]]
@@ -133,6 +134,18 @@ pack it into a single key binding, similar to other-window.
                         :weight 'bold
                         :height 2.0)
     (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
+#+END_SRC
+
+** ANSIBLE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package ansible
+    :ensure t
+    :defer t
+    :config
+    (use-package ansible-doc
+      :ensure t
+      :defer t))
 #+END_SRC
 
 ** ASYNC

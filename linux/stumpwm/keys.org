@@ -203,8 +203,6 @@ https://stumpwm.github.io/git/stumpwm-git_2.html#Remapped-Keys
          ("C-p" . "Up")
          ("C-f" . "Right")
          ("C-b" . "Left")
-         ("C-v" . "Next")
-         ("M-v" . "Prior")
          ("C-<" . "Home")
          ("C->" . "End")
          ("M-b" . "C-Left")
