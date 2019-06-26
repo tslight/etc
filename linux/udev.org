@@ -96,7 +96,7 @@ evdev:atkbd:dmi:*          # only works with udev versions > 215
 
 #+BEGIN_SRC conf :tangle (my/hardware-tangle "HP ProBook 430 G6" "product_name" "/sudo::/etc/udev/hwdb.d/90-kbd.hwdb")
   # Microsoft Wired USB Keyboard
-  evdev:input:b0003v045ep0752*
+  evdev:input:b0003v045Ep0752*
    KEYBOARD_KEY_70029=capslock      # esc   --> caps
    KEYBOARD_KEY_70039=esc           # caps  --> esc
    KEYBOARD_KEY_700e2=leftctrl      # alt   --> leftctrl
