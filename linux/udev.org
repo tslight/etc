@@ -31,9 +31,9 @@ Also, /usr/include/linux/input.h may be of use... Good luck
 Finally one needs to run:
 
 #+BEGIN_SRC sh
-  udevadm hwdb --update
-  systemd-hwdb update
-  udevadm trigger
+  sudo udevadm hwdb --update && \
+      sudo systemd-hwdb update && \
+      sudo udevadm trigger
 #+END_SRC
 
 ** OG MACBOOK
@@ -90,8 +90,17 @@ evdev:atkbd:dmi:*          # only works with udev versions > 215
 ** NS PROBOOK
 
 #+BEGIN_SRC conf :tangle (my/hardware-tangle "HP ProBook 430 G6" "product_name" "/sudo::/etc/udev/hwdb.d/90-kbd.hwdb")
-  #keyboard:dmi:*                # only works on udev versions 208-215
-  evdev:atkbd:dmi:*              # only works with udev versions > 215
+  evdev:input:b0003v045ep0752*
+    KEYBOARD_KEY_70029=capslock      # esc   --> caps
+    KEYBOARD_KEY_70039=esc           # caps  --> esc
+    KEYBOARD_KEY_700e2=leftctrl      # alt   --> leftctrl
+    KEYBOARD_KEY_700e3=leftalt       # super --> leftalt
+    KEYBOARD_KEY_700e0=leftmeta      # ctrl  --> super
+    KEYBOARD_KEY_700e6=rightctrl     # altgr --> rightctrl
+    KEYBOARD_KEY_700e7=leftalt       # super --> leftalt
+    KEYBOARD_KEY_70065=rightmeta     # menu  --> rightmeta
+
+  evdev:atkbd:dmi:*
    KEYBOARD_KEY_01=capslock      # esc   --> caps
    KEYBOARD_KEY_3a=esc           # caps  --> esc
    KEYBOARD_KEY_38=leftctrl      # alt   --> leftctrl
