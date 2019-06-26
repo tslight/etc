@@ -6,7 +6,24 @@
 #+PROPERTY: header-args+ :padline yes
 #+PROPERTY: header-args+ :tangle /sudo::/etc/udev/hwdb.d/90-kbd.hwdb
 
-UDEV MAP SCANCODES TO KEYCODES
+* MAP SCANCODES TO KEYCODES
+
+For maximum default Emacs' binding comfort, I remap my keyboard to conform to
+the [[http://xahlee.info/kbd/space-cadet_keyboard.html][Space-Cadet]] layout of the lisp machines Emacs was originally written on.
+
+*Super > Meta/Alt > Ctrl > S P A C E < Ctrl < Meta/Alt < Super*
+
+This layout not only makes so much more sense for Emacs, but for most other
+applications as well. Typically the Ctrl key is the most commonly used
+modifier, followed by Alt (Meta), and then the Super (Windows) key.
+
+Therefore it makes the most sense to me, to have the most used modifiers
+accessible with one's strongest digits (the thumbs), and the least used
+modifiers using the weakest digit - one's pinkies.
+
+It also means that your modifiers are entirely symmetrical, so you can use them
+in the same touch-typing fashion one uses the shift key (ie. one hand presses
+modifier, the other, the modified key).
 
 [[https://wiki.archlinux.org/index.php/Map_scancodes_to_keycodes][Archlinux Wiki Article 1]]
 
@@ -55,7 +72,7 @@ or:
   udevadm info /dev/input/eventX | grep KEYBOARD_KEY
 #+END_SRC
 
-* Microsoft Wired USB
+** Microsoft Wired USB
 
 #+BEGIN_SRC conf
   # Microsoft Wired USB Keyboard
@@ -70,7 +87,7 @@ or:
    KEYBOARD_KEY_70065=rightmeta     # menu  --> rightmeta
 #+END_SRC
 
-* Apple MacBook Pro
+** Apple MacBook Pro
 
 #+BEGIN_SRC conf
   # Apple MacBook Pro
@@ -85,7 +102,7 @@ or:
    KEYBOARD_KEY_70050=rightmeta  # leftarrow --> super
 #+END_SRC
 
-* Lenovo ThinkPad T450
+** Lenovo ThinkPad T450
 
 #+BEGIN_SRC conf
   # Lenovo ThinkPad T450
@@ -100,7 +117,7 @@ or:
    KEYBOARD_KEY_9d=rightmeta     # ctrl  --> super
 #+END_SRC
 
-* Lenovo ThinkPad T420
+** Lenovo ThinkPad T420
 
 #+BEGIN_SRC conf
   # Lenovo ThinkPad T420
@@ -115,7 +132,7 @@ or:
    KEYBOARD_KEY_1d=leftmeta  # lctrl --> lwin
 #+END_SRC
 
-* HP Probook 430 G6
+** HP Probook 430 G6
 
 #+BEGIN_SRC conf
   # HP Probook 430 G6
