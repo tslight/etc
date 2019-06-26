@@ -6,8 +6,8 @@
 #+PROPERTY: header-args+ :padline yes
 #+PROPERTY: header-args+ :tangle /sudo::/etc/udev/hwdb.d/90-kbd.hwdb
 
-For maximum default Emacs' binding comfort, I remap my keyboard to conform to
-the [[http://xahlee.info/kbd/space-cadet_keyboard.html][Space-Cadet]] layout of the lisp machines Emacs was originally written on.
+For maximum Emacs comfort, I remap my keyboard to conform to the [[http://xahlee.info/kbd/space-cadet_keyboard.html][Space-Cadet]]
+layout of the lisp machines Emacs was originally written on.
 
 #+CAPTION: The Venerable Space Cadet Keyboard
 #+NAME:fig:Space_Cadet
@@ -25,7 +25,11 @@ It also means that your modifiers are symmetrical, so you can use them in the
 same touch-typing fashion as the shift key (ie. one hand presses modifier, the
 other, the modified key).
 
-*REMAPPING VIA UDEV*
+There are a variety of ways to achieve this on Linux - ~setxkbmap~, ~xmodmap~
+or with ~udev~. I choose the latter as it remaps at a lower level and therefore
+works in both X11 and a tty.
+
+* Remapping with udev
 
 [[https://wiki.archlinux.org/index.php/Map_scancodes_to_keycodes][Archlinux Map Scancodes to Keycodes]]
 
