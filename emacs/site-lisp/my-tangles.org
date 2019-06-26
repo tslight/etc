@@ -363,12 +363,12 @@ Tangle block to PATH if VENDOR string matches that in
 Inspired by https://emacs.stackexchange.com/a/14034
 
 #+BEGIN_SRC emacs-lisp
-  (defun my/hardware-tangle (vendor path)
-    "Tangle block to PATH if VENDOR string matches that in
-     /sys/class/dmi/id/chassis_vendor."
+  (defun my/hardware-tangle (vendor file path)
+    "Tangle block to PATH if VENDOR string matches the relevant FILE in
+      /sys/class/dmi/id/."
     (if (string-match vendor
                       (with-temp-buffer
-                        (insert-file-contents "/sys/class/dmi/id/chassis_vendor")
+                        (insert-file-contents (concat "/sys/class/dmi/id/" file))
                         (buffer-string)))
         path
       "no"))

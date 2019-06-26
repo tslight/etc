@@ -7,7 +7,7 @@
 
 * KEYBOARD
 
-#+BEGIN_SRC conf :tangle (my/hardware-tangle "Apple Inc" "/sudo::/etc/default/keyboard")
+#+BEGIN_SRC conf :tangle (my/hardware-tangle "Apple Inc" "chassis_vendor" "/sudo::/etc/default/keyboard")
 # KEYBOARD CONFIGURATION FILE
 # Consult the keyboard(5) manual page.
 XKBMODEL="pc105"

@@ -57,7 +57,7 @@ This doesn't work :-(
 
 WORKS WITH POST *30 (2012) SERIES THINKPADS
 
-#+BEGIN_SRC conf :tangle (my/hardware-tangle "Lenovo" "/sudo::/etc/udev/hwdb.d/90-kbd.hwdb")
+#+BEGIN_SRC conf :tangle (my/hardware-tangle "Lenovo" "chassis_vendor" "/sudo::/etc/udev/hwdb.d/90-kbd.hwdb")
   #keyboard:dmi:*                # only works on udev versions 208-215
   evdev:atkbd:dmi:*              # only works with udev versions > 215
    KEYBOARD_KEY_01=capslock      # esc   --> caps
@@ -74,7 +74,7 @@ WORKS WITH POST *30 (2012) SERIES THINKPADS
 
 WORKS WITH PRE *30 (2012) SERIES THINKPADS
 
-#+BEGIN_SRC conf :tangle (my/hardware-tangle "Lenovo" "/sudo::/etc/udev/hwdb.d/90-kbd.hwdb")
+#+BEGIN_SRC conf :tangle (my/hardware-tangle "Lenovo" "chassis_vendor" "/sudo::/etc/udev/hwdb.d/90-kbd.hwdb")
 #keyboard:dmi:*            # only works on udev versions 208-215
 evdev:atkbd:dmi:*          # only works with udev versions > 215
  KEYBOARD_KEY_01=capslock  # esc   --> caps
@@ -89,7 +89,7 @@ evdev:atkbd:dmi:*          # only works with udev versions > 215
 
 ** NS PROBOOK
 
-#+BEGIN_SRC conf :tangle (my/hardware-tangle "HP" "/sudo::/etc/udev/hwdb.d/90-kbd.hwdb")
+#+BEGIN_SRC conf :tangle (my/hardware-tangle "HP ProBook 430 G6" "product_name" "/sudo::/etc/udev/hwdb.d/90-kbd.hwdb")
   #keyboard:dmi:*                # only works on udev versions 208-215
   evdev:atkbd:dmi:*              # only works with udev versions > 215
    KEYBOARD_KEY_01=capslock      # esc   --> caps
