@@ -57,6 +57,8 @@ Finally one needs to run:
   sudo udevadm hwdb --update && sudo systemd-hwdb update && sudo udevadm trigger
 #+END_SRC
 
+To check this has worked, run the following:
+
 #+BEGIN_SRC sh :tangle no
   udevadm info /dev/input/by-path/*-usb-*-kbd | grep KEYBOARD_KEY
   udevadm info /dev/input/eventX | grep KEYBOARD_KEY
