@@ -104,11 +104,11 @@ or:
    KEYBOARD_KEY_70050=rightmeta  # leftarrow --> super
 #+END_SRC
 
-** Lenovo ThinkPad T450
+** Lenovo ThinkPad T/W/X Chicklet
 
 #+BEGIN_SRC conf
-  # Lenovo ThinkPad T450
-  evdev:atkbd:dmi:bvn*:bvr*:bd*:svnLENOVO:pn*:pvrThinkPadT450
+  # Lenovo ThinkPad T & X series post 2012
+  evdev:atkbd:dmi:bvn*:bvr*:bd*:svnLENOVO:pn*:pvrThinkPad[TWX][24][3-9]0*
    KEYBOARD_KEY_01=capslock      # esc   --> caps
    KEYBOARD_KEY_3a=esc           # caps  --> esc
    KEYBOARD_KEY_38=leftctrl      # alt   --> leftctrl
@@ -119,11 +119,11 @@ or:
    KEYBOARD_KEY_9d=rightmeta     # ctrl  --> super
 #+END_SRC
 
-** Lenovo ThinkPad T420
+** Lenovo ThinkPad T/W/X OG
 
 #+BEGIN_SRC conf
-  # Lenovo ThinkPad T420
-  evdev:atkbd:dmi:bvn*:bvr*:bd*:svnLENOVO:pn*:pvrThinkPadT420
+  # Lenovo ThinkPad T & X series pre 2012
+  evdev:atkbd:dmi:bvn*:bvr*:bd*:svnLENOVO:pn*:pvrThinkPad[TWX][246][0-2]*
    KEYBOARD_KEY_01=capslock  # esc   --> caps
    KEYBOARD_KEY_3a=esc       # caps  --> esc
    KEYBOARD_KEY_b8=rightctrl # altgr --> rctrl
