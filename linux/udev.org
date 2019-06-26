@@ -1,4 +1,4 @@
-#+TITLE: UDEV KEYBOARD REMAPPING
+#+TITLE: UDEV SETTINGS
 #+PROPERTY: header-args :cache yes
 #+PROPERTY: header-args+ :mkdirp yes
 #+PROPERTY: header-args+ :tangle-mode (identity #o644)
@@ -6,12 +6,14 @@
 #+PROPERTY: header-args+ :padline yes
 #+PROPERTY: header-args+ :tangle /sudo::/etc/udev/hwdb.d/90-kbd.hwdb
 
-* MAP SCANCODES TO KEYCODES
+* SPACE CADET KEYBOARD
 
 For maximum default Emacs' binding comfort, I remap my keyboard to conform to
 the [[http://xahlee.info/kbd/space-cadet_keyboard.html][Space-Cadet]] layout of the lisp machines Emacs was originally written on.
 
-*Super > Meta/Alt > Ctrl > S P A C E < Ctrl < Meta/Alt < Super*
+#+CAPTION: The Venerable Space Cadet Keyboard
+#+NAME:fig:Space_Cadet
+     [[../img/space_cadet.jpg]]
 
 This layout not only makes so much more sense for Emacs, but for most other
 applications as well. Typically the Ctrl key is the most commonly used
