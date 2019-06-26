@@ -1,11 +1,10 @@
-#+TITLE: UDEV SETTINGS
+#+TITLE: UDEV KEYBOARD REMAPPING
 #+PROPERTY: header-args :cache yes
 #+PROPERTY: header-args+ :mkdirp yes
 #+PROPERTY: header-args+ :tangle-mode (identity #o644)
 #+PROPERTY: header-args+ :results silent
-#+PROPERTY: header-args+ :padline no
-
-* HARDWARE DATABASE
+#+PROPERTY: header-args+ :padline yes
+#+PROPERTY: header-args+ :tangle /sudo::/etc/udev/hwdb.d/90-kbd.hwdb
 
 UDEV MAP SCANCODES TO KEYCODES
 
@@ -17,84 +16,48 @@ To find the correct keycodes use the evtest utility with the path to the input
 device as the parameter, eg. /dev/input/event0. The keycode is the unique
 identifier after the string "value".
 
-#+BEGIN_SRC sh
+#+BEGIN_SRC sh :tangle no
   sudo evtest /dev/input/event0
 #+END_SRC
-
-However, it may also work with the values from running showkey from a tty...
 
 For examples of how to derive the first keyboard type matching rule, check
 either /lib/udev/hwdb.d/60-keyboard.hwdb or the same path with a /usr prefix.
 
 Also, /usr/include/linux/input.h may be of use... Good luck
 
+You can get also the keyboard identifier with:
+
+#+BEGIN_SRC sh :tangle no
+  cat /proc/bus/input/devices | grep -i keyboard -A 9 -B 1
+#+END_SRC
+
 Finally one needs to run:
 
-#+BEGIN_SRC sh
-  sudo udevadm hwdb --update && \
-      sudo systemd-hwdb update && \
-      sudo udevadm trigger
+#+BEGIN_SRC sh :tangle no
+  sudo udevadm hwdb --update && sudo systemd-hwdb update && sudo udevadm trigger
 #+END_SRC
 
 These links may come in handy:
 
-https://github.com/systemd/systemd/blob/master/hwdb/60-keyboard.hwdb
-https://yulistic.gitlab.io/2017/12/linux-keymapping-with-udev-hwdb/
+[[https://github.com/systemd/systemd/blob/master/hwdb/60-keyboard.hwdb][systemd reference hwdb]]
 
-** OG MACBOOK
+[[https://yulistic.gitlab.io/2017/12/linux-keymapping-with-udev-hwdb/][tricks and tips]]
 
-This doesn't work :-(
+You can check it worked with:
 
-#+BEGIN_SRC conf :tangle no
-  #keyboard:dmi:*                   # only works on udev versions 208-215
-  evdev:input:b0003v05acp0253e0111* # only works with udev versions > 215
-   KEYBOARD_KEY_01=capslock         # esc       --> caps
-   KEYBOARD_KEY_58=esc              # caps      --> esc
-   KEYBOARD_KEY_125=leftctrl        # leftcmd   --> leftctrl
-   KEYBOARD_KEY_126=rightctrl       # rightcmd  --> rightctrl
-   KEYBOARD_KEY_56=leftalt          # leftopt   --> leftalt
-   KEYBOARD_KEY_100=leftalt         # rightopt  --> leftalt (to avoid altgr shit)
-   KEYBOARD_KEY_29=leftmeta         # leftctrl  --> super
-   KEYBOARD_KEY_105=rightmeta       # leftarrow --> super
+#+BEGIN_SRC sh :tangle no
+  udevadm info /dev/input/by-path/*-usb-*-kbd | grep KEYBOARD_KEY
 #+END_SRC
 
-** NS THINKPAD
+or:
 
-WORKS WITH POST *30 (2012) SERIES THINKPADS
-
-#+BEGIN_SRC conf :tangle (my/hardware-tangle "Lenovo" "chassis_vendor" "/sudo::/etc/udev/hwdb.d/90-kbd.hwdb")
-  #keyboard:dmi:*                # only works on udev versions 208-215
-  evdev:atkbd:dmi:*              # only works with udev versions > 215
-   KEYBOARD_KEY_01=capslock      # esc   --> caps
-   KEYBOARD_KEY_3a=esc           # caps  --> esc
-   KEYBOARD_KEY_38=leftctrl      # alt   --> leftctrl
-   KEYBOARD_KEY_b8=rightctrl     # altgr --> rightctrl
-   KEYBOARD_KEY_db=leftalt       # super --> leftalt
-   KEYBOARD_KEY_b7=leftalt       # prtsc --> leftalt (to avoid altgr shit)
-   KEYBOARD_KEY_1d=leftmeta      # ctrl  --> super
-   KEYBOARD_KEY_9d=rightmeta     # ctrl  --> super
+#+BEGIN_SRC sh :tangle no
+  udevadm info /dev/input/eventX | grep KEYBOARD_KEY
 #+END_SRC
 
-** OG THINKPAD
+* Microsoft Wired USB
 
-WORKS WITH PRE *30 (2012) SERIES THINKPADS
-
-#+BEGIN_SRC conf :tangle (my/hardware-tangle "Lenovo" "chassis_vendor" "/sudo::/etc/udev/hwdb.d/90-kbd.hwdb")
-#keyboard:dmi:*            # only works on udev versions 208-215
-evdev:atkbd:dmi:*          # only works with udev versions > 215
- KEYBOARD_KEY_01=capslock  # esc   --> caps
- KEYBOARD_KEY_3a=esc       # caps  --> esc
- KEYBOARD_KEY_b8=rightctrl # altgr --> rctrl
- KEYBOARD_KEY_38=leftctrl  # alt   --> lctrl
- KEYBOARD_KEY_db=leftalt   # lwin  --> lalt
- KEYBOARD_KEY_dd=leftalt   # menu  --> lalt, not altgr (hence left)
- KEYBOARD_KEY_9d=rightmeta # rctrl --> rwin
- KEYBOARD_KEY_1d=leftmeta  # lctrl --> lwin
-#+END_SRC
-
-** NS PROBOOK
-
-#+BEGIN_SRC conf :tangle (my/hardware-tangle "HP ProBook 430 G6" "product_name" "/sudo::/etc/udev/hwdb.d/90-kbd.hwdb")
+#+BEGIN_SRC conf
   # Microsoft Wired USB Keyboard
   evdev:input:b0003v045Ep0752*
    KEYBOARD_KEY_70029=capslock      # esc   --> caps
@@ -105,7 +68,56 @@ evdev:atkbd:dmi:*          # only works with udev versions > 215
    KEYBOARD_KEY_700e6=rightctrl     # altgr --> rightctrl
    KEYBOARD_KEY_700e7=leftalt       # super --> leftalt
    KEYBOARD_KEY_70065=rightmeta     # menu  --> rightmeta
+#+END_SRC
 
+* Apple MacBook Pro
+
+#+BEGIN_SRC conf
+  # Apple MacBook Pro
+  evdev:input:b0003v05ACp0253*
+   KEYBOARD_KEY_70029=capslock   # esc       --> caps
+   KEYBOARD_KEY_70039=esc        # caps      --> esc
+   KEYBOARD_KEY_700e3=leftctrl   # leftcmd   --> leftctrl
+   KEYBOARD_KEY_700e7=rightctrl  # rightcmd  --> rightctrl
+   KEYBOARD_KEY_700e2=leftalt    # leftopt   --> leftalt
+   KEYBOARD_KEY_700e6=leftalt    # rightopt  --> leftalt (to avoid altgr shit)
+   KEYBOARD_KEY_700e0=leftmeta   # leftctrl  --> super
+   KEYBOARD_KEY_70050=rightmeta  # leftarrow --> super
+#+END_SRC
+
+* Lenovo ThinkPad T450
+
+#+BEGIN_SRC conf
+  # Lenovo ThinkPad T450
+  evdev:atkbd:dmi:bvn*:bvr*:bd*:svnLENOVO:pn*:pvrThinkPadT450
+   KEYBOARD_KEY_01=capslock      # esc   --> caps
+   KEYBOARD_KEY_3a=esc           # caps  --> esc
+   KEYBOARD_KEY_38=leftctrl      # alt   --> leftctrl
+   KEYBOARD_KEY_b8=rightctrl     # altgr --> rightctrl
+   KEYBOARD_KEY_db=leftalt       # super --> leftalt
+   KEYBOARD_KEY_b7=leftalt       # prtsc --> leftalt (to avoid altgr shit)
+   KEYBOARD_KEY_1d=leftmeta      # ctrl  --> super
+   KEYBOARD_KEY_9d=rightmeta     # ctrl  --> super
+#+END_SRC
+
+* Lenovo ThinkPad T420
+
+#+BEGIN_SRC conf
+  # Lenovo ThinkPad T420
+  evdev:atkbd:dmi:bvn*:bvr*:bd*:svnLENOVO:pn*:pvrThinkPadT420
+   KEYBOARD_KEY_01=capslock  # esc   --> caps
+   KEYBOARD_KEY_3a=esc       # caps  --> esc
+   KEYBOARD_KEY_b8=rightctrl # altgr --> rctrl
+   KEYBOARD_KEY_38=leftctrl  # alt   --> lctrl
+   KEYBOARD_KEY_db=leftalt   # lwin  --> lalt
+   KEYBOARD_KEY_dd=leftalt   # menu  --> lalt, not altgr (hence left)
+   KEYBOARD_KEY_9d=rightmeta # rctrl --> rwin
+   KEYBOARD_KEY_1d=leftmeta  # lctrl --> lwin
+#+END_SRC
+
+* HP Probook 430 G6
+
+#+BEGIN_SRC conf
   # HP Probook 430 G6
   evdev:atkbd:dmi:bvn*:bvr*:svnHP*:pnHP*ProBook*430*G6*
    KEYBOARD_KEY_01=capslock      # esc   --> caps
@@ -116,5 +128,3 @@ evdev:atkbd:dmi:*          # only works with udev versions > 215
    KEYBOARD_KEY_b8=rightctrl     # altgr --> rightctrl
    KEYBOARD_KEY_9d=leftalt       # ctrl  --> leftalt (otherwise altgr)
 #+END_SRC
-
-* RULES DIRECTORY
