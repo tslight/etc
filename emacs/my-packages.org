@@ -70,6 +70,7 @@ built-in Emacs ones, and my own local custom minor mode packages.
    - [[#find-dired][FIND DIRED]]
    - [[#flyspell][FLYSPELL]]
    - [[#gnus][GNUS]]
+   - [[#highlight-line][HIGHLIGHT LINE]]
    - [[#linum-mode][LINUM MODE]]
    - [[#lisp-mode][LISP MODE]]
    - [[#misc][MISC]]
@@ -1192,6 +1193,20 @@ single buffer, use ‘electric-pair-local-mode’.
           'gnus-gather-threads-by-subject)
     (setq gnus-thread-hide-subtree t)
     (setq gnus-thread-ignore-subject t))
+#+END_SRC
+
+** HIGHLIGHT LINE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package hl-line-mode
+      :defer t
+      :hook
+      (prog-mode . hl-line-mode)
+      (shell-script-mode . linum-mode)
+      (sh-mode . hl-line-mode)
+      (text-mode . hl-line-mode)
+      (dired-mode . hl-line-mode)
+      (org-mode . hl-line-mode))
 #+END_SRC
 
 ** LINUM MODE
