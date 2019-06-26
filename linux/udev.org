@@ -89,7 +89,7 @@ or:
    KEYBOARD_KEY_70065=rightmeta     # menu  --> rightmeta
 #+END_SRC
 
-** Apple MacBook Pro
+** Apple MacBook Pro OG
 
 #+BEGIN_SRC conf
   # Apple MacBook Pro
