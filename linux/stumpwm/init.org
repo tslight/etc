@@ -32,7 +32,7 @@ Please see the relevant READMEs in the fork for more details.
 
 #+BEGIN_SRC common-lisp
   (load-module "acpi")
-  ;; (load-module "clipboard-history")
+  (load-module "clipboard-history")
   (load-module "command-history")
   ;; (load-module "cycle-mru")
   (load-module "encouragement")
@@ -94,5 +94,5 @@ After loading all our lisp, run some shell programs to make things more comfy.
   (run-shell-command "xset r rate 200 40 s 600 dpms 120 180 300")
   (run-shell-command "xrdb ~/.Xresources")
   (run-shell-command "alttab -mk Control_R -kk Escape -vp pointer")
-  ;; (clipboard-history:start-clipboard-manager)
+  (clipboard-history:start-clipboard-manager)
 #+END_SRC
