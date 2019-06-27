@@ -6,16 +6,17 @@
 #+PROPERTY: header-args+ :padline yes
 #+PROPERTY: header-args+ :tangle /sudo::/etc/udev/hwdb.d/90-kbd.hwdb
 
-For maximum Emacs comfort, I remap my keyboard to conform to the [[http://xahlee.info/kbd/space-cadet_keyboard.html][Space-Cadet]]
-layout of the lisp machines Emacs was originally written on.
+For maximum Emacs comfort, I remap my keyboard to conform to the Symbolics'
+[[http://xahlee.info/kbd/space-cadet_keyboard.html][Space-Cadet]] Lisp Machine keyboard layout. The was the keyboard Emacs' was
+originally written on/with.
 
 #+CAPTION: The Venerable Space Cadet Keyboard
 #+NAME:fig:Space_Cadet
-[[../img/space_cadet.jpg]]
+[[../img/space_cadet_close_up.jpg]]
 
 This layout not only makes so much more sense for Emacs, but for most other
-applications too. Typically the Ctrl key is the most commonly used modifier,
-followed by Alt (Meta), and then the Super (Windows) key.
+applications too. Typically the Control key is the most commonly used modifier,
+followed by Alt /(Meta)/, and then the Super /(Windows)/ key.
 
 Therefore it makes the most sense to me, to have the most used modifiers
 accessible with one's strongest digits (the thumbs), and the least used
