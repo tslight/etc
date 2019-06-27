@@ -18,6 +18,7 @@
   export PAGER="/usr/bin/less"
   export PATH=$PATH:$HOME/.local/bin:$HOME/.local/bin/azfuncli:$HOME/bin
   export GTK_THEME=Emacs
+  export GOPATH=$HOME/go
 
   # https://wiki.archlinux.org/index.php/SSH_keys#Keychain
   # command -v keychain &>/dev/null && eval $(keychain --eval --quiet id_rsa)
