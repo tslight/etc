@@ -117,3 +117,18 @@ https://wiki.archlinux.org/index.php/Getty#Have_boot_messages_stay_on_tty1
 [Service]
 TTYVTDisallocate=no
 #+END_SRC
+
+* PHYSLOCK
+
+#+BEGIN_SRC systemd :tangle /sudo::/etc/systemd/system/physlock.service
+  [Unit]
+  Description=Lock the screen on resume from suspend
+
+  [Service]
+  User=toby
+  Environment=DISPLAY=:0
+  ExecStart=/usr/bin/physlock
+
+  [Install]
+  WantedBy=suspend.target
+#+END_SRC
