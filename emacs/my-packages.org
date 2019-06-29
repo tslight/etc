@@ -53,6 +53,7 @@ built-in Emacs ones, and my own local custom minor mode packages.
    - [[#slime][SLIME]]
    - [[#smex][SMEX]]
    - [[#ssh-agency][SSH-AGENCY]]
+   - [[#systemd][SYSTEMD]]
    - [[#terraform-mode][TERRAFORM MODE]]
    - [[#undo-tree][UNDO TREE]]
    - [[#web-mode][WEB MODE]]
@@ -912,6 +913,13 @@ https://github.com/quicklisp/quicklisp-slime-helper
     :defer t
     :init
     (setenv "SSH_ASKPASS" "git-gui--askpass"))
+#+END_SRC
+** SYSTEMD
+
+#+BEGIN_SRC emacs-lisp
+  (use-package systemd
+    :ensure t
+    :defer t)
 #+END_SRC
 
 ** TERRAFORM MODE
