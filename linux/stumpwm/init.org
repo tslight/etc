@@ -91,8 +91,9 @@ After loading all our lisp, run some shell programs to make things more comfy.
 
 #+BEGIN_SRC common-lisp
   (run-shell-command "xsetroot -cursor_name left_ptr -solid grey9")
-  (run-shell-command "xset r rate 200 40 s 600 dpms 120 180 300")
+  (run-shell-command "xset r rate 200 40 s 120 dpms 240 480 600")
   (run-shell-command "xrdb ~/.Xresources")
   (run-shell-command "alttab -mk Control_R -kk Escape -vp pointer")
+  (run-shell-command "xidle -se -program /usr/bin/physlock -timeout 600")
   (clipboard-history:start-clipboard-manager)
 #+END_SRC
