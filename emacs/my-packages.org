@@ -42,6 +42,7 @@ built-in Emacs ones, and my own local custom minor mode packages.
    - [[#ivy][IVY]]
    - [[#magit][MAGIT]]
    - [[#markdown][MARKDOWN]]
+   - [[#neotree][NEOTREE]]
    - [[#paredit][PAREDIT]]
    - [[#pc-buffer-switch][PC BUFFER SWITCH]]
    - [[#powershell][POWERSHELL]]
@@ -726,6 +727,13 @@ that disables itself auto-magically.
            ("\\.md\\'" . markdown-mode)
            ("\\.markdown\\'" . markdown-mode))
     :init (setq markdown-command "multimarkdown"))
+#+END_SRC
+** NEOTREE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package neotree
+    :ensure t
+    :bind ("<f8>" . neotree-toggle))
 #+END_SRC
 
 ** PAREDIT
