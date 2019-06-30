@@ -7,10 +7,14 @@
 
 * INTEL
 
-https://wiki.archlinux.org/index.php/Intel_graphics#Xorg_configuration
-https://www.reddit.com/r/debian/comments/bhehm0/debian_9_xfce_black_screen_after_suspend/elt5b14?utm_source=share&utm_medium=web2x
-https://www.reddit.com/r/archlinux/comments/an3t1p/power_manager_blank_after_option_doesnt_let_me/efr3j3e?utm_source=share&utm_medium=web2x
-https://forum.manjaro.org/t/solved-manjaro-brightness-hotkey-is-writing-to-intel-backlight-instead-of-gmux-backlight/62365/8
+[[https://wiki.archlinux.org/index.php/Intel_graphics#Xorg_configuration][Archlinux Intel Xorg Configuration]]
+
+[[https://www.reddit.com/r/debian/comments/bhehm0/debian_9_xfce_black_screen_after_suspend/elt5b14?utm_source=share&utm_medium=web2x][Reddit thread Debian 9]]
+
+[[https://www.reddit.com/r/archlinux/comments/an3t1p/power_manager_blank_after_option_doesnt_let_me/efr3j3e?utm_source=share&utm_medium=web2x][Reddit thread blanking screen]]
+
+[[https://forum.manjaro.org/t/solved-manjaro-brightness-hotkey-is-writing-to-intel-backlight-instead-of-gmux-backlight/62365/8][Manjaro forums]]
+
 #+NAME: intel
 #+BEGIN_SRC conf :tangle (my/hardware-tangle "Apple Inc" "chassis_vendor" "/sudo::/usr/share/X11/xorg.conf.d/20-intel.conf")
   Section "Device"
