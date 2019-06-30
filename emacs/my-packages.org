@@ -51,6 +51,7 @@ built-in Emacs ones, and my own local custom minor mode packages.
    - [[#elpy][ELPY]]
    - [[#pep8][PEP8]]
    - [[#jedi][JEDI]]
+   - [[#ranger][RANGER]]
    - [[#slime][SLIME]]
    - [[#smex][SMEX]]
    - [[#ssh-agency][SSH-AGENCY]]
@@ -733,7 +734,9 @@ that disables itself auto-magically.
 #+BEGIN_SRC emacs-lisp
   (use-package neotree
     :ensure t
-    :bind ("<f8>" . neotree-toggle))
+    :bind
+    ("<f8>" . neotree-toggle)
+    ("C-c a n" . neotree-toggle))
 #+END_SRC
 
 ** PAREDIT
@@ -877,6 +880,22 @@ https://github.com/anschwa/emacs.d#python
     (setq jedi:complete-on-dot t)
     :hook
     (python-mode . jedi:setup))
+#+END_SRC
+** RANGER
+
+#+BEGIN_SRC emacs-lisp
+  (use-package ranger
+    :ensure t
+    :bind
+    ("<f9>" . ranger)
+    ("C-c a r" . ranger)
+    :config
+    (setq ranger-show-hidden 'nil)
+    (setq ranger-cleanup-eagerly t)
+    (setq ranger-preview-file t)
+    (setq ranger-excluded-extensions '("mkv" "iso" "mp4"))
+    (setq ranger-max-preview-size 10)
+    (setq ranger-dont-show-binary t))
 #+END_SRC
 
 ** SLIME
