@@ -208,7 +208,7 @@ Great for downloading all episodes in a podcast feed.
   }
 #+END_SRC
 
-** TMUX VERTICAL
+** TMUX
 
 Create panes for vertical monitor.
 
@@ -231,7 +231,7 @@ Create panes for horizontal monitor.
   th() {
       tmux new-session \; \
            split-window -h ipython3\; \
-           split-window -v pwsh\; \
+           split-window -v\; \
            select-pane -t 1 \; \
            split-window -v node\; \
            new-window -n fm ranger\; \
