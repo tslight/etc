@@ -736,7 +736,9 @@ that disables itself auto-magically.
     :ensure t
     :bind
     ("<f8>" . neotree-toggle)
-    ("C-c a n" . neotree-toggle))
+    ("C-c a n" . neotree-toggle)
+    :config
+    (setq neo-smart-open t))
 #+END_SRC
 
 ** PAREDIT
