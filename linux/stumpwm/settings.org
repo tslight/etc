@@ -81,17 +81,18 @@ Requires my [[https://github.com/tslight/stumpwm-contrib/blob/merged/modeline/se
 #+END_SRC
 
 #+BEGIN_SRC common-lisp
-  ;;; Define window placement policy...
-  ;; Clear rules
   (clear-window-placement-rules)
   (define-frame-preference "Alpha"
-    ;; frame raise lock (lock AND raise == jumpto)
     (0 t t :class "Emacs")
     (0 t t :class "Xfce4-terminal")
-    (0 t t :class "XTerm")
-    (0 t t :class "UXTerm"))
+    (0 t t :class "st-256color")
+    (0 t t :instance "xterm"))
 
   (define-frame-preference "Beta"
-    ;; frame raise lock (lock AND raise == jumpto)
     (1 t t :role "browser"))
+
+  (define-frame-preference "Tau"
+    (2 t t :instance "libreoffice")
+    (2 t t :role "file_manager")
+    (2 t t :title "...File Manager"))
 #+END_SRC

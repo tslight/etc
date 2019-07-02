@@ -31,6 +31,19 @@ modules.
     (setf *npo-last-call* (get-milliseconds)))
 #+END_SRC
 
+* GROUP WINDOWLIST
+
+#+BEGIN_SRC common-lisp
+  (defcommand group-windowlist () ()
+    "Windowlist showing all windows from all groups."
+    (if-let ((window-list (sort-windows
+                           (mapcan (lambda (s) (screen-windows s)) *screen-list*))))
+      (if-let ((window (select-window-from-menu window-list *window-format*)))
+        (focus-all window)
+        (throw 'error :abort))
+      (message "No Managed Windows")))
+#+END_SRC
+
 * MODELINE RAT
 
 Cycle windows by scrolling and clicking on the modeline.

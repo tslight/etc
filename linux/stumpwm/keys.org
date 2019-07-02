@@ -162,11 +162,11 @@ Requires [[https://github.com/tslight/stumpwm-contrib/blob/merged/util/xdgmenu/R
   (define-key *root-map* (kbd "v") "hsplit")
   ;; windows
   (define-key *root-map* (kbd "Tab") "select")
-  (define-key *root-map* (kbd "M-r") "reinit")
   (define-key *root-map* (kbd "a") "windowlist")
-  (define-key *root-map* (kbd "C-a") "windowlist")
+  (define-key *root-map* (kbd "C-a") "group-windowlist")
   ;; misc
   (define-key *root-map* (kbd "C-l") "exec physlock")
+  (define-key *root-map* (kbd "M-r") "reinit")
   (define-key *root-map* (kbd "M-q") "end-session")
   (define-key *root-map* (kbd "Q") "quit")
   (define-key *root-map* (kbd "m") "mode-line")
