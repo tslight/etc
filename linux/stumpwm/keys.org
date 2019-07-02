@@ -72,8 +72,8 @@ Requires my [[https://github.com/tslight/stumpwm-contrib/blob/merged/util/volume
   (define-key *top-map* (kbd "XF86AudioLowerVolume") "volume Master 5%-")
   (define-key *top-map* (kbd "XF86AudioRaiseVolume") "volume Master 5%+")
   (define-key *top-map* (kbd "XF86AudioMute") "volume Master toggle")
-  ;; (define-key *top-map* (kbd "XF86MonBrightnessDown") "exec xbacklight -dec 10%")
-  ;; (define-key *top-map* (kbd "XF86MonBrightnessUp") "exec xbacklight -inc 10%")
+  (define-key *top-map* (kbd "XF86MonBrightnessDown") "exec xbacklight -dec 10%")
+  (define-key *top-map* (kbd "XF86MonBrightnessUp") "exec xbacklight -inc 10%")
 #+END_SRC
 
 Requires my [[https://github.com/tslight/stumpwm-contrib/blob/merged/util/xdgmenu/README.org][XDGMenu]] and [[https://github.com/tslight/stumpwm-contrib/blob/merged/util/cycle-mru/README.org][CycleMRU]] modules.
@@ -122,11 +122,8 @@ Requires my [[https://github.com/tslight/stumpwm-contrib/blob/merged/util/xdgmen
   (define-key *top-map* (kbd "C-s-k") "move-window up")
   (define-key *top-map* (kbd "C-s-h") "move-window left")
   (define-key *top-map* (kbd "C-s-l") "move-window right")
-  (define-key *top-map* (kbd "M-Tab") "fother")
-  (define-key *top-map* (kbd "M-Escape") "fnext")
-  (define-key *top-map* (kbd "M-S-Escape") "fprev")
+  (define-key *top-map* (kbd "s-o") "fother")
   (define-key *top-map* (kbd "C-F10") "only")
-  (define-key *top-map* (kbd "s-o") "only")
   ;; misc
   (define-key *top-map* (kbd "s-m") "mode-line")
   (define-key *top-map* (kbd "C-s-r") "reinit")
@@ -156,7 +153,9 @@ Requires [[https://github.com/tslight/stumpwm-contrib/blob/merged/util/xdgmenu/R
   (define-key *root-map* (kbd "C-w") '*my-web-map*)
   (define-key *root-map* (kbd "C-s") '*my-screen-map*)
   ;; frames
-  (define-key *root-map* (kbd "C-o") "fother")
+  (define-key *root-map* (kbd "o") "fother")
+  (define-key *root-map* (kbd "C-n") "fnext")
+  (define-key *root-map* (kbd "C-p") "fprev")
   (define-key *root-map* (kbd "C-r") "iresize")
   (define-key *root-map* (kbd "u") "remove")
   (define-key *root-map* (kbd "q") "only")

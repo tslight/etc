@@ -78,9 +78,9 @@ To check this has worked, run the following:
    KEYBOARD_KEY_700e2=leftctrl      # alt   --> leftctrl
    KEYBOARD_KEY_700e3=leftalt       # super --> leftalt
    KEYBOARD_KEY_700e0=leftmeta      # ctrl  --> super
-   KEYBOARD_KEY_700e6=rightctrl     # altgr --> rightctrl
+   KEYBOARD_KEY_700e6=leftctrl      # altgr --> leftctrl
    KEYBOARD_KEY_700e7=leftalt       # super --> leftalt
-   KEYBOARD_KEY_70065=rightmeta     # menu  --> rightmeta
+   KEYBOARD_KEY_70065=leftmeta      # menu  --> leftmeta
    KEYBOARD_KEY_700e4=menu          # ctrl  --> menu
 #+END_SRC
 
@@ -92,11 +92,11 @@ To check this has worked, run the following:
    KEYBOARD_KEY_70029=capslock      # esc       --> caps
    KEYBOARD_KEY_70039=esc           # caps      --> esc
    KEYBOARD_KEY_700e3=leftctrl      # leftcmd   --> leftctrl
-   KEYBOARD_KEY_700e7=rightctrl     # rightcmd  --> rightctrl
+   KEYBOARD_KEY_700e7=leftctrl      # rightcmd  --> leftctrl
    KEYBOARD_KEY_700e2=leftalt       # leftopt   --> leftalt
    KEYBOARD_KEY_700e6=leftalt       # rightopt  --> leftalt (to avoid altgr shit)
    KEYBOARD_KEY_700e0=leftmeta      # leftctrl  --> super
-   KEYBOARD_KEY_70050=rightmeta     # leftarrow --> super
+   KEYBOARD_KEY_70050=leftmeta      # leftarrow --> super
 #+END_SRC
 
 * Lenovo ThinkPad T/W/X Chicklet
@@ -107,11 +107,11 @@ To check this has worked, run the following:
    KEYBOARD_KEY_01=capslock         # esc   --> caps
    KEYBOARD_KEY_3a=esc              # caps  --> esc
    KEYBOARD_KEY_38=leftctrl         # alt   --> leftctrl
-   KEYBOARD_KEY_b8=rightctrl        # altgr --> rightctrl
+   KEYBOARD_KEY_b8=leftctrl         # altgr --> leftctrl
    KEYBOARD_KEY_db=leftalt          # super --> leftalt
    KEYBOARD_KEY_b7=leftalt          # prtsc --> leftalt (to avoid altgr shit)
    KEYBOARD_KEY_1d=leftmeta         # ctrl  --> super
-   KEYBOARD_KEY_9d=rightmeta        # ctrl  --> super
+   KEYBOARD_KEY_9d=leftmeta         # ctrl  --> super
 #+END_SRC
 
 * Lenovo ThinkPad T/W/X OG
@@ -121,11 +121,11 @@ To check this has worked, run the following:
   evdev:atkbd:dmi:bvn*:bvr*:bd*:svnLENOVO:pn*:pvrThinkPad[TWX][246][0-2]*
    KEYBOARD_KEY_01=capslock         # esc   --> caps
    KEYBOARD_KEY_3a=esc              # caps  --> esc
-   KEYBOARD_KEY_b8=rightctrl        # altgr --> rctrl
+   KEYBOARD_KEY_b8=leftctrl         # altgr --> rctrl
    KEYBOARD_KEY_38=leftctrl         # alt   --> lctrl
    KEYBOARD_KEY_db=leftalt          # lwin  --> lalt
    KEYBOARD_KEY_dd=leftalt          # menu  --> lalt, not altgr (hence left)
-   KEYBOARD_KEY_9d=rightmeta        # rctrl --> rwin
+   KEYBOARD_KEY_9d=leftmeta         # rctrl --> rwin
    KEYBOARD_KEY_1d=leftmeta         # lctrl --> lwin
 #+END_SRC
 
@@ -139,7 +139,7 @@ To check this has worked, run the following:
    KEYBOARD_KEY_38=leftctrl         # alt   --> leftctrl
    KEYBOARD_KEY_db=leftalt          # super --> leftalt
    KEYBOARD_KEY_1d=leftmeta         # ctrl  --> super
-   KEYBOARD_KEY_b8=rightctrl        # altgr --> rightctrl
+   KEYBOARD_KEY_b8=leftctrl         # altgr --> leftctrl
    KEYBOARD_KEY_9d=leftalt          # ctrl  --> leftalt (otherwise altgr)
-   KEYBOARD_KEY_cb=rightmeta        # left  --> rightmeta
+   KEYBOARD_KEY_cb=leftmeta         # left  --> rightmeta
 #+END_SRC
