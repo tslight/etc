@@ -79,3 +79,19 @@ Requires my [[https://github.com/tslight/stumpwm-contrib/blob/merged/modeline/se
   (gnewbg "Rho")
   (gnewbg "Lambda")
 #+END_SRC
+
+#+BEGIN_SRC common-lisp
+  ;;; Define window placement policy...
+  ;; Clear rules
+  (clear-window-placement-rules)
+  (define-frame-preference "Alpha"
+    ;; frame raise lock (lock AND raise == jumpto)
+    (0 t t :class "Emacs")
+    (0 t t :class "Xfce4-terminal")
+    (0 t t :class "XTerm")
+    (0 t t :class "UXTerm"))
+
+  (define-frame-preference "Beta"
+    ;; frame raise lock (lock AND raise == jumpto)
+    (1 t t :role "browser"))
+#+END_SRC
