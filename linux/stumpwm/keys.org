@@ -88,7 +88,8 @@ Requires my [[https://github.com/tslight/stumpwm-contrib/blob/merged/util/xdgmen
   (define-key *top-map* (kbd "s-q") "delete")
   (define-key *top-map* (kbd "C-F11") "fullscreen")
   (define-key *top-map* (kbd "s-a") "windowlist")
-  (define-key *top-map* (kbd "C-s-a") "windowlist")
+  (define-key *top-map* (kbd "C-s-a") "group-windowlist")
+  (define-key *top-map* (kbd "s-r") "iresize")
   ;; applications
   (define-key *top-map* (kbd "s-e") "emacs")
   (define-key *top-map* (kbd "s-c") "terminal")
@@ -144,8 +145,6 @@ Requires [[https://github.com/tslight/stumpwm-contrib/blob/merged/util/xdgmenu/R
   (define-key *root-map* (kbd "c") "terminal")
   (define-key *root-map* (kbd "w") "web-browser")
   (define-key *root-map* (kbd "d") "file-manager")
-  (define-key *root-map* (kbd "r") "xdgmenu")
-  (define-key *root-map* (kbd ".") "xdgmenu categories")
   (define-key *root-map* (kbd "y") "show-clipboard-history")
   ;; maps
   (define-key *root-map* (kbd "C-e") '*my-emacs-map*)
@@ -156,14 +155,13 @@ Requires [[https://github.com/tslight/stumpwm-contrib/blob/merged/util/xdgmenu/R
   (define-key *root-map* (kbd "o") "fother")
   (define-key *root-map* (kbd "C-n") "fnext")
   (define-key *root-map* (kbd "C-p") "fprev")
-  (define-key *root-map* (kbd "C-r") "iresize")
   (define-key *root-map* (kbd "u") "remove")
   (define-key *root-map* (kbd "q") "only")
   (define-key *root-map* (kbd "v") "hsplit")
   ;; windows
   (define-key *root-map* (kbd "Tab") "select")
-  (define-key *root-map* (kbd "a") "windowlist")
-  (define-key *root-map* (kbd "C-a") "group-windowlist")
+  (define-key *root-map* (kbd "C-a") "windowlist")
+  (define-key *root-map* (kbd "a") "group-windowlist")
   ;; misc
   (define-key *root-map* (kbd "C-l") "exec physlock")
   (define-key *root-map* (kbd "M-r") "reinit")
