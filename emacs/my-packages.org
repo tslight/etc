@@ -736,7 +736,7 @@ that disables itself auto-magically.
     :ensure t
     :bind
     ("<f8>" . neotree-toggle)
-    ("C-c a n" . neotree-toggle)
+    ("C-c n" . neotree-toggle)
     :config
     (setq neo-smart-open t))
 #+END_SRC
@@ -1269,12 +1269,13 @@ single buffer, use ‘electric-pair-local-mode’.
   (use-package hl-line-mode
       :defer t
       :hook
-      (prog-mode . hl-line-mode)
-      (shell-script-mode . linum-mode)
-      (sh-mode . hl-line-mode)
-      (text-mode . hl-line-mode)
       (dired-mode . hl-line-mode)
-      (org-mode . hl-line-mode))
+      (neotree-mode . hl-line-mode)
+      (org-mode . hl-line-mode)
+      (prog-mode . hl-line-mode)
+      (sh-mode . hl-line-mode)
+      (shell-script-mode . linum-mode)
+      (text-mode . hl-line-mode))
 #+END_SRC
 
 ** LINUM MODE
