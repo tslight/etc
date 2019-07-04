@@ -14,7 +14,7 @@ Please see the [[file:README.org][README]] and/or [[file:my-tangles.org][my-tang
 install.
 
 * CONTENTS                                                         :TOC_5_gh:
-- [[#align-equals][ALIGN EQUALS]]
+- [[#align-symbol][ALIGN SYMBOL]]
 - [[#change-pairs][CHANGE PAIRS]]
 - [[#copy-or-cut-line-or-region][COPY OR CUT LINE OR REGION]]
 - [[#delete-in][DELETE IN]]
@@ -33,17 +33,27 @@ install.
 - [[#yank-pop-forwards][YANK POP FORWARDS]]
 - [[#zap-to-isearch][ZAP TO ISEARCH]]
 
-* ALIGN EQUALS
+* ALIGN SYMBOL
 
-[[https://github.com/skx/dotfiles/blob/master/.emacs.d/init.md][Some random dudes init file that contains this function!]]
+Force align to use spaces instead of tabs.
 
-The following section of code lets us select a region and run M-= to
-align the section based upon the = sign:
+https://stackoverflow.com/a/25164056
 
 #+BEGIN_SRC emacs-lisp
-  (defun my/align-equals (begin end)
-    (interactive "r")
-    (align-regexp begin end "\\(\\s-*\\)=" 1 1))
+  (defadvice align-regexp (around align-regexp-with-spaces activate)
+    (let ((indent-tabs-mode nil))
+      ad-do-it))
+#+END_SRC
+
+[[https://github.com/skx/dotfiles/blob/master/.emacs.d/init.md][Some random dudes init file that contains inspiration for this function!]]
+
+Prompt the user to enter a symbol to align on then do that..
+
+#+BEGIN_SRC emacs-lisp
+  (defun my/align-symbol (begin end symbol)
+    "Prompt the user to enter a SYMBOL to align REGION on then do that."
+    (interactive "r\nsEnter align symbol: ")
+    (align-regexp begin end (concat "\\(\\s-*\\)" symbol) 1 1))
 #+END_SRC
 
 * CHANGE PAIRS
