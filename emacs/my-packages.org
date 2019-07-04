@@ -731,14 +731,33 @@ that disables itself auto-magically.
 #+END_SRC
 ** NEOTREE
 
+https://github.com/jaypei/emacs-neotree
+https://www.emacswiki.org/emacs/NeoTree
+
 #+BEGIN_SRC emacs-lisp
-  (use-package neotree
-    :ensure t
-    :bind
-    ("<f8>" . neotree-toggle)
-    ("C-c n" . neotree-toggle)
-    :config
-    (setq neo-smart-open t))
+    (use-package neotree
+      :ensure t
+      :bind
+      ("<f8>" . neotree-toggle)
+      ("C-c n" . neotree-toggle)
+      (:map
+       neotree-mode-map
+       ("h" . neotree-enter-horizontal-split)
+       ("v" . neotree-enter-vertical-split)
+       ("c" . neotree-collapse-all)
+       ("b" . neotree-select-up-node)
+       ("u" . neotree-select-up-node)
+       ("f" . neotree-enter)
+       ("r" . neotree-rename-node)
+       ("w" . neotree-enter-ace-window)
+       ("." . neotree-hidden-file-toggle)
+       ("+" . neotree-create-node)
+       ("d" . neotree-delete-node)
+       ("y" . neotree-copy-node)
+       ("a" . neotree-open-file-in-system-application))
+      :config
+      (setq neo-smart-open t)
+      (setq projectile-switch-project-action 'neotree-projectile-action))
 #+END_SRC
 
 ** PAREDIT
