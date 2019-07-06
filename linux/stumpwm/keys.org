@@ -90,6 +90,8 @@ Requires my [[https://github.com/tslight/stumpwm-contrib/blob/merged/util/xdgmen
   (define-key *top-map* (kbd "s-a") "windowlist")
   (define-key *top-map* (kbd "C-s-a") "group-windowlist")
   (define-key *top-map* (kbd "s-r") "iresize")
+  (define-key *top-map* (kbd "s-f") "float-this")
+  (define-key *top-map* (kbd "C-s-f") "unfloat-this")
   ;; applications
   (define-key *top-map* (kbd "s-e") "emacs")
   (define-key *top-map* (kbd "s-c") "terminal")
@@ -162,6 +164,8 @@ Requires [[https://github.com/tslight/stumpwm-contrib/blob/merged/util/xdgmenu/R
   (define-key *root-map* (kbd "Tab") "select")
   (define-key *root-map* (kbd "C-a") "windowlist")
   (define-key *root-map* (kbd "a") "group-windowlist")
+  (define-key *root-map* (kbd "C-f") "float-this")
+  (define-key *root-map* (kbd "M-f") "unfloat-this")
   ;; misc
   (define-key *root-map* (kbd "C-l") "exec physlock")
   (define-key *root-map* (kbd "M-r") "reinit")
