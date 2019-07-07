@@ -206,9 +206,13 @@ mode bindings*.
   (use-package bind-key
     :demand t
     :bind*
+    ;; applications
+    ("C-c i" . imenu)
+    ("C-c a c" . calc)
+    ("C-c M-c" . calculator)
+    ;; search
     ("C-s" . isearch-forward-regexp)
     ("C-r" . isearch-backward-regexp)
-    ("C-c i" . imenu)
     ;; evaluation keymap
     ("C-x C-e" . pp-eval-last-sexp)
     ("C-c e s" . pp-eval-last-sexp)
