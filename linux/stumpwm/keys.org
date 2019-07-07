@@ -116,6 +116,10 @@ Requires my [[https://github.com/tslight/stumpwm-contrib/blob/merged/util/xdgmen
     (unless (eq i 0)
       (define-key *top-map* (kbd (format nil "s-~a" i))
         (format nil "gselect ~a" i))))
+  (dotimes (i 9)
+    (unless (eq i 0)
+      (define-key *top-map* (kbd (format nil "C-s-~a" i))
+        (format nil "gmove ~a" i))))
   ;; frames
   (define-key *top-map* (kbd "s-j") "move-focus down")
   (define-key *top-map* (kbd "s-k") "move-focus up")
@@ -193,6 +197,7 @@ Requires [[https://github.com/tslight/stumpwm-contrib/blob/merged/util/xdgmenu/R
   (define-key *groups-map* (kbd "l") "grouplist")
   (define-key *groups-map* (kbd "s") "gselect")
 #+END_SRC
+
 * APPLICATION MAP
 
 https://stumpwm.github.io/git/stumpwm-git_2.html#Remapped-Keys
