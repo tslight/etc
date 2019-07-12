@@ -44,8 +44,6 @@
           alias lla='ls -aFhl'
           alias rb='systemctl reboot'
           alias srch='sudo updatedb && locate -i'
-          alias update='sudo apt -y update && sudo apt -y upgrade && sudo apt -y dist-upgrade'
-          alias upclean='sudo apt -y autoremove && sudo apt -y autoclean && sudo apt -y clean'
           alias zzz='systemctl suspend'
           alias ZZZ='systemctl hibernate'
           case "$(lsb_release -is)" in
