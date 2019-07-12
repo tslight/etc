@@ -48,6 +48,12 @@
           alias upclean='sudo apt -y autoremove && sudo apt -y autoclean && sudo apt -y clean'
           alias zzz='systemctl suspend'
           alias ZZZ='systemctl hibernate'
+          case "$(lsb_release -is)" in
+              Debian|Ubuntu)
+                  alias update="sudo apt update -y && sudo apt dist-upgrade -y"
+                  alias clean="sudo apt autoremove -y && sudo apt autoclean -y && sudo apt clean -y"
+                  ;;
+          esac
           ;;
       netbsd*)
           alias bat='envstat -d acpibat0'
