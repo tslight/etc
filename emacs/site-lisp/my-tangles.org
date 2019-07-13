@@ -232,14 +232,14 @@ another OS.
 
 #+BEGIN_SRC emacs-lisp
   (defun my/auto-tangle ()
-    "Auto tangle files in the directories specified below when they
-      are edited. Providing the system-type value is correct.
+    "Auto tangle files in the directories specified below when
+  they are edited. Providing the system-type value is
 
-      It doesn't make sense to tangle openbsd configurations files
-      on to a linux box, for example.
+  It doesn't make sense to tangle openbsd configurations files on
+  to a linux box, for example.
 
-      However, I may want to be able to edit them without auto
-      tangling from another OS."
+  However, I may want to be able to edit them without auto tangling
+  from another OS."
     (let ((dirname (my/directory-parent-name buffer-file-name))
           (dirpath (file-name-directory (directory-file-name buffer-file-name))))
       (cond ((string-prefix-p (expand-file-name my/emacs-config-directory) dirpath)
