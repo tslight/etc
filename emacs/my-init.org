@@ -59,17 +59,8 @@ everything else up.
     (require 'use-package)
     (setq use-package-enable-imenu-support t
           use-package-verbose t)
-    (setq my/config-directory "~/etc/"
-          my/packages                  (concat user-emacs-directory "my-packages.el")
-          my/site-lisp                 (concat user-emacs-directory "site-lisp/")
-          my/agnostic-config-directory (concat my/config-directory "agnostic/")
-          my/emacs-config-directory    (concat my/config-directory "emacs/")
-          my/linux-config-directory    (concat my/config-directory "linux/")
-          my/macos-config-directory    (concat my/config-directory "macos/")
-          my/freebsd-config-directory  (concat my/config-directory "freebsd/")
-          my/netbsd-config-directory   (concat my/config-directory "netbsd/")
-          my/openbsd-config-directory  (concat my/config-directory "openbsd/")
-          my/windows-config-directory  (concat my/config-directory "windows/"))
+    (setq my/packages (concat user-emacs-directory "my-packages.el")
+          my/site-lisp (concat user-emacs-directory "site-lisp/"))
     (add-to-list 'load-path my/site-lisp)
     (load my/packages))
 #+END_SRC

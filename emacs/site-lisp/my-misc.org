@@ -17,10 +17,12 @@ install.
 - [[#after-make-frame][AFTER MAKE FRAME]]
 - [[#gc-flx-fix][GC FLX FIX]]
 - [[#google][GOOGLE]]
+- [[#substring][SUBSTRING]]
 - [[#switch-to-term][SWITCH TO TERM]]
 - [[#tramp-term][TRAMP TERM]]
 
 * AFTER MAKE FRAME
+
 #+BEGIN_SRC emacs-lisp
 ;; disable other themes before loading new one
 (defadvice load-theme (before theme-dont-propagate activate)
@@ -53,6 +55,7 @@ install.
       (add-hook 'after-make-frame-functions #'my/after-make-frame(selected-frame))
     (my/after-make-frame(selected-frame)))
 #+END_SRC
+
 * GC FLX FIX
 
 [[http://bling.github.io/blog/2016/01/18/why-are-you-changing-gc-cons-threshold/][GC SPEED HACKS]]
@@ -67,7 +70,9 @@ install.
 (add-hook 'minibuffer-setup-hook #'my/minibuffer-setup-hook)
 (add-hook 'minibuffer-exit-hook #'my/minibuffer-exit-hook)
 #+END_SRC
+
 * GOOGLE
+
 #+BEGIN_SRC emacs-lisp
   (defun my/google (arg)
     "Googles a query or region if any.
@@ -81,7 +86,18 @@ install.
       (browse-url
        (concat "http://www.google.com/search?ie=utf-8&oe=utf-8&q=" query))))
 #+END_SRC
+
+* SUBSTRING
+
+#+BEGIN_SRC emacs-lisp
+(defun my/substring (substr string)
+  (let ((regex (concat  ".*\\(" substr "\\).*")))
+    (string-match regex string)
+    (match-string 1 string)))
+#+END_SRC
+
 * SWITCH TO TERM
+
 #+BEGIN_SRC emacs-lisp
   (defun my/switch-to-ansi-term ()
     "Open an ansi-term if it doesn't already exist, otherwise switch to current one."
@@ -90,7 +106,9 @@ install.
         (switch-to-buffer "*ansi-term*")
       (ansi-term (getenv "SHELL"))))
 #+END_SRC
+
 * TRAMP TERM
+
 #+BEGIN_SRC emacs-lisp
   (defun my/tramp-term (&optional path name)
     "Opens an ansi terminal at PATH. If no PATH is given, it uses

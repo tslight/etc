@@ -4,6 +4,7 @@
 #+PROPERTY: header-args+ :results silent
 #+PROPERTY: header-args+ :tangle-mode (identity #o600)
 * BASH PROFILE
+
 #+BEGIN_SRC sh :tangle ~/.bash_profile
   [ -f ~/.profile ] && source ~/.profile
 
@@ -30,7 +31,9 @@
   # startx on tty1
   [[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && exec startx
 #+END_SRC
+
 * BASH LOGOUT
+
 #+BEGIN_SRC sh :tangle ~/.bash_logout
   # when leaving the console clear the screen to increase privacy
   if [ "$SHLVL" = 1 ]; then
@@ -38,7 +41,9 @@
   fi
   # pgrep -u "$USER" ssh-agent && pkill -u "$USER" ssh-agent
 #+END_SRC
+
 * BASHRC
+
 #+BEGIN_SRC sh :tangle ~/.bashrc
   [ -z "$PS1" ] && return # If not running interactively, don't do anything
   [ -f /etc/bash.bashrc ] && source /etc/bash.bashrc
@@ -142,7 +147,9 @@
   [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
   [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 #+END_SRC
+
 * INPUTRC
+
 #+BEGIN_SRC sh :tangle ~/.inputrc
   $include /etc/inputrc
 

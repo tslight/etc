@@ -31,18 +31,17 @@ above, automagically, without even having to open Emacs.../
 * CONTENTS                                                         :TOC_5_gh:
 - [[#babel-no-confirm][BABEL NO CONFIRM]]
 - [[#variables][VARIABLES]]
+- [[#os-config-directory][OS CONFIG DIRECTORY]]
 - [[#insert-boilerplate][INSERT BOILERPLATE]]
 - [[#compile-and-load-config][COMPILE AND LOAD CONFIG]]
-- [[#recursive-file-list][RECURSIVE FILE LIST]]
 - [[#tangle-directory][TANGLE DIRECTORY]]
 - [[#tangle-all][TANGLE ALL]]
+- [[#directory-parent-name][DIRECTORY PARENT NAME]]
 - [[#auto-tangle][AUTO TANGLE]]
 - [[#hardware-tangle][HARDWARE TANGLE]]
 - [[#os-tangle][OS TANGLE]]
 
 * BABEL NO CONFIRM
-
-*Org Babel Execute Confirmation Variable:*
 
 Turn off evaluation confirmation so we can execute all the src blocks
 in the buffer with =org-babel-execute-buffer= /C-c C-v b/.
@@ -55,47 +54,30 @@ confirmation.
 
 [[https://emacs.stackexchange.com/questions/2945/org-babel-eval-with-no-confirmation-is-explicit-eval-yes%5D%5D][Org Babel eval with no confirmation]]
 
-*From the documentation:*
-
-#+BEGIN_QUOTE
-Require confirmation before interactively evaluating code blocks in
-Org-mode buffers.  The default value of this variable is t, meaning
-confirmation is required for any code block evaluation.  This variable
-can be set to nil to inhibit any future confirmation requests.  This
-variable can also be set to a function which takes two arguments the
-language of the code block and the body of the code block.  Such a
-function should then return a non-nil value if the user should be
-prompted for execution or nil if no prompt is required.
-
-Warning: Disabling confirmation may result in accidental evaluation of
-potentially harmful code.  It may be advisable remove code block
-execution from C-c C-c as further protection against accidental code
-block evaluation.  The ‘org-babel-no-eval-on-ctrl-c-ctrl-c’ variable
-can be used to remove code block execution from the C-c C-c
-keybinding.
-#+END_QUOTE
-
 #+Begin_SRC emacs-lisp
   (setq org-confirm-babel-evaluate nil)
 #+END_SRC
 
 * VARIABLES
 
-No need to tangle this block since these variables are loaded by init
-file. This block is just here so that these variables are available
-when =org-babel-execute-buffer= is executed.
-
 #+BEGIN_SRC emacs-lisp
   (setq-default buffer-file-coding-system 'utf-8-unix)
   (setq my/config-directory "~/etc/"
         my/agnostic-config-directory (concat my/config-directory "agnostic/")
-        my/emacs-config-directory    (concat my/config-directory "emacs/")
-        my/linux-config-directory    (concat my/config-directory "linux/")
-        my/macos-config-directory    (concat my/config-directory "macos/")
-        my/freebsd-config-directory  (concat my/config-directory "freebsd/")
-        my/netbsd-config-directory   (concat my/config-directory "netbsd/")
-        my/openbsd-config-directory  (concat my/config-directory "openbsd/")
-        my/windows-config-directory  (concat my/config-directory "windows/"))
+        my/emacs-config-directory (concat my/config-directory "emacs/"))
+#+END_SRC
+
+* OS CONFIG DIRECTORY
+
+#+BEGIN_SRC emacs-lisp
+  (defun my/os-config-directory ()
+    (car (remove nil
+                 (mapcar (lambda (d)
+                           (if (and (file-directory-p d)
+                                    (string-match
+                                     (file-name-base d) system-configuration))
+                               d))
+                         (directory-files my/config-directory t "^[^\\..]*$")))))
 #+END_SRC
 
 * INSERT BOILERPLATE
@@ -128,36 +110,35 @@ functions, such as my/compile-and-load-file.
 [[https://superuser.com/questions/297774/how-do-i-get-emacs-to-insert-text-into-an-arbitrary-file][Superuser - How to insert text into a file]]
 
 #+BEGIN_SRC emacs-lisp
-  (defun my/insert-boilerplate (file)
+  (defun my/insert-boilerplate (&optional file)
     "Take a FILE as an argument & insert elisp header and footer
-       comments into it, if it's an elisp FILE.
+  comments into it, if it's an elisp FILE.
 
-       If the file is in my site-lisp directory also insert a
-       provide expression, so that the FILE can be loaded as a
-       package.
+  If the file is in my site-lisp directory also insert a provide
+  expression, so that the FILE can be loaded as a package.
 
-       Return the file name, so that this function can be piped to
-       other functions, such as my/compile-and-load-file."
-    (interactive "FFile: ")
-    (when (equal (file-name-extension file) "el")
-      (let ((temp-buffer (set-buffer (find-file-noselect file))))
-        (when temp-buffer
-          (unwind-protect
-              (progn
-                (goto-char (point-min))
-                (insert ";; -*- lexical-binding: t; -*-\n")
-                (goto-char (point-max))
-                (let ((provide-string (file-name-sans-extension
-                                       (file-name-nondirectory file))))
-                  (insert (concat "(provide '"provide-string")")))
-                (message (concat "Inserted boilerplate into " file)))
-            (save-buffer temp-buffer)
-            (kill-buffer temp-buffer))))
-      (message (concat "Cleaning up " file"~ backup file..."))
-      (when (file-readable-p (concat file "~"))
-        (delete-file (concat file "~"))
-        (message (concat "Deleted " file "~ backup file"))))
-    file)
+  Return the file name, so that this function can be piped to other
+  functions, such as my/compile-and-load-file."
+    (when file
+      (when (equal (file-name-extension file) "el")
+        (let ((temp-buffer (set-buffer (find-file-noselect file))))
+          (when temp-buffer
+            (unwind-protect
+                (progn
+                  (goto-char (point-min))
+                  (insert ";; -*- lexical-binding: t; -*-\n")
+                  (goto-char (point-max))
+                  (let ((provide-string (file-name-sans-extension
+                                         (file-name-nondirectory file))))
+                    (insert (concat "(provide '"provide-string")")))
+                  (message (concat "Inserted boilerplate into " file)))
+              (save-buffer temp-buffer)
+              (kill-buffer temp-buffer))))
+        (message (concat "Cleaning up " file"~ backup file..."))
+        (when (file-readable-p (concat file "~"))
+          (delete-file (concat file "~"))
+          (message (concat "Deleted " file "~ backup file"))))
+      file))
 #+END_SRC
 
 * COMPILE AND LOAD CONFIG
@@ -175,44 +156,6 @@ compiled configuration.
     (byte-recompile-directory (concat user-emacs-directory "site-lisp") 0))
 #+END_SRC
 
-* RECURSIVE FILE LIST
-
-#+BEGIN_QUOTE
-List files in DIRECTORY and in its sub-directories. Return files that
-match the regular expression MATCH. Recurse only to depth MAXDEPTH. If
-zero or negative, then do not recurse.
-
--- [[http://fgiasson.com/blog/index.php/2016/10/26/literate-clojure-programming-tangle-all-in-org-mode/][Frederick Giasson's Literate Programming Blog]]
-#+END_QUOTE
-
-However I've found this one to be somewhat buggy, so I found basically
-the same thing, but simpler [[https://www.gnu.org/software/emacs/manual/html_node/eintr/Files-List.html][here]].
-
-[[https://www.gnu.org/software/emacs/manual/html_node/eintr/Files-List.html][Gnu Emacs Manual - Files List]]
-
-#+BEGIN_SRC emacs-lisp
-  (defun my/recursive-files-list (directory)
-    "List all the .org files in a DIRECTORY and in it's
-     sub-directories."
-    (interactive "DDirectory name: ")
-    (let (org-files-list
-          (current-directory-list
-           (directory-files-and-attributes directory t)))
-      (while current-directory-list
-        (cond ((equal ".org" (substring (car (car current-directory-list)) -4))
-               (setq org-files-list
-                     (cons (car (car current-directory-list)) org-files-list)))
-              ((eq t (car (cdr (car current-directory-list))))
-               (if (equal "." (substring (car (car current-directory-list)) -1)) ()
-                 (setq org-files-list
-                       (append
-                        (my/recursive-files-list
-                         (car (car current-directory-list)))
-                        org-files-list)))))
-        (setq current-directory-list (cdr current-directory-list)))
-      org-files-list))
-#+END_SRC
-
 * TANGLE DIRECTORY
 
 [[http://fgiasson.com/blog/index.php/2016/10/26/literate-clojure-programming-tangle-all-in-org-mode/][Frederick Giasson's Literate Programming Blog]]
@@ -224,8 +167,7 @@ the same thing, but simpler [[https://www.gnu.org/software/emacs/manual/html_nod
 [[http://ergoemacs.org/emacs/elisp_mapcar_loop.html][Ergoemacs mapcar]]
 
 Takes a DIRECTORY as an argument and recursively tangles all the
-org-mode files in it and it's child directories, using
-[[*RECURSIVE%20FILE%20LIST][my/recursive-file-list]].
+org-mode files in it and it's child directories
 
 If the directory being tangled is my emacs configuration directory,
 run [[*COMPILE%20AND%20LOAD%20CONFIG][my/compile-and-load-config]].
@@ -233,59 +175,48 @@ run [[*COMPILE%20AND%20LOAD%20CONFIG][my/compile-and-load-config]].
 #+BEGIN_SRC emacs-lisp
   (defun my/tangle-directory (directory)
     "Takes a DIRECTORY as an argument and recursively tangles all
-     the org-mode files in it and it's child directories, using
-     my/recursive-file-list.
+  the org-mode files in it and it's child directories.
 
-     If the directory being tangled is my emacs configuration
-     directory, run my/compile-and-load-config."
-    (interactive "DDirectory name: ")
+  If the directory being tangled is my emacs configuration
+  directory, run my/compile-and-load-config."
+    (interactive "DDirectory: ")
 
-    (unless (featurep 'org)
-      (require 'org))
+    (unless (featurep 'org) (require 'org)) ; needed for bootstrap
 
     (mapc (lambda (file)
             (my/insert-boilerplate
              (format "%s" (car (org-babel-tangle-file file)))))
-          (my/recursive-files-list directory))
+          (directory-files-recursively directory ".*\\.org$"))
 
     (when (equal (expand-file-name directory)
                  (expand-file-name my/emacs-config-directory))
       (my/compile-and-load-config)
-      (when (file-readable-p "~/.emacs")
-        (delete-file "~/.emacs"))
-      (when (file-readable-p "~/.emacs~")
-        (delete-file "~/.emacs~")))
+      (mapc (lambda (file)
+            (if (not (file-directory-p file))
+                (delete-file file)))
+              (directory-files (getenv "HOME") t "^\\.emacs.*")))
+
     (message (concat "my/tangle-directory "directory" completed.")))
 #+END_SRC
 
 * TANGLE ALL
 
-Conditioanlly tangle configuration files, based on value returned by
-[[help:system-type][system-type]], using [[*TANGLE%20DIRECTORY][my/tangle-directory]]. Always tangle agnostic and
-emacs directories.
-
 #+BEGIN_SRC emacs-lisp
   (defun my/tangle-all ()
-    "Conditioanlly tangle configuration files, based on value
-         returned by system-type, using my/tangle-directory.
-
-         Always tangle agnostic and emacs directories."
     (interactive)
     (my/tangle-directory my/agnostic-config-directory)
     (my/tangle-directory my/emacs-config-directory)
-    (cond ((eq system-type 'gnu/linux)
-           (my/tangle-directory my/linux-config-directory))
-          ((eq system-type 'darwin)
-           (my/tangle-directory my/macos-config-directory))
-          ((cl-search "openbsd" system-configuration)
-           (my/tangle-directory my/openbsd-config-directory))
-          ((cl-search "freebsd" system-configuration)
-           (my/tangle-directory my/freebsd-config-directory))
-          ((cl-search "netbsd" system-configuration)
-           (my/tangle-directory my/netbsd-config-directory))
-          ((eq system-type 'windows-nt)
-           (my/tangle-directory my/windows-config-directory)))
-    (message "my/tangle-all completed."))
+    (my/tangle-directory (my/os-config-directory))
+    (message "Tangled all the things!"))
+#+END_SRC
+
+* DIRECTORY PARENT NAME
+
+#+BEGIN_SRC emacs-lisp
+  (defun my/directory-parent-name (file)
+    (file-name-nondirectory
+     (directory-file-name
+      (file-name-directory file))))
 #+END_SRC
 
 * AUTO TANGLE
@@ -309,50 +240,18 @@ another OS.
 
       However, I may want to be able to edit them without auto
       tangling from another OS."
-    (when (string-prefix-p
-           (expand-file-name my/agnostic-config-directory)
-           (file-name-directory (directory-file-name buffer-file-name)))
-      (org-babel-tangle))
-    (when (string-prefix-p
-           (expand-file-name my/emacs-config-directory)
-           (file-name-directory (directory-file-name buffer-file-name)))
-      (byte-compile-file
-       (my/insert-boilerplate (expand-file-name (car (org-babel-tangle)))) 0))
-    (when (and (string-prefix-p
-                (expand-file-name my/linux-config-directory)
-                (file-name-directory (directory-file-name buffer-file-name)))
-               (equal system-type 'gnu/linux))
-      (org-babel-tangle))
-    (when (and (string-prefix-p
-                (expand-file-name my/macos-config-directory)
-                (file-name-directory (directory-file-name buffer-file-name)))
-               (equal system-type 'darwin))
-      (org-babel-tangle))
-    (when (and (string-prefix-p
-                (expand-file-name my/freebsd-config-directory)
-                (file-name-directory (directory-file-name buffer-file-name)))
-               (cl-search "freebsd" system-configuration))
-      (org-babel-tangle))
-    (when (and (string-prefix-p
-                (expand-file-name my/netbsd-config-directory)
-                (file-name-directory (directory-file-name buffer-file-name)))
-               (cl-search "netbsd" system-configuration))
-      (org-babel-tangle))
-    (when (and (string-prefix-p
-                (expand-file-name my/openbsd-config-directory)
-                (file-name-directory (directory-file-name buffer-file-name)))
-               (cl-search "openbsd" system-configuration))
-      (org-babel-tangle))
-    (when (and (string-prefix-p
-                (expand-file-name my/netbsd-config-directory)
-                (file-name-directory (directory-file-name buffer-file-name)))
-               (equal system-type 'berkeley-unix))
-      (org-babel-tangle))
-    (when (and (string-prefix-p
-                (expand-file-name my/windows-config-directory)
-                (file-name-directory (directory-file-name buffer-file-name)))
-               (equal system-type 'windows-nt))
-      (org-babel-tangle)))
+    (let ((dirname (my/directory-parent-name buffer-file-name))
+          (dirpath (file-name-directory (directory-file-name buffer-file-name))))
+      (cond ((string-prefix-p (expand-file-name my/emacs-config-directory) dirpath)
+             (byte-compile-file
+              (my/insert-boilerplate
+               (expand-file-name (car (org-babel-tangle))))
+              0))
+            ((or (string-prefix-p
+                  (expand-file-name my/agnostic-config-directory)
+                  (file-name-directory (directory-file-name buffer-file-name)))
+                 (cl-search dirname system-configuration))
+             (org-babel-tangle)))))
 #+END_SRC
 
 * HARDWARE TANGLE

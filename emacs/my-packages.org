@@ -771,6 +771,10 @@ https://www.emacswiki.org/emacs/NeoTree
     :ensure t
     :bind
     ("C-c t p" . paredit-mode)
+    ("C-c (" . paredit-forward-slurp-sexp)
+    ("C-c )" . paredit-backward-slurp-sexp)
+    ("C-c <" . paredit-forward-barf-sexp)
+    ("C-c >" . paredit-backward-barf-sexp)
     :hook
     (common-lisp-mode . paredit-mode)
     (emacs-lisp-mode . paredit-mode)
@@ -1636,8 +1640,6 @@ functions.
     :bind
     ("C-c v d" . my/tangle-directory)
     ("C-c v a" . my/tangle-all)
-    ("C-c v i" . (lambda () (interactive)
-                   (my/tangle-directory my/emacs-config-directory)))
     :init
     (add-hook 'after-save-hook 'my/auto-tangle))
 #+END_SRC
