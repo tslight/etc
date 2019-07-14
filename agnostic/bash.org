@@ -67,59 +67,10 @@
 
   [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
-  RESET="\[$(tput sgr0)\]"
-  BOLD="\[$(tput bold)\]"
-
-  FG_BLACK="\[$(tput setaf 0)\]"
-  FG_RED="\[$(tput setaf 1)\]"
-  FG_GREEN="\[$(tput setaf 2)\]"
-  FG_YELLOW="\[$(tput setaf 3)\]"
-  FG_BLUE="\[$(tput setaf 4)\]"
-  FG_MAGENTA="\[$(tput setaf 5)\]"
-  FG_CYAN="\[$(tput setaf 6)\]"
-  FG_WHITE="\[$(tput setaf 7)\]"
-  FG_GREY="\[$(tput setaf 8)\]"
-  FG_BOLD_RED="\[$(tput setaf 9)\]"
-  FG_BOLD_GREEN="\[$(tput setaf 10)\]"
-  FG_BOLD_YELLOW="\[$(tput setaf 11)\]"
-  FG_BOLD_BLUE="\[$(tput setaf 12)\]"
-  FG_BOLD_MAGENTA="\[$(tput setaf 13)\]"
-  FG_BOLD_CYAN="\[$(tput setaf 14)\]"
-  FG_BOLD_WHITE="\[$(tput setaf 15)\]"
-
-  BG_BLACK="\[$(tput setab 0)\]"
-  BG_RED="\[$(tput setab 1)\]"
-  BG_GREEN="\[$(tput setab 2)\]"
-  BG_YELLOW="\[$(tput setab 3)\]"
-  BG_BLUE="\[$(tput setab 4)\]"
-  BG_MAGENTA="\[$(tput setab 5)\]"
-  BG_CYAN="\[$(tput setab 6)\]"
-  BG_WHITE="\[$(tput setab 7)\]"
-  BG_GREY="\[$(tput setab 8)\]"
-  BG_BOLD_RED="\[$(tput setab 9)\]"
-  BG_BOLD_GREEN="\[$(tput setab 10)\]"
-  BG_BOLD_YELLOW="\[$(tput setab 11)\]"
-  BG_BOLD_BLUE="\[$(tput setab 12)\]"
-  BG_BOLD_MAGENTA="\[$(tput setab 13)\]"
-  BG_BOLD_CYAN="\[$(tput setab 14)\]"
-  BG_BOLD_WHITE="\[$(tput setab 15)\]"
-
-  read -rd '' ROOT_PS1 << EOM
-  ${FG_BOLD_RED}\u@\H \
-  ${FG_BOLD_CYAN}\$?${FG_BOLD_YELLOW}:${FG_BOLD_CYAN}\!/\#${FG_BOLD_YELLOW}:${FG_BOLD_CYAN}\j
-  ${FG_BOLD_MAGENTA}\w ${FG_BOLD_YELLOW}\$ ${RESET}
-  EOM
-
-  read -rd '' USER_PS1 << EOM
-  ${FG_BOLD_BOLD}${FG_BOLD_GREEN}\u@\H \
-  ${FG_BOLD_MAGENTA}\$?${FG_BOLD_YELLOW}:${FG_BOLD_MAGENTA}\!/\#${FG_BOLD_YELLOW}:${FG_BOLD_MAGENTA}\j
-  ${FG_BOLD_CYAN}\w ${FG_BOLD_YELLOW}\$ ${RESET}
-  EOM
-
   if [ $(id -u) -eq 0 ]; then
-      export PS1="$ROOT_PS1"
+      export PS1="\[\033[38;5;196m\]\u\[$(tput sgr0)\]\[\033[38;5;11m\]@\[$(tput sgr0)\]\[\033[38;5;13m\]\h\[$(tput sgr0)\]\[\033[38;5;11m\]:\[$(tput sgr0)\]\[\033[38;5;14m\]\w\[$(tput sgr0)\]\[\033[38;5;15m\]\n\[$(tput sgr0)\]\[\033[38;5;11m\]\$?\[$(tput sgr0)\]\[\033[38;5;15m\] \[$(tput sgr0)\]\[\033[38;5;11m\]\\$\[$(tput sgr0)\]\[\033[38;5;15m\] \[$(tput sgr0)\]"
   else
-      export PS1="$USER_PS1"
+      export PS1="\[\033[38;5;10m\]\u\[$(tput sgr0)\]\[\033[38;5;11m\]@\[$(tput sgr0)\]\[\033[38;5;13m\]\h\[$(tput sgr0)\]\[\033[38;5;11m\]:\[$(tput sgr0)\]\[\033[38;5;14m\]\w\[$(tput sgr0)\]\[\033[38;5;15m\]\n\[$(tput sgr0)\]\[\033[38;5;11m\]\$?\[$(tput sgr0)\]\[\033[38;5;15m\] \[$(tput sgr0)\]\[\033[38;5;11m\]\\$\[$(tput sgr0)\]\[\033[38;5;15m\] \[$(tput sgr0)\]"
   fi
 
   stty -ixon # disable ctrl-s/q flow control
