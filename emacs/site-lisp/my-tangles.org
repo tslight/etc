@@ -36,7 +36,7 @@ above, automagically, without even having to open Emacs.../
 - [[#compile-and-load-config][COMPILE AND LOAD CONFIG]]
 - [[#tangle-directory][TANGLE DIRECTORY]]
 - [[#tangle-all][TANGLE ALL]]
-- [[#directory-parent-name][DIRECTORY PARENT NAME]]
+- [[#parent-directories][PARENT DIRECTORIES]]
 - [[#auto-tangle][AUTO TANGLE]]
 - [[#hardware-tangle][HARDWARE TANGLE]]
 - [[#os-tangle][OS TANGLE]]
@@ -210,13 +210,17 @@ run [[*COMPILE%20AND%20LOAD%20CONFIG][my/compile-and-load-config]].
     (message "Tangled all the things!"))
 #+END_SRC
 
-* DIRECTORY PARENT NAME
+* PARENT DIRECTORIES
 
 #+BEGIN_SRC emacs-lisp
-  (defun my/directory-parent-name (file)
+  (defun my/parent-directory-name (file)
     (file-name-nondirectory
      (directory-file-name
       (file-name-directory file))))
+
+  (defun my/parent-directory-path (file)
+    (string-match "\\(.*\\)/" file)
+    (match-string 1 file))
 #+END_SRC
 
 * AUTO TANGLE
@@ -240,17 +244,21 @@ another OS.
 
   However, I may want to be able to edit them without auto tangling
   from another OS."
-    (let ((dirname (my/directory-parent-name buffer-file-name))
-          (dirpath (file-name-directory (directory-file-name buffer-file-name))))
-      (cond ((string-prefix-p (expand-file-name my/emacs-config-directory) dirpath)
+    (let ((current-directory-path
+           (file-name-directory (directory-file-name buffer-file-name))))
+      (cond ((string-prefix-p
+              (expand-file-name my/emacs-config-directory)
+              current-directory-path)
              (byte-compile-file
               (my/insert-boilerplate
                (expand-file-name (car (org-babel-tangle))))
               0))
             ((or (string-prefix-p
                   (expand-file-name my/agnostic-config-directory)
-                  (file-name-directory (directory-file-name buffer-file-name)))
-                 (cl-search dirname system-configuration))
+                  current-directory-path)
+                 (string-prefix-p
+                  (my/os-config-directory)
+                  current-directory-path))
              (org-babel-tangle)))))
 #+END_SRC
 

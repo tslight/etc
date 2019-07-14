@@ -16,7 +16,7 @@ Decided to stick with the default as having C-i for stump nad C-j for tmux is
 too confusing for my hands!
 
 #+BEGIN_SRC common-lisp :tangle no
-  ;; (set-prefix-key (kbd "C-i"))
+  (set-prefix-key (kbd "C-i"))
 #+END_SRC
 
 * EMACS MAP
