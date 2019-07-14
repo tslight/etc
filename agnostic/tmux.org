@@ -40,8 +40,8 @@
 
   ## KEYS
   unbind C-b
-  set -g prefix C-j
-  bind C-j send-prefix
+  set -g prefix C-i
+  bind C-i send-prefix
   bind C-l switch-client -l
   bind C-c new-session
   bind C-x kill-session

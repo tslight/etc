@@ -16,7 +16,7 @@ Decided to stick with the default as having C-i for stump nad C-j for tmux is
 too confusing for my hands!
 
 #+BEGIN_SRC common-lisp :tangle no
-  (set-prefix-key (kbd "C-i"))
+  (set-prefix-key (kbd "C-j"))
 #+END_SRC
 
 * EMACS MAP
@@ -105,6 +105,7 @@ Requires my [[https://github.com/tslight/stumpwm-contrib/blob/merged/util/xdgmen
   (define-key *top-map* (kbd "C-s-s") *my-screen-map*)
   (define-key *top-map* (kbd "C-s-w") *my-web-map*)
   ;; groups
+  (define-key *top-map* (kbd "C-m") *groups-map*)
   (define-key *top-map* (kbd "s-Tab") "gother")
   (define-key *top-map* (kbd "s-Escape") "gnext")
   (define-key *top-map* (kbd "s-S-Escape") "gprev")
