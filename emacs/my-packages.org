@@ -793,7 +793,7 @@ https://www.emacswiki.org/emacs/NeoTree
     ("C-<tab>" . pc-bufsw-mru)
     ("C-<iso-lefttab>" . pc-bufsw-lru)
     :config
-    (setq pc-bufsw-quit-time 1))
+    (setq pc-bufsw-quit-time 2))
 #+END_SRC
 
 ** POWERSHELL
