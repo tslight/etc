@@ -17,7 +17,6 @@ install.
 - [[#delete-this-file][DELETE THIS FILE]]
 - [[#copy-file-name-to-clipboard][COPY FILE NAME TO CLIPBOARD]]
 - [[#make-backup][MAKE BACKUP]]
-- [[#open-config-file][OPEN CONFIG FILE]]
 - [[#rename-file-and-buffer][RENAME FILE AND BUFFER]]
 - [[#sudoedit][SUDOEDIT]]
 
@@ -35,6 +34,7 @@ install.
       (delete-file (buffer-file-name))
       (kill-this-buffer)))
 #+END_SRC
+
 * COPY FILE NAME TO CLIPBOARD
 
 [[http://emacsredux.com/blog/2013/03/27/copy-filename-to-the-clipboard/][Emacs Redux Article]]
@@ -50,6 +50,7 @@ install.
         (kill-new filename)
         (message "Copied buffer file name '%s' to the clipboard." filename))))
 #+END_SRC
+
 * MAKE BACKUP
 
 [[http://ergoemacs.org/emacs/elisp_make-backup.html][Xah Lee Backup Functions]]
@@ -87,17 +88,13 @@ install.
       (progn
         (my/make-backup))))
 #+END_SRC
-* OPEN CONFIG FILE
-#+BEGIN_SRC emacs-lisp
-  (defun my/find-init ()
-    (interactive)
-    (find-file my/init))
-#+END_SRC
+
 * RENAME FILE AND BUFFER
+
 #+BEGIN_SRC emacs-lisp
   (defun my/rename-this-file-and-buffer (new-name)
     "Renames both current buffer and file it's visiting to NEW-NAME."
-    (interactive "sNew name: ")
+    (interactive "FNew name: ")
     (let ((name (buffer-name))
           (filename (buffer-file-name)))
       (unless filename
@@ -110,7 +107,9 @@ install.
           (rename-buffer new-name)
           (set-visited-file-name new-name)))))
 #+END_SRC
+
 * SUDOEDIT
+
 #+BEGIN_SRC emacs-lisp
   (defun my/sudoedit (&optional arg)
     (interactive "P")

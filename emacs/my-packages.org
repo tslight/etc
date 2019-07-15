@@ -1585,7 +1585,6 @@ functions.
     ("C-c f d" . my/delete-this-file)
     ("C-c f c" . my/copy-file-name-to-clipboard)
     ("C-c f b" . my/make-backup-and-save)
-    ("C-c f i" . my/find-init)
     ("C-c f r" . my/rename-this-file-and-buffer)
     ("C-c f s" . my/sudoedit))
 #+END_SRC
