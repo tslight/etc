@@ -51,7 +51,6 @@ built-in Emacs ones, and my own local custom minor mode packages.
    - [[#elpy][ELPY]]
    - [[#pep8][PEP8]]
    - [[#jedi][JEDI]]
-   - [[#ranger][RANGER]]
    - [[#slime][SLIME]]
    - [[#smex][SMEX]]
    - [[#ssh-agency][SSH-AGENCY]]
@@ -208,14 +207,13 @@ mode bindings*.
     :bind*
     ;; applications
     ("C-c i" . imenu)
-    ("C-c a c" . calc)
+    ("C-c C" . calc)
     ("C-c M-c" . calculator)
     ;; search
     ("C-s" . isearch-forward-regexp)
     ("C-r" . isearch-backward-regexp)
     ;; evaluation keymap
     ("C-x C-e" . pp-eval-last-sexp)
-    ("C-c e s" . pp-eval-last-sexp)
     ("C-c e f" . eval-defun)
     ("C-c e c" . eval-current-buffer)
     ("C-c e b" . eval-buffer)
@@ -913,23 +911,6 @@ https://github.com/anschwa/emacs.d#python
     :hook
     (python-mode . jedi:setup))
 #+END_SRC
-** RANGER
-
-#+BEGIN_SRC emacs-lisp
-  (use-package ranger
-    :ensure t
-    :bind
-    ("<f9>" . ranger)
-    ("C-c a r" . ranger)
-    :config
-    (setq ranger-show-hidden 'nil)
-    (setq ranger-cleanup-eagerly t)
-    (setq ranger-preview-file t)
-    (setq ranger-excluded-extensions '("mkv" "iso" "mp4"))
-    (setq ranger-max-preview-size 10)
-    (setq ranger-dont-show-binary t))
-#+END_SRC
-
 ** SLIME
 
 https://kaashif.co.uk/2015/06/28/hacking-stumpwm-with-common-lisp/
@@ -1238,7 +1219,7 @@ single buffer, use ‘electric-pair-local-mode’.
   (use-package eshell
     :defer t
     :bind
-    ("C-c a s" . eshell)
+    ("C-c e s" . eshell)
     :config
     (use-package em-smart)
     (setq eshell-history-size 1024)
@@ -1598,9 +1579,10 @@ functions.
     :commands
     my/after-make-frame
     my/tramp-term
+    my/google
     :bind
-    ("C-c a g" . my/google)
-    ("C-c a t" . my/switch-to-ansi-term)
+    ("C-c G" . my/google)
+    ("C-x t" . my/switch-to-ansi-term)
     :init
     (if (daemonp)
         (add-hook 'after-make-frame-functions #'my/after-make-frame(selected-frame))
