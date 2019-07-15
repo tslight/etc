@@ -21,6 +21,7 @@ variables to what I consider to be slightly saner defaults...
 - [[#auto-save][AUTO SAVE]]
 - [[#auto-window][AUTO WINDOW]]
 - [[#backup][BACKUP]]
+- [[#backward-delete-char][BACKWARD DELETE CHAR]]
 - [[#bell][BELL]]
 - [[#bookmarks][BOOKMARKS]]
 - [[#copypaste][COPY/PASTE]]
@@ -226,6 +227,14 @@ Number of oldest versions to keep when a new numbered backup is made.
 
 #+BEGIN_SRC emacs-lisp
   (setq kept-old-versions 12)
+#+END_SRC
+
+* BACKWARD DELETE CHAR
+
+[[https://emacs.stackexchange.com/questions/33734/how-to-get-hungry-delete-working-in-paredit-mode?rq=1][Hungry delete not working in Paredit, stumbled across this...]]
+
+#+BEGIN_SRC emacs-lisp
+  (setq backward-delete-char-untabify-method 'all)
 #+END_SRC
 
 * BELL

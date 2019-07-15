@@ -207,17 +207,16 @@ mode bindings*.
     :bind*
     ;; applications
     ("C-c i" . imenu)
-    ("C-c C" . calc)
+    ("C-c c" . calc)
     ("C-c M-c" . calculator)
     ;; search
     ("C-s" . isearch-forward-regexp)
     ("C-r" . isearch-backward-regexp)
     ;; evaluation keymap
-    ("C-x C-e" . pp-eval-last-sexp)
     ("C-c e f" . eval-defun)
     ("C-c e c" . eval-current-buffer)
     ("C-c e b" . eval-buffer)
-    ("C-c e e" . pp-eval-expression)
+    ("C-c e e" . pp-eval-last-sexp)
     ("C-c e r" . eval-region)
     ("C-c e m" . lisp-interaction-mode)
     ;; org mode keymap
@@ -1525,8 +1524,8 @@ functions.
     ("C-a" . my/smart-beginning-of-line)
     ("C-w" . my/copy-line-or-region)
     ("M-w" . my/cut-line-or-region)
-    ("C-c e p" . my/change-pairs)
-    ("C-c e a" . my/align-symbol)
+    ("C-c M-p" . my/change-pairs)
+    ("C-c a" . my/align-symbol)
     ("C-c d" . my/delete-inside)
     ("M-s M-s" . my/surround)
     ("C-o" . my/open-line-above)
@@ -1614,10 +1613,7 @@ functions.
   (use-package my-tangles
     :commands
     my/auto-tangle
-    my/compile-and-load-file
     my/compile-and-load-config
-    my/insert-boilerplate
-    my/recursive-file-list
     my/tangle-directory
     my/tangle-all
     :bind
