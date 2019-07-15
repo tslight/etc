@@ -775,12 +775,15 @@ https://www.emacswiki.org/emacs/NeoTree
     ("C-c )" . paredit-backward-slurp-sexp)
     ("C-c <" . paredit-forward-barf-sexp)
     ("C-c >" . paredit-backward-barf-sexp)
+    ("C-c M-s" . paredit-splice-sexp)
     :hook
     (common-lisp-mode . paredit-mode)
     (emacs-lisp-mode . paredit-mode)
     (lisp-mode . paredit-mode)
     (slime-mode . paredit-mode)
-    (slime-repl-mode . paredit-mode))
+    (slime-repl-mode . paredit-mode)
+    :config
+    (unbind-key "M-s" paredit-mode-map))
 #+END_SRC
 
 ** PC BUFFER SWITCH
@@ -1543,9 +1546,8 @@ functions.
     ("M-w" . my/cut-line-or-region)
     ("C-c e p" . my/change-pairs)
     ("C-c e a" . my/align-symbol)
-    ("C-c d b" . my/delete-in-brackets)
-    ("C-c d q" . my/delete-in-quotes)
-    ("C-c d p" . my/delete-in-parentheses)
+    ("C-c d" . my/delete-inside)
+    ("M-s M-s" . my/surround)
     ("C-o" . my/open-line-above)
     ("C-S-o" . my/open-line-below)
     ("M-Q" . my/unfill-region)

@@ -28,6 +28,7 @@ install.
 - [[#remove-dos-junk][REMOVE DOS JUNK]]
 - [[#smart-beginning-of-line][SMART BEGINNING OF LINE]]
 - [[#sort-lines-nocase][SORT LINES NOCASE]]
+- [[#surround][SURROUND]]
 - [[#unfill-region][UNFILL REGION]]
 - [[#untabify-buffer][UNTABIFY BUFFER]]
 - [[#yank-pop-forwards][YANK POP FORWARDS]]
@@ -225,32 +226,16 @@ Perhaps here:
 * DELETE IN
 
 #+BEGIN_SRC emacs-lisp
-  (defun my/delete-in-quotes () "Deletes the text inside of quotes."
-         (interactive)
-         (search-backward-regexp "[\"\']" (line-beginning-position)) ;; Search for a match on the same line, don't delete across lines
-         (forward-char)
-         (let  ((lstart (point)))
-           (search-forward-regexp "[\"\']" (line-end-position))
-           (backward-char)
-           (kill-region lstart (point))))
-
-  (defun my/delete-in-parentheses () "Deletes the text within parentheses."
-         (interactive)
-         (search-backward "(" (line-beginning-position)) ;; Search for a match on the same line, don't delete across lines
-         (forward-char)
-         (let  ((lstart (point)))
-           (search-forward ")" (line-end-position))
-           (backward-char)
-           (kill-region lstart (point))))
-
-  (defun my/delete-in-brackets () "Deletes the text within square brackets, angle brackets, and curly brackets."
-         (interactive)
-         (search-backward-regexp "[[{<]" (line-beginning-position)) ;; Search for a match on the same line, don't delete across lines
-         (forward-char)
-         (let ((lstart (point)))
-           (search-forward-regexp "[]}>]" (line-end-position))
-           (backward-char)
-           (kill-region lstart (point))))
+  (defun my/delete-inside ()
+    "Deletes the text within parentheses, brackets or quotes."
+    (interactive)
+    ;; Search for a match on the same line, don't delete across lines
+    (search-backward-regexp "[[{(<\"\']" (line-beginning-position))
+    (forward-char)
+    (let ((lstart (point)))
+      (search-forward-regexp "[]})>\"\']" (line-end-position))
+      (backward-char)
+      (kill-region lstart (point))))
 #+END_SRC
 
 * GENERATE NUMBERED LIST
@@ -423,6 +408,22 @@ Perhaps here:
     (interactive)
     (let ((sort-fold-case t))
       (call-interactively 'sort-lines)))
+#+END_SRC
+
+* SURROUND
+
+#+BEGIN_SRC emacs-lisp
+  (defun my/surround (begin end open close)
+    "Put OPEN at START and CLOSE at END of the region.
+  If you omit CLOSE, it will reuse OPEN."
+    (interactive  "r\nsStart: \nsEnd: ")
+    (when (string= close "")
+      (setq close open))
+    (save-excursion
+      (goto-char end)
+      (insert close)
+      (goto-char begin)
+      (insert open)))
 #+END_SRC
 
 * UNFILL REGION
