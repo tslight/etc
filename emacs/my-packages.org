@@ -28,9 +28,8 @@ built-in Emacs ones, and my own local custom minor mode packages.
    - [[#counsel-projectile][COUNSEL PROJECTILE]]
    - [[#diminish][DIMINISH]]
    - [[#dumb-jump][DUMB JUMP]]
-   - [[#emmet-mode][EMMET MODE]]
-   - [[#evil][EVIL]]
    - [[#exec-path-from-shell][EXEC PATH FROM SHELL]]
+   - [[#emmet-mode][EMMET MODE]]
    - [[#expand-region][EXPAND REGION]]
    - [[#flx][FLX]]
    - [[#flycheck][FLYCHECK]]
@@ -412,6 +411,17 @@ Install [[https://github.com/ggreer/the_silver_searcher][The Silver Searcher]] o
     (setq dumb-jump-selector 'ivy))
 #+END_SRC
 
+** EXEC PATH FROM SHELL
+
+#+BEGIN_SRC emacs-lisp
+(use-package exec-path-from-shell
+  :ensure t
+  :defer t
+  :init
+  (exec-path-from-shell-initialize)
+  (exec-path-from-shell-copy-env "PYTHONPATH"))
+#+END_SRC
+
 ** EMMET MODE
 
 #+BEGIN_SRC emacs-lisp
@@ -425,37 +435,6 @@ Install [[https://github.com/ggreer/the_silver_searcher][The Silver Searcher]] o
     (html-mode)
     (css-mode)
     (web-mode))
-#+END_SRC
-
-** EVIL
-
-[[https://stackoverflow.com/a/28985130][Make insert state into emacs state]]
-
-#+BEGIN_SRC emacs-lisp
-  (use-package evil
-    :ensure t
-    :bind
-    ("C-c M-e" . evil-mode)
-    :config
-    ;; (evil-mode 1)
-    (setq evil-insert-state-map (make-sparse-keymap))
-    (define-key evil-insert-state-map (kbd "<escape>") 'evil-normal-state)
-    (setq evil-insert-state-cursor '(box "yellow")
-          evil-emacs-state-cursor '(box "green")
-          evil-normal-state-cursor '(box "purple")))
-#+END_SRC
-
-** EXEC PATH FROM SHELL
-
-https://github.com/purcell/exec-path-from-shell
-
-#+BEGIN_SRC emacs-lisp
-  (use-package exec-path-from-shell
-    :ensure t
-    :defer t
-    :init
-    (exec-path-from-shell-initialize)
-    (exec-path-from-shell-copy-env "PYTHONPATH"))
 #+END_SRC
 
 ** EXPAND REGION
