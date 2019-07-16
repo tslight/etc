@@ -55,6 +55,18 @@ Prompt the user to enter a symbol to align on then do that..
     "Prompt the user to enter a SYMBOL to align REGION on then do that."
     (interactive "r\nsEnter align symbol: ")
     (align-regexp begin end (concat "\\(\\s-*\\)" symbol) 1 1))
+
+  (defun my/align-equals (begin end)
+    (interactive "r")
+    (my/align-symbol begin end "="))
+
+  (defun my/align-colon (begin end)
+    (interactive "r")
+    (my/align-symbol begin end ":"))
+
+  (defun my/align-numbers (begin end)
+    (interactive "r")
+    (my/align-symbol begin end "[0-9]+"))
 #+END_SRC
 
 * CHANGE PAIRS
