@@ -15,7 +15,7 @@ Please see the [[file:README.org][README]] and/or [[file:my-tangles.org][my-tang
 As the name might suggest, this file mainly toggles various built in Emacs
 variables to what I consider to be slightly saner defaults...
 
-* CONTENTS                                                         :TOC_5_gh:
+* CONTENTS                                                        :TOC_5_gh:
 - [[#apropos][APROPOS]]
 - [[#auto-revert][AUTO REVERT]]
 - [[#auto-save][AUTO SAVE]]
@@ -25,6 +25,7 @@ variables to what I consider to be slightly saner defaults...
 - [[#bell][BELL]]
 - [[#bookmarks][BOOKMARKS]]
 - [[#copypaste][COPY/PASTE]]
+- [[#compliation-scroll][COMPLIATION SCROLL]]
 - [[#confirm-kill][CONFIRM KILL]]
 - [[#custom-file][CUSTOM FIlE]]
 - [[#default-frame][DEFAULT FRAME]]
@@ -351,6 +352,15 @@ clipboard contents are saved to the clipboard manager if one is present.
 
 #+BEGIN_SRC emacs-lisp
   (setq x-select-enable-clipboard-manager nil)
+#+END_SRC
+
+* COMPLIATION SCROLL
+
+https://stackoverflow.com/a/12838221
+
+#+BEGIN_SRC emacs-lisp
+  ;; (setq compilation-scroll-output t)
+  (setq compilation-scroll-output 'first-error)
 #+END_SRC
 
 * CONFIRM KILL

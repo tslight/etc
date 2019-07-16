@@ -34,12 +34,14 @@ install.
         (select-window win))))
 #+END_SRC
 * PREV WINDOW
+
 #+BEGIN_SRC emacs-lisp
   (defun my/prev-window ()
     "Go the previously used window, excluding other frames."
     (interactive)
     (other-window -1))
 #+END_SRC
+
 * SPLIT LAST BUFFER
 
 [[https://www.reddit.com/r/emacs/comments/25v0eo/you_emacs_tips_and_tricks/chldury][Reddit Thread]] & [[http://pages.sachachua.com/.emacs.d/Sacha.html#unnumbered-30][Sacha Chua dotemacs]]:

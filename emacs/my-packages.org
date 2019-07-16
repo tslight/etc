@@ -63,6 +63,7 @@ built-in Emacs ones, and my own local custom minor mode packages.
    - [[#yasnippets][YASNIPPETS]]
 - [[#emacs-packages][EMACS PACKAGES]]
    - [[#abbrev-mode][ABBREV MODE]]
+   - [[#ansi-color][ANSI COLOR]]
    - [[#autofill][AUTOFILL]]
    - [[#dired][DIRED]]
    - [[#dired-x][DIRED X]]
@@ -76,6 +77,7 @@ built-in Emacs ones, and my own local custom minor mode packages.
    - [[#highlight-line][HIGHLIGHT LINE]]
    - [[#linum-mode][LINUM MODE]]
    - [[#lisp-mode][LISP MODE]]
+   - [[#makefile-mode][MAKEFILE MODE]]
    - [[#misc][MISC]]
    - [[#org][ORG]]
    - [[#recentf][RECENTF]]
@@ -589,7 +591,7 @@ that disables itself auto-magically.
       ("n" other-window "next")
       ("N" other-window :exit t)
       ("p" my/prev-window "prev")
-      ("P" m/prev-window :exit t)
+      ("P" my/prev-window :exit t)
       ("v" split-window-right "split |" :exit t)
       ("C-v" split-window-right)
       ("h" split-window-below "split -" :exit t)
@@ -1081,6 +1083,15 @@ c++, Message); the g in C-x a i g is for global, meaning every mode.
     (setq save-abbrevs 'silently))
 #+END_SRC
 
+** ANSI COLOR
+
+#+BEGIN_SRC emacs-lisp
+  (use-package ansi-color
+    :hook
+    (compilation-mode . ansi-color-for-comint-mode-on)
+    (shell-mode . ansi-color-for-comint-mode-on))
+#+END_SRC
+
 ** AUTOFILL
 
 #+BEGIN_SRC emacs-lisp
@@ -1286,6 +1297,14 @@ single buffer, use ‘electric-pair-local-mode’.
     :hook ((emacs-lisp-mode lisp-mode)
            . (lambda ()
                (add-hook 'after-save-hook 'check-parens nil t))))
+#+END_SRC
+
+** MAKEFILE MODE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package makefile-mode
+    :bind
+    ("<f5>" . compile))
 #+END_SRC
 
 ** MISC
