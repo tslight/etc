@@ -163,10 +163,10 @@ EndSection
 
 Section "ServerLayout"
     Identifier "ServerLayout0"
-    Option "StandbyTime" "4"
-    Option "SuspendTime" "8"
-    Option "OffTime"     "10"
-    Option "BlankTime"   "2"
+    Option "StandbyTime" "8"
+    Option "SuspendTime" "10"
+    Option "OffTime"     "12"
+    Option "BlankTime"   "4"
 EndSection
 #+END_SRC
 #+BEGIN_SRC conf :noweb yes :tangle /sudo::/etc/X11/xorg.conf.d/10-monitor.conf

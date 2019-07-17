@@ -254,8 +254,8 @@ Perhaps here:
 
 #+BEGIN_SRC emacs-lisp
   (defun my/generate-numbered-list (start end char)
-    "Creates a numbered list from provided start to provided end."
-    (interactive "nStart num:\nnEnd num:\nsChar:")
+    "Creates a numbered list from START to END. Using CHAR as punctuation."
+    (interactive "nStart number:\nnEnd number:\nsCharacter:")
     (let ((x start))
       (while (<= x end)
         (insert (concat (number-to-string x) char))
@@ -298,15 +298,17 @@ Perhaps here:
 
 #+BEGIN_SRC emacs-lisp
   (defun my/push-mark-no-activate ()
-    "Pushes `point' to `mark-ring' and does not activate the region
-         Equivalent to \\[set-mark-command] when \\[transient-mark-mode] is disabled"
+    "Pushes `point' to `mark-ring' and does not activate the
+  region Equivalent to \\[set-mark-command] when
+  \\[transient-mark-mode] is disabled"
     (interactive)
     (push-mark (point) t nil)
     (message "Pushed mark to ring"))
 
   (defun my/jump-to-mark ()
-    "Jumps to the local mark, respecting the `mark-ring' order.
-        This is the same as using \\[set-mark-command] with the prefix argument."
+    " Jumps to the local mark, respecting the `mark-ring'
+  order. This is the same as using \\[set-mark-command] with the
+  prefix argument."
     (interactive)
     (set-mark-command 1))
 #+END_SRC
@@ -403,9 +405,9 @@ Perhaps here:
 
 #+BEGIN_SRC emacs-lisp
   (defun my/smart-beginning-of-line ()
-    "Moves point back to indentation if there is any
-     non blank characters to the left of the cursor.
-     Otherwise point moves to beginning of line."
+    "Moves point back to indentation if there is any non blank
+  characters to the left of the cursor.  Otherwise point moves to
+  beginning of line."
     (interactive)
     (if (= (point) (save-excursion (back-to-indentation) (point)))
         (beginning-of-line)
@@ -479,20 +481,20 @@ Perhaps here:
 #+BEGIN_SRC emacs-lisp
   (defun my/zap-to-isearch (rbeg rend)
     "Kill the region between the mark and the closest portion of
-     the isearch match string.
+  the isearch match string.
 
-     The behaviour is meant to be analogous to zap-to-char; let's
-     call it zap-to-isearch. The deleted region does not include
-     the isearch word. This is meant to be bound only in isearch
-     mode. The point of this function is that oftentimes you want
-     to delete some portion of text, one end of which happens to be
-     an active isearch word.
+  The behaviour is meant to be analogous to zap-to-char; let's call
+  it zap-to-isearch. The deleted region does not include the
+  isearch word. This is meant to be bound only in isearch mode. The
+  point of this function is that oftentimes you want to delete some
+  portion of text, one end of which happens to be an active isearch
+  word.
 
-     The observation to make is that if you use isearch a lot to
-     move the cursor around (as you should, it is much more
-     efficient than using the arrows), it happens a lot that you
-     could just delete the active region between the mark and the
-     point, not include the isearch word."
+  The eobservation to make is that if you use isearch a lot to move
+  the cursor around (as you should, it is much more efficient than
+  using the arrows), it happens a lot that you could just delete
+  the active region between the mark and the point, not include the
+  isearch word."
     (interactive "r")
     (when (not mark-active)
       (error "Mark is not active"))

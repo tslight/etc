@@ -93,8 +93,8 @@ that global variables declared with defvar, defcustom or defconst will
 be dynamically bound due to the global binding being marked as
 “special” by those forms.
 
--- [[https://www.emacswiki.org/emacs/dynamicbindingvslexicalbinding][emacs wiki - dynamic vs lexical binding]]
--- [[https://www.emacswiki.org/emacs/lexicalbinding][emacs wiki - lexical binding]]
+-- [[https://www.emacswiki.org/emacs/DynamicBindingVsLexicalBinding][Emacs Wiki - Dynamic Vs Lexical Binding]]
+-- [[https://www.emacswiki.org/emacs/lexicalbinding][Emacs Wiki - Lexical Binding]]
 #+END_QUOTE
 
 Take a file as an argument & insert elisp header and footer comments
