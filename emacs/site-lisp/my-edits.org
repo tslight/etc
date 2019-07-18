@@ -13,9 +13,10 @@
 Please see the [[file:README.org][README]] and/or [[file:my-tangles.org][my-tangles.org]] for instructions on how to
 install.
 
-* CONTENTS                                                         :TOC_5_gh:
+* CONTENTS                                                        :TOC_5_gh:
 - [[#align-symbol][ALIGN SYMBOL]]
 - [[#change-pairs][CHANGE PAIRS]]
+- [[#convert-to-unix-coding-system][CONVERT TO UNIX CODING SYSTEM]]
 - [[#copy-or-cut-line-or-region][COPY OR CUT LINE OR REGION]]
 - [[#delete-in][DELETE IN]]
 - [[#generate-numbered-list][GENERATE NUMBERED LIST]]
@@ -25,7 +26,7 @@ install.
 - [[#mark-pushing--jumping][MARK PUSHING & JUMPING]]
 - [[#narrow--widen-dwim][NARROW & WIDEN DWIM]]
 - [[#open-lines-sanely][OPEN LINES SANELY]]
-- [[#remove-dos-junk][REMOVE DOS JUNK]]
+- [[#remove-ctrl-m][REMOVE CTRL-M]]
 - [[#smart-beginning-of-line][SMART BEGINNING OF LINE]]
 - [[#sort-lines-nocase][SORT LINES NOCASE]]
 - [[#surround][SURROUND]]
@@ -187,6 +188,16 @@ Taken from [[http://ergoemacs.org/emacs/elisp_change_brackets.html][here]].
                     (goto-char (point-min))
                     (while (search-forward $fromRight nil t)
                       (replace-match $toRight "FIXEDCASE" "LITERAL")))))))))))
+#+END_SRC
+
+* CONVERT TO UNIX CODING SYSTEM
+
+#+BEGIN_SRC emacs-lisp
+  (defun my/convert-to-unix-coding-system ()
+    (interactive)
+    (let ((coding-str (symbol-name buffer-file-coding-system)))
+      (when (string-match "-\\(?:dos\\|mac\\)$" coding-str)
+        (set-buffer-file-coding-system 'unix))))
 #+END_SRC
 
 * COPY OR CUT LINE OR REGION
@@ -389,14 +400,20 @@ Perhaps here:
       (newline-and-indent)))
 #+END_SRC
 
-* REMOVE DOS JUNK
+* REMOVE CTRL-M
 
 #+BEGIN_SRC emacs-lisp
-  (defun my/remove-dos-junk ()
+  (defun my/remove-ctrl-m ()
+    "Remove ^M at end of line in the whole buffer."
     (interactive)
-    (let ((coding-str (symbol-name buffer-file-coding-system)))
-      (when (string-match "-\\(?:dos\\|mac\\)$" coding-str)
-        (set-buffer-file-coding-system 'unix))))
+    (save-match-data
+      (save-excursion
+        (let ((remove-count 0))
+          (goto-char (point-min))
+          (while (re-search-forward (concat (char-to-string 13) "$") (point-max) t)
+            (setq remove-count (+ remove-count 1))
+            (replace-match "" nil nil))
+          (message (format "%d ^M removed from buffer." remove-count))))))
 #+END_SRC
 
 * SMART BEGINNING OF LINE

@@ -1512,12 +1512,15 @@ functions.
 #+BEGIN_SRC emacs-lisp
   (use-package my-edits
     :commands
+    my/convert-to-unix-coding-system
     my/generate-numbered-list
+    my/remove-ctrl-m
     my/insert-fortune
     my/insert-date
     my/sort-lines-nocase
     my/untabify-buffer
     :bind*
+    ("C-x RET u" . my/convert-to-unix-coding-system)
     ("C-S-SPC" . my/push-mark-no-activate)
     ("C-a" . my/smart-beginning-of-line)
     ("C-w" . my/copy-line-or-region)
@@ -1537,8 +1540,9 @@ functions.
      ("C-z" . my/zap-to-isearch)
      ("C-d" . my/kill-isearch-match))
     :config
+    (add-hook 'before-save-hook 'my/convert-to-unix-coding-system)
     (add-hook 'before-save-hook 'my/push-mark-no-activate)
-    (add-hook 'find-file-hooks 'my/remove-dos-junk))
+    (add-hook 'before-save-hook 'my/remove-ctrl-m))
 #+END_SRC
 
 ** DIRED
