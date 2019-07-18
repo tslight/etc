@@ -1514,9 +1514,11 @@ functions.
     :commands
     my/convert-to-unix-coding-system
     my/generate-numbered-list
-    my/remove-ctrl-m
     my/insert-fortune
     my/insert-date
+    my/remove-all-ctrl-characters
+    my/remove-ctrl-m
+    my/remove-from-buffer
     my/sort-lines-nocase
     my/untabify-buffer
     :bind*
@@ -1531,6 +1533,7 @@ functions.
     ("C-c :" . my/align-colon)
     ("C-c #" . my/align-numbers)
     ("C-c d" . my/delete-inside)
+    ("C-c k" . my/remove-from-buffer)
     ("M-s M-s" . my/surround)
     ("C-o" . my/open-line-above)
     ("C-S-o" . my/open-line-below)
