@@ -90,10 +90,11 @@ install.
 * SUBSTRING
 
 #+BEGIN_SRC emacs-lisp
-(defun my/substring (substr string)
-  (let ((regex (concat  ".*\\(" substr "\\).*")))
-    (string-match regex string)
-    (match-string 1 string)))
+  (defun my/substring (substring string)
+    "Returns SUBSTRING of a STRING."
+    (let ((regex (concat  ".*\\(" substring "\\).*")))
+      (string-match regex string)
+      (match-string 1 string)))
 #+END_SRC
 
 * SWITCH TO TERM
