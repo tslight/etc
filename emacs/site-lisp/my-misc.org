@@ -101,7 +101,8 @@ install.
 
 #+BEGIN_SRC emacs-lisp
   (defun my/switch-to-ansi-term ()
-    "Open an ansi-term if it doesn't already exist, otherwise switch to current one."
+    "Open an ansi-term if it doesn't already exist, otherwise
+  switch to current one."
     (interactive)
     (if (get-buffer "*ansi-term*")
         (switch-to-buffer "*ansi-term*")
