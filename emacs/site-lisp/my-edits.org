@@ -26,7 +26,7 @@ install.
 - [[#mark-pushing--jumping][MARK PUSHING & JUMPING]]
 - [[#narrow--widen-dwim][NARROW & WIDEN DWIM]]
 - [[#open-lines-sanely][OPEN LINES SANELY]]
-- [[#remove-ctrl-m][REMOVE CTRL-M]]
+- [[#remove-characters][REMOVE CHARACTERS]]
 - [[#smart-beginning-of-line][SMART BEGINNING OF LINE]]
 - [[#sort-lines-nocase][SORT LINES NOCASE]]
 - [[#surround][SURROUND]]
@@ -400,7 +400,7 @@ Perhaps here:
       (newline-and-indent)))
 #+END_SRC
 
-* REMOVE CTRL-M
+* REMOVE CHARACTERS
 
 #+BEGIN_SRC emacs-lisp
   (defun my/remove-from-buffer (string)
