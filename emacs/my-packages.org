@@ -1636,11 +1636,12 @@ functions.
 [[file:my-windows.org][My Windows Functions]]
 
 #+BEGIN_SRC emacs-lisp
-    (use-package my-windows
-      :bind
-      ("C-x O" . my/prev-window)
-      ("C-c 3" . my/vsplit-last-buffer)
-      ("C-c 2" . my/hsplit-last-buffer)
-      (:map ctl-x-4-map
-            ("t" . my/toggle-split)))
+  (use-package my-windows
+    :bind
+    ("C-x O" . my/prev-window)
+    ("C-c 3" . my/vsplit-last-buffer)
+    ("C-c 2" . my/hsplit-last-buffer)
+    (:map ctl-x-4-map
+          ("k" . my/kill-buffer-other-window)
+          ("t" . my/toggle-split)))
 #+END_SRC

@@ -16,12 +16,29 @@ install.
 [[https://github.com/bbatsov/prelude/blob/master/core/prelude-core.el][Prelude Core]]
 
 * CONTENTS                                                         :TOC_5_gh:
+- [[#kill-buffer-other-window][KILL BUFFER OTHER WINDOW]]
 - [[#last-window][LAST WINDOW]]
 - [[#prev-window][PREV WINDOW]]
 - [[#split-last-buffer][SPLIT LAST BUFFER]]
 - [[#toggle-window-split][TOGGLE WINDOW SPLIT]]
 
+* KILL BUFFER OTHER WINDOW
+
+#+BEGIN_SRC emacs-lisp
+  (defun my/kill-buffer-other-window ()
+    "Kill the buffer in the last used window."
+    (interactive)
+    ;; Window selection is used because point goes to a different window if more
+    ;; than 2 windows are present
+    (let ((current-window (selected-window))
+          (other-window (get-mru-window t t t)))
+      (select-window other-window)
+      (kill-this-buffer)
+      (select-window current-window)))
+#+END_SRC
+
 * LAST WINDOW
+
 #+BEGIN_SRC emacs-lisp
   (defun my/last-window ()
     "Switch back and forth between two windows easily."
@@ -33,6 +50,7 @@ install.
         (select-frame frame)
         (select-window win))))
 #+END_SRC
+
 * PREV WINDOW
 
 #+BEGIN_SRC emacs-lisp
@@ -62,6 +80,7 @@ install.
     (other-window 1 nil)
     (if (= prefix 1) (switch-to-next-buffer)))
 #+END_SRC
+
 * TOGGLE WINDOW SPLIT
 
 #+BEGIN_QUOTE
