@@ -329,3 +329,26 @@ $0
       $_.${1:property} $0
   }
 #+END_SRC
+* ELISP
+** BOILERPLATE
+
+#+BEGIN_SRC snippet :tangle ~/.emacs.d/snippets/emacs-lisp-mode/boilerplate
+  # -*- mode: snippet -*-
+  # name: boilerplate
+  # key: bp
+  # --
+  ;;; `(file-name-nondirectory (buffer-file-name))` --- ${1:summary}
+
+  ;;; Commentary:
+
+  ;; Copyright (C) `(format-time-string "%Y")` `user-full-name`
+  ;; Author: `user-full-name` `user-mail-address`
+  ;; Version: 0.0.1
+  ;; Package-Requires: ${2:depandancies}
+  ;; URL: https://github.com/tslight/${3:repo}
+
+  ;;; Code:
+  $0
+  (provide \'`(file-name-sans-extension (file-name-nondirectory (buffer-file-name)))`)
+  ;;; `(file-name-nondirectory (buffer-file-name))` ends here
+#+END_SRC
