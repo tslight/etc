@@ -1,4 +1,4 @@
-#+TITLE: PLUNDERED BUFFER FUNCTIONS LIBRARY
+#+TITLE: BUFFER FUNCTIONS LIBRARY
 #+AUTHOR: Toby Slight
 
 #+PROPERTY: header-args :cache yes
@@ -13,55 +13,22 @@
 Please see the [[file:README.org][README]] and/or [[file:my-tangles.org][my-tangles.org]] for instructions on how to
 install.
 
-* CONTENTS                                                         :TOC_5_gh:
-- [[#fill-buffer][FILL BUFFER]]
-- [[#indent-buffer][INDENT BUFFER]]
-- [[#last-buffer][LAST BUFFER]]
-- [[#nuke-buffers][NUKE BUFFERS]]
-- [[#save-buffers-silently][SAVE BUFFERS SILENTLY]]
-- [[#search-open-buffers][SEARCH OPEN BUFFERS]]
-- [[#toggle-buffer][TOGGLE BUFFER]]
-
-* FILL BUFFER
-
-Fill the contents of a buffer.
-
 #+BEGIN_SRC emacs-lisp
   (defun my/fill-buffer ()
     "Fill the contents of a buffer."
     (interactive)
     (fill-region (point-min) (point-max)))
-#+END_SRC
 
-* INDENT BUFFER
-
-Indent the contents of a buffer.
-
-#+BEGIN_SRC emacs-lisp
   (defun my/indent-buffer ()
     "Indent the contents of a buffer."
     (interactive)
     (indent-region (point-min) (point-max)))
-#+END_SRC
 
-* LAST BUFFER
-
-Switch back and forth between two buffers easily.
-
-#+BEGIN_SRC emacs-lisp
   (defun my/last-buffer ()
     "Switch back and forth between two buffers easily."
     (interactive)
     (switch-to-buffer (other-buffer (current-buffer) 1)))
-#+END_SRC
 
-* NUKE BUFFERS
-
-Kill all buffers, leaving *scratch* only.
-
--- [[https://github.com/ocodo/.emacs.d/blob/master/custom/handy-functions.el][Handy Functions]]
-
-#+BEGIN_SRC emacs-lisp
   (defun my/nuke-buffers ()
     "Kill all buffers, leaving *scratch* only."
     (interactive)
@@ -70,43 +37,33 @@ Kill all buffers, leaving *scratch* only.
        (kill-buffer buffer))
      (buffer-list))
     (delete-other-windows))
-#+END_SRC
 
-* SAVE BUFFERS SILENTLY
-
-Save all open buffers without prompting.
-
-#+BEGIN_SRC emacs-lisp
   (defun my/save-buffers-silently ()
     "Save all open buffers without prompting."
     (interactive)
     (save-some-buffers t)
     (message "Saving all buffers..."))
-#+END_SRC
 
-* SEARCH OPEN BUFFERS
-
-Search all open buffers for a regex. Open an occur-like window.
-
-#+BEGIN_SRC emacs-lisp
   (defun my/search-all-buffers (regexp)
+    "Search all buffers for REGEXP."
     (interactive "sRegexp: ")
     (multi-occur-in-matching-buffers "." regexp t))
-#+END_SRC
 
-* TOGGLE BUFFER
-
-Takes a buffer name as an argument and toggles back & forth between
-that buffer and the current buffer.
-
-I use this to toggle the scratch and messages buffers.
-
-#+BEGIN_SRC emacs-lisp
   (defun my/toggle-buffer (buffer)
-    "Takes a buffer name as an argument and toggles back & forth
-     between that buffer and the current buffer."
+    "Toggle back & forth between BUFFER and the current buffer."
     (interactive "BBuffer: ")
     (if (equal (buffer-name) buffer)
         (my/last-buffer)
       (switch-to-buffer buffer)))
+
+  (global-set-key (kbd "C-`") 'my/last-buffer)
+  (global-set-key (kbd "C-c M-i") 'my/indent-buffer)
+  (global-set-key (kbd "C-c b i") 'my/indent-buffer)
+  (global-set-key (kbd "C-c M-n") 'my/nuke-buffers)
+  (global-set-key (kbd "C-c s") 'my/save-buffers-silently)
+  (global-set-key (kbd "M-s s") 'my/search-all-buffers)
+  (global-set-key (kbd "C-c t m") '(lambda () (interactive)
+                                     (my/toggle-buffer "*Messages*")))
+  (global-set-key (kbd "C-c t s") '(lambda () (interactive)
+                                     (my/toggle-buffer "*scratch*")))
 #+END_SRC

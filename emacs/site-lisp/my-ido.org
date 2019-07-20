@@ -1,0 +1,63 @@
+#+TITLE: IDO ALL THE THINGS
+#+AUTHOR: Toby Slight
+
+#+PROPERTY: header-args :cache yes
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :padline no
+#+PROPERTY: header-args+ :results silent
+#+PROPERTY: header-args+ :tangle ~/.emacs.d/site-lisp/my-ido.el
+#+PROPERTY: header-args+ :tangle-mode (identity #o600)
+
+#+OPTIONS: toc:t
+
+#+BEGIN_SRC emacs-lisp
+  (require 'ido)
+  (setq ido-use-virtual-buffers t) ;; show recent files too
+  (setq ido-create-new-buffer 'always)
+  (setq ido-enable-prefix nil)
+  (setq ido-enable-flex-matching t)
+  (setq ido-everywhere t)
+  (setq ido-use-filename-at-point 'guess)
+  (setq ido-decorations (quote ("\n--> "
+                                " "
+                                "\n    "
+                                "\n    ..."
+                                "["  "]"
+                                "  [No match]"
+                                "  [Matched]"
+                                "  [Not readable]"
+                                "  [Too big]"
+                                "  [Confirm]")))
+
+  (defun my/ido-find-recentf ()
+    "Use `ido-completing-read' to `find-file' a recent file."
+    (interactive)
+    (if (find-file (ido-completing-read "Recent: " recentf-list))
+        (message "Opening file...")
+      (message "Aborting")))
+
+  (defun my/ido-disable-line-truncation ()
+    "Prevent ido truncation in minibuffer."
+    (set (make-local-variable 'truncate-lines) nil))
+
+  (defun my/ido-keys ()
+    "Custom ido keybindings."
+    (define-key ido-completion-map (kbd "C-n") 'ido-next-match)
+    (define-key ido-completion-map (kbd "C-p") 'ido-prev-match))
+
+  (global-set-key (kbd "C-c r") 'my/ido-find-recentf)
+  (global-set-key (kbd "M-x") (lambda ()
+                                (interactive)
+                                (call-interactively
+                                 (intern
+                                  (ido-completing-read
+                                   "M-x "
+                                   (all-completions "" obarray 'commandp))))))
+
+  (add-hook 'ido-minibuffer-setup-hook 'my/ido-disable-line-truncation)
+  (add-hook 'ido-setup-hook 'my/ido-keys)
+  (add-hook 'ido-setup-hook (lambda ()
+                              (define-key ido-completion-map [tab] 'ido-complete)))
+
+  (ido-mode 1)
+#+END_SRC

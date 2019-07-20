@@ -12,12 +12,6 @@
 
 Please see the [[file:README.org][README]] and/or [[file:./site-lisp/my-tangles.org][my-tangles.org]] for instructions on how to install.
 
-This initialisation file wraps our configuration in some speed hacks found on
-the interwebs with let expressions.
-
-It also sets the stage for John Wiegley's amazing [[https://github.com/jwiegley/use-package][use-package]] macro to load
-the rest of the configuration files, additional packages and modes.
-
 [[https://www.reddit.com/r/emacs/comments/3kqt6e/2_easy_little_known_steps_to_speed_up_emacs_start/][Reddit Thread on Startup Speed]]
 
 [[https://github.com/hlissner/doom-emacs/wiki/FAQ#how-is-dooms-startup-so-fast][Doom Fast Startup Explanation from FAQ]]
@@ -30,40 +24,25 @@ extremely high values and unset file-name-handler-list.
 However, have them be restored once the init code has run, since let only sets
 local variables.
 
-Set up package.el, add melpa repository, add package autoloads, then install
-[[https://github.com/jwiegley/use-package][use-package]], if it's not already.
-
-Set some use-package variables, and then add our configuration file directory to
-the [[help:load-path][load path]].
-
-Finally load our package configuration, which calls use-package to set
-everything else up.
-
 #+BEGIN_SRC emacs-lisp
   (let ((file-name-handler-alist nil)
         (gc-cons-threshold most-positive-fixnum)
         (gc-cons-percentage 0.8))
-    (require 'package)
-    (setq package-enable-at-startup nil
-          package--init-file-ensured t)
-    (setq package-archives
-          '(("melpa" . "https://melpa.org/packages/")
-            ("gnu" . "https://elpa.gnu.org/packages/"))
-          package-archive-priorities
-          '(("melpa" . 2)
-            ("gnu". 1)))
-    (package-initialize)
-    (unless (package-installed-p 'use-package)
-      (package-refresh-contents)
-      (package-install 'use-package))
-    (require 'use-package)
-    (setq use-package-enable-imenu-support t
-          use-package-verbose t)
-    (setq my/packages (concat user-emacs-directory "my-packages.el")
-          my/site-lisp (concat user-emacs-directory "site-lisp/"))
-    (add-to-list 'load-path my/site-lisp)
-    (load my/packages))
+    (add-to-list 'load-path (concat user-emacs-directory "site-lisp/"))
+    (require 'misc)
+    (require 'undo-tree)
+    (require 'my-advice)
+    (require 'my-buffers)
+    (require 'my-dired)
+    (require 'my-edits)
+    (require 'my-files)
+    (require 'my-hooks)
+    (require 'my-ido)
+    (require 'my-keys)
+    (require 'my-misc)
+    (require 'my-org)
+    (require 'my-packages) ;; comment out for simple setup
+    (require 'my-settings)
+    (require 'my-tangles)
+    (require 'my-theme))
 #+END_SRC
-
-Please navigate to [[file:my-packages.org][my-packages]] to see how the rest of this configuration falls
-into place...

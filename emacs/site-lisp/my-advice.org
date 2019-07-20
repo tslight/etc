@@ -1,0 +1,32 @@
+#+TITLE: IMPART SEXP WISDOM
+#+AUTHOR: Toby Slight
+
+#+PROPERTY: header-args :cache yes
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :padline no
+#+PROPERTY: header-args+ :results silent
+#+PROPERTY: header-args+ :tangle ~/.emacs.d/site-lisp/my-advice.el
+#+PROPERTY: header-args+ :tangle-mode (identity #o600)
+
+#+OPTIONS: toc:t
+
+#+BEGIN_SRC emacs-lisp
+(defadvice align-regexp (around align-regexp-with-spaces activate)
+  "Force alignment commands to use spaces, not tabs."
+  (let ((indent-tabs-mode nil))
+    ad-do-it))
+
+(defadvice load-theme (before theme-dont-propagate activate)
+  "Disable theme before loading new one."
+  (mapc #'disable-theme custom-enabled-themes))
+
+(defadvice term-handle-exit (after term-kill-buffer-on-exit activate)
+    "Kill term when shell exits."
+    (kill-buffer))
+
+(defadvice text-scale-increase (around all-buffers (arg) activate)
+  "Make all buffers increase font size with `text-scale-increase'."
+  (dolist (buffer (buffer-list))
+    (with-current-buffer buffer
+      ad-do-it)))
+#+END_SRC

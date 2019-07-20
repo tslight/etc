@@ -13,17 +13,6 @@
 Please see the [[file:README.org][README]] and/or [[file:my-tangles.org][my-tangles.org]] for instructions on how to
 install.
 
-[[https://github.com/bbatsov/prelude/blob/master/core/prelude-core.el][Prelude Core]]
-
-* CONTENTS                                                         :TOC_5_gh:
-- [[#kill-buffer-other-window][KILL BUFFER OTHER WINDOW]]
-- [[#last-window][LAST WINDOW]]
-- [[#prev-window][PREV WINDOW]]
-- [[#split-last-buffer][SPLIT LAST BUFFER]]
-- [[#toggle-window-split][TOGGLE WINDOW SPLIT]]
-
-* KILL BUFFER OTHER WINDOW
-
 #+BEGIN_SRC emacs-lisp
   (defun my/kill-buffer-other-window ()
     "Kill the buffer in the last used window."
@@ -35,38 +24,25 @@ install.
       (select-window other-window)
       (kill-this-buffer)
       (select-window current-window)))
-#+END_SRC
 
-* LAST WINDOW
-
-#+BEGIN_SRC emacs-lisp
   (defun my/last-window ()
     "Switch back and forth between two windows easily."
     (interactive)
     (let ((win (get-mru-window t t t)))
-      (unless win (error "Last window not found."))
+      (unless win (error "Last window not found"))
       (let ((frame (window-frame win)))
         (raise-frame frame)
         (select-frame frame)
         (select-window win))))
-#+END_SRC
 
-* PREV WINDOW
-
-#+BEGIN_SRC emacs-lisp
   (defun my/prev-window ()
     "Go the previously used window, excluding other frames."
     (interactive)
     (other-window -1))
-#+END_SRC
 
-* SPLIT LAST BUFFER
-
-[[https://www.reddit.com/r/emacs/comments/25v0eo/you_emacs_tips_and_tricks/chldury][Reddit Thread]] & [[http://pages.sachachua.com/.emacs.d/Sacha.html#unnumbered-30][Sacha Chua dotemacs]]:
-
-#+BEGIN_SRC emacs-lisp
   (defun my/hsplit-last-buffer (prefix)
-    "Split the window vertically and display the previous buffer."
+    "Split the window vertically and display the previous buffer.
+  With PREFIX stay in current buffer."
     (interactive "p")
     (split-window-vertically)
     (other-window 1 nil)
@@ -74,30 +50,17 @@ install.
         (switch-to-next-buffer)))
 
   (defun my/vsplit-last-buffer (prefix)
-    "Split the window horizontally and display the previous buffer."
+    "Split the window horizontally and display the previous buffer.
+  With PREFIX stay in current buffer."
     (interactive "p")
     (split-window-horizontally)
     (other-window 1 nil)
-    (if (= prefix 1) (switch-to-next-buffer)))
-#+END_SRC
+    (if (= prefix 1) (switch-to-next-ebuffer)))
 
-* TOGGLE WINDOW SPLIT
-
-#+BEGIN_QUOTE
-Vertical split shows more of each line, horizontal split shows more lines. This
-code toggles between them. It only works for frames with exactly two
-windows. The top window goes to the left or vice-versa. I was motivated by
-ediff-toggle-split and helped by TransposeWindows. There may well be better ways
-to write this.
-
--- [[https://www.emacswiki.org/emacs/ToggleWindowSplit][Emacs Wiki]]
-#+END_QUOTE
-
-
-#+BEGIN_SRC emacs-lisp
   (defun my/toggle-split ()
-    "Switch window split from horizontally to vertically, or vice versa.
-     i.e. change right window to bottom, or change bottom window to right."
+    "Switch window split from horizontally to vertically, or vice
+  versa.  Change right window to bottom, or change bottom window to
+  right."
     (interactive)
     (require 'windmove)
     (let ((done))
@@ -120,4 +83,11 @@ to write this.
                       (split-window-vertically)
                     (split-window-horizontally))
                   (set-window-buffer (windmove-find-other-window neighbour-dir) other-buf))))))))
+
+  (global-set-key (kbd "C-x O") 'my/prev-window)
+  (global-set-key (kbd "C-c 3") 'my/vsplit-last-buffer)
+  (global-set-key (kbd "C-c 2") 'my/hsplit-last-buffer)
+
+  (define-key ctl-x-4-map "k" 'my/kill-buffer-other-window)
+  (define-key ctl-x-4-map "t" 'my/toggle-split)
 #+END_SRC

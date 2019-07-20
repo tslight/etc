@@ -13,17 +13,6 @@
 Please see the [[file:README.org][README]] and/or [[file:my-tangles.org][my-tangles.org]] for instructions on how to
 install.
 
-* CONTENTS                                                         :TOC_5_gh:
-- [[#delete-this-file][DELETE THIS FILE]]
-- [[#copy-file-name-to-clipboard][COPY FILE NAME TO CLIPBOARD]]
-- [[#make-backup][MAKE BACKUP]]
-- [[#rename-file-and-buffer][RENAME FILE AND BUFFER]]
-- [[#sudoedit][SUDOEDIT]]
-
-* DELETE THIS FILE
-
-[[https://github.com/purcell/emacs.d/blob/master/lisp/init-utils.el][Steve Purcell's Utils]]
-
 #+BEGIN_SRC emacs-lisp
   (defun my/delete-this-file ()
     "Delete the current file, and kill the buffer."
@@ -33,13 +22,7 @@ install.
                                (file-name-nondirectory buffer-file-name)))
       (delete-file (buffer-file-name))
       (kill-this-buffer)))
-#+END_SRC
 
-* COPY FILE NAME TO CLIPBOARD
-
-[[http://emacsredux.com/blog/2013/03/27/copy-filename-to-the-clipboard/][Emacs Redux Article]]
-
-#+BEGIN_SRC emacs-lisp
   (defun my/copy-file-name-to-clipboard ()
     "Copy the current buffer file name to the clipboard."
     (interactive)
@@ -49,16 +32,10 @@ install.
       (when filename
         (kill-new filename)
         (message "Copied buffer file name '%s' to the clipboard." filename))))
-#+END_SRC
 
-* MAKE BACKUP
-
-[[http://ergoemacs.org/emacs/elisp_make-backup.html][Xah Lee Backup Functions]]
-
-#+BEGIN_SRC emacs-lisp
   (defun my/make-backup ()
-    "Make a backup copy of current file or dired marked files.
-     If in dired, backup current file or marked files."
+    "Make a backup copy of current file or dired marked files.  If
+  in dired, backup current file or marked files."
     (interactive)
     (let (($fname (buffer-file-name)))
       (if $fname
@@ -74,11 +51,11 @@ install.
                         (copy-file $x $backup-name t)))
                     (dired-get-marked-files))
               (message "marked files backed up"))
-          (user-error "buffer not file nor dired")))))
+          (user-error "Buffer not file nor dired")))))
 
   (defun my/make-backup-and-save ()
     "Backup of current file and save, or backup dired marked files.
-     For detail, see `my/make-backup'."
+  For detail, see `my/make-backup'."
     (interactive)
     (if (buffer-file-name)
         (progn
@@ -87,11 +64,7 @@ install.
             (save-buffer)))
       (progn
         (my/make-backup))))
-#+END_SRC
 
-* RENAME FILE AND BUFFER
-
-#+BEGIN_SRC emacs-lisp
   (defun my/rename-this-file-and-buffer (new-name)
     "Renames both current buffer and file it's visiting to NEW-NAME."
     (interactive "FNew name: ")
@@ -106,15 +79,18 @@ install.
             (rename-file filename new-name 1))
           (rename-buffer new-name)
           (set-visited-file-name new-name)))))
-#+END_SRC
 
-* SUDOEDIT
-
-#+BEGIN_SRC emacs-lisp
   (defun my/sudoedit (&optional arg)
+    "Open current or ARG file as root."
     (interactive "P")
     (if (or arg (not buffer-file-name))
         (find-file (concat "/sudo:root@localhost:"
                            (ido-read-file-name "Find file(as root): ")))
       (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
+
+  (global-set-key (kbd "C-c f d") 'my/delete-this-file)
+  (global-set-key (kbd "C-c f c") 'my/copy-file-name-to-clipboard)
+  (global-set-key (kbd "C-c f b") 'my/make-backup-and-save)
+  (global-set-key (kbd "C-c f r") 'my/rename-this-file-and-buffer)
+  (global-set-key (kbd "C-c f s") 'my/sudoedit)
 #+END_SRC

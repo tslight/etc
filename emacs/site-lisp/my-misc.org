@@ -1,4 +1,4 @@
-#+TITLE: PLUNDERED MISC FUNCTIONS LIBRARY
+#+TITLE: MISC FUNCTIONS LIBRARY
 #+AUTHOR: Toby Slight
 
 #+PROPERTY: header-args :cache yes
@@ -13,70 +13,16 @@
 Please see the [[file:README.org][README]] and/or [[file:my-tangles.org][my-tangles.org]] for instructions on how to
 install.
 
-* CONTENTS                                                         :TOC_5_gh:
-- [[#after-make-frame][AFTER MAKE FRAME]]
-- [[#gc-flx-fix][GC FLX FIX]]
-- [[#google][GOOGLE]]
-- [[#substring][SUBSTRING]]
-- [[#switch-to-term][SWITCH TO TERM]]
-- [[#tramp-term][TRAMP TERM]]
-
-* AFTER MAKE FRAME
-
 #+BEGIN_SRC emacs-lisp
-;; disable other themes before loading new one
-(defadvice load-theme (before theme-dont-propagate activate)
-  "Disable theme before loading new one."
-  (mapc #'disable-theme custom-enabled-themes))
+  (defun my/substring (substring string)
+    "Returns SUBSTRING of a STRING."
+    (let ((regex (concat  ".*\\(" substring "\\).*")))
+      (string-match regex string)
+      (match-string 1 string)))
 
-  (defun my/after-make-frame (frame)
-    (select-frame frame)
-    (when (eq system-type 'windows-nt)
-      (set-frame-font "Consolas 9" nil t))
-    (when (eq system-type 'darwin)
-      (set-frame-font "Monaco 10" nil t))
-    (when (or (eq system-type 'gnu/linux)
-              (eq system-type 'berkeley-unix))
-      (set-frame-font "Monospace 9" nil t))
-    (if (display-graphic-p)
-        (load-theme 'deeper-blue)
-      (progn
-        (load-theme 'manoj-dark)
-        (xterm-mouse-mode 1)
-        (mouse-avoidance-mode 'banish)
-        (setq linum-format "%d ")
-        (setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
-        (setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
-        (setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; one line at a time
-        (global-set-key [mouse-4] '(lambda () (interactive) (scroll-down 1)))
-        (global-set-key [mouse-5] '(lambda () (interactive) (scroll-up 1))))))
-
-  (if (daemonp)
-      (add-hook 'after-make-frame-functions #'my/after-make-frame(selected-frame))
-    (my/after-make-frame(selected-frame)))
-#+END_SRC
-
-* GC FLX FIX
-
-[[http://bling.github.io/blog/2016/01/18/why-are-you-changing-gc-cons-threshold/][GC SPEED HACKS]]
-
-#+BEGIN_SRC emacs-lisp
-(defun my/minibuffer-setup-hook ()
-  (setq gc-cons-threshold most-positive-fixnum))
-
-(defun my/minibuffer-exit-hook ()
-  (setq gc-cons-threshold 800000))
-
-(add-hook 'minibuffer-setup-hook #'my/minibuffer-setup-hook)
-(add-hook 'minibuffer-exit-hook #'my/minibuffer-exit-hook)
-#+END_SRC
-
-* GOOGLE
-
-#+BEGIN_SRC emacs-lisp
   (defun my/google (arg)
-    "Googles a query or region if any.
-     With prefix argument, wrap search query in quotes."
+    "Googles a query or region.  With prefix ARG, wrap search query
+  in quotes."
     (interactive "P")
     (let ((query
            (if (region-active-p)
@@ -85,21 +31,7 @@ install.
       (when arg (setq query (concat "\"" query "\"")))
       (browse-url
        (concat "http://www.google.com/search?ie=utf-8&oe=utf-8&q=" query))))
-#+END_SRC
 
-* SUBSTRING
-
-#+BEGIN_SRC emacs-lisp
-  (defun my/substring (substring string)
-    "Returns SUBSTRING of a STRING."
-    (let ((regex (concat  ".*\\(" substring "\\).*")))
-      (string-match regex string)
-      (match-string 1 string)))
-#+END_SRC
-
-* SWITCH TO TERM
-
-#+BEGIN_SRC emacs-lisp
   (defun my/switch-to-ansi-term ()
     "Open an ansi-term if it doesn't already exist, otherwise
   switch to current one."
@@ -107,15 +39,11 @@ install.
     (if (get-buffer "*ansi-term*")
         (switch-to-buffer "*ansi-term*")
       (ansi-term (getenv "SHELL"))))
-#+END_SRC
 
-* TRAMP TERM
-
-#+BEGIN_SRC emacs-lisp
   (defun my/tramp-term (&optional path name)
-    "Opens an ansi terminal at PATH. If no PATH is given, it uses
-     the value of `default-directory'. PATH may be a tramp remote path.
-     The ansi-term buffer is named based on `name' "
+    "Open an ansi terminal at PATH.  If no PATH is given, it uses
+  the value of `default-directory'.  PATH may be a tramp remote
+  path.  The ansi-term buffer is named based on NAME."
     (interactive)
     (unless path (setq path default-directory))
     (unless name (setq name "ansi-term"))
@@ -134,8 +62,11 @@ install.
                                                      "exec bash'; exec bash; clear\n")
                                             (tramp-file-name-host tstruct)
                                             (tramp-file-name-localname tstruct))))
-             (t (error "not implemented for method %s"
+             (t (error "Not implemented for method %s"
                        (tramp-file-name-method tstruct)))))
         (process-send-string bufname (format (concat cd-str " exec bash;clear\n")
                                              path)))))
+
+  (global-set-key (kbd "C-c G") 'my/google)
+  (global-set-key (kbd "C-x t") 'my/switch-to-ansi-term)
 #+END_SRC

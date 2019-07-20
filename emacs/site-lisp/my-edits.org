@@ -1,4 +1,4 @@
-#+TITLE: PLUNDERED EDITING FUNCTIONS LIBRARY
+#+TITLE: EDITING FUNCTIONS LIBRARY
 #+AUTHOR: Toby Slight
 
 #+PROPERTY: header-args :cache yes
@@ -13,84 +13,44 @@
 Please see the [[file:README.org][README]] and/or [[file:my-tangles.org][my-tangles.org]] for instructions on how to
 install.
 
-* CONTENTS                                                        :TOC_5_gh:
-- [[#align-symbol][ALIGN SYMBOL]]
-- [[#change-pairs][CHANGE PAIRS]]
-- [[#convert-to-unix-coding-system][CONVERT TO UNIX CODING SYSTEM]]
-- [[#copy-or-cut-line-or-region][COPY OR CUT LINE OR REGION]]
-- [[#delete-in][DELETE IN]]
-- [[#generate-numbered-list][GENERATE NUMBERED LIST]]
-- [[#insert-fortune][INSERT FORTUNE]]
-- [[#insert-date][INSERT DATE]]
-- [[#kill-isearch-match][KILL ISEARCH MATCH]]
-- [[#mark-pushing--jumping][MARK PUSHING & JUMPING]]
-- [[#narrow--widen-dwim][NARROW & WIDEN DWIM]]
-- [[#open-lines-sanely][OPEN LINES SANELY]]
-- [[#remove-characters][REMOVE CHARACTERS]]
-- [[#smart-beginning-of-line][SMART BEGINNING OF LINE]]
-- [[#sort-lines-nocase][SORT LINES NOCASE]]
-- [[#surround][SURROUND]]
-- [[#unfill-region][UNFILL REGION]]
-- [[#untabify-buffer][UNTABIFY BUFFER]]
-- [[#yank-pop-forwards][YANK POP FORWARDS]]
-- [[#zap-to-isearch][ZAP TO ISEARCH]]
-
-* ALIGN SYMBOL
-
-Force align to use spaces instead of tabs.
-
-https://stackoverflow.com/a/25164056
-
-#+BEGIN_SRC emacs-lisp
-  (defadvice align-regexp (around align-regexp-with-spaces activate)
-    (let ((indent-tabs-mode nil))
-      ad-do-it))
-#+END_SRC
-
-[[https://github.com/skx/dotfiles/blob/master/.emacs.d/init.md][Some random dudes init file that contains inspiration for this function!]]
-
-Prompt the user to enter a symbol to align on then do that..
-
 #+BEGIN_SRC emacs-lisp
   (defun my/align-symbol (begin end symbol)
-    "Prompt the user to enter a SYMBOL to align REGION on then do that."
+    "Align any SYMBOL in region (between BEGIN and END)."
     (interactive "r\nsEnter align symbol: ")
     (align-regexp begin end (concat "\\(\\s-*\\)" symbol) 1 1))
 
   (defun my/align-equals (begin end)
+    "Align equals in region (between BEGIN and END)."
     (interactive "r")
     (my/align-symbol begin end "="))
 
   (defun my/align-colon (begin end)
+    "Align colons in region (between BEGIN and END)."
     (interactive "r")
     (my/align-symbol begin end ":"))
 
   (defun my/align-numbers (begin end)
+    "Align numbers in region (between BEGIN and END)."
     (interactive "r")
     (my/align-symbol begin end "[0-9]+"))
-#+END_SRC
 
-* CHANGE PAIRS
-
-Taken from [[http://ergoemacs.org/emacs/elisp_change_brackets.html][here]].
-
-#+BEGIN_SRC emacs-lisp
   (defun my/change-pairs (@from-chars @to-chars)
-    "Change bracket pairs from one type to another.
+    "Change bracket pairs between @FROM-CHARS to @TO-CHARS from one
+  type to another.
 
-     For example, change all parenthesis () to square brackets [].
+  For example, change all parenthesis () to square brackets [].
 
-     Works on selected text, or current text block.
+  Works on selected text, or current text block.
 
-     When called in lisp program, @from-chars or @to-chars is a
-     string of bracket pair. eg \"(paren)\", \"[bracket]\", etc.
-     The first and last characters are used.
+  When called in Lisp program, @FROM-CHARS or @TO-CHARS is a string
+  of bracket pair. eg \"(paren)\", \"[bracket]\", etc.  The first
+  and last characters are used.
 
-     If the string contains “,2”, then the first 2 chars and last 2
-     chars are used, for example \"[[bracket,2]]\".  If @to-chars
-     is equal to string “none”, the brackets are deleted.
+  If the string contains “,2”, then the first 2 chars and last 2
+  chars are used, for example \"[[bracket,2]]\".  If @to-chars is
+  equal to string “none”, the brackets are deleted.
 
-     If the string has length greater than 2, the rest are ignored."
+  If the string has length greater than 2, the rest are ignored."
     (interactive
      (let (($bracketsList
             '("(paren)"
@@ -188,36 +148,18 @@ Taken from [[http://ergoemacs.org/emacs/elisp_change_brackets.html][here]].
                     (goto-char (point-min))
                     (while (search-forward $fromRight nil t)
                       (replace-match $toRight "FIXEDCASE" "LITERAL")))))))))))
-#+END_SRC
 
-* CONVERT TO UNIX CODING SYSTEM
-
-#+BEGIN_SRC emacs-lisp
   (defun my/convert-to-unix-coding-system ()
+    "Change the current buffer's file encoding to unix."
     (interactive)
     (let ((coding-str (symbol-name buffer-file-coding-system)))
       (when (string-match "-\\(?:dos\\|mac\\)$" coding-str)
         (set-buffer-file-coding-system 'unix))))
-#+END_SRC
 
-* COPY OR CUT LINE OR REGION
-
-Not sure where these versions come from but they seems to work better
-than the Emacs wiki version.
-
-They don't have the delay of moving to the point to the beginning of
-the line.
-
-[[http://www.emacswiki.org/emacs/WholeLineOrRegion][Emacs Wiki Article]]
-
-Perhaps here:
-
-[[http://ergoemacs.org/emacs/emacs_copy_cut_current_line.html][Ergo Emacs Article]]
-
-#+BEGIN_SRC emacs-lisp
   (defun my/copy-line-or-region ()
-    "Copy current line, or text selection. When `universal-argument' is called first,
-     copy whole buffer (but respect `narrow-to-region')."
+    "Copy current line or text selection to kill ring.  When
+  `universal-argument' is called first, copy whole buffer (but
+  respect `narrow-to-region')."
     (interactive)
     (let (p1 p2)
       (if (null current-prefix-arg)
@@ -231,8 +173,9 @@ Perhaps here:
       (kill-ring-save p1 p2)))
 
   (defun my/cut-line-or-region ()
-    "Cut current line, or text selection. When `universal-argument' is called first,
-     cut whole buffer (but respect `narrow-to-region')."
+    "Cut current line, or text selection to kill ring.  When
+  `universal-argument' is called first, cut whole buffer (but
+  respect `narrow-to-region')."
     (interactive)
     (let (p1 p2)
       (if (null current-prefix-arg)
@@ -244,11 +187,7 @@ Perhaps here:
         (progn (setq p1 (point-min))
                (setq p2 (point-max))))
       (kill-region p1 p2)))
-#+END_SRC
 
-* DELETE IN
-
-#+BEGIN_SRC emacs-lisp
   (defun my/delete-inside ()
     "Deletes the text within parentheses, brackets or quotes."
     (interactive)
@@ -259,83 +198,54 @@ Perhaps here:
       (search-forward-regexp "[]})>\"\']" (line-end-position))
       (backward-char)
       (kill-region lstart (point))))
-#+END_SRC
 
-* GENERATE NUMBERED LIST
-
-#+BEGIN_SRC emacs-lisp
   (defun my/generate-numbered-list (start end char)
-    "Creates a numbered list from START to END. Using CHAR as punctuation."
+    "Create a numbered list from START to END.  Using CHAR as punctuation."
     (interactive "nStart number:\nnEnd number:\nsCharacter:")
     (let ((x start))
       (while (<= x end)
         (insert (concat (number-to-string x) char))
         (newline)
         (setq x (+ x 1)))))
-#+END_SRC
 
-* INSERT FORTUNE
-
-#+BEGIN_SRC emacs-lisp
   (defun my/insert-fortune ()
-    "Inserts output of the fortune command into the buffer, before the point."
+    "Insert output of the fortune command into the buffer, before the point."
     (interactive)
     (insert (shell-command-to-string "fortune")))
-#+END_SRC
 
-* INSERT DATE
+  (defun my/insert-date ()
+    "Insert a timestamp according to locale's date and time format."
+    (interactive)
+    (insert (format-time-string "%c" (current-time))))
 
-#+BEGIN_SRC emacs-lisp
-(defun my/insert-date ()
-  "Insert a time-stamp according to locale's date and time format."
-  (interactive)
-  (insert (format-time-string "%c" (current-time))))
-#+END_SRC
-
-* KILL ISEARCH MATCH
-
-[[https://github.com/purcell/emacs.d/blob/master/lisp/init-utils.el][Steve Purcell's Utils]]
-
-#+BEGIN_SRC emacs-lisp
   (defun my/kill-isearch-match ()
     "Kill the current isearch match string and continue searching."
     (interactive)
     (kill-region isearch-other-end (point)))
-#+END_SRC
 
-* MARK PUSHING & JUMPING
-
-[[https://www.masteringemacs.org/article/fixing-mark-commands-transient-mark-mode][Mastering Emacs Article]]
-
-#+BEGIN_SRC emacs-lisp
   (defun my/push-mark-no-activate ()
-    "Pushes `point' to `mark-ring' and does not activate the
-  region Equivalent to \\[set-mark-command] when
-  \\[transient-mark-mode] is disabled"
+    "Push `point' to `mark-ring', but do not activate the region.
+  Equivalent to \\[set-mark-command] when \\[transient-mark-mode]
+  is disabled"
     (interactive)
     (push-mark (point) t nil)
     (message "Pushed mark to ring"))
 
   (defun my/jump-to-mark ()
-    " Jumps to the local mark, respecting the `mark-ring'
-  order. This is the same as using \\[set-mark-command] with the
-  prefix argument."
+    "Jump to the local mark, respecting the `mark-ring' order.  This
+  is the same as using \\[set-mark-command] with the prefix
+  argument."
     (interactive)
     (set-mark-command 1))
-#+END_SRC
 
-* NARROW & WIDEN DWIM
-
-#+BEGIN_SRC emacs-lisp
   (defun my/narrow-or-widen-dwim (p)
-    "If the buffer is narrowed, it widens. Otherwise, it narrows intelligently.
-     Intelligently means: region, org-src-block, org-subtree, or defun,
-     whichever applies first.
+    "If the buffer is narrowed, it widens. Otherwise, it narrows
+  intelligently.  Intelligently means: region, org-src-block,
+  org-subtree, or defun, whichever applies first.
 
-     Narrowing to org-src-block actually calls `org-edit-src-code'.
-
-     With prefix P, don't widen, just narrow even if buffer is already
-     narrowed."
+  Narrowing to org-src-block actually calls `org-edit-src-code'.
+  With prefix P, don't widen, just narrow even if buffer is already
+  narrowed."
     (interactive "P")
     (declare (interactive-only))
     (cond ((and (buffer-narrowed-p) (not p)) (widen))
@@ -350,28 +260,14 @@ Perhaps here:
                   (org-narrow-to-block))
                  (t (org-narrow-to-subtree))))
           (t (narrow-to-defun))))
-
   ;; (define-key endless/toggle-map "n" #'narrow-or-widen-dwim)
   ;; This line actually replaces Emacs' entire narrowing keymap, that's
   ;; how much I like this command. Only copy it if that's what you want.
   (define-key ctl-x-map "n" #'my/narrow-or-widen-dwim)
-#+END_SRC
 
-* OPEN LINES SANELY
-
-[[https://github.com/ocodo/.emacs.d/blob/master/custom/handy-functions.el][Handy Functions]]
-
-[[https://stackoverflow.com/questions/2173324/emacs-equivalents-of-vims-dd-o-o][Vi open lines stackoverflow]]
-
-[[https://github.com/magnars/.emacs.d/blob/master/defuns/editing-defuns.el][Magnar's Editing Fun]]
-
-[[https://github.com/bbatsov/crux/blob/master/crux.el][Crux]]
-
-#+BEGIN_SRC emacs-lisp
   (defun my/open-line-above ()
-    "Insert an empty line above the current line.
-     Position the cursor at its beginning, according to the current
-     mode."
+    "Insert an empty line above the current line.  Position the
+  cursor at its beginning, according to the current mode."
     (interactive)
     (move-beginning-of-line nil)
     (insert "\n")
@@ -390,19 +286,14 @@ Perhaps here:
       (indent-according-to-mode)))
 
   (defun my/open-line-below (arg)
-    "Insert an empty line after the current line.
-     Position the cursor at its beginning, according to the current
-     mode.  With a prefix ARG open line above the current line."
+    "Insert an empty line after the current line. Position the
+  cursor at its beginning, according to the current mode.  With a
+  prefix ARG open line above the current line."
     (interactive "P")
     (if arg
         (my/open-line-above)
       (move-end-of-line nil)
       (newline-and-indent)))
-#+END_SRC
-
-* REMOVE CHARACTERS
-
-#+BEGIN_SRC emacs-lisp
   (defun my/remove-from-buffer (string)
     "Remove all occurences of STRING from the whole buffer."
     (interactive "sString to remove: ")
@@ -435,13 +326,7 @@ Perhaps here:
     "Remove all ^M occurrences from EOL in a buffer."
     (interactive)
     (my/remove-from-buffer "$"))
-#+END_SRC
 
-* SMART BEGINNING OF LINE
-
-[[http://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/][Emacs Redux Article]]
-
-#+BEGIN_SRC emacs-lisp
   (defun my/smart-beginning-of-line ()
     "Moves point back to indentation if there is any non blank
   characters to the left of the cursor.  Otherwise point moves to
@@ -450,24 +335,16 @@ Perhaps here:
     (if (= (point) (save-excursion (back-to-indentation) (point)))
         (beginning-of-line)
       (back-to-indentation)))
-#+END_SRC
 
-* SORT LINES NOCASE
-
-#+BEGIN_SRC emacs-lisp
   (defun my/sort-lines-nocase ()
-    "Sorts marked lines with case sensitivity."
+    "Sort marked lines with case sensitivity."
     (interactive)
     (let ((sort-fold-case t))
       (call-interactively 'sort-lines)))
-#+END_SRC
 
-* SURROUND
-
-#+BEGIN_SRC emacs-lisp
   (defun my/surround (begin end open close)
-    "Put OPEN at START and CLOSE at END of the region.
-  If you omit CLOSE, it will reuse OPEN."
+    "Put OPEN at BEGIN and CLOSE at END of the region.  If you omit
+  CLOSE, it will reuse OPEN."
     (interactive  "r\nsStart: \nsEnd: ")
     (save-excursion
       (goto-char end)
@@ -476,59 +353,38 @@ Perhaps here:
         (insert close))
       (goto-char begin)
       (insert open)))
-#+END_SRC
 
-* UNFILL REGION
-
-[[https://www.emacswiki.org/emacs/UnfillParagraph][Emacs Wiki]]
-
-#+BEGIN_SRC emacs-lisp
   (defun my/unfill-region (&optional region)
-    "Takes a multi-line paragraph and makes it into a single line of text."
+    "Take a multi-line paragraph, or REGION, and make it into a
+  single line of text."
     (interactive (progn (barf-if-buffer-read-only) '(t)))
     (let ((fill-column (point-max))
           ;; This would override `fill-column' if it's an integer.
           (emacs-lisp-docstring-fill-column t))
       (fill-paragraph nil region)))
-#+END_SRC
 
-* UNTABIFY BUFFER
-
-[[https://github.com/magnars/.emacs.d/blob/master/defuns/buffer-defuns.el][Magnar's Buffer fun]]
-
-#+BEGIN_SRC emacs-lisp
   (defun my/untabify-buffer ()
+    "Convert all tabs to spaces in the buffer."
     (interactive)
     (untabify (point-min) (point-max)))
-#+END_SRC
 
-* YANK POP FORWARDS
-
-[[http://www.emacswiki.org/emacs/KillingAndYanking][Emacs Wiki Killing & Yanking]]
-
-#+BEGIN_SRC emacs-lisp
   (defun my/yank-pop-forwards (arg)
+    "Pop the kill ring forwards by ARG."
     (interactive "p")
     (yank-pop (- arg)))
-#+END_SRC
 
-* ZAP TO ISEARCH
-
-[[http://www.emacswiki.org/emacs/ZapToISearch][Emacs Wiki Entry]]
-
-#+BEGIN_SRC emacs-lisp
   (defun my/zap-to-isearch (rbeg rend)
-    "Kill the region between the mark and the closest portion of
-  the isearch match string.
+    "Kill the region (RBEG - REND) between the mark and the
+  closest portion of the isearch match string.
 
-  The behaviour is meant to be analogous to zap-to-char; let's call
-  it zap-to-isearch. The deleted region does not include the
-  isearch word. This is meant to be bound only in isearch mode. The
-  point of this function is that oftentimes you want to delete some
-  portion of text, one end of which happens to be an active isearch
-  word.
+  The behaviour is meant to be analogous to `zap-to-char'; let's
+  call it `my/zap-to-isearch'.  The deleted region does not include
+  the `isearch' word.  This is meant to be bound only in isearch
+  mode.  The point of this function is that oftentimes you want to
+  delete some portion of text, one end of which happens to be an
+  active isearch word.
 
-  The eobservation to make is that if you use isearch a lot to move
+  The observation to make is that if you use isearch a lot to move
   the cursor around (as you should, it is much more efficient than
   using the arrows), it happens a lot that you could just delete
   the active region between the mark and the point, not include the
@@ -543,6 +399,30 @@ Perhaps here:
           (kill-region (mark) ismin)
         (if (> (mark) ismax)
             (kill-region ismax (mark))
-          (error "Internal error in isearch kill function.")))
+          (error "Internal error in isearch kill function")))
       (isearch-exit)))
+
+  (global-set-key (kbd "C-x RET u") 'my/convert-to-unix-coding-system)
+  (global-set-key (kbd "C-S-SPC") 'my/push-mark-no-activate)
+  (global-set-key (kbd "C-a") 'my/smart-beginning-of-line)
+  (global-set-key (kbd "C-w") 'my/copy-line-or-region)
+  (global-set-key (kbd "M-w") 'my/cut-line-or-region)
+  (global-set-key (kbd "C-c M-p") 'my/change-pairs)
+  (global-set-key (kbd "C-c a") 'my/align-symbol)
+  (global-set-key (kbd "C-c =") 'my/align-equals)
+  (global-set-key (kbd "C-c :") 'my/align-colon)
+  (global-set-key (kbd "C-c #") 'my/align-numbers)
+  (global-set-key (kbd "C-c d") 'my/delete-inside)
+  (global-set-key (kbd "C-c k") 'my/remove-from-buffer)
+  (global-set-key (kbd "M-s M-s") 'my/surround)
+  (global-set-key (kbd "C-o") 'my/open-line-above)
+  (global-set-key (kbd "C-S-o") 'my/open-line-below)
+  (global-set-key (kbd "M-Q") 'my/unfill-region)
+
+  (define-key isearch-mode-map (kbd "C-z") 'my/zap-to-isearch)
+  (define-key isearch-mode-map (kbd "C-d") 'my/kill-isearch-match)
+
+  (add-hook 'before-save-hook 'my/convert-to-unix-coding-system)
+  (add-hook 'before-save-hook 'my/push-mark-no-activate)
+  (add-hook 'before-save-hook 'my/remove-ctrl-m)
 #+END_SRC

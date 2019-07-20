@@ -1,0 +1,653 @@
+#+TITLE: PACKAGE CONFIGURATION
+#+AUTHOR: Toby Slight
+
+#+PROPERTY: header-args :cache yes
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :padline no
+#+PROPERTY: header-args+ :results silent
+#+PROPERTY: header-args+ :tangle ~/.emacs.d/site-lisp/my-packages.el
+#+PROPERTY: header-args+ :tangle-mode (identity #o600)
+
+#+OPTIONS: toc:t
+
+Please see the [[file:README.org][README]] and/or [[file:./site-lisp/my-tangles.org][my-tangles.org]] for instructions on how to install.
+
+I am using [[https://github.com/jwiegley][John Wiegley's]] amazing [[https://github.com/jwiegley/use-package][use-package]] macro to configure MELPA packages,
+built-in Emacs ones, and my own local custom minor mode packages.
+
+* BOOTSTRAP
+
+Set up package.el, add melpa repository, add package autoloads, then install
+[[https://github.com/jwiegley/use-package][use-package]], if it's not already.
+
+Set some use-package variables, and then add our configuration file directory to
+the [[help:load-path][load path]].
+
+Finally load our package configuration, which calls use-package to set
+everything else up.
+
+#+BEGIN_SRC emacs-lisp
+;; setup package.el
+(require 'package)
+(setq package-enable-at-startup nil)
+(setq package--init-file-ensured t)
+(setq package-archives
+      '(("melpa" . "https://melpa.org/packages/")
+        ("gnu" . "https://elpa.gnu.org/packages/")))
+(package-initialize)
+
+;; install use-package
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+
+;; setup use-package
+(require 'use-package)
+(setq use-package-enable-imenu-support t
+      use-package-verbose t)
+#+END_SRC
+
+* ACE WINDOW
+
+#+BEGIN_QUOTE
+*What and why*
+
+I'm sure you're aware of the other-window command. While it's great
+for two windows, it quickly loses its value when there are more
+windows. You need to call it many times, and since it's not easily
+predictable, you have to check each time if you're in the window that
+you wanted.
+
+Another approach is to use windmove-left, windmove-up, etc. These are
+fast and predictable. Their disadvantage is that they need 4 key
+bindings. The default ones are shift+arrows, which are hard to reach.
+
+This package aims to take the speed and predictability of windmove and
+pack it into a single key binding, similar to other-window.
+
+-- [[https://github.com/abo-abo/ace-window][Abo-Abo GitHub Link]]
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package ace-window
+    :after bind-key
+    :ensure t
+    :bind
+    ("C-x o" . ace-window)
+    ("C-x 0" . ace-delete-window)
+    ("C-x 1" . ace-delete-other-windows)
+    :config
+    (set-face-attribute 'aw-leading-char-face nil
+                        :foreground "deep sky blue"
+                        :weight 'bold
+                        :height 2.0)
+    (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
+#+END_SRC
+
+* ANSIBLE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package ansible
+    :ensure t
+    :defer t
+    :config
+    (use-package ansible-doc
+      :ensure t
+      :defer t))
+#+END_SRC
+
+* ASYNC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package async
+    :ensure t
+    :defer t
+    :config
+    (async-bytecomp-package-mode 1)
+    (dired-async-mode 1))
+#+END_SRC
+
+* AVY
+
+#+BEGIN_SRC emacs-lisp
+  (use-package avy
+    :after bind-key
+    :ensure t
+    :bind
+    ("C-c j" . avy-goto-char-2)
+    ("M-g t" . avy-goto-char-timer)
+    ("C-c r" . avy-resume)
+    ("M-g l" . avy-goto-line)
+    ("M-g w" . avy-goto-word-1)
+    :config
+    (avy-setup-default)
+    (setq avy-dispatch-alist '((?c . avy-action-copy)
+                               (?k . avy-action-kill-move)
+                               (?K . avy-action-kill-stay)
+                               (?m . avy-action-mark)
+                               (?z . avy-action-zap-to-char))))
+#+END_SRC
+
+* CHANGE INNER
+
+#+BEGIN_QUOTE
+change-inner gives you vim's ci command, building on expand-region. It
+is most easily explained by example:
+
+=function test() { return "semantic kill";}=
+
+With point after the word semantic
+
+change-inner " would kill the contents of the string
+change-outer " would kill the entire string
+change-inner { would kill the return-statement
+change-outer { would kill the entire block
+
+I use M-i and M-o for this.
+
+Giving these commands a prefix argument C-u means copy instead of
+kill.
+
+-- [[https://github.com/magnars/change-inner.el][GitHub Repo]]
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package change-inner
+    :ensure t
+    :bind
+    ("M-i" . change-inner)
+    ("M-o" . change-outer))
+#+END_SRC
+
+* COMPANY MODE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package company
+    :ensure t
+    :defer t
+    :diminish company-mode
+    :hook
+    (prog-mode . company-mode)
+    (slime-mode . company-mode)
+    (slime-repl-mode . company-mode))
+#+END_SRC
+
+* DIMINISH
+
+#+BEGIN_SRC emacs-lisp
+  (use-package diminish
+    :defer 4
+    :ensure t)
+#+END_SRC
+
+* DUMB JUMP
+
+Install [[https://github.com/ggreer/the_silver_searcher][The Silver Searcher]] or [[https://github.com/BurntSushi/ripgrep][ripgrep]] first.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package dumb-jump
+    :ensure t
+    :bind (("M-g o" . dumb-jump-go-other-window)
+           ("M-g j" . dumb-jump-go)
+           ("M-g i" . dumb-jump-go-prompt)
+           ("M-g x" . dumb-jump-go-prefer-external)
+           ("M-g z" . dumb-jump-go-prefer-external-other-window))
+    :hook
+    (prog-mode . dumb-jump-mode)
+    :config
+    (setq dumb-jump-selector 'ido))
+#+END_SRC
+
+* EXEC PATH FROM SHELL
+
+#+BEGIN_SRC emacs-lisp
+(use-package exec-path-from-shell
+  :ensure t
+  :defer t
+  :init
+  (exec-path-from-shell-initialize)
+  (exec-path-from-shell-copy-env "PYTHONPATH"))
+#+END_SRC
+
+* EMMET MODE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package emmet-mode
+    :defer t
+    :ensure t
+    :diminish
+    :after web-mode
+    :hook
+    (sgml-mode)
+    (html-mode)
+    (css-mode)
+    (web-mode))
+#+END_SRC
+
+* EXPAND REGION
+
+https://spwhitton.name/blog/entry/expandregionlines/
+
+#+BEGIN_SRC emacs-lisp
+  (use-package expand-region
+    :ensure t
+    :bind
+    ("C-=" . er/expand-region)
+    ("C--" . er/contract-region)
+    :config
+    (defadvice er/expand-region (around fill-out-region activate)
+      (if (or (not (region-active-p))
+              (eq last-command 'er/expand-region))
+          ad-do-it
+        (if (< (point) (mark))
+            (let ((beg (point)))
+              (goto-char (mark))
+              (end-of-line)
+              (forward-char 1)
+              (push-mark)
+              (goto-char beg)
+              (beginning-of-line))
+          (let ((end (point)))
+            (goto-char (mark))
+            (beginning-of-line)
+            (push-mark)
+            (goto-char end)
+            (end-of-line)
+            (forward-char 1))))))
+#+END_SRC
+
+* FLX
+
+#+BEGIN_SRC emacs-lisp
+  (use-package flx-ido
+    :ensure t
+    :config
+    (flx-ido-mode 1))
+#+END_SRC
+
+* FLYCHECK
+
+#+BEGIN_SRC emacs-lisp
+  (use-package flycheck
+    :ensure t
+    :defer t
+    :diminish flycheck-mode
+    :hook
+    (prog-mode . flycheck-mode))
+#+END_SRC
+
+* GIT TIMEMACHINE
+
+[[https://github.com/pidu/git-timemachine][GitHub Repo]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package git-timemachine
+    :defer t
+    :ensure t)
+#+END_SRC
+
+* GO
+
+#+BEGIN_SRC emacs-lisp
+  (use-package go-mode
+    :ensure t
+    :defer t
+    :config
+    (add-hook 'go-mode-hook
+              (lambda ()
+                (setq indent-tabs-mode 1)
+                (setq tab-width 2)))
+    (use-package company-go
+      :ensure t
+      :after go-mode))
+#+END_SRC
+
+* HUNGRY DELETE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package hungry-delete
+    :defer 6
+    :ensure t
+    :diminish hungry-delete-mode
+    :config
+    (global-hungry-delete-mode))
+#+END_SRC
+
+* IEDIT
+
+#+BEGIN_SRC emacs-lisp
+  (use-package iedit
+    :ensure t
+    :bind
+    ("M-%" . iedit-mode))
+#+END_SRC
+
+* MAGIT
+
+[[https://github.com/magit/magit/issues/2971][Batch operation wontfix]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package magit
+    :ensure t
+    :bind
+    ("C-x g" . magit-status)
+    ("C-c g d" . magit-dispatch)
+    ("C-c g l" . magit-list-repositories)
+    :init
+    (setq magit-repository-directories `(("~/" . 3)))
+    (setq magit-repolist-columns
+          '(("Name" 10 magit-repolist-column-ident nil)
+            ("Version" 25 magit-repolist-column-version nil)
+            ("Pull" 6 magit-repolist-column-unpulled-from-upstream)
+            ("Push" 6 magit-repolist-column-unpushed-to-upstream)
+            ("Commit" 8 magit-repolist-column-dirty)
+            ("Path" 99 magit-repolist-column-path nil)))
+    :config
+    (setq magit-completing-read-function 'ivy-completing-read))
+#+END_SRC
+
+* MARKDOWN
+
+#+BEGIN_SRC emacs-lisp
+  (use-package markdown-mode
+    :ensure t
+    :defer t
+    :commands (markdown-mode gfm-mode)
+    :mode (("README\\.md\\'" . gfm-mode)
+           ("\\.md\\'" . markdown-mode)
+           ("\\.markdown\\'" . markdown-mode))
+    :init (setq markdown-command "multimarkdown"))
+#+END_SRC
+
+* PAREDIT
+
+#+BEGIN_SRC emacs-lisp
+  (use-package paredit
+    :ensure t
+    :bind
+    ("C-c t p" . paredit-mode)
+    ("C-c (" . paredit-forward-slurp-sexp)
+    ("C-c )" . paredit-backward-slurp-sexp)
+    ("C-c <" . paredit-forward-barf-sexp)
+    ("C-c >" . paredit-backward-barf-sexp)
+    ("C-c M-s" . paredit-splice-sexp)
+    :hook
+    (common-lisp-mode . paredit-mode)
+    (emacs-lisp-mode . paredit-mode)
+    (lisp-mode . paredit-mode)
+    (slime-mode . paredit-mode)
+    (slime-repl-mode . paredit-mode)
+    :config
+    (unbind-key "M-s" paredit-mode-map))
+#+END_SRC
+
+* PC BUFFER SWITCH
+
+#+BEGIN_SRC emacs-lisp
+  (use-package pc-bufsw
+    :ensure t
+    :bind*
+    ("C-<tab>" . pc-bufsw-mru)
+    ("C-<iso-lefttab>" . pc-bufsw-lru)
+    :config
+    (setq pc-bufsw-quit-time 2))
+#+END_SRC
+
+* POWERSHELL
+
+#+BEGIN_SRC emacs-lisp
+  (use-package powershell
+    :ensure t
+    :defer t)
+#+END_SRC
+
+* PROJECTILE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package projectile
+    :ensure t
+    :diminish projectile-mode
+    :bind-keymap
+    ("C-c p" . projectile-command-map)
+    :config
+    (projectile-mode)
+    (setq projectile-completion-system 'ivy)
+    (when (require 'magit nil t)
+      (mapc #'projectile-add-known-project
+            (mapcar #'file-name-as-directory (magit-list-repos)))
+      ;; Optionally write to persistent `projectile-known-projects-file'
+      (projectile-save-known-projects)))
+#+END_SRC
+
+* PYTHON
+
+Make sure the following python packages are installed with ~pip install~:
+
+- *autopep8* /pep8 style formatter/
+- *black* /uncompromising formatter/
+- *flake8* /style guide enforcement/
+- *importmagic* /automatic imports/
+- *jedi* /lightweight autocomplete/
+- *jupyter* /ipython successor/
+- *rope* /refactoring library/
+- *virtualenv* /sandboxed python environments/
+- *yapf* /yet another python formatter/
+
+#+BEGIN_SRC sh :tangle no
+pip3 install autopep8 black flake8 importmagic jedi jupyter rope virtualenv yapf pylint
+#+END_SRC
+
+[[https://emacs.stackexchange.com/questions/2745/make-fill-paragraph-in-python-docstring-leave-the-triple-quotes-on-separate-line/2758][Docstring Fill Column Mode]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package python-mode
+    :ensure t
+    :commands (python-mode)
+    :mode (("\\.py\\'" . python-mode))
+    :config
+    (setq python-shell-interpreter "ipython3")
+    (setq python-fill-docstring-style 'django)
+    (setq fill-column 78)
+    ;; stop python interpreter from clobbering find-file...
+    ;; https://answers.launchpad.net/python-mode/+question/221144
+    (add-hook 'python-mode-hook
+              (lambda ()
+                ;; remove python-mode's ffap things that slow down find-file
+                (setq ffap-alist (remove '(python-mode . py-ffap-module-path) ffap-alist))
+                (setq ffap-alist (remove '(python-mode . py-module-path) ffap-alist))
+                (setq ffap-alist (remove '(inferior-python-mode . py-ffap-module-path) ffap-alist))
+                )))
+#+END_SRC
+
+https://realpython.com/emacs-the-best-python-editor/
+
+* ELPY
+
+https://elpy.readthedocs.io/en/latest/
+
+Run ~elpy-config~ to check python dependencies
+
+#+BEGIN_SRC emacs-lisp
+  (use-package elpy
+    :ensure t
+    :defer t
+    :hook
+    (python-mode . elpy-mode)
+    :init
+    (elpy-enable)
+    :config
+    (setq elpy-rpc-backend "jedi")
+    (setq python-shell-interpreter "jupyter"
+          python-shell-interpreter-args "console --simple-prompt"
+          python-shell-prompt-detect-failure-warning nil)
+    (add-to-list 'python-shell-completion-native-disabled-interpreters"jupyter"))
+#+END_SRC
+
+* PEP8
+
+https://pypi.org/project/autopep8/
+
+#+BEGIN_SRC emacs-lisp
+  (use-package py-autopep8
+    :ensure t
+    :defer t
+    :hook
+    (python-mode . py-autopep8-enable-on-save))
+#+END_SRC
+
+* JEDI
+
+https://github.com/anschwa/emacs.d#python
+
+#+BEGIN_SRC emacs-lisp
+  (use-package jedi
+    :ensure t
+    :defer t
+    :init
+    (setq jedi:complete-on-dot t)
+    :hook
+    (python-mode . jedi:setup))
+#+END_SRC
+
+* SLIME
+
+https://kaashif.co.uk/2015/06/28/hacking-stumpwm-with-common-lisp/
+
+https://github.com/quicklisp/quicklisp-slime-helper
+
+#+BEGIN_SRC common-lisp :tangle no
+(ql:quickload "quicklisp-slime-helper")
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package slime
+    :ensure t
+    :commands (slime-mode)
+    :defer t
+    :config
+    (use-package slime-company
+      :ensure t
+      :defer t)
+    (load (expand-file-name "~/quicklisp/slime-helper.el"))
+    (setq inferior-lisp-program "sbcl")
+    (slime-setup '(slime-fancy slime-company slime-quicklisp slime-asdf)))
+#+END_SRC
+
+* SSH-AGENCY
+
+#+BEGIN_SRC emacs-lisp :tangle (my/os-tangle 'windows-nt)
+  (use-package ssh-agency
+    :if (eq system-type 'windows-nt)
+    :ensure t
+    :defer t
+    :init
+    (setenv "SSH_ASKPASS" "git-gui--askpass"))
+#+END_SRC
+
+* SYSTEMD
+
+#+BEGIN_SRC emacs-lisp
+  (use-package systemd
+    :ensure t
+    :defer t)
+#+END_SRC
+
+* TERRAFORM MODE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package terraform-mode
+    :ensure t
+    :defer t
+    :config
+    (use-package company-terraform
+      :ensure t
+      :defer t))
+#+END_SRC
+
+* UNDO TREE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package undo-tree
+    :defer 4
+    :ensure t
+    :diminish undo-tree-mode
+    :bind
+    ("C-x u" . undo-tree-visualize)
+    :config
+    (global-undo-tree-mode 1)
+    (setq undo-tree-auto-save-history t)
+    (setq undo-tree-history-directory-alist
+          `(("." . ,(expand-file-name "~/.emacs.d/undos/")))))
+#+END_SRC
+
+* WEB MODE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package web-mode
+    :ensure t
+    :mode
+    "\\.phtml\\'"
+    "\\.tpl\\.php\\'"
+    "\\.[agj]sp\\'"
+    "\\.as[cp]x\\'"
+    "\\.erb\\'"
+    "\\.mustache\\'"
+    "\\.djhtml\\'"
+    "\\.html\\.twig\\'"
+    "\\.html?\\'"
+    "\\.php?\\'"
+    "\\.css?\\'"
+    :config
+    (setq web-mode-markup-indent-offset 2)
+    (setq web-mode-css-indent-offset 2)
+    (setq web-mode-code-indent-offset 2)
+    (setq web-mode-enable-auto-pairing t)
+    (setq web-mode-enable-css-colorization t)
+    (setq web-mode-enable-block-face t)
+    (setq web-mode-enable-part-face t)
+    (setq web-mode-enable-comment-keywords t))
+#+END_SRC
+
+* WGREP
+
+#+BEGIN_SRC emacs-lisp
+  (use-package wgrep
+    :ensure t
+    :defer t)
+#+END_SRC
+
+* WHICH KEY
+
+#+BEGIN_SRC emacs-lisp
+  (use-package which-key
+    :ensure t
+    :defer t
+    :diminish which-key-mode
+    :init
+    (which-key-mode))
+#+END_SRC
+
+* YAML MODE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package yaml-mode
+    :ensure t
+    :defer t)
+#+END_SRC
+
+* YASNIPPETS
+
+#+BEGIN_SRC emacs-lisp
+  (use-package yasnippet
+    :ensure t
+    :defer t
+    :diminish yas-minor-mode
+    :hook
+    (prog-mode . yas-minor-mode)
+    :config
+    (use-package yasnippet-snippets
+      :defer t
+      :ensure t
+      :after yasnippet
+      ))
+#+END_SRC
