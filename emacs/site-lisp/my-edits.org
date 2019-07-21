@@ -417,6 +417,7 @@ install.
   (global-set-key (kbd "M-s M-s") 'my/surround)
   (global-set-key (kbd "C-o") 'my/open-line-above)
   (global-set-key (kbd "C-S-o") 'my/open-line-below)
+  (global-set-key (kbd "M-S-y") 'my/yank-pop-forwards)
   (global-set-key (kbd "M-Q") 'my/unfill-region)
 
   (define-key isearch-mode-map (kbd "C-z") 'my/zap-to-isearch)

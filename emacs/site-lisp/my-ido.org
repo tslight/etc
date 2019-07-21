@@ -32,9 +32,13 @@
                                 "  [Not readable]"
                                 "  [Too big]"
                                 "  [Confirm]")))
+
+  ;; (setq icomplete-separator "\n")
+  ;; (setq icomplete-hide-common-prefix nil)
+  (setq icomplete-in-buffer t)
 #+END_SRC
 
-* FUNCTIONS
+* IDO FIND RECENTF
 
 #+BEGIN_SRC emacs-lisp
   (defun my/ido-find-recentf ()
@@ -43,7 +47,11 @@
     (if (find-file (ido-completing-read "Recent: " recentf-list))
         (message "Opening file...")
       (message "Aborting")))
+#+END_SRC
 
+* IDO KEYS
+
+#+BEGIN_SRC emacs-lisp
   (defun my/ido-keys ()
     "Custom ido keybindings."
     (define-key ido-completion-map (kbd "C-n") 'ido-next-match)
@@ -61,6 +69,13 @@
                                   (ido-completing-read
                                    "M-x "
                                    (all-completions "" obarray 'commandp))))))
+
+  (define-key icomplete-minibuffer-map (kbd "C-f") 'icomplete-forward-completions)
+  (define-key icomplete-minibuffer-map (kbd "C-b") 'icomplete-backward-completions)
+  (define-key icomplete-minibuffer-map (kbd "C-n") 'icomplete-forward-completions)
+  (define-key icomplete-minibuffer-map (kbd "C-p") 'icomplete-backward-completions)
+  (define-key icomplete-minibuffer-map (kbd "C-s") 'icomplete-forward-completions)
+  (define-key icomplete-minibuffer-map (kbd "C-r") 'icomplete-backward-completions)
 #+END_SRC
 
 * HOOKS
