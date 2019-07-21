@@ -343,7 +343,7 @@ https://spwhitton.name/blog/entry/expandregionlines/
             ("Commit" 8 magit-repolist-column-dirty)
             ("Path" 99 magit-repolist-column-path nil)))
     :config
-    (setq magit-completing-read-function 'ivy-completing-read))
+    (setq magit-completing-read-function 'magit-ido-completing-read))
 #+END_SRC
 
 * MARKDOWN

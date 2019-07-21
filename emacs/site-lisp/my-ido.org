@@ -10,8 +10,12 @@
 
 #+OPTIONS: toc:t
 
+* SETTINGS
+
 #+BEGIN_SRC emacs-lisp
   (require 'ido)
+  (require 'icomplete)
+
   (setq ido-use-virtual-buffers t) ;; show recent files too
   (setq ido-create-new-buffer 'always)
   (setq ido-enable-prefix nil)
@@ -28,7 +32,11 @@
                                 "  [Not readable]"
                                 "  [Too big]"
                                 "  [Confirm]")))
+#+END_SRC
 
+* FUNCTIONS
+
+#+BEGIN_SRC emacs-lisp
   (defun my/ido-find-recentf ()
     "Use `ido-completing-read' to `find-file' a recent file."
     (interactive)
@@ -36,15 +44,15 @@
         (message "Opening file...")
       (message "Aborting")))
 
-  (defun my/ido-disable-line-truncation ()
-    "Prevent ido truncation in minibuffer."
-    (set (make-local-variable 'truncate-lines) nil))
-
   (defun my/ido-keys ()
     "Custom ido keybindings."
     (define-key ido-completion-map (kbd "C-n") 'ido-next-match)
     (define-key ido-completion-map (kbd "C-p") 'ido-prev-match))
+#+END_SRC
 
+* BINDINGS
+
+#+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "C-c r") 'my/ido-find-recentf)
   (global-set-key (kbd "M-x") (lambda ()
                                 (interactive)
@@ -53,11 +61,23 @@
                                   (ido-completing-read
                                    "M-x "
                                    (all-completions "" obarray 'commandp))))))
+#+END_SRC
 
-  (add-hook 'ido-minibuffer-setup-hook 'my/ido-disable-line-truncation)
+* HOOKS
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'ido-minibuffer-setup-hook (lambda ()
+                                         (set
+                                          (make-local-variable 'truncate-lines)
+                                          nil)))
   (add-hook 'ido-setup-hook 'my/ido-keys)
   (add-hook 'ido-setup-hook (lambda ()
                               (define-key ido-completion-map [tab] 'ido-complete)))
+#+END_SRC
 
+* INIT
+
+#+BEGIN_SRC emacs-lisp
+  (icomplete-mode 1)
   (ido-mode 1)
 #+END_SRC

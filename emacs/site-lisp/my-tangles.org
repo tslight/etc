@@ -28,14 +28,25 @@ compiled and loaded.
 /Alternatively, simply running [[file:../tangle.sh][tangle.sh]] from a terminal should do all of the
 above, automagically, without even having to open Emacs.../
 
+* VARIABLES
+
 #+BEGIN_SRC emacs-lisp
   (setq org-confirm-babel-evaluate nil)
   (setq-default buffer-file-coding-system 'utf-8-unix)
   (setq my/config-directory "~/etc/"
         my/agnostic-config-directory (concat my/config-directory "agnostic/")
         my/emacs-config-directory (concat my/config-directory "emacs/"))
+#+END_SRC
 
+* OS CONFIG DIRECTORY
+
+Finds the directory in ~my/config-directory~ that matches a substring of
+~system-configuration~.
+
+#+BEGIN_SRC emacs-lisp
   (defun my/os-config-directory ()
+    "Finds the directory in `my/config-directory' that matches a
+  substring of `system-configuration'."
     (car (remove nil
                  (mapcar (lambda (d)
                            (if (and (file-directory-p d)
@@ -43,7 +54,20 @@ above, automagically, without even having to open Emacs.../
                                      (file-name-base d) system-configuration))
                                d))
                          (directory-files my/config-directory t "^[^\\..]*$")))))
+#+END_SRC
 
+* INSERT BOILERPLATE
+
+Take a FILE as an argument & insert elisp header and footer comments into it,
+if it's an elisp FILE.
+
+If the file is in my site-lisp directory also insert a provide expression, so
+that the FILE can be loaded as a package.
+
+Return the file name, so that this function can be piped to other functions,
+such as my/compile-and-load-file."
+
+#+BEGIN_SRC emacs-lisp
   (defun my/insert-boilerplate (&optional file)
     "Take a FILE as an argument & insert elisp header and footer
   comments into it, if it's an elisp FILE.
@@ -52,7 +76,7 @@ above, automagically, without even having to open Emacs.../
   expression, so that the FILE can be loaded as a package.
 
   Return the file name, so that this function can be piped to other
-  functions, such as my/compile-and-load-file."
+  functions, such as `my/compile-and-load-file'."
     (when file
       (when (equal (file-name-extension file) "el")
         (let ((temp-buffer (set-buffer (find-file-noselect file))))
@@ -86,14 +110,31 @@ above, automagically, without even having to open Emacs.../
           (delete-file (concat file "~"))
           (message (concat "Deleted " file "~ backup file"))))
       file))
+#+END_SRC
 
+* COMPILE & LOAD CONFIG
+
+Byte compile init file and site-lisp directory and then load the newly compiled
+configuration.
+
+#+BEGIN_SRC emacs-lisp
   (defun my/compile-and-load-config ()
     "Byte compile init file and site-lisp directory and then load
      the newly compiled configuration."
     (interactive)
     (byte-compile-file (concat user-emacs-directory "init.el") 0)
     (byte-recompile-directory (concat user-emacs-directory "site-lisp") 0))
+#+END_SRC
 
+* TANGLE DIRECTORY
+
+Takes a DIRECTORY as an argument and recursively tangles all the org-mode files
+in it and it's child directories.
+
+If the directory being tangled is my emacs configuration directory, run
+my/compile-and-load-config.
+
+#+BEGIN_SRC emacs-lisp
   (defun my/tangle-directory (directory)
     "Takes a DIRECTORY as an argument and recursively tangles all
   the org-mode files in it and it's child directories.
@@ -118,14 +159,34 @@ above, automagically, without even having to open Emacs.../
             (directory-files (getenv "HOME") t "^\\.emacs.*")))
 
     (message (concat "my/tangle-directory "directory" completed.")))
+#+END_SRC
 
+* TANGLE ALL
+
+Tangle all the things!
+
+#+BEGIN_SRC emacs-lisp
   (defun my/tangle-all ()
+    "Tangle all the things!"
     (interactive)
     (my/tangle-directory my/agnostic-config-directory)
     (my/tangle-directory my/emacs-config-directory)
     (my/tangle-directory (my/os-config-directory))
     (message "Tangled all the things!"))
+#+END_SRC
 
+* AUTO TANGLE
+
+Auto tangle files in the directories specified below when they are
+edited. Providing the system-type value is
+
+It doesn't make sense to tangle openbsd configurations files on to a linux box,
+for example.
+
+However, I may want to be able to edit them without auto tangling from another
+OS.
+
+#+BEGIN_SRC emacs-lisp
   (defun my/parent-directory-name (file)
     (file-name-nondirectory
      (directory-file-name
@@ -160,7 +221,11 @@ above, automagically, without even having to open Emacs.../
                   (my/os-config-directory)
                   current-directory-path))
              (org-babel-tangle)))))
+#+END_SRC
 
+* HARDWARE TANGLE
+
+#+BEGIN_SRC emacs-lisp
   (defun my/hardware-tangle (vendor file path)
     "Tangle block to PATH if VENDOR string matches the relevant FILE in
       /sys/class/dmi/id/."
@@ -170,12 +235,24 @@ above, automagically, without even having to open Emacs.../
                         (buffer-string)))
         path
       "no"))
+#+END_SRC
 
+* OS TANGLE
+
+#+BEGIN_SRC emacs-lisp
   (defun my/os-tangle (os)
     (when (not (equal system-type os)) "no"))
+#+END_SRC
 
+* BINDINGS
+
+#+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "C-c v d") 'my/tangle-directory)
   (global-set-key (kbd "C-c v a") 'my/tangle-all)
+#+END_SRC
 
+* HOOKS
+
+#+BEGIN_SRC emacs-lisp
   (add-hook 'after-save-hook 'my/auto-tangle)
 #+END_SRC

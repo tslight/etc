@@ -10,11 +10,17 @@
 
 #+OPTIONS: toc:t
 
+* REQUIRES
+
 #+BEGIN_SRC emacs-lisp
   (require 'dired-x)
   (require 'dired)
   (require 'find-dired)
+#+END_SRC
 
+* SETTINGS
+
+#+BEGIN_SRC emacs-lisp
   (autoload 'dired-jump "dired-x" t)
   (setq find-ls-option '("-print0 | xargs -0 ls -ld" . "-ld"))
   (when (eq system-type 'berkeley-unix)
@@ -30,16 +36,18 @@
   (defvar dired-compress-files-alist
     '(("\\.tar\\.gz\\'" . "tar -c %i | gzip -c9 > %o")
       ("\\.zip\\'" . "zip %o -r --filesync %i"))
-       "Control the compression shell command for `dired-do-compress-to'.
+       " Control the compression shell command for
+  `dired-do-compress-to'.  Each element is (REGEXP . CMD), where
+  REGEXP is the name of the archive to which you want to compress,
+  and CMD the the corresponding command.
 
-        Each element is (REGEXP . CMD), where REGEXP is the name of
-        the archive to which you want to compress, and CMD the the
-        corresponding command.
+  Within CMD, %i denotes the input file(s), and %o denotes the
+  output file.  %i path(s) are relative, while %o is absolute.")
+#+END_SRC
 
-        Within CMD, %i denotes the input file(s), and %o denotes
-        the output file.  %i path(s) are relative, while %o is
-        absolute.")
+* FUNCTIONS
 
+#+BEGIN_SRC emacs-lisp
   (defun my/dired-get-size ()
     "Get cumlative size of marked or current item."
     (interactive)
@@ -114,7 +122,11 @@
             (switch-to-buffer filebuffer)
           (view-file file))
         (other-window -1))))
+#+END_SRC
 
+* BINDINGS
+
+#+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "C-x C-S-J") 'dired-jump-other-window)
   (global-set-key (kbd "C-x C-j") 'dired-jump)
 
