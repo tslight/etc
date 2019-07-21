@@ -36,6 +36,7 @@ local variables.
     (require 'my-dired)
     (require 'my-edits)
     (require 'my-files)
+    (require 'my-gnus)
     (require 'my-hooks)
     (require 'my-ido)
     (require 'my-keys)

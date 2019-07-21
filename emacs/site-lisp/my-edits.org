@@ -265,9 +265,9 @@ install.
 
 #+BEGIN_SRC emacs-lisp
   (defun my/jump-to-mark ()
-    "Jump to the local mark, respecting the `mark-ring' order.  This
-    is the same as using \\[set-mark-command] with the prefix
-    argument."
+    "Jump to the local mark, respecting the `mark-ring' order.
+  This is the same as using \\[set-mark-command] with the prefix
+  argument."
     (interactive)
     (set-mark-command 1))
 #+END_SRC
