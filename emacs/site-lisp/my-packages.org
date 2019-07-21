@@ -1,19 +1,16 @@
 #+TITLE: PACKAGE CONFIGURATION
 #+AUTHOR: Toby Slight
-
 #+PROPERTY: header-args :cache yes
 #+PROPERTY: header-args+ :mkdirp yes
 #+PROPERTY: header-args+ :padline no
 #+PROPERTY: header-args+ :results silent
 #+PROPERTY: header-args+ :tangle ~/.emacs.d/site-lisp/my-packages.el
 #+PROPERTY: header-args+ :tangle-mode (identity #o600)
-
 #+OPTIONS: toc:t
 
 Please see the [[file:README.org][README]] and/or [[file:./site-lisp/my-tangles.org][my-tangles.org]] for instructions on how to install.
 
-I am using [[https://github.com/jwiegley][John Wiegley's]] amazing [[https://github.com/jwiegley/use-package][use-package]] macro to configure MELPA packages,
-built-in Emacs ones, and my own local custom minor mode packages.
+I am using [[https://github.com/jwiegley][John Wiegley's]] amazing [[https://github.com/jwiegley/use-package][use-package]] macro to configure MELPA packages.
 
 * BOOTSTRAP
 
@@ -49,25 +46,6 @@ everything else up.
 
 * ACE WINDOW
 
-#+BEGIN_QUOTE
-*What and why*
-
-I'm sure you're aware of the other-window command. While it's great
-for two windows, it quickly loses its value when there are more
-windows. You need to call it many times, and since it's not easily
-predictable, you have to check each time if you're in the window that
-you wanted.
-
-Another approach is to use windmove-left, windmove-up, etc. These are
-fast and predictable. Their disadvantage is that they need 4 key
-bindings. The default ones are shift+arrows, which are hard to reach.
-
-This package aims to take the speed and predictability of windmove and
-pack it into a single key binding, similar to other-window.
-
--- [[https://github.com/abo-abo/ace-window][Abo-Abo GitHub Link]]
-#+END_QUOTE
-
 #+BEGIN_SRC emacs-lisp
   (use-package ace-window
     :after bind-key
@@ -77,10 +55,6 @@ pack it into a single key binding, similar to other-window.
     ("C-x 0" . ace-delete-window)
     ("C-x 1" . ace-delete-other-windows)
     :config
-    (set-face-attribute 'aw-leading-char-face nil
-                        :foreground "deep sky blue"
-                        :weight 'bold
-                        :height 2.0)
     (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
 #+END_SRC
 
@@ -138,27 +112,6 @@ pack it into a single key binding, similar to other-window.
 #+END_SRC
 
 * CHANGE INNER
-
-#+BEGIN_QUOTE
-change-inner gives you vim's ci command, building on expand-region. It
-is most easily explained by example:
-
-=function test() { return "semantic kill";}=
-
-With point after the word semantic
-
-change-inner " would kill the contents of the string
-change-outer " would kill the entire string
-change-inner { would kill the return-statement
-change-outer { would kill the entire block
-
-I use M-i and M-o for this.
-
-Giving these commands a prefix argument C-u means copy instead of
-kill.
-
--- [[https://github.com/magnars/change-inner.el][GitHub Repo]]
-#+END_QUOTE
 
 #+BEGIN_SRC emacs-lisp
   (use-package change-inner

@@ -30,7 +30,6 @@ local variables.
         (gc-cons-percentage 0.8))
     (add-to-list 'load-path (concat user-emacs-directory "site-lisp/"))
     (require 'misc)
-    (require 'undo-tree)
     (require 'my-advice)
     (require 'my-buffers)
     (require 'my-dired)
