@@ -15,35 +15,51 @@ Please see the [[file:README.org][README]] and/or [[file:my-tangles.org][my-tang
 As the name might suggest, this file mainly toggles various built in Emacs
 variables to what I consider to be slightly saner defaults...
 
+* ABBREVS
+
 #+BEGIN_SRC emacs-lisp
-  ;; abbrevs
   (setq abbrev-file-name (concat user-emacs-directory "abbrevs"))
   (setq save-abbrevs 'silently)
+#+END_SRC
 
-  ;; autosave settings
+* AUTOSAVE SETTINGS
+
+#+BEGIN_SRC emacs-lisp
   (setq auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)))
   (setq auto-save-timeout 5)
   (setq auto-window-vscroll nil)
+#+END_SRC
 
-  ;; backup settings
+* BACKUP SETTINGS
+
+#+BEGIN_SRC emacs-lisp
   (setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
   (setq backup-by-copying t) ;; copy files, don't rename them.
   (setq delete-old-versions t)
   (setq kept-new-versions 12)
   (setq kept-old-versions 12)
+#+END_SRC
 
-  ;; bell settings
+* BELL SETTINGS
+
+#+BEGIN_SRC emacs-lisp
   (setq ring-bell-function 'ignore)
   (setq visible-bell 1)
+#+END_SRC
 
-  ;; killing & clipboard settings
+* KILLING & CLIPBOARD SETTINGS
+
+#+BEGIN_SRC emacs-lisp
   (setq mouse-yank-at-point t)
   (setq select-enable-clipboard t)
   (setq select-enable-primary t)
   (setq x-select-enable-clipboard-manager nil)
   (setq save-interprogram-paste-before-kill t)
+#+END_SRC
 
-  ;; editing settings
+* EDITING SETTINGS
+
+#+BEGIN_SRC emacs-lisp
   (electric-pair-mode 1)
   (electric-indent-mode 1)
   (global-subword-mode 1) ;; move by camel case, etc
@@ -56,15 +72,24 @@ variables to what I consider to be slightly saner defaults...
   (setq require-final-newline t) ;; useful for crontab
   (setq set-mark-command-repeat-pop t) ;; repeating C-SPC after popping, pops it
   (show-paren-mode 1)
+#+END_SRC
 
-  ;; elisp settings
+* ELISP SETTINGS
+
+#+BEGIN_SRC emacs-lisp
   (setq load-prefer-newer t) ;; if init.elc is older, use newer init.el
+#+END_SRC
 
-  ;; encryption settings
+* ENCRYPTION SETTINGS
+
+#+BEGIN_SRC emacs-lisp
   (setq epa-file-cache-passphrase-for-symmetric-encryption t)
   (setf epa-pinentry-mode 'loopback)
+#+END_SRC
 
-  ;; erc settings
+* ERC SETTINGS
+
+#+BEGIN_SRC emacs-lisp
   (setq erc-autojoin-channels-alist '(("freenode.net"
                                        "#org-mode"
                                        "#emacs")))
@@ -75,15 +100,21 @@ variables to what I consider to be slightly saner defaults...
   (setq erc-nick "not2b")
   (setq erc-prompt-for-password t)
   (setq erc-track-enable-keybindings t)
+#+END_SRC
 
-  ;; eshell settings
+* ESHELL SETTINGS
+
+#+BEGIN_SRC emacs-lisp
   (require 'em-smart)
   (setq eshell-history-size 1024)
   (setq eshell-where-to-jump 'begin)
   (setq eshell-review-quick-commands nil)
   (setq eshell-smart-space-goes-to-end t)
+#+END_SRC
 
-  ;; file encoding & env settings
+* FILE ENCODING & ENV SETTINGS
+
+#+BEGIN_SRC emacs-lisp
   (setq-default buffer-file-coding-system 'utf-8-unix)
   (setq-default default-buffer-file-coding-system 'utf-8-unix)
   (setq coding-system-for-read 'utf-8-unix)
@@ -91,29 +122,44 @@ variables to what I consider to be slightly saner defaults...
   (set-language-environment "UTF-8")
   (set-default-coding-systems 'utf-8-unix)
   (prefer-coding-system 'utf-8-unix)
+#+END_SRC
 
-  ;; misc settings
+* MISC SETTINGS
+
+#+BEGIN_SRC emacs-lisp
   (setq compilation-scroll-output 'first-error)
   (setq custom-file (make-temp-file "emacs-custom"))
   (setq disabled-command-function nil) ;; enable all "advanced" features
   (setq message-log-max 10000)
   (setq apropos-do-all t) ;; doesn't seem to be documented anywhere..
+#+END_SRC
 
-  ;; personal info settings
+* PERSONAL INFO SETTINGS
+
+#+BEGIN_SRC emacs-lisp
   (setq user-full-name "Toby Slight")
   (setq user-mail-address "tslight@pm.me")
+#+END_SRC
 
-  ;; pdf view mode scrolling
+* PDF VIEW MODE SCROLLING
+
+#+BEGIN_SRC emacs-lisp
   (setq doc-view-continuous t)
   (setq doc-view-resolution 300)
+#+END_SRC
 
-  ;; programming settings
+* PROGRAMMING SETTINGS
+
+#+BEGIN_SRC emacs-lisp
   (setq c-default-style "bsd")
   (setq c-basic-offset 4)
   (setq css-indent-offset 2)
   (setq js-indent-level 2)
+#+END_SRC
 
-  ;; recentf settings
+* RECENTF SETTINGS
+
+#+BEGIN_SRC emacs-lisp
   (recentf-mode 1)
   (setq recentf-exclude '(".*init\.el"
                           ".*\/my-.*\.el"
@@ -123,8 +169,11 @@ variables to what I consider to be slightly saner defaults...
                           "[/\\]\\.elpa/"))
   (setq recentf-max-menu-items 128)
   (setq recentf-max-saved-items 256)
+#+END_SRC
 
-  ;; registers
+* REGISTERS
+
+#+BEGIN_SRC emacs-lisp
   (set-register ?h (cons 'file "~/"))
   (set-register ?g (cons 'file "~/src"))
   (set-register ?o (cons 'file "~/org"))
@@ -133,8 +182,11 @@ variables to what I consider to be slightly saner defaults...
   (set-register ?j (cons 'file "~/org/journal.org"))
   (set-register ?b (cons 'file "~/Documents/bbk"))
   (set-register ?i (cons 'file "~/etc/emacs/my-init.org"))
+#+END_SRC
 
-  ;; saving settings
+* SAVING SETTINGS
+
+#+BEGIN_SRC emacs-lisp
   (savehist-mode 1)
   (setq savehist-additional-variables '(kill-ring search-ring regexp-search-ring))
   (setq savehist-save-minibuffer-history 1)
@@ -143,45 +195,71 @@ variables to what I consider to be slightly saner defaults...
   (setq bookmark-save-flag 1) ;; always save bookmarks to file
   (save-place-mode 1)
   (setq save-place-file (concat user-emacs-directory "saveplace.el"))
+#+END_SRC
 
-  ;; scrolling settings
+* SCROLLING SETTINGS
+
+#+BEGIN_SRC emacs-lisp
   (setq scroll-step 4)
   (setq scroll-margin 6)
   (setq scroll-conservatively 8)
+#+END_SRC
 
-  ;; startup settings
+* STARTUP SETTINGS
+
+#+BEGIN_SRC emacs-lisp
   (setq inhibit-startup-echo-area-message t)
   (setq inhibit-startup-screen t)
   (setq initial-scratch-message nil)
   (setq initial-major-mode 'fundamental-mode)
+#+END_SRC
 
-  ;; stop nagging!
+* STOP NAGGING!
+
+#+BEGIN_SRC emacs-lisp
   (fset 'yes-or-no-p 'y-or-n-p) ;; never have to type full word
   (setq confirm-kill-emacs 'y-or-n-p)
+#+END_SRC
 
-  ;; term settings
+* TERM SETTINGS
+
+#+BEGIN_SRC emacs-lisp
   (setq term-buffer-maximum-size 200000)
+#+END_SRC
 
-  ;; tramp settings
+* TRAMP SETTINGS
+
+#+BEGIN_SRC emacs-lisp
   (setq tramp-backup-directory-alist backup-directory-alist)
   (setq tramp-default-method "ssh")
   (setf tramp-persistency-file-name (concat temporary-file-directory "tramp-" (user-login-name)))
+#+END_SRC
 
-  ;; undo settings
+* UNDO SETTINGS
+
+#+BEGIN_SRC emacs-lisp
   (setq undo-limit 150000)
   (setq undo-strong-limit 300000)
+#+END_SRC
 
-  ;; uniquify settings
+* UNIQUIFY SETTINGS
+
+#+BEGIN_SRC emacs-lisp
   (require 'uniquify)
   (setq uniquify-buffer-name-style 'forward)
+#+END_SRC
 
-  ;; vc settings
+* VC SETTINGS
+
+#+BEGIN_SRC emacs-lisp
   (setq vc-follow-symlinks t)
   (setq vc-make-backup-files t)
   (setq version-control t)
+#+END_SRC
 
-  ;; window settings
-  (windmove-default-keybindings 'control)
+* WINDOW SETTINGS
+
+#+BEGIN_SRC emacs-lisp
   (when (fboundp 'winner-mode) (winner-mode 1))
   (setq split-width-threshold 160)
   (setq split-height-threshold 80)

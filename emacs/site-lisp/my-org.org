@@ -13,24 +13,10 @@
 Please see the [[file:README.org][README]] and/or [[file:my-tangles.org][my-tangles.org]] for instructions on how to
 install.
 
+* SETTINGS
+
 #+BEGIN_SRC emacs-lisp
   (require 'org)
-
-  (defun my/org-recursive-sort ()
-    "Sort all entries in the current buffer, recursively."
-    (interactive)
-    (org-map-entries
-     (lambda ()
-       (condition-case x
-           (org-sort-entries nil ?a)
-         (user-error)))))
-
-  (defun my/org-tangle-block()
-    "Only tangle the block at point."
-    (interactive)
-    (let ((current-prefix-arg '(4)))
-      (call-interactively 'org-babel-tangle)))
-
   (setf org-blank-before-new-entry '((heading . nil) (plain-list-item . nil)))
   (setq org-emphasis-regexp-components '(" \t('\"{" "- \t.,:!?;'\")}\\" " \t\r\n,\"'" "." 300))
   (setq org-confirm-babel-evaluate t)
@@ -105,4 +91,23 @@ install.
   (add-to-list 'org-structure-template-alist
                '("sh" "#+BEGIN_SRC sh\n?\n#+END_SRC"
                  "<src lang=\"sh\">\n\n</src>"))
+#+END_SRC
+
+* FUNCTIONS
+
+#+BEGIN_SRC emacs-lisp
+  (defun my/org-recursive-sort ()
+    "Sort all entries in the current buffer, recursively."
+    (interactive)
+    (org-map-entries
+     (lambda ()
+       (condition-case x
+           (org-sort-entries nil ?a)
+         (user-error)))))
+
+  (defun my/org-tangle-block()
+    "Only tangle the block at point."
+    (interactive)
+    (let ((current-prefix-arg '(4)))
+      (call-interactively 'org-babel-tangle)))
 #+END_SRC

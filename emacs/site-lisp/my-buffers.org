@@ -13,22 +13,36 @@
 Please see the [[file:README.org][README]] and/or [[file:my-tangles.org][my-tangles.org]] for instructions on how to
 install.
 
+* FILL BUFFER
+
 #+BEGIN_SRC emacs-lisp
   (defun my/fill-buffer ()
     "Fill the contents of a buffer."
     (interactive)
     (fill-region (point-min) (point-max)))
+#+END_SRC
 
+* INDENT BUFFER
+
+#+BEGIN_SRC emacs-lisp
   (defun my/indent-buffer ()
     "Indent the contents of a buffer."
     (interactive)
     (indent-region (point-min) (point-max)))
+#+END_SRC
 
+* LAST BUFFER
+
+#+BEGIN_SRC emacs-lisp
   (defun my/last-buffer ()
     "Switch back and forth between two buffers easily."
     (interactive)
     (switch-to-buffer (other-buffer (current-buffer) 1)))
+#+END_SRC
 
+* NUKE BUFFERS
+
+#+BEGIN_SRC emacs-lisp
   (defun my/nuke-buffers ()
     "Kill all buffers, leaving *scratch* only."
     (interactive)
@@ -37,25 +51,41 @@ install.
        (kill-buffer buffer))
      (buffer-list))
     (delete-other-windows))
+#+END_SRC
 
+* SAVE BUFFERS SILENTLY
+
+#+BEGIN_SRC emacs-lisp
   (defun my/save-buffers-silently ()
     "Save all open buffers without prompting."
     (interactive)
     (save-some-buffers t)
     (message "Saving all buffers..."))
+#+END_SRC
 
+* SEARCH ALL BUFFERS
+
+#+BEGIN_SRC emacs-lisp
   (defun my/search-all-buffers (regexp)
     "Search all buffers for REGEXP."
     (interactive "sRegexp: ")
     (multi-occur-in-matching-buffers "." regexp t))
+#+END_SRC
 
+* TOGGLE BUFFER
+
+#+BEGIN_SRC emacs-lisp
   (defun my/toggle-buffer (buffer)
     "Toggle back & forth between BUFFER and the current buffer."
     (interactive "BBuffer: ")
     (if (equal (buffer-name) buffer)
         (my/last-buffer)
       (switch-to-buffer buffer)))
+#+END_SRC
 
+* BINDINGS
+
+#+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "C-`") 'my/last-buffer)
   (global-set-key (kbd "C-c M-i") 'my/indent-buffer)
   (global-set-key (kbd "C-c b i") 'my/indent-buffer)
