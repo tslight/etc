@@ -294,6 +294,7 @@ install.
         (my/open-line-above)
       (move-end-of-line nil)
       (newline-and-indent)))
+
   (defun my/remove-from-buffer (string)
     "Remove all occurences of STRING from the whole buffer."
     (interactive "sString to remove: ")
@@ -368,10 +369,27 @@ install.
     (interactive)
     (untabify (point-min) (point-max)))
 
-  (defun my/yank-pop-forwards (arg)
+  (defun my/yank ()
+    "This command calls `yank', and if repeated, calls `yank-pop'.
+
+  When `universal-argument' is called first with a number arg,
+  paste that many times."
+    (interactive)
+    (progn
+      (when (and delete-selection-mode (region-active-p))
+        (delete-region (region-beginning) (region-end)))
+      (if current-prefix-arg
+          (progn
+            (dotimes ($i (prefix-numeric-value current-prefix-arg))
+              (yank)))
+        (if (eq real-last-command this-command)
+            (yank-pop 1)
+          (yank)))))
+
+  (defun my/yank-pop-forwards ()
     "Pop the kill ring forwards by ARG."
-    (interactive "p")
-    (yank-pop (- arg)))
+    (interactive)
+    (yank-pop -1))
 
   (defun my/zap-to-isearch (rbeg rend)
     "Kill the region (RBEG - REND) between the mark and the
@@ -417,6 +435,8 @@ install.
   (global-set-key (kbd "M-s M-s") 'my/surround)
   (global-set-key (kbd "C-o") 'my/open-line-above)
   (global-set-key (kbd "C-S-o") 'my/open-line-below)
+  (global-set-key (kbd "C-y") 'my/yank)
+  (global-set-key (kbd "C-M-y") 'my/yank-pop-forwards)
   (global-set-key (kbd "M-S-y") 'my/yank-pop-forwards)
   (global-set-key (kbd "M-Q") 'my/unfill-region)
 
