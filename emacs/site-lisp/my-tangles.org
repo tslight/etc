@@ -11,7 +11,7 @@
 
 #+BEGIN_SRC emacs-lisp
   ;; This is horrible. There has to be a clever way to do this with recursion...
-  (setq my/config-directory "~/src/tspub/etc/"
+  (setq my/config-directory (expand-file-name (vc-root-dir))
         my/agnostic-config-directory (concat my/config-directory "agnostic/")
         my/emacs-config-directory (concat my/config-directory "emacs/"))
 #+END_SRC
