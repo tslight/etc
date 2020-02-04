@@ -3,9 +3,11 @@
 #+PROPERTY: header-args+ :results silent
 
 * Hello? Hello? What's all this shouting?
+
 #+CAPTION: This is a local config, for local Lispers. There's nothing for you here.
 #+NAME:fig:Edward_and_Tubbs
      [[./img/local.jpg]]
+
 * We'll have no trouble here.
 
 The culmination of years of [[http://projects.csail.mit.edu/gsb/old-archive/gsb-archive/gsb2000-02-11.html][yak-shaving]]...
@@ -17,7 +19,7 @@ All in one handy dandy git repo. Fact.
 
 * Installation
 
-** OPTION 1
+** Option 1
 
 1) Clone this repo & open this file in Emacs.
 2) Execute the elisp source code block below using ~C-c C-c~ with your cursor
@@ -31,7 +33,7 @@ All in one handy dandy git repo. Fact.
 3) Wait for all the appropriate org files to [[https://www.gnu.org/software/emacs/manual/html_node/org/Extracting-source-code.html][tangle]] (this may take a while...)
 4) ...Profit!
 
-** OPTION 2
+** Option 2
 
 1) Clone this repo & cd into this directory.
 2) Run ~install.sh~, or the command below, in a terminal, from this directory:
@@ -44,29 +46,30 @@ All in one handy dandy git repo. Fact.
 
 3) Wait for all the appropriate org files to [[https://www.gnu.org/software/emacs/manual/html_node/org/Extracting-source-code.html][tangle]] (this may take a while...)
 4) ...Profit!
+
 * How does all this work?
 
-I'm using Emacs' amazing org-mode as a configuration file management
-system.
+I'm using Emacs' amazing org-mode as a configuration file management system.
 
-The functions defined in [[file:emacs/site-lisp/my-tangles.org][this]] file, allow automated tangling of the
-files in this repository.
+The functions defined in [[file:emacs/site-lisp/my-tangles.org][this]] file, allow automated tangling of the files in
+this repository.
 
-Please see the [[file:emacs/README.org][Emacs configuration directory]] for more details on how
-this is implemented.
+Please see the [[file:emacs/README.org][Emacs configuration directory]] for more details on how this is
+implemented.
 
 The main functions were inspired by this guy's blog:
 
 [[http://fgiasson.com/blog/index.php/2016/10/26/literate-clojure-programming-tangle-all-in-org-mode/][Frederick Giasson's Literate Programming Blog]]
 
-For more information on tangling, please see the following entries in
-the org-mode manual:
+For more information on tangling, please see the following entries in the
+org-mode manual:
 
 [[https://orgmode.org/manual/Extracting-source-code.html][Extracting Source Code]]
 
 [[https://orgmode.org/worg/org-contrib/babel/intro.html][Introduction to Org Babel]]
 
 * Where can I see these mythical beasts?
+
 *** Emacs
 
 The main emacs configuration from which this strange odyssey of [[http://www.mncc.com.my/ossig/lists/general/2003-09/msg00143.html][sexp
