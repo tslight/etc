@@ -1,0 +1,224 @@
+#+TITLE: SETTINGS
+#+AUTHOR: Toby Slight
+#+PROPERTY: header-args :cache yes
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :results silent
+#+PROPERTY: header-args+ :tangle ~/.emacs.d/site-lisp/my-settings.el
+#+PROPERTY: header-args+ :tangle-mode (identity #o644)
+#+OPTIONS: toc:t
+
+* ABBREVS
+
+#+BEGIN_SRC emacs-lisp
+  (setq abbrev-file-name (concat user-emacs-directory "abbrevs"))
+  (setq save-abbrevs 'silently)
+#+END_SRC
+
+* AUTOSAVE
+
+#+BEGIN_SRC emacs-lisp
+  (setq auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)))
+  (setq auto-save-timeout 5)
+#+END_SRC
+
+* AUTO WINDOW VSCROLL
+
+#+BEGIN_SRC emacs-lisp
+  (setq auto-window-vscroll nil)
+#+END_SRC
+
+* BACKUPS
+
+#+BEGIN_SRC emacs-lisp
+  (setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
+  (setq backup-by-copying t) ;; copy files, don't rename them.
+  (setq delete-old-versions t)
+  (setq kept-new-versions 12)
+  (setq kept-old-versions 12)
+#+END_SRC
+
+* BELLS
+
+#+BEGIN_SRC emacs-lisp
+  (setq ring-bell-function 'ignore)
+  (setq visible-bell 1)
+#+END_SRC
+
+* MOUSE
+
+#+BEGIN_SRC emacs-lisp
+  (setq mouse-yank-at-point t)
+#+END_SRC
+
+* CLIPBOARD
+
+#+BEGIN_SRC emacs-lisp
+  (setq select-enable-clipboard t)
+  (setq select-enable-primary t)
+  (setq x-select-enable-clipboard-manager nil)
+  (setq save-interprogram-paste-before-kill t)
+#+END_SRC
+
+* EDITING
+
+#+BEGIN_SRC emacs-lisp
+  (global-subword-mode 1) ;; move by camel case, etc
+  (global-auto-revert-mode 1) ;; reload if file changed on disk
+  (pending-delete-mode 1) ;; remove selected region if typing
+  (set-default 'truncate-lines t)
+  (setq-default fill-column 79)
+  (setq backward-delete-char-untabify-method 'all)
+  (setq create-lockfiles nil) ;; prevent creation of .#myfile.ext
+  (setq require-final-newline t) ;; useful for crontab
+  (setq set-mark-command-repeat-pop t) ;; repeating C-SPC after popping, pops it
+  (show-paren-mode 1)
+#+END_SRC
+
+* LOADING
+
+#+BEGIN_SRC emacs-lisp
+  (setq load-prefer-newer t) ;; if init.elc is older, use newer init.el
+#+END_SRC
+
+* EPA
+
+#+BEGIN_SRC emacs-lisp
+  (setq epa-file-cache-passphrase-for-symmetric-encryption t)
+  (setf epa-pinentry-mode 'loopback)
+#+END_SRC
+
+* ENCODING
+
+#+BEGIN_SRC emacs-lisp
+  (setq-default buffer-file-coding-system 'utf-8-unix)
+  (setq-default default-buffer-file-coding-system 'utf-8-unix)
+  (setq coding-system-for-read 'utf-8-unix)
+  (setq coding-system-for-write 'utf-8-unix)
+  (set-language-environment "UTF-8")
+  (set-default-coding-systems 'utf-8-unix)
+  (prefer-coding-system 'utf-8-unix)
+#+END_SRC
+
+* MISC
+
+#+BEGIN_SRC emacs-lisp
+  (setq compilation-scroll-output 'first-error)
+  (setq custom-file (make-temp-file "emacs-custom"))
+  (setq disabled-command-function nil) ;; enable all "advanced" features
+  (setq message-log-max 10000)
+  (setq apropos-do-all t) ;; doesn't seem to be documented anywhere..
+#+END_SRC
+
+* USER
+
+#+BEGIN_SRC emacs-lisp
+  (setq user-full-name "Toby Slight")
+  (setq user-mail-address "tslight@pm.me")
+#+END_SRC
+
+* DOC VIEW
+
+#+BEGIN_SRC emacs-lisp
+  (setq doc-view-continuous t)
+  (setq doc-view-resolution 300)
+#+END_SRC
+
+* PROGRAMMING
+
+#+BEGIN_SRC emacs-lisp
+  (setq c-default-style "bsd")
+  (setq c-basic-offset 4)
+  (setq css-indent-offset 2)
+  (setq js-indent-level 2)
+#+END_SRC
+
+* REGISTERS
+
+#+BEGIN_SRC emacs-lisp
+  (set-register ?h (cons 'file "~/"))
+  (set-register ?s (cons 'file "~/src/"))
+  (set-register ?j (cons 'file "~/src/tspub/"))
+  (set-register ?a (cons 'file "~/src/tspub/etc/agnostic"))
+  (set-register ?e (cons 'file "~/src/tspub/etc/emacs/"))
+  (set-register ?l (cons 'file "~/src/tspub/etc/emacs/site-lisp"))
+  (set-register ?o (cons 'file "~/src/tsprv/org/"))
+  (set-register ?n (cons 'file "~/src/tsprv/org/work/notes.org"))
+  (set-register ?t (cons 'file "~/src/tsprv/org/work/todo.org"))
+  (set-register ?w (cons 'file "~/src/oe-developers/"))
+  (set-register ?b (cons 'file "~/src/oe-developers/be/"))
+  (set-register ?d (cons 'file "~/src/oe-developers/be/devops"))
+#+END_SRC
+
+* HISTORY
+
+#+BEGIN_SRC emacs-lisp
+  (savehist-mode 1)
+  (setq savehist-additional-variables '(kill-ring search-ring regexp-search-ring))
+  (setq savehist-save-minibuffer-history 1)
+  (setq history-length t)
+  (setq history-delete-duplicates t)
+  (setq bookmark-save-flag 1) ;; always save bookmarks to file
+  (save-place-mode 1)
+  (setq save-place-file (concat user-emacs-directory "saveplace.el"))
+#+END_SRC
+
+* SCROLLING
+
+#+BEGIN_SRC emacs-lisp
+  (setq scroll-step 4)
+  (setq scroll-margin 6)
+  (setq scroll-conservatively 8)
+#+END_SRC
+
+* STARTUP
+
+#+BEGIN_SRC emacs-lisp
+  (setq inhibit-startup-echo-area-message t)
+  (setq inhibit-startup-screen t)
+  (setq initial-scratch-message nil)
+  (setq initial-major-mode 'fundamental-mode)
+#+END_SRC
+
+* YES OR NO
+
+#+BEGIN_SRC emacs-lisp
+  (fset 'yes-or-no-p 'y-or-n-p) ;; never have to type full word
+  (setq confirm-kill-emacs 'y-or-n-p)
+#+END_SRC
+
+* TERM BUFFER SIZE
+
+#+BEGIN_SRC emacs-lisp
+  (setq term-buffer-maximum-size 200000)
+#+END_SRC
+
+* UNDO LIMITS
+
+#+BEGIN_SRC emacs-lisp
+  (setq undo-limit 150000)
+  (setq undo-strong-limit 300000)
+#+END_SRC
+
+* VERSION CONTROL
+
+#+BEGIN_SRC emacs-lisp
+  (setq vc-follow-symlinks t)
+  (setq vc-make-backup-files t)
+  (setq version-control t)
+#+END_SRC
+
+* WINDOWS
+
+#+BEGIN_SRC emacs-lisp
+  (when (fboundp 'winner-mode) (winner-mode 1))
+  (setq split-width-threshold 160)
+  (setq split-height-threshold 80)
+#+END_SRC
+
+* HOOKS
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'before-save-hook 'whitespace-cleanup)
+  (add-hook 'minibuffer-exit-hook (lambda () (setq gc-cons-threshold 800000)))
+  (add-hook 'minibuffer-setup-hook (lambda () (setq gc-cons-threshold most-positive-fixnum)))
+#+END_SRC

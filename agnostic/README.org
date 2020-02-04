@@ -1,0 +1,17 @@
+#+TITLE: POOR LOST OS AGNOSTIC CONFIGURATION FILES
+#+AUTHOR: Toby Slight
+#+DATE: 18/10/15
+
+[[./bash.org][The Bourne Again Shell]]
+
+[[./emacs.org][Worship at the Church of Emacs]]
+
+[[./git.org][Git VCS Aliases and other wonders]]
+
+[[./gtkrc.org][GTK2 Configuration]]
+
+[[./neovim.org][Neovim Treachery]]
+
+[[./tmux.org][Tmux is the fucking greatest]]
+
+[[./zsh.org][The Zed Shell Goodness]]

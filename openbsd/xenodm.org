@@ -1,0 +1,30 @@
+#+PROPERTY: header-args :cache yes
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :tangle-mode (identity #o400)
+#+PROPERTY: header-args+ :results silent
+#+PROPERTY: header-args+ :padline no
+#+BEGIN_SRC conf :tangle /sudo::/etc/X11/xenodm/xenodm-config :tangle-mode (identity #o644)
+  ! $OpenBSD: xenodm-config.cpp,v 1.1 2016/10/23 08:30:37 matthieu Exp $
+
+  DisplayManager.authDir: /etc/X11/xenodm
+  DisplayManager.errorLogFile:    /var/log/xenodm.log
+  DisplayManager.keyFile:         /etc/X11/xenodm/xenodm-keys
+  DisplayManager.servers:         /etc/X11/xenodm/Xservers
+  DisplayManager*resources:       /etc/X11/xenodm/Xresources
+  ! All displays should use authorization, but we cannot be sure
+  ! X terminals may not be configured that way, so they will require
+  ! individual resource settings.
+  DisplayManager*authorize:       true
+  !
+  DisplayManager*startup:         /etc/X11/xenodm/Xstartup
+  DisplayManager*session:         /etc/X11/xenodm/Xsession
+  DisplayManager*reset:           /etc/X11/xenodm/Xreset
+  DisplayManager*authComplain:    true
+  ! The following three resources set up display :0 as the console.
+  DisplayManager._0.setup:        /etc/X11/xenodm/Xsetup_0
+  DisplayManager._0.startup:      /etc/X11/xenodm/GiveConsole
+  DisplayManager._0.reset:        /etc/X11/xenodm/TakeConsole
+
+  DisplayManager.*.authName:      MIT-MAGIC-COOKIE-1
+  DisplayManager.*.autoLogin:     toby
+#+END_SRC

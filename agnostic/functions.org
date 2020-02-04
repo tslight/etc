@@ -1,0 +1,241 @@
+#+TITLE: SHELL FUNCTIONS
+#+PROPERTY: header-args :cache yes
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :tangle-mode (identity #o600)
+#+PROPERTY: header-args+ :results silent
+#+PROPERTY: header-args+ :padline no
+#+PROPERTY: header-args+ :tangle ~/.functions
+
+* BASH LIBRARY
+
+#+BEGIN_SRC sh
+  if echo "$0" | grep -q bash; then
+      if [ -d "$HOME"/bin/lib/bash ]; then
+          for f in "$HOME"/bin/lib/bash/*; do
+              source "$f"
+          done
+      fi
+  fi
+#+END_SRC
+
+* OS SPECIFIC
+
+#+BEGIN_SRC sh
+  case "$OSTYPE" in
+      darwin*)
+      ;;
+      freebsd*)
+      ;;
+      linux*)
+      ;;
+      netbsd*)
+      ;;
+      openbsd*)
+          lsdisk () {
+              sysctl hw.disknames | sed -n 1'p' | tr ',' '\n'\
+                  | while read word; do
+                  echo $word | sed -e 's/^hw.disknames=//g'
+              done
+          }
+
+          lspart() {
+              echo " "
+              lsblk | cut -c3 | while read number; do
+                  doas disklabel -h sd$number\
+                      | sed -ne '/unused/d;1p;/size/,$p'\
+                      | cut -c -21,40-46,67-
+                  echo " "
+              done
+          }
+          ;;
+  esac
+#+END_SRC
+
+* OS AGNOSTIC
+** BZIPR
+
+Bzip all files in directory.
+
+#+BEGIN_SRC sh
+  bzipr () {
+      for dir in "$1"; do
+          base=$(basename "$dir")
+          tar cvjf "${base}.tar.bz2" "$dir"
+      done
+  }
+#+END_SRC
+
+** CD NUMBER
+
+Go up \x\ directories...
+
+#+BEGIN_SRC sh
+  cdot () {
+      for x in $(seq "$1"); do
+          cd ..
+      done
+  }
+#+END_SRC
+
+** CALC
+
+Floating point from shell.
+
+#+BEGIN_SRC sh
+  calc () {
+      echo "scale=3;$@" | bc -l
+  }
+#+END_SRC
+
+** CHEAT
+
+Get useful information on commands.
+
+#+BEGIN_SRC sh
+  cheat () {
+      curl cheat.sh/${1:-cheat};
+  }
+#+END_SRC
+
+** RECURSIVE DOS 2 UNIX
+
+https://stackoverflow.com/questions/4767396/linux-command-how-to-find-only-text-files
+
+#+BEGIN_SRC sh
+  dos2unix_recursive () {
+      find "$1" -type f\
+           -exec grep -Ilq "" {} \; \
+           -exec dos2unix {} \;
+  }
+#+END_SRC
+
+** DUSORT
+
+Sort directory by human readable size.
+
+#+BEGIN_SRC sh
+  dusort () {
+      # d1 = depth 1, sort -hr = human-readable & reverse
+      du -hd1 "$1" | sort -hr
+  }
+#+END_SRC
+
+** FIXPERMS
+
+Recursive chmod on files and directories.
+
+Usage: fixperms [DIRECTORY OCTAL] [FILE OCTAL] [PATH]
+
+#+BEGIN_SRC sh
+  fixperms () {
+      local path=$(eval echo "${3//>}") # santize input so find doesn't break on spaces or ~
+      local -i fileperms="$2" dirperms="$1"
+      find "$path" -type d -exec chmod "$dirperms" {} \;
+      find "$path" -type f -exec chmod "$fileperms" {} \;
+  }
+#+END_SRC
+
+** MKCD
+
+Make a directory and cd into it.
+
+#+BEGIN_SRC sh
+  mkcd () {
+      mkdir -p "$1" && cd "$1"
+  }
+#+END_SRC
+
+** MTAIL
+#+BEGIN_SRC sh
+mtail () {
+    trap 'kill $(jobs -p)' EXIT
+    for file in "$@"; do
+        tail -f "$file" &
+    done
+    wait
+}
+#+END_SRC
+** PEEK
+
+https://github.com/lf94/peek-for-tmux
+
+#+BEGIN_SRC sh
+  peek () {
+      tmux split-window -h -p 48 "$PAGER" "$@" || exit
+  }
+#+END_SRC
+
+** PGREPKILL
+
+Find and kill all processes with a given name
+
+#+BEGIN_SRC sh
+  pgrepkill () {
+      if pid=($(pgrep -i "$1")); then
+          for p in "${pid[@]}"; do
+              if ps -p "$p" &> /dev/null; then
+                  echo "Killing $1 process: $p"
+                  sudo kill -9 "$p"
+              fi
+          done
+      else
+          echo "No $1 processes found."
+      fi
+  }
+#+END_SRC
+** PSEE
+
+I have since found ~pgrep -ail~...
+
+#+BEGIN_SRC sh
+  psee () {
+      tput setaf 3
+      printf "\nYou should probably be using $(tput setaf 6)pgrep -ail$(tput setaf 3)...\n\n"
+      tput sgr0
+      local char="${1:0:1}" rest="${1:1}"
+      ps aux | grep -i "[$char]$rest" | awk '{printf ("%s %i %s %s\n", $1, $2, $9, $11)}'
+      echo
+  }
+#+END_SRC
+
+** RSS GET
+
+Great for downloading all episodes in a podcast feed.
+
+#+BEGIN_SRC sh
+  rssget () {
+      curl "$1" | grep -E "http.*\.$2" | sed "s/.*\(http.*\.$2\).*/\1/" | xargs wget -nc
+  }
+#+END_SRC
+
+** TMUX
+
+Create panes for vertical monitor.
+
+#+BEGIN_SRC sh
+  tv() {
+      tmux new-session \; \
+           split-window -v ranger\; \
+           split-window -v htop\; \
+           select-pane -t 1 \; \
+           split-window -v pwsh\; \
+           split-window -h ipython\; \
+           select-pane -t 1 \; \
+           split-window -h\;
+  }
+#+END_SRC
+
+Create panes for horizontal monitor.
+
+#+BEGIN_SRC sh
+  th() {
+      tmux new-session \; \
+           split-window -h ipython3\; \
+           split-window -v\; \
+           select-pane -t 1 \; \
+           split-window -v node\; \
+           new-window -n fm ranger\; \
+           select-window -t 1\; \
+           select-pane -t 1
+  }
+#+END_SRC

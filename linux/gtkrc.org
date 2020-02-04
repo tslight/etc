@@ -1,0 +1,30 @@
+#+PROPERTY: header-args :cache yes
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :tangle-mode (identity #o644)
+#+PROPERTY: header-args+ :results silent
+#+PROPERTY: header-args+ :padline no
+
+http://tiborsimko.org/emacs-bindings-in-gtk-apps.html
+https://wiki.archlinux.org/index.php/GTK%2B#Emacs_key_bindings
+
+#+NAME: gtk2
+#+BEGIN_SRC conf :tangle ~/.gtkrc-2.0.mine
+  gtk-key-theme-name = "Emacs"
+#+END_SRC
+
+#+BEGIN_SRC conf :noweb yes :tangle ~/.gtkrc-2.0
+  <<gtk2>>
+#+END_SRC
+
+#+BEGIN_SRC conf :noweb yes :tangle /sudo::/etc/gtk-2.0/gtkrc
+  <<gtk2>>
+#+END_SRC
+
+#+NAME: gtk3
+#+BEGIN_SRC conf :tangle ~/.config/gtk-3.0/settings.ini
+  [Settings]
+  gtk-key-theme-name = Emacs
+#+END_SRC
+#+BEGIN_SRC conf :noweb yes :tangle /sudo::/etc/gtk-3.0/settings.ini
+  <<gtk3>>
+#+END_SRC

@@ -1,0 +1,17 @@
+#+TITLE: ETC DEFAULT DIRECTORY STUFF
+#+PROPERTY: header-args :cache yes
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :tangle-mode (identity #o644)
+#+PROPERTY: header-args+ :results silent
+#+PROPERTY: header-args+ :padline no
+
+* KEYBOARD
+
+#+BEGIN_SRC conf :tangle /sudo::/etc/default/keyboard
+# Consult the keyboard(5) manual page.
+XKBMODEL="pc105"
+XKBLAYOUT="gb"
+XKBVARIANT=""
+XKBOPTIONS="terminate:ctrl_alt_bksp"
+BACKSPACE="guess"
+#+END_SRC

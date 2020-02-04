@@ -1,0 +1,10 @@
+#+PROPERTY: header-args :cache yes
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :tangle-mode (identity #o400)
+#+PROPERTY: header-args+ :results silent
+#+PROPERTY: header-args+ :padline no
+#+BEGIN_SRC conf :tangle ~/.mg
+c-mode
+set-default-mode fill
+set-default-mode indent
+#+END_SRC

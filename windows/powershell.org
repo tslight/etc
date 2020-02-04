@@ -1,0 +1,87 @@
+#+PROPERTY: header-args :cache yes
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :padline no
+#+PROPERTY: header-args+ :results silent
+#+PROPERTY: header-args+ :tangle-mode (identity #o600)
+
+* POWERSHELL PROFILE
+
+#+NAME: Powershell
+#+BEGIN_SRC powershell :tangle ~/Documents/WindowsPowershell/Microsoft.Powershell_profile.ps1
+  $env:PSModulePath = $env:PSModulePath + ";$env:USERPROFILE\src"
+  $ChocolateyProfile = "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
+
+  if (Test-Path($ChocolateyProfile)) {
+      Import-Module "$ChocolateyProfile"
+  }
+
+  if ($host.Name -eq 'ConsoleHost') {
+      Import-Module PSReadLine
+      Set-PSReadLineOption -EditMode Emacs
+      Set-PSReadlineKeyHandler -Key UpArrow -Function HistorySearchBackward
+      Set-PSReadlineKeyHandler -Key DownArrow -Function HistorySearchForward
+      Set-PSReadlineKeyHandler -Chord Alt+p -Function HistorySearchBackward
+      Set-PSReadlineKeyHandler -Chord Alt+n -Function HistorySearchForward
+      Set-PSReadLineKeyHandler -Chord Shift+Alt+B -Function SelectShellBackwardWord
+      Set-PSReadLineKeyHandler -Chord Shift+Alt+F -Function SelectShellForwardWord
+      Set-PSReadLineKeyHandler -Chord Shift+Ctrl+B -Function SelectBackwardChar
+      Set-PSReadLineKeyHandler -Chord Shift+Ctrl+F -Function SelectForwardChar
+      Set-PSReadLineKeyHandler -Chord Ctrl+Q -Function TabCompleteNext
+      Set-PSReadLineKeyHandler -Chord Ctrl+Shift+Q -Function TabCompletePrevious
+      Set-PSReadLineKeyHandler -Chord Ctrl+Shift+C -Function Copy
+      Set-PSReadLineKeyHandler -Chord Ctrl+Shift+V -Function Paste
+  }
+
+  New-Alias -Name 'll' -Value 'Get-ChildItem' -Force
+#+END_SRC
+
+#+BEGIN_SRC powershell :tangle ~/Documents/WindowsPowershell/Microsoft.PowershellISE_profile.ps1
+  function Save-AllISEFiles {
+      [CmdletBinding(SupportsShouldProcess)]
+      Param ()
+
+      foreach ($tab in $psISE.PowerShellTabs) {
+          foreach ($file in $tab.Files) {
+              if (-Not ($file.IsUntitled -Or $file.IsSaved)) {
+                  try {
+                      $file.Save()
+                      Write-Host "Successfully saved $($file.FullPath)"
+                  } catch {
+                      throw $_.Exception.Message
+                  }
+              } else {
+                  Write-Verbose "$($file.FullPath) is already saved or not titled."
+              }
+          }
+      }
+  }
+
+  function Add-ISEMenuItemAndKey {
+      [CmdletBinding(SupportsShouldProcess)]
+      Param(
+          [Parameter(Mandatory,Position=1)]
+          [string]$Name,
+          [Parameter(Mandatory,Position=2)]
+          [string]$Function,
+          [Parameter(Mandatory,Position=3)]
+          [string]$Key
+      )
+
+      if ($psISE.CurrentPowerShellTab.AddOnsMenu.Submenus.DisplayName -contains $Name) {
+          Write-Verbose "$Name menu item already exists."
+      } else {
+          $psISE.CurrentPowerShellTab.AddOnsMenu.Submenus.Add($Name,{$Function},$Key)
+          Write-Verbose "Successfully added $Name menu item and keybinding."
+      }
+  }
+
+  Add-ISEMenuItemAndKey -Name "Save All" -Function "Save-AllISEFiles" -Key "Ctrl+Shift+s" -Verbose
+#+END_SRC
+
+#+BEGIN_SRC powershell :noweb yes :tangle ~/OneDrive/Documents/WindowsPowershell/Microsoft.Powershell_profile.ps1
+<<Powershell>>
+#+END_SRC
+
+#+BEGIN_SRC powershell :noweb yes :tangle ~/OneDrive/Documents/WindowsPowershell/Microsoft.PowershellISE_profile.ps1
+<<Powershell>>
+#+END_SRC

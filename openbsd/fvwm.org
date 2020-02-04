@@ -1,0 +1,196 @@
+#+PROPERTY: header-args :cache yes
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :tangle-mode (identity #o600)
+#+PROPERTY: header-args+ :results silent
+#+PROPERTY: header-args+ :padline no
+#+BEGIN_SRC conf :tangle ~/.fvwmrc
+  # STARTUP
+  AddToFunc InitFunction    "I" Module FvwmPager * *
+  +                         "I" Module FvwmWinList
+  +                         "I" exec /usr/local/bin/zap -f tint2
+  +                         "I" exec /usr/local/bin/zap -f pixelclock
+  +                         "I" exec /usr/X11R6/bin/xclock -g -0+0
+
+  AddToFunc RestartFunction "I" Module FvwmPager * *
+  +                         "I" Module FvwmWinList
+
+  # MISC
+  ModulePath /usr/X11R6/lib/X11/fvwm
+  PixmapPath /usr/X11R6/include/X11/pixmaps
+  IconPath   /usr/X11R6/include/X11/bitmaps
+
+  EdgeResistance 10 5
+  EdgeScroll 100 100
+  ClickTime 750
+
+  WindowFont -adobe-times-bold-r-*-*-14-*-*-*-*-*-*-*
+  IconFont -adobe-helvetica-bold-r-*-*-10-*-*-*-*-*-*-*
+
+  HilightColor white blue
+  MenuStyle #4d4d4d #bebebe #e7e7e7 -adobe-times-bold-r-*-*-12-*-*-*-*-*-*-* win
+
+  DeskTopSize 0x4
+
+  ColormapFocus FollowsFocus
+
+  # STYLES
+  Style "*"           NoTitle, BorderWidth 6
+  Style "*"           Color #bebebe/darkred
+  Style "*"           MWMFunctions, MWMDecor
+  Style "*"           DecorateTransient, NoPPosition
+  Style "*"           IconBox -70 140 -1 -140
+  Style "*"           SloppyFocus
+  Style "*"           RandomPlacement, SmartPlacement
+
+  Style "Fvwm*"       Sticky, WindowListSkip, BorderWidth 0, CirculateSkipIcon, CirculateSkip, StaysOnTop, NoHandles
+  Style "XClock"      Sticky, WindowListSkip, BorderWidth 0, CirculateSkipIcon, CirculateSkip, StaysOnTop, NoHandles
+
+  Style "XTerm"       Icon xterm.xpm, SloppyFocus
+  Style "xcalc"       Icon xcalc.xpm, NoButton 2,RandomPlacement,ClickToFocus
+  Style "xconsole"    Icon rterm.xpm, WindowListSkip, Sticky
+
+  # FUNCTIONS
+  AddToFunc Move-or-Raise         "I" Raise
+  +                               "M" Move
+  +                               "D" Lower
+
+  AddToFunc Move-or-Raise2        "M" Raise
+  +                               "M" Move
+  +                               "D" Lower
+
+  AddToFunc Maximize-Func         "M" Maximize 0 100
+  +                               "C" Maximize 0 80
+  +                               "D" Maximize 100 100
+
+  AddToFunc Move-or-Iconify       "I" Raise
+  +                               "M" Move
+  +                               "D" Iconify
+
+  AddToFunc Resize-or-Raise       "I" Raise
+  +                               "M" Resize
+  +                               "D" Lower
+
+  AddToFunc Resize-or-Raise2      "M" Raise
+  +                               "M" Resize
+  +                               "D" Lower
+
+  AddToFunc Iconify-and-Raise     "I" Iconify
+  +                               "I" Raise
+
+  AddToFunc FocusAndWarp          "I" Focus
+  +                               "I" WarpToWindow 2p 2p
+
+  AddToFunc DeiconifyFocusAndWarp "I" Iconify -1
+  +                               "I" FocusAndWarp
+
+  AddToFunc ChangeDefaultFocus    "I" Style "*" $0
+  +                               "I" Recapture
+
+  # MENUS
+  AddToMenu RootMenu      "Root Menu"        Title
+  +                       "X&Term"           Exec exec xterm
+  +                       "Tmux"             Exec exec xterm -e tmux
+  +                       "&Chrome"          Exec exec chrome
+  +                       "&Firefox"         Exec exec firefox
+  +                       "&Emacs"           Exec exec xterm -e emacsclient -nw -c -a ""
+  +                       "Screenshot"       Exec exec maim
+  +                       "&Scrot Select"    Exec exec maim -s
+  +                       "&Restart Fvwm"    Restart fvwm
+  +                       "Start cwm"        Restart cwm
+  +                       "&XLock"           Exec exec xlock
+  +                       "Logout"           Quit
+  +                       "&ZZZ"             Exec exec zzz
+  +                       "Reboot"           Exec exec shutdown -r now
+  +                       "Shutdown"         Exec exec shutdown -h now
+
+  AddToMenu Window-Ops    "&Move%mini.move.xpm%"               Move
+  +                       "&Resize%mini.resize.xpm%"           Resize
+  +                       "R&aise%mini.raise.xpm%"             Raise
+  +                       "&Lower%mini.lower.xpm%"             Lower
+  +                       "(De)&Iconify%mini.iconify.xpm%"     Iconify
+  +                       "(Un)&Stick%mini.stick2.xpm%"        Stick
+  +                       "(Un)Ma&ximize%mini.maximize.xpm%"   Maximize 92 100
+  +                       "(Un)&Fullscreen%mini.maximize.xpm%" Maximize
+  +                       "&Delete%mini.excl.xpm%"             Delete
+  +                       "&Close%mini.cut.xpm%"               Close
+  +                       "Destroy%mini.destroy.xpm%"          Destroy
+  +                       "Refresh Window%mini.refresh.xpm%"   RefreshWindow
+
+  # MOUSE
+  Mouse 1 R    A WindowList
+  Mouse 2 R    A Menu Window-Ops Nop
+  Mouse 3 R    A Menu RootMenu Nop
+  Mouse 4 R    A Scroll -100000 0
+  Mouse 5 R    A Scroll 100000 0
+
+  Mouse 1 TS  A Move-or-Raise
+  Mouse 3 TS  A Resize-or-Raise
+  Mouse 2 FTS A RaiseLower
+  Mouse 1 F   A Resize-or-Raise
+  Mouse 3 F   A Move-or-Raise
+
+  Mouse 1 I    A Move-or-Iconify
+  Mouse 2 I    A RaiseLower
+  Mouse 3 I    A Iconify
+
+  # KEYS
+  Key F4        A C  Close
+  Key F5        A C  Destroy
+  Key F6        A C  Stick
+  Key F7        A C  Move
+  Key F8        A C  Resize
+  Key F9        A C  Iconify
+  Key F10       A C  Maximize 92 100
+  Key F11       A C  Maximize
+
+  Key Escape    A C  Next [CurrentPage] FocusAndWarp
+  Key Escape    A CS Prev [CurrentPage] FocusAndWarp
+
+  Key Escape    A M  Next [*] FocusAndWarp
+  Key Escape    A MS Prev [*] FocusAndWarp
+
+  Key k         A 4  Scroll -100000 0
+  Key j         A 4  Scroll 100000 0
+
+  Key b         A 4  Exec exec chrome
+  Key b         A 4C Exec exec firefox
+  Key c         A 4  Menu RootMenu Root c c
+  Key e         A 4  Exec exec xterm -e emacsclient -nw -c -a ''
+  Key e         A 4C Exec exec xterm -e emacs -nw
+  Key p         A 4  Exec exec maim
+  Key p         A 4C Exec exec maim -s
+  Key r         A 4  Exec exec dmenu_run -nb darkblue -nf grey90 -sb darkred -sf white -fn "Monospace:Bold"
+  Key Return    A 4  Exec exec xterm
+  Key space     A 4  Menu Window-Ops Root c c
+  Key t         A 4  Exec exec xterm -e tmux
+  Key t         A 4C Exec exec xterm -e tmux attach
+  Key w         A 4  WindowList Root c c "Prev [*] FocusAndWarp"
+  Key w         A 4C WindowList Root c c "Next [*] FocusAndWarp"
+
+  Key BackSpace A 4  Restart fvwm
+  Key BackSpace A 4C Quit
+
+  # MODULES
+  ,,*FvwmIdentBack MidnightBlue
+  ,,*FvwmIdentFore Yellow
+  ,,*FvwmIdentFont -adobe-helvetica-medium-r-*-*-12-*-*-*-*-*-*-*
+
+  ,,*FvwmPagerFont none
+  ,,*FvwmPagerBack darkblue
+  ,,*FvwmPagerFore white
+  ,,*FvwmPagerHilight #2d2d2d
+  ,,*FvwmPagerGeometry 120x240-0--2
+  ,,*FvwmPagerSmallFont 5x8
+
+  ,,*FvwmWinListBack #908090
+  ,,*FvwmWinListFore Black
+  ,,*FvwmWinListFont -adobe-helvetica-bold-r-*-*-10-*-*-*-*-*-*-*
+  ,,*FvwmWinListAction Click1 Iconify -1,FocusAndWarp
+  ,,*FvwmWinListAction Click3 Iconify
+  ,,*FvwmWinListAction Click2 Module "FvwmIdent" FvwmIdent
+  ,,*FvwmWinListUseIconNames
+  ,,*FvwmWinListUseSkipList
+  ,,*FvwmWinListGeometry -0+29
+  ,,*FvwmWinListLeftJustify
+  ,,*FvwmWinListMaxWidth 120
+#+END_SRC

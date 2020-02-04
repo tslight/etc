@@ -1,0 +1,1029 @@
+#+TITLE: USE PACKAGE DECLARATIONS
+#+AUTHOR: Toby Slight
+#+PROPERTY: header-args :cache yes
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :results silent
+#+PROPERTY: header-args+ :tangle ~/.emacs.d/use.el
+#+PROPERTY: header-args+ :tangle-mode (identity #o644)
+#+OPTIONS: toc:t
+
+* ACE WINDOW
+
+#+BEGIN_SRC emacs-lisp
+  (use-package ace-window
+    :ensure t
+    :bind*
+    ("C-x o" . ace-window)
+    ("C-x 0" . ace-delete-window)
+    ("C-x 1" . ace-delete-other-windows)
+    :config
+    (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+    ;; (setq aw-background nil)
+    (custom-set-faces
+     '(aw-leading-char-face
+       ((t (:foreground
+            "green"
+            ;; :background
+            ;; "black"
+            :height
+            2.0))))))
+#+END_SRC
+
+* ANACONDA MODE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package anaconda-mode
+    :ensure t
+    :after python-mode
+    :hook
+    (python-mode . anaconda-mode)
+    (python-mode . anaconda-eldoc-mode))
+#+END_SRC
+
+* ANSIBLE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package ansible
+    :ensure t
+    :defer t
+    :mode
+    "\\-pb.yaml\\'"
+    "\\-pb.yml\\'"
+    "\\.pb.yaml\\'"
+    "\\.pb.yml\\'")
+#+END_SRC
+
+* ANSIBLE DOC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package ansible-doc
+    :ensure t
+    :after ansible)
+#+END_SRC
+
+* ASYNC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package async
+    :ensure t
+    :defer t
+    :config
+    (async-bytecomp-package-mode 1))
+#+END_SRC
+
+* BIND KEY
+
+#+BEGIN_SRC emacs-lisp
+  (use-package bind-key
+    :ensure t
+    :bind*
+    (("<f6>" . desktop-read)
+     ("C-<tab>" . other-frame)
+     ("C-!" . shell-command)
+     ("C-$" . ispell-word)
+     ("C-%" . query-replace)
+     ("C-(" . insert-parentheses)
+     ("C-)" . move-past-close-and-reindent)
+     ("C-:" . pp-eval-expression)
+     ("C-;" . comment-line)
+     ("C-<" . beginning-of-buffer)
+     ("C->" . end-of-buffer)
+     ("C-<f10>" . toggle-frame-maximized)
+     ("C-<f11>" . toggle-frame-fullscreen)
+     ("M-<escape>" . next-buffer)
+     ("M-S-<escape>" . previous-buffer)
+     ("C-M-v" . scroll-other-window-down)
+     ("C-S-v" . scroll-other-window)
+     ("C-^" . delete-indentation)
+     ("C-c C-/" . winner-undo)
+     ("C-c C-?" . winner-redo)
+     ("C-c M-c" . calculator)
+     ("C-c c" . calc)
+     ("C-c e b" . eval-buffer)
+     ("C-c e c" . eval-current-buffer)
+     ("C-c e e" . pp-eval-last-sexp)
+     ("C-c e f" . eval-defun)
+     ("C-c e m" . lisp-interaction-mode)
+     ("C-c e r" . eval-region)
+     ("C-c i" . imenu)
+     ("C-c t a" . toggle-text-mode-autofill)
+     ("C-c t d E" . toggle-debug-on-entry)
+     ("C-c t d e" . toggle-debug-on-error)
+     ("C-c t d q" . toggle-debug-on-quit)
+     ("C-c t l" . linum-mode)
+     ("C-c t t" . toggle-truncate-lines)
+     ("C-c x" . execute-extended-command)
+     ("C-r" . isearch-backward-regexp)
+     ("C-s" . isearch-forward-regexp)
+     ("C-s-f" . toggle-frame-fullscreen)
+     ("C-s-m" . toggle-frame-maximized)
+     ("C-w" . kill-ring-save)
+     ("C-x C" . save-buffers-kill-emacs)
+     ("C-x C-b" . ibuffer)
+     ("C-x j" . jump-to-register)
+     ("C-x M-k" . kill-buffer)
+     ("C-x p" . pop-to-mark-command)
+     ("C-z" . zap-up-to-char)
+     ("C-~" . not-modified)
+     ("M-/" . hippie-expand)
+     ("M-;" . comment-or-uncomment-region)
+     ("M-<tab>" . next-multiframe-window)
+     ("M-<iso-lefttab>" . previous-multiframe-window)
+     ("M-SPC" . cycle-spacing)
+     ("M-w" . kill-region)
+     ("M-z" . zap-up-char)
+     ("S-<f10>" . menu-bar-mode)
+     ("S-<f6>" . desktop-save)
+     :map special-mode-map
+     ("n" . forward-button)
+     ("p" . backward-button)
+     ("f" . forward-button)
+     ("b" . backward-button)
+     ("n" . widget-forward)
+     ("p" . widget-backward)
+     ("f" . widget-forward)
+     ("b" . widget-backward)))
+#+END_SRC
+
+* CHANGE INNER
+
+#+BEGIN_SRC emacs-lisp
+  (use-package change-inner
+    :ensure t
+    :bind
+    ("M-i" . change-inner)
+    ("M-o" . change-outer))
+#+END_SRC
+
+* COMPANY
+
+#+BEGIN_SRC emacs-lisp
+  (use-package company
+    :ensure t
+    :defer t
+    :diminish company-mode
+    :hook
+    (prog-mode . company-mode))
+#+END_SRC
+
+* COMPANY ANACONDA
+
+#+BEGIN_SRC emacs-lisp
+  (use-package company-anaconda
+    :ensure t
+    :after (:all company-mode anaconda-mode))
+#+END_SRC
+
+* COMPANY GO
+
+#+BEGIN_SRC emacs-lisp
+  (use-package company-go
+    :ensure t
+    :after company-mode go-mode)
+#+END_SRC
+
+* COMPANY TERRAFORM
+
+#+BEGIN_SRC emacs-lisp
+  (use-package company-terraform
+    :ensure t
+    :after (:all company-mode terraform-mode))
+#+END_SRC
+
+* COUNSEL
+
+#+BEGIN_SRC emacs-lisp
+  (use-package counsel
+    :ensure t
+    :diminish
+    :bind*
+    ("C-x C-f" . counsel-find-file)
+    ("M-x" . counsel-M-x)
+    ("M-y" . counsel-yank-pop)
+    ("C-h a" . counsel-apropos)
+    ("C-h f" . counsel-describe-function)
+    ("C-h v" . counsel-describe-variable)
+    ("C-h l" . counsel-load-library)
+    ("C-h i" . counsel-info-lookup-symbol)
+    ("C-h u" . counsel-unicode-char)
+    ("C-c g c" . counsel-git)
+    ("C-c C-g" . counsel-git-grep)
+    ("C-c M-g" . counsel-ag)
+    ("C-c l" . counsel-locate)
+    ("C-x r b" . counsel-bookmark)
+    ("C-c f l" . counsel-find-library)
+    ("C-c f f" . counsel-file-jump)
+    ("C-c f j" . counsel-dired-jump)
+    :config
+    (counsel-mode 1))
+#+END_SRC
+
+* COUNSEL PROJECTILE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package counsel-projectile
+    :ensure t
+    :defer t
+    :after (counsel projectile)
+    :config
+    (counsel-projectile-mode))
+#+END_SRC
+
+* DIMINISH
+
+#+BEGIN_SRC emacs-lisp
+  (use-package diminish
+    :ensure t
+    :defer 4)
+#+END_SRC
+
+* DIRED X
+
+#+BEGIN_SRC emacs-lisp
+  (use-package dired-x)
+#+END_SRC
+
+* DIRED
+
+#+BEGIN_SRC emacs-lisp
+  (use-package dired
+    :after dired-x
+    :bind*
+    ("C-x d" . dired-jump)
+    ("C-x C-d" . dired)
+    (:map dired-mode-map
+          ("i" . ido-find-file)
+          (")" . dired-omit-mode)
+          ("b" . (lambda () (interactive (find-alternate-file ".."))))
+          ("f" . dired-find-alternate-file)
+          ("c" . dired-do-compress-to)
+          ("C-o" . dired-find-file-other-window))
+    :hook
+    (dired-mode . hl-line-mode))
+#+END_SRC
+
+* FIND DIRED
+
+#+BEGIN_SRC emacs-lisp
+  (use-package find-dired
+    :after dired)
+#+END_SRC
+
+* DOCKER
+
+#+BEGIN_SRC emacs-lisp
+  (use-package docker
+    :ensure t
+    :bind ("C-c C-d" . docker))
+#+END_SRC
+
+* DOCKERFILE MODE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package dockerfile-mode
+    :ensure t
+    :defer t )
+#+END_SRC
+
+* EDIFF
+
+#+BEGIN_SRC emacs-lisp
+  (use-package ediff
+    :defer t
+    :hook
+    (ediff-after-quit-hook-internal . winner-undo)
+    :config
+    (defun disable-y-or-n-p (orig-fun &rest args)
+      (cl-letf (((symbol-function 'y-or-n-p) (lambda (prompt) t)))
+        (apply orig-fun args)))
+    (advice-add 'ediff-quit :around #'disable-y-or-n-p)
+    (setq ediff-window-setup-function 'ediff-setup-windows-plain)
+    (setq ediff-split-window-function 'split-window-horizontally)
+    (setq ediff-diff-options "-w"))
+#+END_SRC
+
+* ELECTRIC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package electric
+    :config
+    (electric-pair-mode 1)
+    (electric-indent-mode 1))
+#+END_SRC
+
+* ERC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package erc
+    :defer t
+    :config
+    (setq erc-autojoin-channels-alist '(("freenode.net"
+                                         "#org-mode"
+                                         "#emacs")))
+    (setq erc-fill-column 80)
+    (setq erc-hide-list '("JOIN" "PART" "QUIT"))
+    (setq erc-input-line-position -2)
+    (setq erc-keywords '("not2b"))
+    (setq erc-nick "not2b")
+    (setq erc-prompt-for-password t)
+    (setq erc-track-enable-keybindings t))
+#+END_SRC
+
+* ESHELL
+
+#+BEGIN_SRC emacs-lisp
+  (use-package eshell
+    :bind*
+    ("C-c e s" . eshell)
+    :config
+    (use-package em-smart)
+    (setq eshell-history-size 2048)
+    (setq eshell-where-to-jump 'begin)
+    (setq eshell-review-quick-commands nil)
+    (setq eshell-smart-space-goes-to-end t))
+#+END_SRC
+
+* EXEC PATH FROM SHELL
+
+#+BEGIN_SRC emacs-lisp
+  (use-package exec-path-from-shell
+    :ensure t
+    :defer t
+    :config
+    (exec-path-from-shell-initialize)
+    (exec-path-from-shell-copy-env "PYTHONPATH"))
+#+END_SRC
+
+* FLX
+
+#+BEGIN_SRC emacs-lisp
+  (use-package flx
+    :ensure t
+    :defer 8)
+#+END_SRC
+
+* FLYCHECK
+
+#+BEGIN_SRC emacs-lisp
+  (use-package flycheck
+    :ensure t
+    :defer t
+    :diminish flycheck-mode
+    :hook
+    (prog-mode . flycheck-mode)
+    :config
+    (flycheck-add-mode 'javascript-eslint 'web-mode))
+#+END_SRC
+
+* GITLAB CI MODE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package gitlab-ci-mode
+    :ensure t
+    :defer t
+    :mode
+    "\\.gitlab-ci.yaml\\'"
+    "\\.gitlab-ci.yml\\'")
+#+END_SRC
+
+* GIT TIMEMACHINE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package git-timemachine
+    :ensure t
+    :defer t)
+#+END_SRC
+
+* GNUS
+
+#+BEGIN_SRC emacs-lisp
+  (use-package gnus
+    :defer t
+    :config
+    (setq gnus-init-file "~/.emacs.d/init.el")
+    (setq gnus-home-directory "~/.emacs.d/")
+    (setq gnus-completing-read-function 'gnus-ido-completing-read)
+    (setq message-directory "~/.emacs.d/mail")
+    (setq gnus-directory "~/.emacs.d/news")
+    (setq nnfolder-directory "~/.emacs.d/mail/archive")
+    (setq gnus-use-full-window nil)
+    (setq gnus-select-method '(nntp "news.gnus.org"))
+    (setq gnus-summary-thread-gathering-function
+          'gnus-gather-threads-by-subject)
+    (setq gnus-thread-hide-subtree t)
+    (setq gnus-thread-ignore-subject t))
+#+END_SRC
+
+* GO MODE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package go-mode
+    :ensure t
+    :defer t
+    :config
+    (add-hook 'go-mode-hook
+              (lambda ()
+                (setq indent-tabs-mode 1)
+                (setq tab-width 2))))
+#+END_SRC
+
+* HUNGRY DELETE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package hungry-delete
+    :ensure t
+    :defer 6
+    :diminish hungry-delete-mode
+    :config
+    (global-hungry-delete-mode))
+#+END_SRC
+
+* IBUFFER VC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package ibuffer-vc
+    :ensure t
+    :defer t
+    :init
+    (add-hook 'ibuffer-hook
+              (lambda ()
+                (ibuffer-vc-set-filter-groups-by-vc-root)
+                (unless (eq ibuffer-sorting-mode 'alphabetic)
+                  (ibuffer-do-sort-by-alphabetic))))
+    :config
+    (setq ibuffer-formats
+          '((mark modified read-only vc-status-mini " "
+                  (name 18 18 :left :elide)
+                  " "
+                  (size 9 -1 :right)
+                  " "
+                  (mode 16 16 :left :elide)
+                  " "
+                  (vc-status 16 16 :left)
+                  " "
+                  vc-relative-file))))
+#+END_SRC
+
+* IEDIT
+
+#+BEGIN_SRC emacs-lisp
+  (use-package iedit
+    :ensure t
+    :bind
+    ("M-%" . iedit-mode))
+#+END_SRC
+
+* IVY
+
+#+BEGIN_SRC emacs-lisp
+  (use-package ivy
+    :ensure t
+    :diminish
+    :bind*
+    ("C-x b" . ivy-switch-buffer)
+    ("C-M-r" . swiper)
+    ("C-M-s" . swiper)
+    ("C-S-s" . swiper-multi)
+    ("C-c C-r" . ivy-resume)
+    :config
+    (ivy-mode 1)
+    (setq ivy-wrap t)
+    (setq ivy-use-virtual-buffers t)
+    (setq ivy-height 20)
+    (setq ivy-initial-inputs-alist nil) ;; no ^
+    (setq ivy-re-builders-alist
+          '((swiper . ivy--regex-plus)
+            (t      . ivy--regex-fuzzy)))
+    (define-key ivy-minibuffer-map (kbd "C-s") 'ivy-next-line)
+    (define-key ivy-minibuffer-map (kbd "C-r") 'ivy-previous-line))
+#+END_SRC
+
+* JS2 MODE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package js2-mode
+    :ensure t
+    :hook
+    (js-mode . js2-minor-mode)
+    (js2-mode . js2-imenu-extras-mode)
+    :mode
+    "\\.js\\'")
+#+END_SRC
+
+* JS2 REFACTOR
+
+#+BEGIN_SRC emacs-lisp
+  (use-package js2-refactor
+    :ensure t
+    :hook
+    (js2-mode . js2-refactor-mode)
+    :bind
+    (:map
+     js2-mode-map
+     ("C-k" . js2r-kill))
+    :config
+    (js2r-add-keybindings-with-prefix "C-c C-j"))
+#+END_SRC
+
+* JSON MODE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package json-mode
+    :ensure t
+    :defer t
+    :config
+    (add-to-list 'auto-mode-alist
+                 '("\\.json\\'" . (lambda ()
+                                    (json-mode)
+                                    (json-pretty-print (point-min) (point-max))
+                                    (goto-char (point-min))
+                                    (set-buffer-modified-p nil)))))
+#+END_SRC
+
+* JSON NAVIGATOR
+
+#+BEGIN_SRC emacs-lisp
+  (use-package json-navigator
+    :ensure t
+    :defer t)
+#+END_SRC
+
+* MAGIT
+
+#+BEGIN_SRC emacs-lisp
+  (use-package magit
+    :ensure t
+    :bind
+    ("C-x g" . magit-status)
+    ("C-c g d" . magit-dispatch)
+    ("C-c g l" . magit-list-repositories)
+    :init
+    (setq magit-repository-directories `(("~/" . 10)))
+    (setq magit-repolist-columns
+          '(("Name" 10 magit-repolist-column-ident nil)
+            ("Version" 25 magit-repolist-column-version nil)
+            ("Pull" 6 magit-repolist-column-unpulled-from-upstream)
+            ("Push" 6 magit-repolist-column-unpushed-to-upstream)
+            ("Commit" 8 magit-repolist-column-dirty)
+            ("Path" 99 magit-repolist-column-path nil)))
+    :config
+    (setq magit-completing-read-function 'magit-builtin-completing-read))
+#+END_SRC
+
+* MARKDOWN MODE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package markdown-mode
+    :ensure t
+    :defer t
+    :commands (markdown-mode gfm-mode)
+    :mode (("README\\.md\\'" . gfm-mode)
+           ("\\.md\\'" . markdown-mode)
+           ("\\.markdown\\'" . markdown-mode))
+    :init (setq markdown-command "multimarkdown"))
+#+END_SRC
+
+* MY ADVICE)
+
+#+BEGIN_SRC emacs-lisp
+  (use-package my-advice)
+#+END_SRC
+
+* MY BUFFERS
+
+#+BEGIN_SRC emacs-lisp
+  (use-package my-buffers
+    :bind*
+    (("C-<escape>" . my/last-buffer)
+     ("C-M-<escape>" . my/toggle-buffer)
+     ("C-c TAB" . my/indent-buffer)
+     ("C-c b i" . my/indent-buffer)
+     ("C-c z" . my/toggle-maximize-buffer)
+     ("C-c M-n" . my/nuke-buffers)
+     ("C-c s" . my/save-buffers-silently)
+     ("C-x k" . my/kill-this-buffer)
+     ("M-s s" . my/search-all-)
+     ("C-c t m" . (lambda () (interactive) (my/toggle-buffer "*Messages*")))
+     ("C-c t s" . (lambda () (interactive) (my/toggle-buffer "*scratch*")))))
+#+END_SRC
+
+* MY DIRED
+
+#+BEGIN_SRC emacs-lisp
+  (use-package my-dired
+    :after dired
+    :demand t
+    :bind
+    (:map dired-mode-map
+          ("?" . my/dired-get-size)
+          ("s" . my/dired-sort)
+          ("C-RET" . my/dired-get-size)
+          ("o" . my/dired-view-current)))
+#+END_SRC
+
+* MY EDITS
+
+#+BEGIN_SRC emacs-lisp
+  (use-package my-edits
+    :bind*
+    (("C-x RET u" . my/convert-to-unix-coding-system)
+     ("C-S-SPC" . my/push-mark-no-activate)
+     ("C-a" . my/smart-beginning-of-line)
+     ("C-w" . my/copy-line-or-region)
+     ("M-w" . my/cut-line-or-region)
+     ("C-c M-p" . my/change-pairs)
+     ("C-c a" . my/align-symbol)
+     ("C-c =" . my/align-equals)
+     ("C-c :" . my/align-colon)
+     ("C-c #" . my/align-numbers)
+     ("C-c d" . my/delete-inside)
+     ("C-c k" . my/remove-from-buffer)
+     ("M-s M-s" . my/surround)
+     ("C-o" . my/open-line-above)
+     ("C-S-o" . my/open-line-below)
+     ("M-Q" . my/unfill-region)
+     :map isearch-mode-map
+     ("C-z" . my/zap-to-isearch)
+     ("C-w" . my/copy-isearch-match)
+     ("M-w" . my/kill-isearch-match))
+    :hook
+    ;; (before-save . my/convert-to-unix-coding-system)
+    ;; (before-save . my/remove-ctrl-m)
+    (after-save . my/auto-recompile)
+    (before-save . my/push-mark-no-activate)
+    (find-file . my/hide-dos-eol))
+#+END_SRC
+
+* MY FILES
+
+#+BEGIN_SRC emacs-lisp
+  (use-package my-files
+    :bind*
+    (("C-c f d" . my/delete-this-file)
+     ("C-c f c" . my/copy-file-name-to-clipboard)
+     ("C-c f b" . my/make-backup-and-save)
+     ("C-c f r" . my/rename-this-file-and-buffer)
+     ("C-c f s" . my/sudoedit)))
+#+END_SRC
+
+* MY MISC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package my-misc
+    :bind*
+    ("C-c G" . my/google)
+    ("C-x t" . my/switch-to-ansi-term)
+    :hook
+    (compilation-filter . colorize-compilation-buffer))
+#+END_SRC
+
+* MY ORG
+
+#+BEGIN_SRC emacs-lisp
+  (use-package my-org
+    :after org)
+#+END_SRC
+
+* MY SETTINGS
+
+#+BEGIN_SRC emacs-lisp
+  (use-package my-settings
+    :demand)
+#+END_SRC
+
+* MY TANGLES
+
+#+BEGIN_SRC emacs-lisp
+  (use-package my-tangles
+    :hook
+    (after-save . my/auto-tangle)
+    :bind*
+    ("C-c v d" . my/tangle-directory)
+    ("C-c v a" . my/tangle-all))
+#+END_SRC
+
+* MY THEME
+
+#+BEGIN_SRC emacs-lisp
+  (use-package my-theme
+    :demand
+    :bind*
+    ("C-c t C-t" . my/disable-themes))
+#+END_SRC
+
+* MY WINDOWS
+
+#+BEGIN_SRC emacs-lisp
+  (use-package my-windows
+    :bind*
+    (("C-x O" . my/prev-window)
+     ("C-c 3" . my/vsplit-last-buffer)
+     ("C-c 2" . my/hsplit-last-buffer)
+     :map ctl-x-4-map
+     ("k" . my/kill-buffer-other-window)
+     ("o" . my/open-buffer-other-window)
+     ("t" . my/toggle-split)))
+#+END_SRC
+
+* NIX MODE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package nix-mode
+    :ensure t
+    :defer t)
+#+END_SRC
+
+* NNIR
+
+#+BEGIN_SRC emacs-lisp
+  (use-package nnir
+    :after gnus)
+#+END_SRC
+
+* NODEJS REPL
+
+#+BEGIN_SRC emacs-lisp
+  (use-package nodejs-repl
+    :ensure t
+    :defer t
+    :bind
+    (:map js2-mode-map
+          ("C-x C-e" . nodejs-repl-send-last-expression)
+          ("C-c C-j" . nodejs-repl-send-line)
+          ("C-c SPC" . nodejs-repl-send-region)
+          ("C-c C-b" . nodejs-repl-send-buffer)
+          ("C-c C-f" . nodejs-repl-load-file)
+          ("C-c C-z" . nodejs-repl-switch-to-repl)))
+#+END_SRC
+
+* ORG
+
+#+BEGIN_SRC emacs-lisp
+  (use-package org
+    :ensure t
+    :bind*
+    ("C-c o a" . org-agenda)
+    ("C-c o c" . org-capture)
+    :hook
+    (org-mode-hook . auto-fill-mode)
+    (org-mode-hook . hl-line-mode))
+#+END_SRC
+
+* PAREDIT
+
+#+BEGIN_SRC emacs-lisp
+  (use-package paredit
+    :ensure t
+    :bind
+    ("C-c t p" . paredit-mode)
+    ("C-c (" . paredit-forward-slurp-sexp)
+    ("C-c )" . paredit-backward-slurp-sexp)
+    ("C-c <" . paredit-forward-barf-sexp)
+    ("C-c >" . paredit-backward-barf-sexp)
+    ("C-c M-s" . paredit-splice-sexp)
+    :hook
+    (common-lisp-mode . paredit-mode)
+    (emacs-lisp-mode . paredit-mode)
+    (lisp-mode . paredit-mode)
+    :config
+    (unbind-key "M-s" paredit-mode-map))
+#+END_SRC
+
+* PROG MODE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package prog-mode
+    :defer t
+    :hook
+    (prog-mode . hl-line-mode)
+    (prog-mode . hs-minor-mode)
+    (prog-mode . linum-mode))
+#+END_SRC
+
+* PROJECTILE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package projectile
+    :ensure t
+    :diminish projectile-mode
+    :bind-keymap
+    ("C-c p" . projectile-command-map)
+    :config
+    (projectile-mode)
+    (setq projectile-completion-system 'ivy)
+    (when (require 'magit nil t)
+      (mapc #'projectile-add-known-project
+            (mapcar #'file-name-as-directory (magit-list-repos)))
+      ;; Optionally write to persistent `projectile-known-projects-file'
+      (projectile-save-known-projects)))
+#+END_SRC
+
+* PYTHON MODE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package python-mode
+    :defer t
+    :config
+    (setq python-fill-docstring-style 'django)
+    (setq fill-column 78))
+#+END_SRC
+
+* PY AUTOPEP8
+
+#+BEGIN_SRC emacs-lisp
+  (use-package py-autopep8
+    :ensure t
+    :after python-mode
+    :hook
+    (python-mode . py-autopep8-enable-on-save))
+#+END_SRC
+
+* RECENTF
+
+#+BEGIN_SRC emacs-lisp
+  (use-package recentf
+    :bind*
+    ("<f12>" . recentf-open-files)
+    :config
+    (recentf-mode 1)
+    (setq recentf-exclude '(".*init\.el"
+                            ".*\/my-.*\.el"
+                            "^/var/folders\\.*"
+                            "COMMIT_EDITMSG\\'"
+                            ".*-autoloads\\.el\\'"
+                            "[/\\]\\.elpa/"))
+    (setq recentf-max-menu-items 128)
+    (setq recentf-max-saved-items 256))
+#+END_SRC
+
+* RESTCLIENT
+
+#+BEGIN_SRC emacs-lisp
+  (use-package restclient
+    :ensure t
+    :defer t)
+#+END_SRC
+
+* SMEX
+
+#+BEGIN_SRC emacs-lisp
+  (use-package smex
+    :ensure t
+    :defer 7)
+#+END_SRC
+
+* SYSTEMD
+
+#+BEGIN_SRC emacs-lisp
+  (use-package systemd
+    :ensure t
+    :defer t)
+#+END_SRC
+
+* TERRAFORM MODE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package terraform-mode
+    :ensure t
+    :defer t)
+#+END_SRC
+
+* TEXT MODE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package text-mode
+    :hook
+    (text-mode . hl-line-mode)
+    (text-mode . abbrev-mode)
+    (text-mode . auto-fill-mode))
+#+END_SRC
+
+* TRAMP
+
+#+BEGIN_SRC emacs-lisp
+  (use-package tramp
+    :config
+    (setq tramp-backup-directory-alist backup-directory-alist)
+    (setq tramp-default-method "ssh")
+    (setf tramp-persistency-file-name (concat temporary-file-directory "tramp-" (user-login-name))))
+#+END_SRC
+
+* UNIQUIFY
+
+#+BEGIN_SRC emacs-lisp
+  (use-package uniquify
+    :defer 10
+    :config
+    (setq uniquify-buffer-name-style 'forward))
+#+END_SRC
+
+* UNDO TREE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package undo-tree
+    :ensure t
+    :diminish undo-tree-mode
+    :bind
+    ("C-x u" . undo-tree-visualize)
+    :config
+    (global-undo-tree-mode 1)
+    (setq undo-tree-auto-save-history t)
+    (setq undo-tree-history-directory-alist
+          `(("." . ,(expand-file-name "~/.emacs.d/undos/")))))
+#+END_SRC
+
+* WEB MODE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package web-mode
+    :ensure t
+    :mode
+    "\\.phtml\\'"
+    "\\.tpl\\.php\\'"
+    "\\.[agj]sp\\'"
+    "\\.as[cp]x\\'"
+    "\\.erb\\'"
+    "\\.mustache\\'"
+    "\\.djhtml\\'"
+    "\\.html\\.twig\\'"
+    "\\.html?\\'"
+    "\\.php?\\'"
+    "\\.css?\\'"
+    :hook
+    (web-mode . js2-minor-mode)
+    :config
+    (setq web-mode-content-type "jsx")
+    (setq web-mode-enable-auto-quoting nil)
+    (setq web-mode-code-indent-offset 2)
+    (setq web-mode-markup-indent-offset 2)
+    (setq web-mode-attr-indent-offset 2)
+    (setq web-mode-css-indent-offset 2)
+    (setq web-mode-code-indent-offset 2)
+    (setq web-mode-enable-auto-pairing t)
+    (setq web-mode-enable-css-colorization t)
+    (setq web-mode-enable-block-face t)
+    (setq web-mode-enable-part-face t)
+    (setq web-mode-enable-comment-keywords t)
+    (add-to-list 'web-mode-indentation-params '("lineup-args" . nil))
+    (add-to-list 'web-mode-indentation-params '("lineup-calls" . nil))
+    (add-to-list 'web-mode-indentation-params '("lineup-concats" . nil))
+    (add-to-list 'web-mode-indentation-params '("lineup-ternary" . nil)))
+#+END_SRC
+
+* WGREP
+
+#+BEGIN_SRC emacs-lisp
+  (use-package wgrep
+    :ensure t
+    :defer t)
+#+END_SRC
+
+* WHICH KEY
+
+#+BEGIN_SRC emacs-lisp
+  (use-package which-key
+    :ensure t
+    :defer 5
+    :config
+    (which-key-mode))
+#+END_SRC
+
+* YAML MODE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package yaml-mode
+    :ensure t
+    :defer t)
+#+END_SRC
+
+* YASNIPPET
+
+#+BEGIN_SRC emacs-lisp
+  (use-package yasnippet
+    :ensure t
+    :defer t
+    :diminish yas-minor-mode
+    :hook
+    (prog-mode . yas-minor-mode))
+#+END_SRC
+
+* YASNIPPET SNIPPETS
+
+#+BEGIN_SRC emacs-lisp
+  (use-package yasnippet-snippets
+    :ensure t
+    :defer t
+    :after yasnippet)
+#+END_SRC
+
+* ZOOM
+
+#+BEGIN_SRC emacs-lisp
+  (use-package zoom
+    :ensure t
+    :bind*
+    ("C-x C-z" . zoom-window-zoom)
+    :config
+    (custom-set-variables
+     '(zoom-window-mode-line-color "DarkGreen")))
+#+END_SRC
