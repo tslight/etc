@@ -31,8 +31,8 @@ configuration [[file:use.org][here]].
 
    #+BEGIN_SRC sh
      emacs -Q --batch \
-           --eval '(org-babel-load-file "'$PWD'/site-lisp/my-tangles.org")' \
-           --eval '(my/tangle-directory "'$PWD'/")'
+	   --eval '(org-babel-load-file "'$PWD'/site-lisp/my-tangles.org")' \
+	   --eval '(my/tangle-directory "'$PWD'/")'
    #+END_SRC
 
 3) Wait for packages to install (this may take a while...)
