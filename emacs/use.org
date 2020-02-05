@@ -251,6 +251,7 @@
     :bind*
     ("C-x d" . dired-jump)
     ("C-x C-d" . dired)
+    ("C-x M-d" . list-directory)
     (:map dired-mode-map
           ("i" . ido-find-file)
           (")" . dired-omit-mode)
@@ -649,7 +650,7 @@
     :hook
     ;; (before-save . my/convert-to-unix-coding-system)
     ;; (before-save . my/remove-ctrl-m)
-    (after-save . my/auto-recompile)
+    ;; (after-save . my/auto-recompile)
     (before-save . my/push-mark-no-activate)
     (find-file . my/hide-dos-eol))
 #+END_SRC
@@ -764,6 +765,8 @@
     :bind*
     ("C-c o a" . org-agenda)
     ("C-c o c" . org-capture)
+    (:map org-mode-map
+          ("C-c M-l" . org-store-link))
     :hook
     (org-mode-hook . auto-fill-mode)
     (org-mode-hook . hl-line-mode))
