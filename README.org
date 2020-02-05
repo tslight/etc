@@ -47,6 +47,15 @@ All in one handy dandy git repo. Fact.
 3) Wait for all the appropriate org files to [[https://www.gnu.org/software/emacs/manual/html_node/org/Extracting-source-code.html][tangle]] (this may take a while...)
 4) ...Profit!
 
+** But I only came here for an Emacs config!
+
+Please go [[file:emacs/README.org][here]]. Or execute the code block below in Emacs with ~C-c C-c~:
+
+   #+BEGIN_SRC sh
+     (org-babel-load-file (concat default-directory "/emacs/site-lisp/my-tangles.org"))
+     (my/tangle-directory (concat default-directory "/emacs/"))
+   #+END_SRC
+
 * How does all this work?
 
 I'm using Emacs' amazing [[https://orgmode.org/][org-mode]] as a basic cross platform configuration
