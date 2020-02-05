@@ -22,13 +22,13 @@ All in one handy dandy git repo. Fact.
 ** Warning
 
 Installing this stuff will overwrite any configuration files you currently have
-in place that are part of this repo, encluding your ~~/.emacs.d~ directory.
+in place that are part of this repo, encluding your [[file:~/.emacs.d/][Emacs configuration]].
 
 Please inspect the blocks in the files you intend to tangle and back up any
 files that will be overwritten by [[https://www.gnu.org/software/emacs/manual/html_node/org/Extracting-source-code.html][tangling]] them.
 
 If that doesn't mean anything to you - please don't do anything until you've
-read all the documentation here and linked to!
+read & understood all the documentation here and linked to!
 
 ** Option 1
 
