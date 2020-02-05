@@ -19,7 +19,7 @@ All in one handy dandy git repo. Fact.
 
 * Installation
 
-** Warning
+** *Warning*
 
 Installing this stuff will overwrite any configuration files you currently have
 in place that are part of this repo, encluding your [[file:~/.emacs.d/][Emacs configuration]].
@@ -27,13 +27,14 @@ in place that are part of this repo, encluding your [[file:~/.emacs.d/][Emacs co
 Please inspect the blocks in the files you intend to tangle and back up any
 files that will be overwritten by [[https://www.gnu.org/software/emacs/manual/html_node/org/Extracting-source-code.html][tangling]] them.
 
-If that doesn't mean anything to you - please don't do anything until you've
-read & understood all the documentation here and linked to!
+/If that doesn't mean anything to you - please don't do anything until you've
+read & understood all the documentation here and linked to!/
 
 ** Option 1
 
 1) Clone this repo & open this file in Emacs.
-2) Execute the elisp source code block below using ~C-c C-c~ with your cursor
+2) *BACKUP ANY CONFIGURATION FILES YOU WANT TO KEEP THAT ARE DEFINED IN THIS REPO.*
+3) Execute the elisp source code block below using ~C-c C-c~ with your cursor
    in the block:
 
    #+BEGIN_SRC emacs-lisp
@@ -41,13 +42,14 @@ read & understood all the documentation here and linked to!
      (my/tangle-all)
    #+END_SRC
 
-3) Wait for all the appropriate org files to [[https://www.gnu.org/software/emacs/manual/html_node/org/Extracting-source-code.html][tangle]] (this may take a while...)
-4) ...Profit!
+4) Wait for all the appropriate org files to [[https://www.gnu.org/software/emacs/manual/html_node/org/Extracting-source-code.html][tangle]] (this may take a while...)
+5) ...Profit!
 
 ** Option 2
 
 1) Clone this repo & cd into this directory.
-2) Run ~install.sh~, or the command below, in a terminal, from this directory:
+2) *BACKUP ANY CONFIGURATION FILES YOU WANT TO KEEP THAT ARE DEFINED IN THIS REPO.*
+3) Run ~install.sh~, or the command below, in a terminal, from this directory:
 
    #+BEGIN_SRC sh
      emacs -Q --batch \
@@ -55,8 +57,8 @@ read & understood all the documentation here and linked to!
            --eval '(my/tangle-all)'
    #+END_SRC
 
-3) Wait for all the appropriate org files to [[https://www.gnu.org/software/emacs/manual/html_node/org/Extracting-source-code.html][tangle]] (this may take a while...)
-4) ...Profit!
+4) Wait for all the appropriate org files to [[https://www.gnu.org/software/emacs/manual/html_node/org/Extracting-source-code.html][tangle]] (this may take a while...)
+5) ...Profit!
 
 ** But I only came here for an Emacs config!
 
