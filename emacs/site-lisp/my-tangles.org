@@ -9,14 +9,18 @@
 
 * SETTINGS
 
+This is horrible. There has to be a clever way to do this with recursion...
+
 #+BEGIN_SRC emacs-lisp
-  ;; This is horrible. There has to be a clever way to do this with recursion...
   (setq my/config-directory (expand-file-name (vc-root-dir))
         my/agnostic-config-directory (concat my/config-directory "agnostic/")
         my/emacs-config-directory (concat my/config-directory "emacs/"))
 #+END_SRC
 
 * OS CONFIG DIRECTORY
+
+Finds the directory in ~my/config-directory~ (ie, this repo) that matches a
+substring of ~system-configuration~.
 
 #+BEGIN_SRC emacs-lisp
   (defun my/os-config-directory ()
@@ -32,6 +36,15 @@
 #+END_SRC
 
 * INSERT BOILERPLATE
+
+Take a FILE as an argument & insert elisp header and footer comments into it,
+if it's an elisp FILE.
+
+If the file is in my conf directory also insert a provide expression, so that
+the FILE can be loaded as a package.
+
+Return the file name, so that this function can be piped to other functions,
+such as ~my/compile-and-load-file~.
 
 #+BEGIN_SRC emacs-lisp
   (defun my/insert-boilerplate (&optional file)
@@ -80,6 +93,9 @@
 
 * COMPILE AND LOAD CONFIG
 
+Byte compile init file and conf directory and then load the newly compiled
+configuration.
+
 #+BEGIN_SRC emacs-lisp
   (defun my/compile-and-load-config ()
     "Byte compile init file and conf directory and then load
@@ -90,6 +106,12 @@
 #+END_SRC
 
 * TANGLE DIRECTORY
+
+Takes a DIRECTORY as an argument and recursively tangles all the org-mode files
+in it and it's child directories.
+
+If the directory being tangled is my emacs configuration directory, run
+~my/compile-and-load-config~.
 
 #+BEGIN_SRC emacs-lisp
   (defun my/tangle-directory (directory)
@@ -131,6 +153,15 @@
 
 * AUTO TANGLE
 
+Auto tangle files in the directories specified below when they are
+edited. Providing the system-type value is
+
+It doesn't make sense to tangle openbsd configurations files on to a linux box,
+for example.
+
+However, I may want to be able to edit them without auto tangling from another
+OS.
+
 #+BEGIN_SRC emacs-lisp
   (defun my/auto-tangle ()
     "Auto tangle files in the directories specified below when they
@@ -162,6 +193,9 @@
 #+END_SRC
 
 * HARDWARE TANGLE
+
+Tangle block to PATH if VENDOR string matches the relevant FILE in
+~/sys/class/dmi/id/~.
 
 #+BEGIN_SRC emacs-lisp
   (defun my/hardware-tangle (vendor file path)
