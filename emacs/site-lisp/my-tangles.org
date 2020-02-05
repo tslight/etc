@@ -12,14 +12,20 @@
 This is horrible. There has to be a clever way to do this with recursion...
 
 #+BEGIN_SRC emacs-lisp
+  (defgroup my/configuration-directories nil
+    "Quick manipulation of textual checkboxes."
+    :group 'convenience)
   (defcustom my/config-directory "~/src/tspub/devops/etc/"
     "Path to parent configuration directory."
+    :group 'my/configuration-directories
     :type 'directory)
   (defcustom my/agnostic-config-directory (concat my/config-directory "agnostic/")
     "Path to agnostic configuration directory."
+    :group 'my/configuration-directories
     :type 'directory)
   (defcustom my/emacs-config-directory (concat my/config-directory "emacs/")
     "Path to emacs configuration directory."
+    :group 'my/configuration-directories
     :type 'directory)
 #+END_SRC
 
