@@ -12,7 +12,7 @@
 
 The culmination of years of [[http://projects.csail.mit.edu/gsb/old-archive/gsb-archive/gsb2000-02-11.html][yak-shaving]]...
 
-Relying almost entirley on Emacs' wonderful [[https://orgmode.org/][org-mode]], to [[http://www.literateprogramming.com/][literally]] manage cross
+Relying almost entirley on Emacs' wonderful [[https://orgmode.org/][org-mode]], to [[http://www.literateprogramming.com/][literately]] manage cross
 platform configuration files.
 
 All in one handy dandy git repo. Fact.
@@ -49,13 +49,16 @@ All in one handy dandy git repo. Fact.
 
 * How does all this work?
 
-I'm using Emacs' amazing org-mode as a configuration file management system.
+I'm using Emacs' amazing [[https://orgmode.org/][org-mode]] as a basic cross platform configuration
+management system.
 
 The functions defined in [[file:emacs/site-lisp/my-tangles.org][this]] file, allow automated tangling of the files in
-this repository.
+this repository. However, only the files of the operating system you're
+currently using and the files in the [[file:emacs/][Emacs]] and [[file:agnostic/][agnostic]] directories will be
+tangled when using the [[file:emacs/site-lisp/my-tangles.org::*TANGLE%20ALL][my/tangle-all]] or [[file:emacs/site-lisp/my-tangles.org::*AUTO%20TANGLE][my/auto-tangle]] functions.
 
 Please see the [[file:emacs/README.org][Emacs configuration directory]] for more details on how this is
-implemented.
+implemented. Specifically the functions defined in [[file:emacs/site-lisp/my-tangles.org][this file]].
 
 The main functions were inspired by this guy's blog:
 
