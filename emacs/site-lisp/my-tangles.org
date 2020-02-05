@@ -12,9 +12,15 @@
 This is horrible. There has to be a clever way to do this with recursion...
 
 #+BEGIN_SRC emacs-lisp
-  (setq my/config-directory (expand-file-name (vc-root-dir))
-        my/agnostic-config-directory (concat my/config-directory "agnostic/")
-        my/emacs-config-directory (concat my/config-directory "emacs/"))
+  (defcustom my/config-directory "~/src/tspub/devops/etc/"
+    "Path to parent configuration directory."
+    :type 'directory)
+  (defcustom my/agnostic-config-directory (concat my/config-directory "agnostic/")
+    "Path to agnostic configuration directory."
+    :type 'directory)
+  (defcustom my/emacs-config-directory (concat my/config-directory "emacs/")
+    "Path to emacs configuration directory."
+    :type 'directory)
 #+END_SRC
 
 * OS CONFIG DIRECTORY
@@ -116,10 +122,10 @@ If the directory being tangled is my emacs configuration directory, run
 #+BEGIN_SRC emacs-lisp
   (defun my/tangle-directory (directory)
     "Takes a DIRECTORY as an argument and recursively tangles all
-  the org-mode files in it and it's child directories.
+    the org-mode files in it and it's child directories.
 
-  If the directory being tangled is my emacs configuration
-  directory, run my/compile-and-load-config."
+    If the directory being tangled is my emacs configuration
+    directory, run my/compile-and-load-config."
     (interactive "DDirectory: ")
     (unless (featurep 'org) (require 'org)) ; needed for bootstrap
 
@@ -127,9 +133,11 @@ If the directory being tangled is my emacs configuration directory, run
             (my/insert-boilerplate
              (format "%s" (car (org-babel-tangle-file file)))))
           (directory-files-recursively directory ".*\\.org$"))
-
-    (when (string-prefix-p (file-truename my/emacs-config-directory)
-                           (file-truename directory))
+    (when (string-prefix-p
+           (replace-regexp-in-string "/$" ""
+                                     (file-truename my/emacs-config-directory))
+           (replace-regexp-in-string "/$" ""
+                                     (file-truename directory)))
       (my/compile-and-load-config)
       (mapc (lambda (file)
               (if (not (file-directory-p file))
