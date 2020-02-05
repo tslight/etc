@@ -78,7 +78,7 @@
     :ensure t
     :bind*
     (("<f6>" . desktop-read)
-     ("C-<tab>" . other-frame)
+     ("M-<escape>" . other-frame)
      ("C-!" . shell-command)
      ("C-$" . ispell-word)
      ("C-%" . query-replace)
@@ -90,8 +90,8 @@
      ("C->" . end-of-buffer)
      ("C-<f10>" . toggle-frame-maximized)
      ("C-<f11>" . toggle-frame-fullscreen)
-     ("M-<escape>" . next-buffer)
-     ("M-S-<escape>" . previous-buffer)
+     ("C-<tab>" . next-buffer)
+     ("C-<iso-lefttab>" . previous-buffer)
      ("C-M-v" . scroll-other-window-down)
      ("C-S-v" . scroll-other-window)
      ("C-^" . delete-indentation)
