@@ -350,7 +350,9 @@
   (use-package evil
     :ensure t
     :bind*
-    ("C-c M-e" . evil-mode)
+    ("C-c t e" . evil-mode)
+    :hook
+    (with-editor-mode . evil-insert-state)
     :init
     (setq evil-disable-insert-state-bindings t)
     :config
