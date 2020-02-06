@@ -352,6 +352,8 @@
     :bind*
     ("C-c t e" . evil-mode)
     :hook
+    (org-mode . evil-insert-state)
+    (prog-mode . evil-normal-state)
     (with-editor-mode . evil-insert-state)
     :init
     (setq evil-disable-insert-state-bindings t)
@@ -863,7 +865,9 @@
   (use-package ranger
     :ensure t
     :bind*
-    ("C-c r" . ranger))
+    ("C-c r" . ranger)
+    :init
+    (ranger-override-dired-mode t))
 #+END_SRC
 
 * RECENTF
