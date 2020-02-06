@@ -857,6 +857,15 @@
     (python-mode . py-autopep8-enable-on-save))
 #+END_SRC
 
+* RANGER
+
+#+BEGIN_SRC emacs-lisp
+  (use-package ranger
+    :ensure t
+    :bind*
+    ("C-c r" . ranger))
+#+END_SRC
+
 * RECENTF
 
 #+BEGIN_SRC emacs-lisp
