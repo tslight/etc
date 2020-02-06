@@ -344,6 +344,20 @@
     (setq eshell-smart-space-goes-to-end t))
 #+END_SRC
 
+* EVIL
+
+#+BEGIN_SRC emacs-lisp
+  (use-package evil
+    :ensure t
+    :bind*
+    ("C-c M-e" . evil-mode)
+    :init
+    (setq evil-disable-insert-state-bindings t)
+    :config
+    (setq evil-insert-state-cursor '((bar . 2) "yellow")
+          evil-normal-state-cursor '(box "green")))
+#+END_SRC
+
 * EXEC PATH FROM SHELL
 
 #+BEGIN_SRC emacs-lisp
