@@ -24,7 +24,7 @@ https://github.com/stumpwm/stumpwm/issues/480
 * IN WITH THE NEW
 
 #+BEGIN_SRC common-lisp
-  (set-prefix-key (kbd "C-i"))
+  (set-prefix-key (kbd "C-t"))
 #+END_SRC
 
 * APPLICATION MAP
@@ -152,12 +152,10 @@ http://dotshare.it/dots/396/
     ("r" "exec")
     ("SPC" "xdgmenu")
     ("." "xdgmenu categories")
-    ("c" "sttabbed")
-    ("C-c" "exec xterm")
+    ("c" "lilytmux")
+    ("C-c" "sttabbed")
     ("e" "emacsclient")
     ("C-e" "exec emacs")
-    ("t" "lilytmux")
-    ("C-t" "exec x-terminal-emulator")
     ("b" "web-browser")
     ("C-b" "exec chromium")
     ("f" "file-manager")
@@ -184,8 +182,8 @@ http://dotshare.it/dots/396/
 #+BEGIN_SRC common-lisp
   ;; windows
   (defkeys-root
-    ("C-i" "other")
-    ("i" "send-escape")
+    ("C-t" "other")
+    ("t" "send-escape")
     ("n" "next")
     ("p" "previous")
     ("M-n" "pull-hidden-next")
