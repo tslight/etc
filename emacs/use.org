@@ -240,14 +240,15 @@
 * DIRED X
 
 #+BEGIN_SRC emacs-lisp
-  (use-package dired-x)
+  (use-package dired-x
+    :defer t)
 #+END_SRC
 
 * DIRED
 
 #+BEGIN_SRC emacs-lisp
   (use-package dired
-    :after dired-x
+    :requires dired-x
     :bind*
     ("C-x d" . dired-jump)
     ("C-x C-d" . dired)
@@ -267,6 +268,7 @@
 
 #+BEGIN_SRC emacs-lisp
   (use-package find-dired
+    :defer t
     :after dired)
 #+END_SRC
 
@@ -307,9 +309,12 @@
 
 #+BEGIN_SRC emacs-lisp
   (use-package electric
-    :config
-    (electric-pair-mode 1)
-    (electric-indent-mode 1))
+    :defer t
+    :hook
+    (prog-mode . electric-pair-mode)
+    (prog-mode . electric-indent-mode)
+    (text-mode . electric-pair-mode)
+    (text-mode . electric-indent-mode))
 #+END_SRC
 
 * ERC
@@ -620,10 +625,11 @@
     :init (setq markdown-command "multimarkdown"))
 #+END_SRC
 
-* MY ADVICE)
+* MY ADVICE
 
 #+BEGIN_SRC emacs-lisp
-  (use-package my-advice)
+  (use-package my-advice
+    :defer 8)
 #+END_SRC
 
 * MY BUFFERS
@@ -649,7 +655,6 @@
 #+BEGIN_SRC emacs-lisp
   (use-package my-dired
     :after dired
-    :demand t
     :bind
     (:map dired-mode-map
           ("?" . my/dired-get-size)
@@ -774,6 +779,7 @@
 
 #+BEGIN_SRC emacs-lisp
   (use-package nnir
+    :defer t
     :after gnus)
 #+END_SRC
 
@@ -882,9 +888,10 @@
 #+BEGIN_SRC emacs-lisp
   (use-package ranger
     :ensure t
+    :requires dired
     :bind*
     ("C-c r" . ranger)
-    :init
+    :config
     (ranger-override-dired-mode t))
 #+END_SRC
 
@@ -952,6 +959,7 @@
 
 #+BEGIN_SRC emacs-lisp
   (use-package tramp
+    :defer t
     :config
     (setq tramp-backup-directory-alist backup-directory-alist)
     (setq tramp-default-method "ssh")
