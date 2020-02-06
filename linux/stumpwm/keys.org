@@ -202,6 +202,8 @@ http://dotshare.it/dots/396/
     ("F" "fullscreen")
     ("d" "delete")
     ("k" "kill")
+    ("z" "my/toggle-only")
+    ("C-o" "fother")
     ("Delete" "repack-window-numbers")
     ("M-i" "show-window-properties"))
 
