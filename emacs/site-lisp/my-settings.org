@@ -80,6 +80,14 @@
   (setq load-prefer-newer t) ;; if init.elc is older, use newer init.el
 #+END_SRC
 
+* DISPLAY LINE NUMBERS
+
+This is new in Emacs 26 :-)
+
+#+BEGIN_SRC emacs-lisp
+  (setq display-line-numbers 'relative)
+#+END_SRC
+
 * EPA
 
 #+BEGIN_SRC emacs-lisp

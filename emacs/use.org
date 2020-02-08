@@ -248,7 +248,7 @@
 
 #+BEGIN_SRC emacs-lisp
   (use-package dired
-    :requires dired-x
+    :after dired-x
     :bind*
     ("C-x d" . dired-jump)
     ("C-x C-d" . dired)
@@ -356,6 +356,9 @@
     :ensure t
     :bind*
     ("C-c t e" . evil-mode)
+    (:map dired-mode-map
+          ("h" . (lambda () (interactive (find-alternate-file ".."))))
+          ("l" . dired-find-alternate-file))
     :hook
     (org-mode . evil-insert-state)
     (prog-mode . evil-normal-state)
@@ -842,7 +845,8 @@
     :hook
     (prog-mode . hl-line-mode)
     (prog-mode . hs-minor-mode)
-    (prog-mode . linum-mode))
+    ;; replaces linum mode in Emacs 26
+    (prog-mode . (lambda () (setq display-line-numbers 'relative))))
 #+END_SRC
 
 * PROJECTILE
@@ -890,9 +894,7 @@
     :ensure t
     :requires dired
     :bind*
-    ("C-c r" . ranger)
-    :config
-    (ranger-override-dired-mode t))
+    ("C-c r" . ranger))
 #+END_SRC
 
 * RECENTF
