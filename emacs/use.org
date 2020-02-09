@@ -240,7 +240,8 @@
 * DIRED X
 
 #+BEGIN_SRC emacs-lisp
-  (use-package dired-x)
+  (use-package dired-x
+    :defer 4)
 #+END_SRC
 
 * DIRED
@@ -287,7 +288,7 @@
     :defer t )
 #+END_SRC
 
-* DOT
+* DOT MODE
 
 #+BEGIN_SRC emacs-lisp
   (use-package dot-mode
