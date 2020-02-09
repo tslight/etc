@@ -110,7 +110,7 @@
      ("C-c t d E" . toggle-debug-on-entry)
      ("C-c t d e" . toggle-debug-on-error)
      ("C-c t d q" . toggle-debug-on-quit)
-     ("C-c t l" . linum-mode)
+     ("C-c t l" . display-line-numbers-mode)
      ("C-c t t" . toggle-truncate-lines)
      ("C-c x" . execute-extended-command)
      ("C-r" . isearch-backward-regexp)
@@ -134,15 +134,15 @@
      ("M-z" . zap-up-char)
      ("S-<f10>" . menu-bar-mode)
      ("S-<f6>" . desktop-save)
-     :map special-mode-map
-     ("n" . forward-button)
-     ("p" . backward-button)
-     ("f" . forward-button)
-     ("b" . backward-button)
-     ("n" . widget-forward)
-     ("p" . widget-backward)
-     ("f" . widget-forward)
-     ("b" . widget-backward)))
+     (:map special-mode-map
+           ("n" . forward-button)
+           ("p" . backward-button)
+           ("f" . forward-button)
+           ("b" . backward-button)
+           ("n" . widget-forward)
+           ("p" . widget-backward)
+           ("f" . widget-forward)
+           ("b" . widget-backward))))
 #+END_SRC
 
 * CHANGE INNER
@@ -1046,16 +1046,4 @@
     :ensure t
     :defer t
     :after yasnippet)
-#+END_SRC
-
-* ZOOM
-
-#+BEGIN_SRC emacs-lisp
-  (use-package zoom
-    :ensure t
-    :bind*
-    ("C-x C-z" . zoom-window-zoom)
-    :config
-    (custom-set-variables
-     '(zoom-window-mode-line-color "DarkGreen")))
 #+END_SRC
