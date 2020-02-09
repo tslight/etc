@@ -287,6 +287,15 @@
     :defer t )
 #+END_SRC
 
+* DOT
+
+#+BEGIN_SRC emacs-lisp
+  (use-package dot-mode
+    :ensure t
+    :hook
+    (find-file . dot-mode-on))
+#+END_SRC
+
 * EDIFF
 
 #+BEGIN_SRC emacs-lisp
