@@ -85,10 +85,12 @@
     (scroll-down (- (window-height) 3)))
 
   (defun my/scroll-line-up (n)
+    "Equivalent of Ctrl-e in Vi."
    (interactive "p")
    (scroll-up n))
 
   (defun my/scroll-line-down (n)
+    "Equivalent of Ctrl-y in Vi."
    (interactive "p")
    (scroll-down n))
 #+END_SRC
