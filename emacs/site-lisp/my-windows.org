@@ -70,6 +70,29 @@
     (other-window -1))
 #+END_SRC
 
+* RECENTER WINDOw
+
+#+BEGIN_SRC emacs-lisp
+  (defun my/top-of-window ()
+     "Shift current line to the top of the window-  i.e. zt in Vim"
+     (interactive)
+     (set-window-start (selected-window) (point)))
+
+  (defun my/bottom-of-window ()
+    "Shift current line to the bottom of the window- i.e. zb in Vim"
+    (interactive)
+    (my/top-of-window)
+    (scroll-down (- (window-height) 3)))
+
+  (defun my/scroll-line-up (n)
+   (interactive "p")
+   (scroll-up n))
+
+  (defun my/scroll-line-down (n)
+   (interactive "p")
+   (scroll-down n))
+#+END_SRC
+
 * HSPLIT-LAST-BUFFER
 
 #+BEGIN_SRC emacs-lisp
