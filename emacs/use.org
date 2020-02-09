@@ -657,15 +657,13 @@
      ("C-o" . my/open-line-above)
      ("C-S-o" . my/open-line-below)
      ("M-Q" . my/unfill-region)
-     :map isearch-mode-map
-     ("C-z" . my/zap-to-isearch)
-     ("C-w" . my/copy-isearch-match)
-     ("M-w" . my/kill-isearch-match))
+     (:map isearch-mode-map
+           ("C-z" . my/zap-to-isearch)
+           ("C-w" . my/copy-isearch-match)
+           ("M-w" . my/kill-isearch-match)))
     :hook
-    ;; (before-save . my/convert-to-unix-coding-system)
-    ;; (before-save . my/remove-ctrl-m)
-    ;; (after-save . my/auto-recompile)
     (before-save . my/push-mark-no-activate)
+    ;; (after-save . my/auto-recompile)
     (find-file . my/hide-dos-eol))
 #+END_SRC
 
