@@ -240,8 +240,7 @@
 * DIRED X
 
 #+BEGIN_SRC emacs-lisp
-  (use-package dired-x
-    :defer t)
+  (use-package dired-x)
 #+END_SRC
 
 * DIRED
@@ -892,7 +891,7 @@
 #+BEGIN_SRC emacs-lisp
   (use-package ranger
     :ensure t
-    :requires dired
+    :after dired
     :bind*
     ("C-c r" . ranger))
 #+END_SRC

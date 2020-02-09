@@ -150,6 +150,14 @@
         alias lt='exa --tree --group'; \
         alias llt='exa --tree --long --group --git'; \
       }
+  command -v nix-env &>/dev/null && \
+      { \
+        alias nix-install='nix-env -iA'; \
+        alias nix-install="nix-env -iA"; \
+        alias nix-remove="nix-env -e"; \
+        alias nix-search="nix-env -qaP"; \
+        alias nix-update="nix-channel --update && nix-env -u '*'"; \
+      }
   command -v git &>/dev/null && alias g='git'
   command -v sudo &>/dev/null && alias se='sudoedit'
   # https://github.com/areina/stumpwm.d/blob/master/applications.lisp
