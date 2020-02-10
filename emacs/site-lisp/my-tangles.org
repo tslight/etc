@@ -232,8 +232,8 @@ Tangle block to PATH if VENDOR string matches the relevant FILE in
 * KEYBINDINGS
 
 #+BEGIN_SRC emacs-lisp
-  (define-key my/keymap (kbd "C-c v d") 'my/tangle-directory)
-  (define-key my/keymap (kbd "C-c v a") 'my/tangle-all)
+  (global-set-key (kbd "C-c v d") 'my/tangle-directory)
+  (global-set-key (kbd "C-c v a") 'my/tangle-all)
 #+END_SRC
 
 * HOOKS
