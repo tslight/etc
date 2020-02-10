@@ -74,6 +74,13 @@
   (show-paren-mode 1)
 #+END_SRC
 
+* HIGHLIGHT CHANGES
+
+#+BEGIN_SRC emacs-lisp
+  (global-highlight-changes-mode)
+  (setq highlight-changes-visibility-initial-state nil)
+#+END_SRC
+
 * LOADING
 
 #+BEGIN_SRC emacs-lisp
