@@ -58,6 +58,21 @@
   (setq x-select-enable-clipboard-manager nil)
   (setq save-interprogram-paste-before-kill t)
 #+END_SRC
+* EDIFF
+
+#+BEGIN_SRC emacs-lisp
+  (setq ediff-window-setup-function 'ediff-setup-windows-plain)
+  (setq ediff-split-window-function 'split-window-horizontally)
+  (setq ediff-diff-options "-w")
+
+  (add-hook 'ediff-after-quit-hook-internal 'winner-undo)
+
+  (defun disable-y-or-n-p (orig-fun &rest args)
+    (cl-letf (((symbol-function 'y-or-n-p) (lambda (prompt) t)))
+      (apply orig-fun args)))
+
+  (advice-add 'ediff-quit :around #'disable-y-or-n-p)
+#+END_SRC
 
 * EDITING
 
@@ -72,6 +87,50 @@
   (setq require-final-newline t) ;; useful for crontab
   (setq set-mark-command-repeat-pop t) ;; repeating C-SPC after popping, pops it
   (show-paren-mode 1)
+#+END_SRC
+
+* ERC
+
+#+BEGIN_SRC emacs-lisp
+  (setq erc-autojoin-channels-alist '(("freenode.net"
+                                       "#org-mode"
+                                       "#emacs")))
+  (setq erc-fill-column 80)
+  (setq erc-hide-list '("JOIN" "PART" "QUIT"))
+  (setq erc-input-line-position -2)
+  (setq erc-keywords '("not2b"))
+  (setq erc-nick "not2b")
+  (setq erc-prompt-for-password t)
+  (setq erc-track-enable-keybindings t)
+#+END_SRC
+
+* ESHELL
+
+#+BEGIN_SRC emacs-lisp
+  (require 'em-smart)
+  (setq eshell-history-size 2048)
+  (setq eshell-where-to-jump 'begin)
+  (setq eshell-review-quick-commands nil)
+  (setq eshell-smart-space-goes-to-end t)
+  (define-key my/keymap (kbd "C-c e s") 'eshell)
+#+END_SRC
+
+* GNUS
+
+#+BEGIN_SRC emacs-lisp
+  ;; (require 'nnir)
+  (setq gnus-init-file "~/.emacs.d/init.el")
+  (setq gnus-home-directory "~/.emacs.d/")
+  (setq gnus-completing-read-function 'gnus-ido-completing-read)
+  (setq message-directory "~/.emacs.d/mail")
+  (setq gnus-directory "~/.emacs.d/news")
+  (setq nnfolder-directory "~/.emacs.d/mail/archive")
+  (setq gnus-use-full-window nil)
+  (setq gnus-select-method '(nntp "news.gnus.org"))
+  (setq gnus-summary-thread-gathering-function
+        'gnus-gather-threads-by-subject)
+  (setq gnus-thread-hide-subtree t)
+  (setq gnus-thread-ignore-subject t)
 #+END_SRC
 
 * HIGHLIGHT CHANGES
@@ -147,6 +206,27 @@ This is new in Emacs 26 :-)
   (setq js-indent-level 2)
 #+END_SRC
 
+* PYTHON
+
+#+BEGIN_SRC emacs-lisp
+  (setq python-fill-docstring-style 'django)
+  (setq fill-column 78)
+#+END_SRC
+
+* RECENTF
+
+#+BEGIN_SRC emacs-lisp
+  (recentf-mode 1)
+  (setq recentf-exclude '(".*init\.el"
+                          ".*\/my-.*\.el"
+                          "^/var/folders\\.*"
+                          "COMMIT_EDITMSG\\'"
+                          ".*-autoloads\\.el\\'"
+                          "[/\\]\\.elpa/"))
+  (setq recentf-max-menu-items 128)
+  (setq recentf-max-saved-items 256)
+#+END_SRC
+
 * REGISTERS
 
 #+BEGIN_SRC emacs-lisp
@@ -194,17 +274,18 @@ This is new in Emacs 26 :-)
   (setq initial-major-mode 'fundamental-mode)
 #+END_SRC
 
-* YES OR NO
-
-#+BEGIN_SRC emacs-lisp
-  (fset 'yes-or-no-p 'y-or-n-p) ;; never have to type full word
-  (setq confirm-kill-emacs 'y-or-n-p)
-#+END_SRC
-
 * TERM BUFFER SIZE
 
 #+BEGIN_SRC emacs-lisp
   (setq term-buffer-maximum-size 200000)
+#+END_SRC
+
+* TRAMP
+
+#+BEGIN_SRC emacs-lisp
+  (setq tramp-backup-directory-alist backup-directory-alist)
+  (setq tramp-default-method "ssh")
+  (setf tramp-persistency-file-name (concat temporary-file-directory "tramp-" (user-login-name)))
 #+END_SRC
 
 * UNDO LIMITS
@@ -212,6 +293,12 @@ This is new in Emacs 26 :-)
 #+BEGIN_SRC emacs-lisp
   (setq undo-limit 150000)
   (setq undo-strong-limit 300000)
+#+END_SRC
+* UNIQUIFY
+
+#+BEGIN_SRC emacs-lisp
+  (require 'uniquify)
+  (setq uniquify-buffer-name-style 'forward)
 #+END_SRC
 
 * VERSION CONTROL
@@ -222,18 +309,17 @@ This is new in Emacs 26 :-)
   (setq version-control t)
 #+END_SRC
 
+* YES OR NO
+
+#+BEGIN_SRC emacs-lisp
+  (fset 'yes-or-no-p 'y-or-n-p) ;; never have to type full word
+  (setq confirm-kill-emacs 'y-or-n-p)
+#+END_SRC
+
 * WINDOWS
 
 #+BEGIN_SRC emacs-lisp
   (when (fboundp 'winner-mode) (winner-mode 1))
   (setq split-width-threshold 160)
   (setq split-height-threshold 80)
-#+END_SRC
-
-* HOOKS
-
-#+BEGIN_SRC emacs-lisp
-  (add-hook 'before-save-hook 'whitespace-cleanup)
-  (add-hook 'minibuffer-exit-hook (lambda () (setq gc-cons-threshold 800000)))
-  (add-hook 'minibuffer-setup-hook (lambda () (setq gc-cons-threshold most-positive-fixnum)))
 #+END_SRC

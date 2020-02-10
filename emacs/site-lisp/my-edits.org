@@ -578,3 +578,39 @@
           (error "Internal error in isearch kill function")))
       (isearch-exit)))
 #+END_SRC
+* KEYBINDINGS
+
+#+BEGIN_SRC emacs-lisp
+  (define-key my/keymap (kbd "C-x RET u") 'my/convert-to-unix-coding-system)
+  (define-key my/keymap (kbd "C-S-SPC") 'my/push-mark-no-activate)
+  (define-key my/keymap (kbd "C-a") 'my/smart-beginning-of-line)
+  (define-key my/keymap (kbd "C-w") 'my/copy-line-or-region)
+  (define-key my/keymap (kbd "M-w") 'my/cut-line-or-region)
+  (define-key my/keymap (kbd "C-c M-p") 'my/change-pairs)
+  (define-key my/keymap (kbd "C-c a") 'my/align-symbol)
+  (define-key my/keymap (kbd "C-c =") 'my/align-equals)
+  (define-key my/keymap (kbd "C-c :") 'my/align-colon)
+  (define-key my/keymap (kbd "C-c #") 'my/align-numbers)
+  (define-key my/keymap (kbd "C-c d") 'my/delete-inside)
+  (define-key my/keymap (kbd "C-c k") 'my/remove-from-buffer)
+  (define-key my/keymap (kbd "M-s M-s") 'my/surround)
+  (define-key my/keymap (kbd "C-o") 'my/open-line-above)
+  (define-key my/keymap (kbd "C-S-o") 'my/open-line-below)
+  ;; (define-key my/keymap (kbd "C-y") 'my/yank)
+  ;; (define-key my/keymap (kbd "C-M-y") '(lambda () (interactive) (my/yank t)))
+  (define-key my/keymap (kbd "M-Q") 'my/unfill-region)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (define-key isearch-mode-map (kbd "C-z") 'my/zap-to-isearch)
+  (define-key isearch-mode-map (kbd "C-w") 'my/copy-isearch-match)
+  (define-key isearch-mode-map (kbd "M-w") 'my/kill-isearch-match)
+#+END_SRC
+
+* HOOKS
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'before-save-hook 'my/push-mark-no-activate)
+  ;; (add-hook 'after-save-hook 'my/auto-recompile)
+  (add-hook 'find-file-hook 'my/hide-dos-eol)
+#+END_SRC

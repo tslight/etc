@@ -74,9 +74,9 @@
 
 #+BEGIN_SRC emacs-lisp
   (defun my/top-of-window ()
-     "Shift current line to the top of the window-  i.e. zt in Vim"
-     (interactive)
-     (set-window-start (selected-window) (point)))
+    "Shift current line to the top of the window-  i.e. zt in Vim"
+    (interactive)
+    (set-window-start (selected-window) (point)))
 
   (defun my/bottom-of-window ()
     "Shift current line to the bottom of the window- i.e. zb in Vim"
@@ -86,13 +86,13 @@
 
   (defun my/scroll-line-up (n)
     "Equivalent of Ctrl-e in Vi."
-   (interactive "p")
-   (scroll-up n))
+    (interactive "p")
+    (scroll-up n))
 
   (defun my/scroll-line-down (n)
     "Equivalent of Ctrl-y in Vi."
-   (interactive "p")
-   (scroll-down n))
+    (interactive "p")
+    (scroll-down n))
 #+END_SRC
 
 * HSPLIT-LAST-BUFFER
@@ -149,4 +149,21 @@
                       (split-window-vertically)
                     (split-window-horizontally))
                   (set-window-buffer (windmove-find-other-window neighbour-dir) other-buf))))))))
+#+END_SRC
+* KEYBINDINGS
+
+#+BEGIN_SRC emacs-lisp
+  (define-key my/keymap (kbd "C-x O") 'my/prev-window)
+  (define-key my/keymap (kbd "C-c 3") 'my/vsplit-last-buffer)
+  (define-key my/keymap (kbd "C-c 2") 'my/hsplit-last-buffer)
+  (define-key my/keymap (kbd "M-<") 'my/top-of-window)
+  (define-key my/keymap (kbd "M->") 'my/bottom-of-window)
+  (define-key my/keymap (kbd "M-p") 'my/scroll-line-up)
+  (define-key my/keymap (kbd "M-n") 'my/scroll-line-down)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (define-key ctl-x-4-map "k" 'my/kill-buffer-other-window)
+  (define-key ctl-x-4-map "o" 'my/open-buffer-other-window)
+  (define-key ctl-x-4-map "t" 'my/toggle-split)
 #+END_SRC

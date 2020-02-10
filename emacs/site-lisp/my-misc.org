@@ -83,3 +83,15 @@
         (process-send-string bufname (format (concat cd-str " exec bash;clear\n")
                                              path)))))
 #+END_SRC
+* KEYBINDINGS
+
+#+BEGIN_SRC emacs-lisp
+  (define-key my/keymap (kbd "C-c G") 'my/google)
+  (define-key my/keymap (kbd "C-x t") 'my/switch-to-ansi-term)
+#+END_SRC
+
+* HOOKS
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
+#+END_SRC

@@ -99,3 +99,18 @@
         (window-configuration-to-register '_)
         (delete-other-windows))))
 #+END_SRC
+* KEYBINDINGS
+
+#+BEGIN_SRC emacs-lisp
+  (define-key my/keymap (kbd "C-<escape>") 'my/last-buffer)
+  (define-key my/keymap (kbd "C-M-<escape>") 'my/toggle-buffer)
+  (define-key my/keymap (kbd "C-c TAB") 'my/indent-buffer)
+  (define-key my/keymap (kbd "C-c b i") 'my/indent-buffer)
+  (define-key my/keymap (kbd "C-c z") 'my/toggle-maximize-buffer)
+  (define-key my/keymap (kbd "C-c M-n") 'my/nuke-buffers)
+  (define-key my/keymap (kbd "C-c s") 'my/save-buffers-silently)
+  (define-key my/keymap (kbd "C-x k") 'my/kill-this-buffer)
+  (define-key my/keymap (kbd "M-s s") 'my/search-all-buffers)
+  (define-key my/keymap (kbd "C-c t m") '(lambda () (interactive) (my/toggle-buffer "*Messages*")))
+  (define-key my/keymap (kbd "C-c t s") '(lambda () (interactive) (my/toggle-buffer "*scratch*")))
+#+END_SRC

@@ -3,7 +3,7 @@
 #+PROPERTY: header-args :cache yes
 #+PROPERTY: header-args+ :mkdirp yes
 #+PROPERTY: header-args+ :results silent
-#+PROPERTY: header-args+ :tangle ~/.emacs.d/use.el
+#+PROPERTY: header-args+ :tangle ~/.emacs.d/site-lisp/use.el
 #+PROPERTY: header-args+ :tangle-mode (identity #o644)
 #+OPTIONS: toc:t
 
@@ -69,82 +69,6 @@
     :defer t
     :config
     (async-bytecomp-package-mode 1))
-#+END_SRC
-
-* BIND KEY
-
-#+BEGIN_SRC emacs-lisp
-  (use-package bind-key
-    :ensure t
-    :bind*
-    (("<f6>" . desktop-read)
-     ("M-<escape>" . other-frame)
-     ("C-!" . shell-command)
-     ("C-$" . ispell-word)
-     ("C-%" . query-replace)
-     ("C-(" . insert-parentheses)
-     ("C-)" . move-past-close-and-reindent)
-     ("C-:" . pp-eval-expression)
-     ("C-;" . comment-line)
-     ("C-<" . beginning-of-buffer)
-     ("C->" . end-of-buffer)
-     ("C-<f10>" . toggle-frame-maximized)
-     ("C-<f11>" . toggle-frame-fullscreen)
-     ("C-<tab>" . next-buffer)
-     ("C-<iso-lefttab>" . previous-buffer)
-     ("C-M-v" . scroll-other-window-down)
-     ("C-S-v" . scroll-other-window)
-     ("C-^" . delete-indentation)
-     ("C-c C-/" . winner-undo)
-     ("C-c C-?" . winner-redo)
-     ("C-c M-c" . calculator)
-     ("C-c c c" . calc)
-     ("C-c c n" . highlight-changes-next-change)
-     ("C-c c p" . highlight-changes-previous-change)
-     ("C-c e b" . eval-buffer)
-     ("C-c e c" . eval-current-buffer)
-     ("C-c e e" . pp-eval-last-sexp)
-     ("C-c e f" . eval-defun)
-     ("C-c e m" . lisp-interaction-mode)
-     ("C-c e r" . eval-region)
-     ("C-c i" . imenu)
-     ("C-c t a" . toggle-text-mode-autofill)
-     ("C-c t d E" . toggle-debug-on-entry)
-     ("C-c t d e" . toggle-debug-on-error)
-     ("C-c t d q" . toggle-debug-on-quit)
-     ("C-c t l" . display-line-numbers-mode)
-     ("C-c t t" . toggle-truncate-lines)
-     ("C-c x" . execute-extended-command)
-     ("C-r" . isearch-backward-regexp)
-     ("C-s" . isearch-forward-regexp)
-     ("C-s-f" . toggle-frame-fullscreen)
-     ("C-s-m" . toggle-frame-maximized)
-     ("C-w" . kill-ring-save)
-     ("C-x C" . save-buffers-kill-emacs)
-     ("C-x C-b" . ibuffer)
-     ("C-x j" . jump-to-register)
-     ("C-x M-k" . kill-buffer)
-     ("C-x p" . pop-to-mark-command)
-     ("C-z" . zap-up-to-char)
-     ("C-~" . not-modified)
-     ("M-/" . hippie-expand)
-     ("M-;" . comment-or-uncomment-region)
-     ("M-<tab>" . next-multiframe-window)
-     ("M-<iso-lefttab>" . previous-multiframe-window)
-     ("M-SPC" . cycle-spacing)
-     ("M-w" . kill-region)
-     ("M-z" . zap-up-char)
-     ("S-<f10>" . menu-bar-mode)
-     ("S-<f6>" . desktop-save)
-     (:map special-mode-map
-           ("n" . forward-button)
-           ("p" . backward-button)
-           ("f" . forward-button)
-           ("b" . backward-button)
-           ("n" . widget-forward)
-           ("p" . widget-backward)
-           ("f" . widget-forward)
-           ("b" . widget-backward))))
 #+END_SRC
 
 * CHANGE INNER
@@ -239,41 +163,6 @@
     :defer 4)
 #+END_SRC
 
-* DIRED X
-
-#+BEGIN_SRC emacs-lisp
-  (use-package dired-x
-    :defer 4)
-#+END_SRC
-
-* DIRED
-
-#+BEGIN_SRC emacs-lisp
-  (use-package dired
-    :after dired-x
-    :bind*
-    ("C-x d" . dired-jump)
-    ("C-x C-d" . dired)
-    ("C-x M-d" . list-directory)
-    (:map dired-mode-map
-          ("i" . ido-find-file)
-          (")" . dired-omit-mode)
-          ("b" . (lambda () (interactive (find-alternate-file ".."))))
-          ("f" . dired-find-alternate-file)
-          ("c" . dired-do-compress-to)
-          ("C-o" . dired-find-file-other-window))
-    :hook
-    (dired-mode . hl-line-mode))
-#+END_SRC
-
-* FIND DIRED
-
-#+BEGIN_SRC emacs-lisp
-  (use-package find-dired
-    :defer t
-    :after dired)
-#+END_SRC
-
 * DOCKER
 
 #+BEGIN_SRC emacs-lisp
@@ -297,67 +186,6 @@
     :ensure t
     :config
     (global-dot-mode))
-#+END_SRC
-
-* EDIFF
-
-#+BEGIN_SRC emacs-lisp
-  (use-package ediff
-    :defer t
-    :hook
-    (ediff-after-quit-hook-internal . winner-undo)
-    :config
-    (defun disable-y-or-n-p (orig-fun &rest args)
-      (cl-letf (((symbol-function 'y-or-n-p) (lambda (prompt) t)))
-        (apply orig-fun args)))
-    (advice-add 'ediff-quit :around #'disable-y-or-n-p)
-    (setq ediff-window-setup-function 'ediff-setup-windows-plain)
-    (setq ediff-split-window-function 'split-window-horizontally)
-    (setq ediff-diff-options "-w"))
-#+END_SRC
-
-* ELECTRIC
-
-#+BEGIN_SRC emacs-lisp
-  (use-package electric
-    :defer t
-    :hook
-    (prog-mode . electric-pair-mode)
-    (prog-mode . electric-indent-mode)
-    (text-mode . electric-pair-mode)
-    (text-mode . electric-indent-mode))
-#+END_SRC
-
-* ERC
-
-#+BEGIN_SRC emacs-lisp
-  (use-package erc
-    :defer t
-    :config
-    (setq erc-autojoin-channels-alist '(("freenode.net"
-                                         "#org-mode"
-                                         "#emacs")))
-    (setq erc-fill-column 80)
-    (setq erc-hide-list '("JOIN" "PART" "QUIT"))
-    (setq erc-input-line-position -2)
-    (setq erc-keywords '("not2b"))
-    (setq erc-nick "not2b")
-    (setq erc-prompt-for-password t)
-    (setq erc-track-enable-keybindings t))
-#+END_SRC
-
-* ESHELL
-
-#+BEGIN_SRC emacs-lisp
-  (use-package eshell
-    :bind*
-    ("C-c e s" . eshell)
-    :config
-    (use-package em-smart)
-    (setq eshell-history-size 2048)
-    (setq eshell-where-to-jump 'begin)
-    (setq eshell-review-quick-commands nil)
-    (setq eshell-smart-space-goes-to-end t))
 #+END_SRC
 
 * EXEC PATH FROM SHELL
@@ -409,26 +237,6 @@
   (use-package git-timemachine
     :ensure t
     :defer t)
-#+END_SRC
-
-* GNUS
-
-#+BEGIN_SRC emacs-lisp
-  (use-package gnus
-    :defer t
-    :config
-    (setq gnus-init-file "~/.emacs.d/init.el")
-    (setq gnus-home-directory "~/.emacs.d/")
-    (setq gnus-completing-read-function 'gnus-ido-completing-read)
-    (setq message-directory "~/.emacs.d/mail")
-    (setq gnus-directory "~/.emacs.d/news")
-    (setq nnfolder-directory "~/.emacs.d/mail/archive")
-    (setq gnus-use-full-window nil)
-    (setq gnus-select-method '(nntp "news.gnus.org"))
-    (setq gnus-summary-thread-gathering-function
-          'gnus-gather-threads-by-subject)
-    (setq gnus-thread-hide-subtree t)
-    (setq gnus-thread-ignore-subject t))
 #+END_SRC
 
 * GO MODE
@@ -599,164 +407,12 @@
     :init (setq markdown-command "multimarkdown"))
 #+END_SRC
 
-* MY ADVICE
-
-#+BEGIN_SRC emacs-lisp
-  (use-package my-advice
-    :defer 8)
-#+END_SRC
-
-* MY BUFFERS
-
-#+BEGIN_SRC emacs-lisp
-  (use-package my-buffers
-    :bind*
-    (("C-<escape>" . my/last-buffer)
-     ("C-M-<escape>" . my/toggle-buffer)
-     ("C-c TAB" . my/indent-buffer)
-     ("C-c b i" . my/indent-buffer)
-     ("C-c z" . my/toggle-maximize-buffer)
-     ("C-c M-n" . my/nuke-buffers)
-     ("C-c s" . my/save-buffers-silently)
-     ("C-x k" . my/kill-this-buffer)
-     ("M-s s" . my/search-all-)
-     ("C-c t m" . (lambda () (interactive) (my/toggle-buffer "*Messages*")))
-     ("C-c t s" . (lambda () (interactive) (my/toggle-buffer "*scratch*")))))
-#+END_SRC
-
-* MY DIRED
-
-#+BEGIN_SRC emacs-lisp
-  (use-package my-dired
-    :after dired
-    :bind
-    (:map dired-mode-map
-          ("?" . my/dired-get-size)
-          ("s" . my/dired-sort)
-          ("C-RET" . my/dired-get-size)
-          ("o" . my/dired-view-current)))
-#+END_SRC
-
-* MY EDITS
-
-#+BEGIN_SRC emacs-lisp
-  (use-package my-edits
-    :bind*
-    (("C-x RET u" . my/convert-to-unix-coding-system)
-     ("C-S-SPC" . my/push-mark-no-activate)
-     ("C-a" . my/smart-beginning-of-line)
-     ("C-w" . my/copy-line-or-region)
-     ("M-w" . my/cut-line-or-region)
-     ("C-c M-p" . my/change-pairs)
-     ("C-c a" . my/align-symbol)
-     ("C-c =" . my/align-equals)
-     ("C-c :" . my/align-colon)
-     ("C-c #" . my/align-numbers)
-     ("C-c d" . my/delete-inside)
-     ("C-c k" . my/remove-from-buffer)
-     ("M-s M-s" . my/surround)
-     ("C-o" . my/open-line-above)
-     ("C-S-o" . my/open-line-below)
-     ("M-Q" . my/unfill-region)
-     (:map isearch-mode-map
-           ("C-z" . my/zap-to-isearch)
-           ("C-w" . my/copy-isearch-match)
-           ("M-w" . my/kill-isearch-match)))
-    :hook
-    (before-save . my/push-mark-no-activate)
-    ;; (after-save . my/auto-recompile)
-    (find-file . my/hide-dos-eol))
-#+END_SRC
-
-* MY FILES
-
-#+BEGIN_SRC emacs-lisp
-  (use-package my-files
-    :bind*
-    (("C-c f d" . my/delete-this-file)
-     ("C-c f c" . my/copy-file-name-to-clipboard)
-     ("C-c f b" . my/make-backup-and-save)
-     ("C-c f r" . my/rename-this-file-and-buffer)
-     ("C-c f s" . my/sudoedit)))
-#+END_SRC
-
-* MY MISC
-
-#+BEGIN_SRC emacs-lisp
-  (use-package my-misc
-    :bind*
-    ("C-c G" . my/google)
-    ("C-x t" . my/switch-to-ansi-term)
-    :hook
-    (compilation-filter . colorize-compilation-buffer))
-#+END_SRC
-
-* MY ORG
-
-#+BEGIN_SRC emacs-lisp
-  (use-package my-org
-    :after org)
-#+END_SRC
-
-* MY SETTINGS
-
-#+BEGIN_SRC emacs-lisp
-  (use-package my-settings
-    :demand)
-#+END_SRC
-
-* MY TANGLES
-
-#+BEGIN_SRC emacs-lisp
-  (use-package my-tangles
-    :hook
-    (after-save . my/auto-tangle)
-    :bind*
-    ("C-c v d" . my/tangle-directory)
-    ("C-c v a" . my/tangle-all))
-#+END_SRC
-
-* MY THEME
-
-#+BEGIN_SRC emacs-lisp
-  (use-package my-theme
-    :demand
-    :bind*
-    ("C-c t C-t" . my/disable-themes))
-#+END_SRC
-
-* MY WINDOWS
-
-#+BEGIN_SRC emacs-lisp
-  (use-package my-windows
-    :bind*
-    (("C-x O" . my/prev-window)
-     ("C-c 3" . my/vsplit-last-buffer)
-     ("C-c 2" . my/hsplit-last-buffer)
-     ("M-<" . my/top-of-window)
-     ("M->" . my/bottom-of-window)
-     ("M-p" . my/scroll-line-up)
-     ("M-n" . my/scroll-line-down)
-     :map ctl-x-4-map
-     ("k" . my/kill-buffer-other-window)
-     ("o" . my/open-buffer-other-window)
-     ("t" . my/toggle-split)))
-#+END_SRC
-
 * NIX MODE
 
 #+BEGIN_SRC emacs-lisp
   (use-package nix-mode
     :ensure t
     :defer t)
-#+END_SRC
-
-* NNIR
-
-#+BEGIN_SRC emacs-lisp
-  (use-package nnir
-    :defer t
-    :after gnus)
 #+END_SRC
 
 * NODEJS REPL
@@ -773,21 +429,6 @@
           ("C-c C-b" . nodejs-repl-send-buffer)
           ("C-c C-f" . nodejs-repl-load-file)
           ("C-c C-z" . nodejs-repl-switch-to-repl)))
-#+END_SRC
-
-* ORG
-
-#+BEGIN_SRC emacs-lisp
-  (use-package org
-    :ensure t
-    :bind*
-    ("C-c o a" . org-agenda)
-    ("C-c o c" . org-capture)
-    (:map org-mode-map
-          ("C-c M-l" . org-store-link))
-    :hook
-    (org-mode-hook . auto-fill-mode)
-    (org-mode-hook . hl-line-mode))
 #+END_SRC
 
 * PAREDIT
@@ -810,18 +451,6 @@
     (unbind-key "M-s" paredit-mode-map))
 #+END_SRC
 
-* PROG MODE
-
-#+BEGIN_SRC emacs-lisp
-  (use-package prog-mode
-    :defer t
-    :hook
-    (prog-mode . hl-line-mode)
-    (prog-mode . hs-minor-mode)
-    ;; replaces linum mode in Emacs 26
-    (prog-mode . (lambda () (setq display-line-numbers 'relative))))
-#+END_SRC
-
 * PROJECTILE
 
 #+BEGIN_SRC emacs-lisp
@@ -838,16 +467,6 @@
             (mapcar #'file-name-as-directory (magit-list-repos)))
       ;; Optionally write to persistent `projectile-known-projects-file'
       (projectile-save-known-projects)))
-#+END_SRC
-
-* PYTHON MODE
-
-#+BEGIN_SRC emacs-lisp
-  (use-package python-mode
-    :defer t
-    :config
-    (setq python-fill-docstring-style 'django)
-    (setq fill-column 78))
 #+END_SRC
 
 * PY AUTOPEP8
@@ -868,24 +487,6 @@
     :after dired
     :bind*
     ("C-c r" . ranger))
-#+END_SRC
-
-* RECENTF
-
-#+BEGIN_SRC emacs-lisp
-  (use-package recentf
-    :bind*
-    ("<f12>" . recentf-open-files)
-    :config
-    (recentf-mode 1)
-    (setq recentf-exclude '(".*init\.el"
-                            ".*\/my-.*\.el"
-                            "^/var/folders\\.*"
-                            "COMMIT_EDITMSG\\'"
-                            ".*-autoloads\\.el\\'"
-                            "[/\\]\\.elpa/"))
-    (setq recentf-max-menu-items 128)
-    (setq recentf-max-saved-items 256))
 #+END_SRC
 
 * RESTCLIENT
@@ -918,36 +519,6 @@
   (use-package terraform-mode
     :ensure t
     :defer t)
-#+END_SRC
-
-* TEXT MODE
-
-#+BEGIN_SRC emacs-lisp
-  (use-package text-mode
-    :hook
-    (text-mode . hl-line-mode)
-    (text-mode . abbrev-mode)
-    (text-mode . auto-fill-mode))
-#+END_SRC
-
-* TRAMP
-
-#+BEGIN_SRC emacs-lisp
-  (use-package tramp
-    :defer t
-    :config
-    (setq tramp-backup-directory-alist backup-directory-alist)
-    (setq tramp-default-method "ssh")
-    (setf tramp-persistency-file-name (concat temporary-file-directory "tramp-" (user-login-name))))
-#+END_SRC
-
-* UNIQUIFY
-
-#+BEGIN_SRC emacs-lisp
-  (use-package uniquify
-    :defer 10
-    :config
-    (setq uniquify-buffer-name-style 'forward))
 #+END_SRC
 
 * UNDO TREE

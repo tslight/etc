@@ -1,0 +1,61 @@
+#+TITLE: SETTINGS
+#+AUTHOR: Toby Slight
+#+PROPERTY: header-args :cache yes
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :results silent
+#+PROPERTY: header-args+ :tangle ~/.emacs.d/site-lisp/my-hooks.el
+#+PROPERTY: header-args+ :tangle-mode (identity #o644)
+#+OPTIONS: toc:t
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'before-save-hook 'whitespace-cleanup)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'emacs-lisp-mode 'eldoc-mode)
+  (add-hook 'emacs-lisp-mode (lambda () (add-hook 'after-save-hook 'check-parens nil t)))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'lisp-interaction-mode 'eldoc-mode)
+  (add-hook 'lisp-interaction-mode (lambda () (add-hook 'after-save-hook 'check-parens nil t)))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'lisp-mode-hook 'eldoc-mode)
+  (add-hook 'lisp-mode (lambda () (add-hook 'after-save-hook 'check-parens nil t)))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  ;; (add-hook 'makefile-mode-map (lambda () (local-set-key (kbd "<f5>") 'compile)))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'minibuffer-exit-hook (lambda () (setq gc-cons-threshold 800000)))
+  (add-hook 'minibuffer-setup-hook (lambda () (setq gc-cons-threshold most-positive-fixnum)))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'prog-mode-hook 'electric-indent-mode)
+  (add-hook 'prog-mode-hook 'electric-pair-mode)
+  (add-hook 'prog-mode-hook 'hl-line-mode)
+  (add-hook 'prog-mode-hook 'hs-minor-mode)
+  (add-hook 'prog-mode-hook '(lambda () (setq display-line-numbers 'relative)))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'sh-mode 'electric-indent-mode)
+  (add-hook 'sh-mode 'electric-pair-mode)
+  (add-hook 'sh-mode 'hl-line-mode)
+  (add-hook 'sh-mode '(lambda () (setq display-line-numbers 'relative)))
+  (add-hook 'shell-script-mode 'electric-indent-mode)
+  (add-hook 'shell-script-mode 'electric-pair-mode)
+  (add-hook 'shell-script-mode 'hl-line-mode)
+  (add-hook 'shell-script-mode '(lambda () (setq display-line-numbers 'relative)))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'text-mode 'hl-line-mode)
+  (add-hook 'text-mode-hook 'abbrev-mode)
+  (add-hook 'text-mode-hook 'auto-fill-mode)
+#+END_SRC

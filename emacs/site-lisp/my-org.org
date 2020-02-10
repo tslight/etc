@@ -7,6 +7,10 @@
 #+PROPERTY: header-args+ :tangle-mode (identity #o644)
 #+OPTIONS: toc:t
 
+#+BEGIN_SRC emacs-lisp
+  (require 'org)
+#+END_SRC
+
 * ORG-RECURSIVE-SORT
 
 #+BEGIN_SRC emacs-lisp
@@ -116,4 +120,21 @@
   (add-to-list 'org-structure-template-alist
                '("sh" "#+BEGIN_SRC sh\n?\n#+END_SRC"
                  "<src lang=\"sh\">\n\n</src>"))
+#+END_SRC
+* KEYBINDINGS
+
+#+BEGIN_SRC emacs-lisp
+  (define-key my/keymap (kbd "C-c o a") 'org-agenda)
+  (define-key my/keymap (kbd "C-c o c") 'org-capture)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (define-key org-mode-map (kbd "C-c M-l") 'org-store-link)
+#+END_SRC
+
+* HOOKS
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'org-mode-hook 'auto-fill-mode)
+  (add-hook 'org-mode-hook 'hl-line-mode)
 #+END_SRC

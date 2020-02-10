@@ -81,3 +81,8 @@
   (setq prettify-symbols-unprettify-at-point 'right-edge)
   (global-prettify-symbols-mode 1)
 #+END_SRC
+* KEYBINDINGS
+
+#+BEGIN_SRC emacs-lisp
+  (define-key my/keymap (kbd "C-c t C-t") 'my/disable-themes)
+#+END_SRC
