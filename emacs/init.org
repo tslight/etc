@@ -29,8 +29,6 @@ local variables.
     (mapc (lambda (file) (load file))
           (directory-files (concat user-emacs-directory "site-lisp") t "\.elc$"))
 
-    (byte-recompile-file (concat user-emacs-directory "init.el") 'nil 0 'nil)
-
     ;; setup package.el
     (require 'package)
     (setq package-enable-at-startup nil)
@@ -53,6 +51,7 @@ local variables.
       (require 'use-package))
     (require 'bind-key)
 
+    (byte-recompile-file (concat user-emacs-directory "init.el") 'nil 0 'nil)
     (byte-recompile-file (concat user-emacs-directory "use.el") 'nil 0 t)
     (message "Hacks and glory await! :-)"))
 #+END_SRC
