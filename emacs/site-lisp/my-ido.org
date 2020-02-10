@@ -47,7 +47,6 @@
 #+END_SRC
 
 * FUNCTIONS
-
 ** IDO FIND RECENTF
 
 #+BEGIN_SRC emacs-lisp
