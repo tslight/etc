@@ -1,4 +1,4 @@
-#+TITLE: USE PACKAGE DECLARATIONS
+#+TITLE: 3RD PARTY PACKAGE CONFIGURATION
 #+AUTHOR: Toby Slight
 #+PROPERTY: header-args :cache yes
 #+PROPERTY: header-args+ :mkdirp yes
@@ -70,6 +70,14 @@
     :config
     (async-bytecomp-package-mode 1))
 #+END_SRC
+* BROWSE KILL RING
+
+#+BEGIN_SRC emacs-lisp
+  (use-package browse-kill-ring
+    :ensure t
+    :bind*
+    ("M-y" . browse-kill-ring))
+#+END_SRC
 
 * CHANGE INNER
 
@@ -116,45 +124,6 @@
     :after (:all company-mode terraform-mode))
 #+END_SRC
 
-* COUNSEL
-
-#+BEGIN_SRC emacs-lisp
-  (use-package counsel
-    :ensure t
-    :diminish
-    :bind*
-    ("C-x C-f" . counsel-find-file)
-    ("M-x" . counsel-M-x)
-    ("M-y" . counsel-yank-pop)
-    ("C-h a" . counsel-apropos)
-    ("C-h f" . counsel-describe-function)
-    ("C-h v" . counsel-describe-variable)
-    ("C-h l" . counsel-load-library)
-    ("C-h i" . counsel-info-lookup-symbol)
-    ("C-h u" . counsel-unicode-char)
-    ("C-c g c" . counsel-git)
-    ("C-c C-g" . counsel-git-grep)
-    ("C-c M-g" . counsel-ag)
-    ("C-c l" . counsel-locate)
-    ("C-x r b" . counsel-bookmark)
-    ("C-c f l" . counsel-find-library)
-    ("C-c f f" . counsel-file-jump)
-    ("C-c f j" . counsel-dired-jump)
-    :config
-    (counsel-mode 1))
-#+END_SRC
-
-* COUNSEL PROJECTILE
-
-#+BEGIN_SRC emacs-lisp
-  (use-package counsel-projectile
-    :ensure t
-    :defer t
-    :after (counsel projectile)
-    :config
-    (counsel-projectile-mode))
-#+END_SRC
-
 * DIMINISH
 
 #+BEGIN_SRC emacs-lisp
@@ -199,12 +168,16 @@
     (exec-path-from-shell-copy-env "PYTHONPATH"))
 #+END_SRC
 
-* FLX
+* FLX IDO
 
 #+BEGIN_SRC emacs-lisp
-  (use-package flx
+  (use-package flx-ido
     :ensure t
-    :defer 8)
+    :config
+    (flx-ido-mode 1)
+    (setq ido-enable-flex-matching t)
+    ;; disable ido faces to see flx highlights.
+    (setq ido-use-faces nil))
 #+END_SRC
 
 * FLYCHECK
@@ -220,6 +193,14 @@
     (flycheck-add-mode 'javascript-eslint 'web-mode))
 #+END_SRC
 
+* GIT TIMEMACHINE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package git-timemachine
+    :ensure t
+    :defer t)
+#+END_SRC
+
 * GITLAB CI MODE
 
 #+BEGIN_SRC emacs-lisp
@@ -229,14 +210,6 @@
     :mode
     "\\.gitlab-ci.yaml\\'"
     "\\.gitlab-ci.yml\\'")
-#+END_SRC
-
-* GIT TIMEMACHINE
-
-#+BEGIN_SRC emacs-lisp
-  (use-package git-timemachine
-    :ensure t
-    :defer t)
 #+END_SRC
 
 * GO MODE
@@ -251,6 +224,7 @@
                 (setq indent-tabs-mode 1)
                 (setq tab-width 2))))
 #+END_SRC
+
 * HUNGRY DELETE
 
 #+BEGIN_SRC emacs-lisp
@@ -295,31 +269,6 @@
     :ensure t
     :bind
     ("M-%" . iedit-mode))
-#+END_SRC
-
-* IVY
-
-#+BEGIN_SRC emacs-lisp
-  (use-package ivy
-    :ensure t
-    :diminish
-    :bind*
-    ("C-x b" . ivy-switch-buffer)
-    ("C-M-r" . swiper)
-    ("C-M-s" . swiper)
-    ("C-S-s" . swiper-multi)
-    ("C-c C-r" . ivy-resume)
-    :config
-    (ivy-mode 1)
-    (setq ivy-wrap t)
-    (setq ivy-use-virtual-buffers t)
-    (setq ivy-height 20)
-    (setq ivy-initial-inputs-alist nil) ;; no ^
-    (setq ivy-re-builders-alist
-          '((swiper . ivy--regex-plus)
-            (t      . ivy--regex-fuzzy)))
-    (define-key ivy-minibuffer-map (kbd "C-s") 'ivy-next-line)
-    (define-key ivy-minibuffer-map (kbd "C-r") 'ivy-previous-line))
 #+END_SRC
 
 * JS2 MODE
@@ -461,7 +410,7 @@
     ("C-c p" . projectile-command-map)
     :config
     (projectile-mode)
-    (setq projectile-completion-system 'ivy)
+    (setq projectile-completion-system 'ido)
     (when (require 'magit nil t)
       (mapc #'projectile-add-known-project
             (mapcar #'file-name-as-directory (magit-list-repos)))
@@ -479,30 +428,12 @@
     (python-mode . py-autopep8-enable-on-save))
 #+END_SRC
 
-* RANGER
-
-#+BEGIN_SRC emacs-lisp
-  (use-package ranger
-    :ensure t
-    :after dired
-    :bind*
-    ("C-c r" . ranger))
-#+END_SRC
-
 * RESTCLIENT
 
 #+BEGIN_SRC emacs-lisp
   (use-package restclient
     :ensure t
     :defer t)
-#+END_SRC
-
-* SMEX
-
-#+BEGIN_SRC emacs-lisp
-  (use-package smex
-    :ensure t
-    :defer 7)
 #+END_SRC
 
 * SYSTEMD
