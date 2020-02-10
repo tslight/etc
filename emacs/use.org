@@ -3,9 +3,35 @@
 #+PROPERTY: header-args :cache yes
 #+PROPERTY: header-args+ :mkdirp yes
 #+PROPERTY: header-args+ :results silent
-#+PROPERTY: header-args+ :tangle ~/.emacs.d/site-lisp/use.el
+#+PROPERTY: header-args+ :tangle ~/.emacs.d/use.el
 #+PROPERTY: header-args+ :tangle-mode (identity #o644)
 #+OPTIONS: toc:t
+
+Setup ~package.el~ first...
+
+#+BEGIN_SRC emacs-lisp
+  ;; setup package.el
+  (require 'package)
+  (setq package-enable-at-startup nil)
+  (setq package--init-file-ensured t)
+  (setq package-archives
+        '(("melpa" . "https://melpa.org/packages/")
+          ("gnu" . "https://elpa.gnu.org/packages/")))
+  (package-initialize)
+
+  ;; install use-package
+  (unless (package-installed-p 'use-package)
+    (package-refresh-contents)
+    (package-install 'use-package))
+
+  ;; `use-package' does all the heavy lifting in my config.
+  (setq use-package-enable-imenu-support t)
+  ;; (setq use-package-always-ensure t)
+  (setq use-package-verbose t)
+  (eval-when-compile
+    (require 'use-package))
+  (require 'bind-key)
+#+END_SRC
 
 * ACE WINDOW
 

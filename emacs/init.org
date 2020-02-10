@@ -25,8 +25,9 @@ local variables.
         (gc-cons-percentage 0.8))
     (add-to-list 'load-path (concat user-emacs-directory "site-lisp/"))
     (byte-recompile-directory (concat user-emacs-directory "site-lisp") 0)
-    (mapcar (lambda (file) (load file))
-            (directory-files (concat user-emacs-directory "site-lisp") t "\.elc$"))
+    (mapc (lambda (file) (load file))
+          (directory-files (concat user-emacs-directory "site-lisp") t "\.elc$"))
     (byte-recompile-file (concat user-emacs-directory "init.el") 'nil 0 'nil)
+    (byte-recompile-file (concat user-emacs-directory "use.el") 'nil 0 t)
     (message "Hacks and glory await! :-)"))
 #+END_SRC
