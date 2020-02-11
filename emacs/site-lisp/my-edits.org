@@ -644,6 +644,7 @@ https://www.reddit.com/r/emacs/comments/f1tmkf/underlining_plain_text_in_emacs/
   (define-key my/keymap (kbd "C-c #") 'my/align-numbers)
   (define-key my/keymap (kbd "C-c d") 'my/delete-inside)
   (define-key my/keymap (kbd "C-c k") 'my/remove-from-buffer)
+  (define-key my/keymap (kbd "C-c u") 'my/underline-text)
   (define-key my/keymap (kbd "M-s M-s") 'my/surround)
   (define-key my/keymap (kbd "C-o") 'my/open-line-above)
   (define-key my/keymap (kbd "C-S-o") 'my/open-line-below)
