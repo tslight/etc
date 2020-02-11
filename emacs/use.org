@@ -262,6 +262,15 @@
                   vc-relative-file))))
 #+END_SRC
 
+* IDO COMPLETING READ+
+
+#+BEGIN_SRC emacs-lisp
+  (use-package ido-completing-read+
+    :ensure t
+    :config
+    (ido-ubiquitous-mode 1))
+#+END_SRC
+
 * IEDIT
 
 #+BEGIN_SRC emacs-lisp

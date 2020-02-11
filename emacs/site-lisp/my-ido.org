@@ -112,4 +112,5 @@
 #+BEGIN_SRC emacs-lisp
   (icomplete-mode 1)
   (ido-mode 1)
+  (ido-everywhere 1)
 #+END_SRC
