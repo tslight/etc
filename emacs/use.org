@@ -331,7 +331,7 @@
     ("C-c g d" . magit-dispatch)
     ("C-c g l" . magit-list-repositories)
     :init
-    (setq magit-repository-directories `(("~/" . 10)))
+    (setq magit-repository-directories `(("~/src" . 10)))
     (setq magit-repolist-columns
           '(("Name" 10 magit-repolist-column-ident nil)
             ("Version" 25 magit-repolist-column-version nil)
@@ -340,9 +340,7 @@
             ("Commit" 8 magit-repolist-column-dirty)
             ("Path" 99 magit-repolist-column-path nil)))
     :config
-    (setq magit-completing-read-function 'magit-ido-completing-read)
-    ;; (setq magit-completing-read-function 'magit-builtin-completing-read)
-    )
+    (setq magit-completing-read-function 'magit-ido-completing-read))
 #+END_SRC
 
 * MARKDOWN MODE
