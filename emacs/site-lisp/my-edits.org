@@ -194,14 +194,6 @@
         (set-buffer-file-coding-system 'unix))))
 #+END_SRC
 
-* COPY-ISEARCH-MATCH
-
-#+BEGIN_SRC emacs-lisp
-  (defun my/copy-isearch-match ()
-    (interactive)
-    (copy-region-as-kill isearch-other-end (point)))
-#+END_SRC
-
 * COPY-LINE-OR-REGION
 
 #+BEGIN_SRC emacs-lisp
@@ -297,6 +289,86 @@
     (interactive)
     (insert (shell-command-to-string "fortune")))
 #+END_SRC
+* ISEARCH
+** COPY-ISEARCH-MATCH
+
+#+BEGIN_SRC emacs-lisp
+  (defun my/copy-isearch-match ()
+    (interactive)
+    (copy-region-as-kill isearch-other-end (point)))
+#+END_SRC
+
+** KILL-ISEARCH-MATCH
+
+#+BEGIN_SRC emacs-lisp
+  (defun my/kill-isearch-match ()
+    "Kill the current isearch match string and continue searching."
+    (interactive)
+    (kill-region isearch-other-end (point)))
+#+END_SRC
+
+** VIM STYLE ISEARCH
+
+https://www.reddit.com/r/emacs/comments/f1x0jq/blog_post_my_first_emacs_lisp/
+https://thomashartmann.dev/blog/my-first-emacs-lisp/
+
+#+BEGIN_SRC emacs-lisp
+  (defun my/isearch-exit ()
+    "Move point to the start of the matched string, regardless of
+  search direction. A.K.A. Vim style."
+    (interactive)
+    (when (eq isearch-forward t)
+      (goto-char isearch-other-end))
+    (isearch-exit))
+
+  (defun my/isearch-kill ()
+    "Kill up to the search match when searching forward. When
+  searching backward, kill to the beginning of the match."
+    (interactive)
+    (my/isearch-exit)
+    (call-interactively 'kill-region))
+
+  (defun my/isearch-copy ()
+    "Copy up to the search match when searching forward. When
+  searching backward, copy to the start of the search match."
+    (interactive)
+    (my/isearch-exit)
+    (call-interactively 'kill-ring-save)
+    (exchange-point-and-mark))
+#+END_SRC
+
+** ZAP-TO-ISEARCH
+
+#+BEGIN_SRC emacs-lisp
+  (defun my/zap-to-isearch (rbeg rend)
+    "Kill the region (RBEG - REND) between the mark and the
+    closest portion of the isearch match string.
+
+    The behaviour is meant to be analogous to `zap-to-char'; let's
+    call it `my/zap-to-isearch'.  The deleted region does not include
+    the `isearch' word.  This is meant to be bound only in isearch
+    mode.  The point of this function is that oftentimes you want to
+    delete some portion of text, one end of which happens to be an
+    active isearch word.
+
+    The observation to make is that if you use isearch a lot to move
+    the cursor around (as you should, it is much more efficient than
+    using the arrows), it happens a lot that you could just delete
+    the active region between the mark and the point, not include the
+    isearch word."
+    (interactive "r")
+    (when (not mark-active)
+      (error "Mark is not active"))
+    (let* ((isearch-bounds (list isearch-other-end (point)))
+           (ismin (apply 'min isearch-bounds))
+           (ismax (apply 'max isearch-bounds)))
+      (if (< (mark) ismin)
+          (kill-region (mark) ismin)
+        (if (> (mark) ismax)
+            (kill-region ismax (mark))
+          (error "Internal error in isearch kill function")))
+      (isearch-exit)))
+#+END_SRC
 
 * JUMP-TO-MARK
 
@@ -307,15 +379,6 @@
   argument."
     (interactive)
     (set-mark-command 1))
-#+END_SRC
-
-* KILL-ISEARCH-MATCH
-
-#+BEGIN_SRC emacs-lisp
-  (defun my/kill-isearch-match ()
-    "Kill the current isearch match string and continue searching."
-    (interactive)
-    (kill-region isearch-other-end (point)))
 #+END_SRC
 
 * NARROW-OR-WIDEN-DWIM
@@ -546,38 +609,6 @@
       (indent-region (point-min) (point-max))))
 #+END_SRC
 
-* ZAP-TO-ISEARCH
-
-#+BEGIN_SRC emacs-lisp
-  (defun my/zap-to-isearch (rbeg rend)
-    "Kill the region (RBEG - REND) between the mark and the
-    closest portion of the isearch match string.
-
-    The behaviour is meant to be analogous to `zap-to-char'; let's
-    call it `my/zap-to-isearch'.  The deleted region does not include
-    the `isearch' word.  This is meant to be bound only in isearch
-    mode.  The point of this function is that oftentimes you want to
-    delete some portion of text, one end of which happens to be an
-    active isearch word.
-
-    The observation to make is that if you use isearch a lot to move
-    the cursor around (as you should, it is much more efficient than
-    using the arrows), it happens a lot that you could just delete
-    the active region between the mark and the point, not include the
-    isearch word."
-    (interactive "r")
-    (when (not mark-active)
-      (error "Mark is not active"))
-    (let* ((isearch-bounds (list isearch-other-end (point)))
-           (ismin (apply 'min isearch-bounds))
-           (ismax (apply 'max isearch-bounds)))
-      (if (< (mark) ismin)
-          (kill-region (mark) ismin)
-        (if (> (mark) ismax)
-            (kill-region ismax (mark))
-          (error "Internal error in isearch kill function")))
-      (isearch-exit)))
-#+END_SRC
 * KEYBINDINGS
 
 #+BEGIN_SRC emacs-lisp
@@ -605,6 +636,9 @@
   (define-key isearch-mode-map (kbd "C-z") 'my/zap-to-isearch)
   (define-key isearch-mode-map (kbd "C-w") 'my/copy-isearch-match)
   (define-key isearch-mode-map (kbd "M-w") 'my/kill-isearch-match)
+  (define-key isearch-mode-map (kbd "<return>") 'my/isearch-exit)
+  (define-key isearch-mode-map (kbd "<C-return>") 'my/isearch-copy)
+  (define-key isearch-mode-map (kbd "<M-return>") 'my/isearch-kill)
 #+END_SRC
 
 * HOOKS
