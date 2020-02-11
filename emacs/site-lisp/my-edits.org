@@ -7,7 +7,8 @@
 #+PROPERTY: header-args+ :tangle-mode (identity #o644)
 #+OPTIONS: toc:t
 
-* ALIGN-SYMBOL
+* ALIGN
+** ALIGN-SYMBOL
 
 #+BEGIN_SRC emacs-lisp
   (defun my/align-symbol (begin end symbol)
@@ -16,7 +17,7 @@
     (align-regexp begin end (concat "\\(\\s-*\\)" symbol) 1 1))
 #+END_SRC
 
-* ALIGN-EQUALS
+** ALIGN-EQUALS
 
 #+BEGIN_SRC emacs-lisp
   (defun my/align-equals (begin end)
@@ -25,7 +26,7 @@
     (my/align-symbol begin end "="))
 #+END_SRC
 
-* ALIGN-COLON
+** ALIGN-COLON
 
 #+BEGIN_SRC emacs-lisp
   (defun my/align-colon (begin end)
@@ -34,7 +35,7 @@
     (my/align-symbol begin end ":"))
 #+END_SRC
 
-* ALIGN-NUMBERS
+** ALIGN-NUMBERS
 
 #+BEGIN_SRC emacs-lisp
   (defun my/align-numbers (begin end)
@@ -192,46 +193,6 @@
     (let ((coding-str (symbol-name buffer-file-coding-system)))
       (when (string-match "-\\(?:dos\\|mac\\)$" coding-str)
         (set-buffer-file-coding-system 'unix))))
-#+END_SRC
-
-* COPY-LINE-OR-REGION
-
-#+BEGIN_SRC emacs-lisp
-  (defun my/copy-line-or-region ()
-    "Copy current line or text selection to kill ring.  When
-    `universal-argument' is called first, copy whole buffer (but
-    respect `narrow-to-region')."
-    (interactive)
-    (let (p1 p2)
-      (if (null current-prefix-arg)
-          (progn (if (use-region-p)
-                     (progn (setq p1 (region-beginning))
-                            (setq p2 (region-end)))
-                   (progn (setq p1 (line-beginning-position))
-                          (setq p2 (line-end-position)))))
-        (progn (setq p1 (point-min))
-               (setq p2 (point-max))))
-      (kill-ring-save p1 p2)))
-#+END_SRC
-
-* CUT-LINE-OR-REGION
-
-#+BEGIN_SRC emacs-lisp
-  (defun my/cut-line-or-region ()
-    "Cut current line, or text selection to kill ring.  When
-    `universal-argument' is called first, cut whole buffer (but
-    respect `narrow-to-region')."
-    (interactive)
-    (let (p1 p2)
-      (if (null current-prefix-arg)
-          (progn (if (use-region-p)
-                     (progn (setq p1 (region-beginning))
-                            (setq p2 (region-end)))
-                   (progn (setq p1 (line-beginning-position))
-                          (setq p2 (line-beginning-position 2)))))
-        (progn (setq p1 (point-min))
-               (setq p2 (point-max))))
-      (kill-region p1 p2)))
 #+END_SRC
 
 * DELETE-INSIDE
@@ -417,7 +378,8 @@ https://thomashartmann.dev/blog/my-first-emacs-lisp/
     (message "Pushed mark to ring"))
 #+END_SRC
 
-* REMOVE-FROM-BUFFER
+* REMOVE STUFF
+** REMOVE-FROM-BUFFER
 
 #+BEGIN_SRC emacs-lisp
   (defun my/remove-from-buffer (string)
@@ -433,7 +395,7 @@ https://thomashartmann.dev/blog/my-first-emacs-lisp/
           (message (format "%d %s removed from buffer." count string))))))
 #+END_SRC
 
-* REMOVE-CHARACTER-NUMBER
+** REMOVE-CHARACTER-NUMBER
 
 #+BEGIN_SRC emacs-lisp
   (defun my/remove-character-number (number)
@@ -445,7 +407,7 @@ https://thomashartmann.dev/blog/my-first-emacs-lisp/
           (my/remove-from-buffer character))))
 #+END_SRC
 
-* REMOVE-ALL-CTRL-CHARACTERS
+** REMOVE-ALL-CTRL-CHARACTERS
 
 #+BEGIN_SRC emacs-lisp
   (defun my/remove-all-ctrl-characters ()
@@ -457,7 +419,7 @@ https://thomashartmann.dev/blog/my-first-emacs-lisp/
             (number-sequence 0 31)))
 #+END_SRC
 
-* REMOVE-CTRL-M
+** REMOVE-CTRL-M
 
 #+BEGIN_SRC emacs-lisp
   (defun my/remove-ctrl-m ()
@@ -465,18 +427,66 @@ https://thomashartmann.dev/blog/my-first-emacs-lisp/
     (interactive)
     (my/remove-from-buffer "$"))
 #+END_SRC
-
-* SMART-BEGINNING-OF-LINE
+* SMART STUFF
+** BEGINNING OF LINE
 
 #+BEGIN_SRC emacs-lisp
-  (defun my/smart-beginning-of-line ()
+  (defun smart/move-beginning-of-line ()
     "Moves point back to indentation if there is any non blank
-    characters to the left of the cursor.  Otherwise point moves to
-    beginning of line."
+  characters to the left of the cursor.  Otherwise point moves to
+  beginning of line."
     (interactive)
     (if (= (point) (save-excursion (back-to-indentation) (point)))
         (beginning-of-line)
       (back-to-indentation)))
+#+END_SRC
+
+** KILL RING SAVE
+
+#+BEGIN_SRC emacs-lisp
+  (defun smart/kill-ring-save ()
+    "Copy current line or text selection to kill ring.  When
+  `universal-argument' is called first, copy whole buffer (but
+  respect `narrow-to-region')."
+    (interactive)
+    (let (p1 p2)
+      (if (null current-prefix-arg)
+          (progn (if (use-region-p)
+                     (progn (setq p1 (region-beginning))
+                            (setq p2 (region-end)))
+                   (progn (setq p1 (line-beginning-position))
+                          (setq p2 (line-end-position)))))
+        (progn (setq p1 (point-min))
+               (setq p2 (point-max))))
+      (kill-ring-save p1 p2)))
+#+END_SRC
+
+** KILL REGION
+
+#+BEGIN_SRC emacs-lisp
+  (defun smart/kill-region ()
+    "Cut current line, or text selection to kill ring.  When
+  `universal-argument' is called first, cut whole buffer (but
+  respect `narrow-to-region')."
+    (interactive)
+    (let (p1 p2)
+      (if (null current-prefix-arg)
+          (progn (if (use-region-p)
+                     (progn (setq p1 (region-beginning))
+                            (setq p2 (region-end)))
+                   (progn (setq p1 (line-beginning-position))
+                          (setq p2 (line-beginning-position 2)))))
+        (progn (setq p1 (point-min))
+               (setq p2 (point-max))))
+      (kill-region p1 p2)))
+#+END_SRC
+
+** KEYBINDINGS
+
+#+BEGIN_SRC emacs-lisp
+  (global-set-key [remap move-beginning-of-line] 'smart/move-beginning-of-line)
+  (global-set-key [remap kill-ring-save] 'smart/kill-ring-save)
+  (global-set-key [remap kill-region] 'smart/kill-region)
 #+END_SRC
 
 * SORT-LINES-NOCASE
@@ -634,9 +644,6 @@ https://www.reddit.com/r/emacs/comments/f1tmkf/underlining_plain_text_in_emacs/
 #+BEGIN_SRC emacs-lisp
   (define-key my/keymap (kbd "C-x RET u") 'my/convert-to-unix-coding-system)
   (define-key my/keymap (kbd "C-S-SPC") 'my/push-mark-no-activate)
-  (define-key my/keymap (kbd "C-a") 'my/smart-beginning-of-line)
-  (define-key my/keymap (kbd "C-w") 'my/copy-line-or-region)
-  (define-key my/keymap (kbd "M-w") 'my/cut-line-or-region)
   (define-key my/keymap (kbd "C-c M-p") 'my/change-pairs)
   (define-key my/keymap (kbd "C-c a") 'my/align-symbol)
   (define-key my/keymap (kbd "C-c =") 'my/align-equals)
