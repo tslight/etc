@@ -28,6 +28,14 @@
             :height
             2.0))))))
 #+END_SRC
+* AMX
+
+#+BEGIN_SRC emacs-lisp
+  (use-package amx
+    :ensure t
+    :bind*
+    ("M-x" . amx))
+#+END_SRC
 
 * ANACONDA MODE
 
