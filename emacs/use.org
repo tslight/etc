@@ -340,7 +340,9 @@
             ("Commit" 8 magit-repolist-column-dirty)
             ("Path" 99 magit-repolist-column-path nil)))
     :config
-    (setq magit-completing-read-function 'magit-builtin-completing-read))
+    (setq magit-completing-read-function 'magit-ido-completing-read)
+    ;; (setq magit-completing-read-function 'magit-builtin-completing-read)
+    )
 #+END_SRC
 
 * MARKDOWN MODE
