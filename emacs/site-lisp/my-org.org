@@ -129,7 +129,7 @@
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-  (define-key org-mode-map (kbd "C-c M-l") 'org-store-link)
+  (define-key org-mode-map (kbd "C-c o l") 'org-store-link)
 #+END_SRC
 
 * HOOKS

@@ -6,6 +6,59 @@
 #+PROPERTY: header-args+ :tangle ~/.emacs.d/use.el
 #+PROPERTY: header-args+ :tangle-mode (identity #o644)
 #+OPTIONS: toc:t
+* CONTENTS:TOC_5_gh:
+- [[#ace-window][ACE WINDOW]]
+- [[#amx][AMX]]
+- [[#anaconda-mode][ANACONDA MODE]]
+- [[#ansible][ANSIBLE]]
+- [[#ansible-doc][ANSIBLE DOC]]
+- [[#async][ASYNC]]
+- [[#browse-kill-ring][BROWSE KILL RING]]
+- [[#change-inner][CHANGE INNER]]
+- [[#company][COMPANY]]
+- [[#company-anaconda][COMPANY ANACONDA]]
+- [[#company-go][COMPANY GO]]
+- [[#company-terraform][COMPANY TERRAFORM]]
+- [[#diminish][DIMINISH]]
+- [[#docker][DOCKER]]
+- [[#dockerfile-mode][DOCKERFILE MODE]]
+- [[#dot-mode][DOT MODE]]
+- [[#exec-path-from-shell][EXEC PATH FROM SHELL]]
+- [[#flx-ido][FLX IDO]]
+- [[#flycheck][FLYCHECK]]
+- [[#git-timemachine][GIT TIMEMACHINE]]
+- [[#gitlab-ci-mode][GITLAB CI MODE]]
+- [[#go-mode][GO MODE]]
+- [[#hungry-delete][HUNGRY DELETE]]
+- [[#ibuffer-vc][IBUFFER VC]]
+- [[#ido-completing-read][IDO COMPLETING READ+]]
+- [[#iedit][IEDIT]]
+- [[#js2-mode][JS2 MODE]]
+- [[#js2-refactor][JS2 REFACTOR]]
+- [[#json-mode][JSON MODE]]
+- [[#json-navigator][JSON NAVIGATOR]]
+- [[#magit][MAGIT]]
+- [[#markdown-mode][MARKDOWN MODE]]
+- [[#nix-mode][NIX MODE]]
+- [[#nodejs-repl][NODEJS REPL]]
+- [[#org][ORG]]
+   - [[#bullets][BULLETS]]
+   - [[#htmlize][HTMLIZE]]
+   - [[#toc][TOC]]
+   - [[#latex][LATEX]]
+- [[#paredit][PAREDIT]]
+- [[#projectile][PROJECTILE]]
+- [[#py-autopep8][PY AUTOPEP8]]
+- [[#restclient][RESTCLIENT]]
+- [[#systemd][SYSTEMD]]
+- [[#terraform-mode][TERRAFORM MODE]]
+- [[#undo-tree][UNDO TREE]]
+- [[#web-mode][WEB MODE]]
+- [[#wgrep][WGREP]]
+- [[#which-key][WHICH KEY]]
+- [[#yaml-mode][YAML MODE]]
+- [[#yasnippet][YASNIPPET]]
+- [[#yasnippet-snippets][YASNIPPET SNIPPETS]]
 
 * ACE WINDOW
 
@@ -395,6 +448,50 @@
           ("C-c C-b" . nodejs-repl-send-buffer)
           ("C-c C-f" . nodejs-repl-load-file)
           ("C-c C-z" . nodejs-repl-switch-to-repl)))
+#+END_SRC
+* ORG
+** BULLETS
+
+#+BEGIN_SRC emacs-lisp
+(use-package org-bullets
+  :defer t
+  :if window-system
+  :ensure t
+  :hook
+  (org-mode . org-bullets-mode))
+#+END_SRC
+
+** HTMLIZE
+
+#+BEGIN_SRC emacs-lisp
+;; source code syntax highlighting when html exporting
+(use-package htmlize
+  :defer t
+  :ensure t)
+#+END_SRC
+
+** TOC
+
+#+BEGIN_SRC emacs-lisp
+(use-package toc-org
+  :defer t
+  :ensure t
+  :hook
+  (org-mode . toc-org-enable))
+#+END_SRC
+
+** LATEX
+
+#+BEGIN_SRC emacs-lisp
+(use-package ox-latex
+  :defer t
+  :config
+  (add-to-list 'org-latex-packages-alist '("" "minted"))
+  (setq org-latex-listings 'minted)
+  (setq org-latex-pdf-process
+        '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+          "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+          "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f")))
 #+END_SRC
 
 * PAREDIT
