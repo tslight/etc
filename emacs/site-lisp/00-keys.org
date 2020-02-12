@@ -18,13 +18,15 @@ https://emacs.stackexchange.com/a/358
     "Keymap for `my/key-mode'.")
 #+END_SRC
 
+If init-value is not set to t, this mode does not get enabled in
+~fundamental-mode~ buffers even after doing ~(my/global-keys-mode 1)~.
+
+More info: http://emacs.stackexchange.com/q/16693/115
+
 #+BEGIN_SRC emacs-lisp
   ;;;###autoload
   (define-minor-mode my/key-mode
     "A minor mode so that my key settings override annoying major modes."
-    ;; If init-value is not set to t, this mode does not get enabled in
-    ;; `fundamental-mode' buffers even after doing \"(my/global-keys-mode 1)\".
-    ;; More info: http://emacs.stackexchange.com/q/16693/115
     :global t
     :init-value t
     :lighter " my/key-mode"
@@ -36,17 +38,20 @@ https://emacs.stackexchange.com/a/358
   (define-globalized-minor-mode my/global-keys-mode my/key-mode my/key-mode)
 #+END_SRC
 
+https://github.com/jwiegley/use-package/blob/master/bind-key.el
+
+The keymaps in `emulation-mode-map-alists' take precedence over
+~minor-mode-map-alist~.
+
 #+BEGIN_SRC emacs-lisp
-  ;; https://github.com/jwiegley/use-package/blob/master/bind-key.el
-  ;; The keymaps in `emulation-mode-map-alists' take precedence over
-  ;; `minor-mode-map-alist'
   (add-to-list 'emulation-mode-map-alists `((my/key-mode . ,my/keymap)))
 #+END_SRC
 
+Turn off the minor mode in the minibuffer
+
 #+BEGIN_SRC emacs-lisp
-  ;; Turn off the minor mode in the minibuffer
   (defun turn-off-my/key-mode ()
-    "Turn off my/key-mode."
+    "Turn off my/key-mode in the minibuffer."
     (my/key-mode -1))
   (add-hook 'minibuffer-setup-hook #'turn-off-my/key-mode)
 #+END_SRC
@@ -55,7 +60,7 @@ https://emacs.stackexchange.com/a/358
   (my/global-keys-mode 1)
 #+END_SRC
 
-Space Cadet Re-Bindings
+* Space Cadet Re-Bindings
 
 #+BEGIN_SRC emacs-lisp
   (define-key my/keymap (kbd "C-!") 'shell-command)
@@ -76,7 +81,7 @@ Space Cadet Re-Bindings
   (define-key my/keymap (kbd "M-z") 'zap-up-char)
 #+END_SRC
 
-Evaluation Bindings
+* Evaluation Bindings
 
 #+BEGIN_SRC emacs-lisp
   (define-key my/keymap (kbd "C-c e b") 'eval-buffer)
@@ -88,7 +93,7 @@ Evaluation Bindings
   (define-key my/keymap (kbd "C-c e s") 'eshell)
 #+END_SRC
 
-Toggling Bindings
+* Toggling Bindings
 
 #+BEGIN_SRC emacs-lisp
   (define-key my/keymap (kbd "C-c t a") 'toggle-text-mode-autofill)
@@ -99,7 +104,7 @@ Toggling Bindings
   (define-key my/keymap (kbd "C-c t t") 'toggle-truncate-lines)
 #+END_SRC
 
-Highlight Changes Bindings
+* Highlight Changes Bindings
 
 #+BEGIN_SRC emacs-lisp
   (define-key my/keymap (kbd "C-c ]") 'highlight-changes-next-change)
@@ -108,7 +113,7 @@ Highlight Changes Bindings
   (define-key my/keymap (kbd "C-S-p") 'highlight-changes-previous-change)
 #+END_SRC
 
-Buffer Bindings
+* Buffer Bindings
 
 #+BEGIN_SRC emacs-lisp
   (define-key my/keymap (kbd "C-<tab>") 'next-buffer)
@@ -118,7 +123,7 @@ Buffer Bindings
   (define-key my/keymap (kbd "C-x M-k") 'kill-buffer)
 #+END_SRC
 
-Frame Bindings
+* Frame Bindings
 
 #+BEGIN_SRC emacs-lisp
   (define-key my/keymap (kbd "C-<f10>") 'toggle-frame-maximized)
@@ -130,7 +135,7 @@ Frame Bindings
   (define-key my/keymap (kbd "M-<iso-lefttab>") 'previous-multiframe-window)
 #+END_SRC
 
-Isearch Bindings
+* Isearch Bindings
 
 #+BEGIN_SRC emacs-lisp
   (define-key my/keymap (kbd "C-r") 'isearch-backward-regexp)
@@ -140,7 +145,7 @@ Isearch Bindings
   (define-key my/keymap (kbd "C-M-s") 'isearch-forward-symbol-at-point)
 #+END_SRC
 
-Misc Bindings
+* Misc Bindings
 
 #+BEGIN_SRC emacs-lisp
   (define-key my/keymap (kbd "<f12>") 'recentf-open-files)
@@ -161,7 +166,7 @@ Misc Bindings
   (define-key my/keymap (kbd "M-/") 'hippie-expand)
 #+END_SRC
 
-Simple/Special Mode Bindings
+* Simple/Special Mode Bindings
 
 #+BEGIN_SRC emacs-lisp
   ;; for help modes, and simple/special modes
