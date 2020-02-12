@@ -211,6 +211,8 @@ This is new in Emacs 26 :-)
 #+BEGIN_SRC emacs-lisp
   (setq python-fill-docstring-style 'django)
   (setq fill-column 78)
+  (when (executable-find "ipython")
+    (setq python-shell-interpreter "ipython"))
 #+END_SRC
 
 * RECENTF
