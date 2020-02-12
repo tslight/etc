@@ -12,14 +12,61 @@
 
 * SETTINGS
 
+If non-nil, refer to past ("virtual") buffers as well as existing ones.
+
+The options are:
+  nil:  Do not use virtual buffers.
+  t:    Always use virtual buffers.
+  auto: Use virtual buffers if the current input matches no existing buffer.
+
+This feature relies upon the ‘recentf’ package, which will be
+enabled if this variable is configured to a non-nil value.
+
 #+BEGIN_SRC emacs-lisp
   (setq ido-use-virtual-buffers 't) ;; show recent files too
-  (setq ido-auto-merge-work-directories-length -1)
+#+END_SRC
+
+Specify whether a new buffer is created if no buffer matches substring.
+Choices are ‘always’ to create new buffers unconditionally, ‘prompt’ to ask
+user whether to create buffer, or ‘never’ to never create new buffer.
+
+#+BEGIN_SRC emacs-lisp
   (setq ido-create-new-buffer 'always)
+#+END_SRC
+
+Non-nil means only match if the entered text is a prefix of file name.  This
+behavior is like the standard Emacs completion.  If nil, match if the entered
+text is an arbitrary substring.  Value can be toggled within Ido using
+‘ido-toggle-prefix’.
+
+#+BEGIN_SRC emacs-lisp
   (setq ido-enable-prefix t)
+#+END_SRC
+
+Non-nil means that Ido will do flexible string matching.  Flexible matching
+means that if the entered string does not match any item, any item containing
+the entered characters in the given sequence will match.
+
+#+BEGIN_SRC emacs-lisp
   (setq ido-enable-flex-matching 't)
-  (setq ido-everywhere t)
-  (setq ido-use-filename-at-point 'ffap-guesser)
+#+END_SRC
+
+Automatically switch to merged work directories during file name input.  The
+value is number of characters to type before switching to merged mode.  If
+zero, the switch happens when no matches are found in the current directory.
+Automatic merging is disabled if the value is negative.
+
+#+BEGIN_SRC emacs-lisp
+  (setq ido-auto-merge-work-directories-length -1)
+#+END_SRC
+
+Non-nil means that Ido shall look for a filename at point.  May use
+‘ffap-guesser’ to guess whether text at point is a filename.  If found, use
+that as the starting point for filename selection.
+
+#+BEGIN_SRC emacs-lisp
+  ;; (setq ido-use-filename-at-point 'ffap-guesser)
+  (setq ido-use-filename-at-point 'nil)
 #+END_SRC
 
 ** VERTICAL IDO
@@ -50,10 +97,10 @@
 ** IDO FIND RECENTF
 
 #+BEGIN_SRC emacs-lisp
-  (recentf-mode 1)
   (defun my/ido-find-recentf ()
     "Use `ido-completing-read' to `find-file' a recent file."
     (interactive)
+    (recentf-mode 1)
     (if (find-file (ido-completing-read "Recent: " recentf-list))
         (message "Opening file...")
       (message "Aborting")))
@@ -112,5 +159,12 @@
 #+BEGIN_SRC emacs-lisp
   (icomplete-mode 1)
   (ido-mode 1)
+#+END_SRC
+
+Toggle use of Ido for all buffer/file reading.  With a prefix argument ARG,
+enable this feature if ARG is positive, and disable it otherwise.  If called
+from Lisp, enable the mode if ARG is omitted or nil.
+
+#+BEGIN_SRC emacs-lisp
   (ido-everywhere 1)
 #+END_SRC
