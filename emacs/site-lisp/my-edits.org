@@ -8,7 +8,7 @@
 #+OPTIONS: toc:t
 
 * ALIGN
-** ALIGN-SYMBOL
+** ALIGN SYMBOL
 
 #+BEGIN_SRC emacs-lisp
   (defun my/align-symbol (begin end symbol)
@@ -17,7 +17,7 @@
     (align-regexp begin end (concat "\\(\\s-*\\)" symbol) 1 1))
 #+END_SRC
 
-** ALIGN-EQUALS
+** ALIGN EQUALS
 
 #+BEGIN_SRC emacs-lisp
   (defun my/align-equals (begin end)
@@ -26,7 +26,7 @@
     (my/align-symbol begin end "="))
 #+END_SRC
 
-** ALIGN-COLON
+** ALIGN COLON
 
 #+BEGIN_SRC emacs-lisp
   (defun my/align-colon (begin end)
@@ -35,7 +35,7 @@
     (my/align-symbol begin end ":"))
 #+END_SRC
 
-** ALIGN-NUMBERS
+** ALIGN NUMBERS
 
 #+BEGIN_SRC emacs-lisp
   (defun my/align-numbers (begin end)
@@ -44,7 +44,7 @@
     (my/align-symbol begin end "[0-9]+"))
 #+END_SRC
 
-* AUTO-RECOMPILE
+* AUTO RECOMPILE
 
 #+BEGIN_SRC emacs-lisp
   (defun my/auto-recompile ()
@@ -55,7 +55,7 @@
         (message (concat "Re-compiled " buffer-file-name)))))
 #+END_SRC
 
-* RECOMPILE-SITE-LISP
+* RECOMPILE SITE LISP
 
 #+BEGIN_SRC emacs-lisp
   (defun my/recompile-site-lisp ()
@@ -65,7 +65,7 @@
     (byte-compile-file (concat user-emacs-directory "init.el") 0))
 #+END_SRC
 
-* CHANGE-PAIRS
+* CHANGE PAIRS
 
 #+BEGIN_SRC emacs-lisp
   (defun my/change-pairs (@from-chars @to-chars)
@@ -184,7 +184,7 @@
                       (replace-match $toRight "FIXEDCASE" "LITERAL")))))))))))
 #+END_SRC
 
-* CONVERT-TO-UNIX-CODING-SYSTEM
+* CONVERT TO UNIX CODING SYSTEM
 
 #+BEGIN_SRC emacs-lisp
   (defun my/convert-to-unix-coding-system ()
@@ -195,7 +195,7 @@
         (set-buffer-file-coding-system 'unix))))
 #+END_SRC
 
-* DELETE-INSIDE
+* DELETE INSIDE
 
 #+BEGIN_SRC emacs-lisp
   (defun my/delete-inside ()
@@ -210,7 +210,7 @@
       (kill-region lstart (point))))
 #+END_SRC
 
-* GENERATE-NUMBERED-LIST
+* GENERATE NUMBERED LIST
 
 #+BEGIN_SRC emacs-lisp
   (defun my/generate-numbered-list (start end char)
@@ -223,7 +223,7 @@
         (setq x (+ x 1)))))
 #+END_SRC
 
-* HIDE-DOS-EOL
+* HIDE DOS EOL
 
 #+BEGIN_SRC emacs-lisp
   (defun my/hide-dos-eol ()
@@ -233,7 +233,7 @@
     (aset buffer-display-table ?\^M []))
 #+END_SRC
 
-* INSERT-DATE
+* INSERT DATE
 
 #+BEGIN_SRC emacs-lisp
   (defun my/insert-date ()
@@ -242,7 +242,7 @@
     (insert (format-time-string "%c" (current-time))))
 #+END_SRC
 
-* INSERT-FORTUNE
+* INSERT FORTUNE
 
 #+BEGIN_SRC emacs-lisp
   (defun my/insert-fortune ()
@@ -286,7 +286,7 @@ https://thomashartmann.dev/blog/my-first-emacs-lisp/
   (define-key isearch-mode-map (kbd "M-w") 'my/kill-to-isearch)
 #+END_SRC
 
-* JUMP-TO-MARK
+* JUMP TO MARK
 
 #+BEGIN_SRC emacs-lisp
   (defun my/jump-to-mark ()
@@ -297,7 +297,7 @@ https://thomashartmann.dev/blog/my-first-emacs-lisp/
     (set-mark-command 1))
 #+END_SRC
 
-* NARROW-OR-WIDEN-DWIM
+* NARROW OR WIDEN DWIM
 
 #+BEGIN_SRC emacs-lisp
   (defun my/narrow-or-widen-dwim (p)
@@ -328,7 +328,7 @@ https://thomashartmann.dev/blog/my-first-emacs-lisp/
   (define-key ctl-x-map "n" #'my/narrow-or-widen-dwim)
 #+END_SRC
 
-* OPEN-LINE-ABOVE
+* OPEN LINE ABOVE
 
 #+BEGIN_SRC emacs-lisp
   (defun my/open-line-above ()
@@ -352,7 +352,7 @@ https://thomashartmann.dev/blog/my-first-emacs-lisp/
       (indent-according-to-mode)))
 #+END_SRC
 
-* OPEN-LINE-BELOW
+* OPEN LINE BELOW
 
 #+BEGIN_SRC emacs-lisp
   (defun my/open-line-below (arg)
@@ -366,7 +366,7 @@ https://thomashartmann.dev/blog/my-first-emacs-lisp/
       (newline-and-indent)))
 #+END_SRC
 
-* PUSH-MARK-NO-ACTIVATE
+* PUSH MARK NO ACTIVATE
 
 #+BEGIN_SRC emacs-lisp
   (defun my/push-mark-no-activate ()
@@ -379,7 +379,7 @@ https://thomashartmann.dev/blog/my-first-emacs-lisp/
 #+END_SRC
 
 * REMOVE STUFF
-** REMOVE-FROM-BUFFER
+** REMOVE FROM BUFFER
 
 #+BEGIN_SRC emacs-lisp
   (defun my/remove-from-buffer (string)
@@ -395,7 +395,7 @@ https://thomashartmann.dev/blog/my-first-emacs-lisp/
           (message (format "%d %s removed from buffer." count string))))))
 #+END_SRC
 
-** REMOVE-CHARACTER-NUMBER
+** REMOVE CHARACTER NUMBER
 
 #+BEGIN_SRC emacs-lisp
   (defun my/remove-character-number (number)
@@ -407,7 +407,7 @@ https://thomashartmann.dev/blog/my-first-emacs-lisp/
           (my/remove-from-buffer character))))
 #+END_SRC
 
-** REMOVE-ALL-CTRL-CHARACTERS
+** REMOVE ALL CTRL CHARACTERS
 
 #+BEGIN_SRC emacs-lisp
   (defun my/remove-all-ctrl-characters ()
@@ -419,7 +419,7 @@ https://thomashartmann.dev/blog/my-first-emacs-lisp/
             (number-sequence 0 31)))
 #+END_SRC
 
-** REMOVE-CTRL-M
+** REMOVE CTRL M
 
 #+BEGIN_SRC emacs-lisp
   (defun my/remove-ctrl-m ()
@@ -489,7 +489,7 @@ https://thomashartmann.dev/blog/my-first-emacs-lisp/
   (global-set-key [remap kill-region] 'smart/kill-region)
 #+END_SRC
 
-* SORT-LINES-NOCASE
+* SORT LINES NOCASE
 
 #+BEGIN_SRC emacs-lisp
   (defun my/sort-lines-nocase ()
@@ -580,7 +580,7 @@ https://www.reddit.com/r/emacs/comments/f1tmkf/underlining_plain_text_in_emacs/
             (goto-char original-point))))))
 #+END_SRC
 
-* UNFILL-REGION
+* UNFILL REGION
 
 #+BEGIN_SRC emacs-lisp
   (defun my/unfill-region (&optional region)
@@ -593,7 +593,7 @@ https://www.reddit.com/r/emacs/comments/f1tmkf/underlining_plain_text_in_emacs/
       (fill-paragraph nil region)))
 #+END_SRC
 
-* UNTABIFY-BUFFER
+* UNTABIFY BUFFER
 
 #+BEGIN_SRC emacs-lisp
   (defun my/untabify-buffer ()
@@ -628,7 +628,7 @@ https://www.reddit.com/r/emacs/comments/f1tmkf/underlining_plain_text_in_emacs/
           (yank)))))
 #+END_SRC
 
-* XML-PRETTY-PRINT
+* XML PRETTY PRINT
 
 #+BEGIN_SRC emacs-lisp
   (defun my/xml-pretty-print ()

@@ -14,17 +14,17 @@
   (setq save-abbrevs 'silently)
 #+END_SRC
 
+* AUTO WINDOW VSCROLL
+
+#+BEGIN_SRC emacs-lisp
+  (setq auto-window-vscroll nil)
+#+END_SRC
+
 * AUTOSAVE
 
 #+BEGIN_SRC emacs-lisp
   (setq auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)))
   (setq auto-save-timeout 5)
-#+END_SRC
-
-* AUTO WINDOW VSCROLL
-
-#+BEGIN_SRC emacs-lisp
-  (setq auto-window-vscroll nil)
 #+END_SRC
 
 * BACKUPS
@@ -44,12 +44,6 @@
   (setq visible-bell 1)
 #+END_SRC
 
-* MOUSE
-
-#+BEGIN_SRC emacs-lisp
-  (setq mouse-yank-at-point t)
-#+END_SRC
-
 * CLIPBOARD
 
 #+BEGIN_SRC emacs-lisp
@@ -58,6 +52,21 @@
   (setq x-select-enable-clipboard-manager nil)
   (setq save-interprogram-paste-before-kill t)
 #+END_SRC
+* DISPLAY LINE NUMBERS
+
+This is new in Emacs 26 :-)
+
+#+BEGIN_SRC emacs-lisp
+  (setq display-line-numbers 'relative)
+#+END_SRC
+
+* DOC VIEW
+
+#+BEGIN_SRC emacs-lisp
+  (setq doc-view-continuous t)
+  (setq doc-view-resolution 300)
+#+END_SRC
+
 * EDIFF
 
 #+BEGIN_SRC emacs-lisp
@@ -87,6 +96,25 @@
   (setq require-final-newline t) ;; useful for crontab
   (setq set-mark-command-repeat-pop t) ;; repeating C-SPC after popping, pops it
   (show-paren-mode 1)
+#+END_SRC
+
+* ENCODING
+
+#+BEGIN_SRC emacs-lisp
+  (setq-default buffer-file-coding-system 'utf-8-unix)
+  (setq-default default-buffer-file-coding-system 'utf-8-unix)
+  (setq coding-system-for-read 'utf-8-unix)
+  (setq coding-system-for-write 'utf-8-unix)
+  (set-language-environment "UTF-8")
+  (set-default-coding-systems 'utf-8-unix)
+  (prefer-coding-system 'utf-8-unix)
+#+END_SRC
+
+* EPA
+
+#+BEGIN_SRC emacs-lisp
+  (setq epa-file-cache-passphrase-for-symmetric-encryption t)
+  (setf epa-pinentry-mode 'loopback)
 #+END_SRC
 
 * ERC
@@ -140,37 +168,23 @@
   (setq highlight-changes-visibility-initial-state nil)
 #+END_SRC
 
+* HISTORY
+
+#+BEGIN_SRC emacs-lisp
+  (savehist-mode 1)
+  (setq savehist-additional-variables '(kill-ring search-ring regexp-search-ring))
+  (setq savehist-save-minibuffer-history 1)
+  (setq history-length t)
+  (setq history-delete-duplicates t)
+  (setq bookmark-save-flag 1) ;; always save bookmarks to file
+  (save-place-mode 1)
+  (setq save-place-file (concat user-emacs-directory "saveplace.el"))
+#+END_SRC
+
 * LOADING
 
 #+BEGIN_SRC emacs-lisp
   (setq load-prefer-newer t) ;; if init.elc is older, use newer init.el
-#+END_SRC
-
-* DISPLAY LINE NUMBERS
-
-This is new in Emacs 26 :-)
-
-#+BEGIN_SRC emacs-lisp
-  (setq display-line-numbers 'relative)
-#+END_SRC
-
-* EPA
-
-#+BEGIN_SRC emacs-lisp
-  (setq epa-file-cache-passphrase-for-symmetric-encryption t)
-  (setf epa-pinentry-mode 'loopback)
-#+END_SRC
-
-* ENCODING
-
-#+BEGIN_SRC emacs-lisp
-  (setq-default buffer-file-coding-system 'utf-8-unix)
-  (setq-default default-buffer-file-coding-system 'utf-8-unix)
-  (setq coding-system-for-read 'utf-8-unix)
-  (setq coding-system-for-write 'utf-8-unix)
-  (set-language-environment "UTF-8")
-  (set-default-coding-systems 'utf-8-unix)
-  (prefer-coding-system 'utf-8-unix)
 #+END_SRC
 
 * MISC
@@ -183,18 +197,10 @@ This is new in Emacs 26 :-)
   (setq apropos-do-all t) ;; doesn't seem to be documented anywhere..
 #+END_SRC
 
-* USER
+* MOUSE
 
 #+BEGIN_SRC emacs-lisp
-  (setq user-full-name "Toby Slight")
-  (setq user-mail-address "tslight@pm.me")
-#+END_SRC
-
-* DOC VIEW
-
-#+BEGIN_SRC emacs-lisp
-  (setq doc-view-continuous t)
-  (setq doc-view-resolution 300)
+  (setq mouse-yank-at-point t)
 #+END_SRC
 
 * PROGRAMMING
@@ -246,19 +252,6 @@ This is new in Emacs 26 :-)
   (set-register ?d (cons 'file "~/src/oe-developers/be/devops"))
 #+END_SRC
 
-* HISTORY
-
-#+BEGIN_SRC emacs-lisp
-  (savehist-mode 1)
-  (setq savehist-additional-variables '(kill-ring search-ring regexp-search-ring))
-  (setq savehist-save-minibuffer-history 1)
-  (setq history-length t)
-  (setq history-delete-duplicates t)
-  (setq bookmark-save-flag 1) ;; always save bookmarks to file
-  (save-place-mode 1)
-  (setq save-place-file (concat user-emacs-directory "saveplace.el"))
-#+END_SRC
-
 * SCROLLING
 
 #+BEGIN_SRC emacs-lisp
@@ -303,6 +296,13 @@ This is new in Emacs 26 :-)
   (setq uniquify-buffer-name-style 'forward)
 #+END_SRC
 
+* USER
+
+#+BEGIN_SRC emacs-lisp
+  (setq user-full-name "Toby Slight")
+  (setq user-mail-address "tslight@pm.me")
+#+END_SRC
+
 * VERSION CONTROL
 
 #+BEGIN_SRC emacs-lisp
@@ -311,17 +311,16 @@ This is new in Emacs 26 :-)
   (setq version-control t)
 #+END_SRC
 
-* YES OR NO
-
-#+BEGIN_SRC emacs-lisp
-  (fset 'yes-or-no-p 'y-or-n-p) ;; never have to type full word
-  (setq confirm-kill-emacs 'y-or-n-p)
-#+END_SRC
-
 * WINDOWS
 
 #+BEGIN_SRC emacs-lisp
   (when (fboundp 'winner-mode) (winner-mode 1))
   (setq split-width-threshold 160)
   (setq split-height-threshold 80)
+#+END_SRC
+* YES OR NO
+
+#+BEGIN_SRC emacs-lisp
+  (fset 'yes-or-no-p 'y-or-n-p) ;; never have to type full word
+  (setq confirm-kill-emacs 'y-or-n-p)
 #+END_SRC

@@ -7,6 +7,8 @@
 #+PROPERTY: header-args+ :tangle-mode (identity #o644)
 #+OPTIONS: toc:t
 
+* ALIGN TO SPACES NOT TABS
+
 #+BEGIN_SRC emacs-lisp
   (defadvice align-regexp (around align-regexp-with-spaces activate)
     "Force alignment commands to use spaces, not tabs."
@@ -14,17 +16,23 @@
       ad-do-it))
 #+END_SRC
 
+* RELOAD THEME
+
 #+BEGIN_SRC emacs-lisp
   (defadvice load-theme (before theme-dont-propagate activate)
     "Disable theme before loading new one."
     (mapc #'disable-theme custom-enabled-themes))
 #+END_SRC
 
+* KILL TERM ON SHELL EXIT
+
 #+BEGIN_SRC emacs-lisp
   (defadvice term-handle-exit (after term-kill-buffer-on-exit activate)
     "Kill term when shell exits."
     (kill-buffer))
 #+END_SRC
+
+* ALL BUFFER TEXT SCALE
 
 #+BEGIN_SRC emacs-lisp
   (defadvice text-scale-increase (around all-buffers (arg) activate)

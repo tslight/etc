@@ -6,14 +6,13 @@
 #+PROPERTY: header-args+ :tangle ~/.emacs.d/site-lisp/my-dired.el
 #+PROPERTY: header-args+ :tangle-mode (identity #o644)
 #+OPTIONS: toc:t
-
 #+BEGIN_SRC emacs-lisp
   (require 'dired-x)
   (require 'dired)
   (require 'find-dired)
 #+END_SRC
 
-* MY/DIRED-GET-SIZE
+* DIRED GET SIZE
 
 #+BEGIN_SRC emacs-lisp
   (defun my/dired-get-size ()
@@ -28,7 +27,7 @@
                    (match-string 1))))))
 #+END_SRC
 
-* MY/DIRED-OPEN-MARKED-FILES
+* DIRED OPEN MARKED FILES
 
 #+BEGIN_SRC emacs-lisp
   (defun my/dired-open-marked-files ()
@@ -41,7 +40,7 @@
              current-prefix-arg))))
 #+END_SRC
 
-* MY/DIRED-SORT
+* DIRED SORT
 
 #+BEGIN_SRC emacs-lisp
   (defun my/dired-sort ()
@@ -71,7 +70,7 @@
       (dired-sort-other -arg )))
 #+END_SRC
 
-* MY/DIRED-BACK-TO-TOP
+* DIRED BACK TO TOP
 
 #+BEGIN_SRC emacs-lisp
   (defun my/dired-back-to-top ()
@@ -81,7 +80,7 @@
     (dired-next-line 2))
 #+END_SRC
 
-* MY/DIRED-JUMP-TO-BOTTOM
+* DIRED JUMP TO BOTTOM
 
 #+BEGIN_SRC emacs-lisp
   (defun my/dired-jump-to-bottom ()
@@ -91,7 +90,7 @@
     (dired-next-line -1))
 #+END_SRC
 
-* MY/DIRED-VIEW-CURRENT
+* DIRED VIEW CURRENT
 
 #+BEGIN_SRC emacs-lisp
   (defun my/dired-view-current ()
@@ -130,7 +129,7 @@
   (setq dired-recursive-deletes 'always)
 #+END_SRC
 
-* DIRED-COMPRESS-FILES-ALIST
+* DIRED COMPRESS FILES ALIST
 
 #+BEGIN_SRC emacs-lisp
   (defvar dired-compress-files-alist
