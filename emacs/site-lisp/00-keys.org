@@ -139,7 +139,7 @@ macOS. For Windows I recommend uing [[https://github.com/randyrants/sharpkeys/re
 #+BEGIN_SRC emacs-lisp
   (define-key my/keymap (kbd "C-<tab>") 'next-buffer)
   (define-key my/keymap (kbd "C-<iso-lefttab>") 'previous-buffer)
-  (define-key my/keymap (kbd "C-x C") 'save-buffers-kill-emacs)
+  (define-key my/keymap (kbd "C-x c") 'save-buffers-kill-emacs)
   (define-key my/keymap (kbd "C-x M-c") 'save-buffers-kill-emacs)
   (define-key my/keymap (kbd "C-x C-b") 'ibuffer)
   (define-key my/keymap (kbd "C-x M-k") 'kill-buffer)

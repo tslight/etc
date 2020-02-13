@@ -19,6 +19,7 @@
 - [[#company-anaconda][COMPANY ANACONDA]]
 - [[#company-go][COMPANY GO]]
 - [[#company-terraform][COMPANY TERRAFORM]]
+- [[#default-text-scale][DEFAULT TEXT SCALE]]
 - [[#diminish][DIMINISH]]
 - [[#docker][DOCKER]]
 - [[#dockerfile-mode][DOCKERFILE MODE]]
@@ -183,6 +184,16 @@
   (use-package company-terraform
     :ensure t
     :after (:all company-mode terraform-mode))
+#+END_SRC
+* DEFAULT TEXT SCALE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package default-text-scale
+    :ensure t
+    :bind*
+    ("C-M-=" . default-text-scale-increase)
+    ("C-M--" . default-text-scale-decrease)
+    ("C-M-0" . default-text-scale-reset))
 #+END_SRC
 
 * DIMINISH

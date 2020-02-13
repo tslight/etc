@@ -39,7 +39,15 @@
 
 * ALL BUFFER TEXT SCALE
 
-#+BEGIN_SRC emacs-lisp
+https://www.emacswiki.org/emacs/GlobalTextScaleMode
+
+This doesn't really do what I want so let's not tangle anymore, but leaving
+here for reference.
+
+[[https://github.com/purcell/default-text-scale][This]] does exactly what I want so I'm using Steve Purcell's ~default-text-scale~
+instead.
+
+#+BEGIN_SRC emacs-lisp :tangle no
   (defadvice text-scale-increase (around all-buffers (arg) activate)
     "Make all buffers increase font size with `text-scale-increase'."
     (dolist (buffer (buffer-list))

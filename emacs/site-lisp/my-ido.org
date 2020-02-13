@@ -80,15 +80,6 @@ that as the starting point for filename selection.
   (setq ido-use-filename-at-point 'nil)
 #+END_SRC
 
-When you call write-file 【Ctrl+x Ctrl+w】 (aka “save as”), when ido is on,
-it'll make suggestions. This is annoying because usually you don't want the
-name to be a existing file.
-
-#+BEGIN_SRC emacs-lisp
-;; stop ido suggestion when doing a save-as
-(define-key (cdr ido-minor-mode-map-entry) [remap write-file] nil)
-#+END_SRC
-
 ** VERTICAL IDO
 
 #+BEGIN_SRC emacs-lisp
@@ -188,4 +179,15 @@ from Lisp, enable the mode if ARG is omitted or nil.
 
 #+BEGIN_SRC emacs-lisp
   (ido-everywhere 1)
+#+END_SRC
+
+When you call write-file 【Ctrl+x Ctrl+w】 (aka “save as”), when ido is on,
+it'll make suggestions. This is annoying because usually you don't want the
+name to be a existing file.
+
+This needs to come after turning ~ido-mode~ on.
+
+#+BEGIN_SRC emacs-lisp
+  ;; stop ido suggestion when doing a save-as
+  (define-key (cdr ido-minor-mode-map-entry) [remap write-file] nil)
 #+END_SRC
