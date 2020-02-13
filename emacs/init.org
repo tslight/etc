@@ -47,8 +47,7 @@ local variables.
     (setq use-package-enable-imenu-support t)
     ;; (setq use-package-always-ensure t)
     (setq use-package-verbose t)
-    (eval-when-compile
-      (require 'use-package))
+    (require 'use-package)
     (require 'bind-key)
 
     (byte-recompile-file (concat user-emacs-directory "init.el") 'nil 0 'nil)

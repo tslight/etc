@@ -224,6 +224,8 @@
   (use-package exec-path-from-shell
     :ensure t
     :defer t
+    :init
+    (setq exec-path-from-shell-check-startup-files 'nil)
     :config
     (exec-path-from-shell-initialize)
     (exec-path-from-shell-copy-env "PYTHONPATH"))
