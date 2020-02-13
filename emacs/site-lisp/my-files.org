@@ -116,9 +116,9 @@
 * KEYBINDINGS
 
 #+BEGIN_SRC emacs-lisp
-  (define-key my/keymap (kbd "C-c f d") 'my/delete-this-file)
-  (define-key my/keymap (kbd "C-c f c") 'my/copy-file-name-to-clipboard)
-  (define-key my/keymap (kbd "C-c f b") 'my/make-backup-and-save)
-  (define-key my/keymap (kbd "C-c f r") 'my/rename-this-file-and-buffer)
-  (define-key my/keymap (kbd "C-c f s") 'my/sudoedit)
+  (my/bind "C-c f d" my/delete-this-file)
+  (my/bind "C-c f c" my/copy-file-name-to-clipboard)
+  (my/bind "C-c f b" my/make-backup-and-save)
+  (my/bind "C-c f r" my/rename-this-file-and-buffer)
+  (my/bind "C-c f s" my/sudoedit)
 #+END_SRC

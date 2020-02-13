@@ -157,9 +157,9 @@
 * KEYBINDINGS
 
 #+BEGIN_SRC emacs-lisp
-  (define-key my/keymap (kbd "C-x M-d") 'list-directory)
-  (define-key my/keymap (kbd "C-x C-d") 'dired)
-  (define-key my/keymap (kbd "C-x d") 'dired-jump)
+  (my/bind "C-x M-d" list-directory)
+  (my/bind "C-x C-d" dired)
+  (my/bind "C-x d" dired-jump)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp

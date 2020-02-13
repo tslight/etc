@@ -175,7 +175,7 @@ This is new in Emacs 26 :-)
   (setq eshell-where-to-jump 'begin)
   (setq eshell-review-quick-commands nil)
   (setq eshell-smart-space-goes-to-end t)
-  (define-key my/keymap (kbd "C-c e s") 'eshell)
+  (my/bind "C-c e s" eshell)
 #+END_SRC
 
 * GNUS

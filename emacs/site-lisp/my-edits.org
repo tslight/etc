@@ -682,22 +682,22 @@ https://www.reddit.com/r/emacs/comments/f1tmkf/underlining_plain_text_in_emacs/
 * KEYBINDINGS
 
 #+BEGIN_SRC emacs-lisp
-  (define-key my/keymap (kbd "C-x RET u") 'my/convert-to-unix-coding-system)
-  (define-key my/keymap (kbd "C-S-SPC") 'my/push-mark-no-activate)
-  (define-key my/keymap (kbd "C-c M-p") 'my/change-pairs)
-  (define-key my/keymap (kbd "C-c a") 'my/align-symbol)
-  (define-key my/keymap (kbd "C-c =") 'my/align-equals)
-  (define-key my/keymap (kbd "C-c :") 'my/align-colon)
-  (define-key my/keymap (kbd "C-c #") 'my/align-numbers)
-  (define-key my/keymap (kbd "C-c d") 'my/delete-inside)
-  (define-key my/keymap (kbd "C-c k") 'my/remove-from-buffer)
-  (define-key my/keymap (kbd "C-c u") 'my/underline-text)
-  (define-key my/keymap (kbd "M-s M-s") 'my/surround)
-  (define-key my/keymap (kbd "C-o") 'my/open-line-above)
-  (define-key my/keymap (kbd "C-S-o") 'my/open-line-below)
-  ;; (define-key my/keymap (kbd "C-y") 'my/yank)
-  ;; (define-key my/keymap (kbd "C-M-y") '(lambda () (interactive) (my/yank t)))
-  (define-key my/keymap (kbd "M-Q") 'my/unfill-region)
+  (my/bind "C-x RET u" my/convert-to-unix-coding-system)
+  (my/bind "C-S-SPC" my/push-mark-no-activate)
+  (my/bind "C-c M-p" my/change-pairs)
+  (my/bind "C-c a" my/align-symbol)
+  (my/bind "C-c =" my/align-equals)
+  (my/bind "C-c :" my/align-colon)
+  (my/bind "C-c #" my/align-numbers)
+  (my/bind "C-c d" my/delete-inside)
+  (my/bind "C-c k" my/remove-from-buffer)
+  (my/bind "C-c u" my/underline-text)
+  (my/bind "M-s M-s" my/surround)
+  (my/bind "C-o" my/open-line-above)
+  (my/bind "C-S-o" my/open-line-below)
+  ;; (my/bind "C-y" my/yank)
+  ;; (my/bind "C-M-y" (lambda () (interactive) (my/yank t)))
+  (my/bind "M-Q" my/unfill-region)
 #+END_SRC
 
 * HOOKS

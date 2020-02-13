@@ -124,8 +124,8 @@
 * KEYBINDINGS
 
 #+BEGIN_SRC emacs-lisp
-  (define-key my/keymap (kbd "C-c o a") 'org-agenda)
-  (define-key my/keymap (kbd "C-c o c") 'org-capture)
+  (my/bind "C-c o a" org-agenda)
+  (my/bind "C-c o c" org-capture)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp

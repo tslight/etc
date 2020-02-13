@@ -86,8 +86,8 @@
 * KEYBINDINGS
 
 #+BEGIN_SRC emacs-lisp
-  (define-key my/keymap (kbd "C-c G") 'my/google)
-  (define-key my/keymap (kbd "C-x t") 'my/switch-to-ansi-term)
+  (my/bind "C-c G" my/google)
+  (my/bind "C-x t" my/switch-to-ansi-term)
 #+END_SRC
 
 * HOOKS

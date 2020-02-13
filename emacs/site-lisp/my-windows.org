@@ -165,13 +165,13 @@
 * KEYBINDINGS
 
 #+BEGIN_SRC emacs-lisp
-  (define-key my/keymap (kbd "C-x O") 'my/prev-window)
-  (define-key my/keymap (kbd "C-c 3") 'my/vsplit-last-buffer)
-  (define-key my/keymap (kbd "C-c 2") 'my/hsplit-last-buffer)
-  (define-key my/keymap (kbd "M-<") 'my/top-of-window)
-  (define-key my/keymap (kbd "M->") 'my/bottom-of-window)
-  (define-key my/keymap (kbd "M-p") 'my/scroll-line-up)
-  (define-key my/keymap (kbd "M-n") 'my/scroll-line-down)
+  (my/bind "C-x O" my/prev-window)
+  (my/bind "C-c 3" my/vsplit-last-buffer)
+  (my/bind "C-c 2" my/hsplit-last-buffer)
+  (my/bind "M-<" my/top-of-window)
+  (my/bind "M->" my/bottom-of-window)
+  (my/bind "M-p" my/scroll-line-up)
+  (my/bind "M-n" my/scroll-line-down)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp

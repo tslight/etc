@@ -8,6 +8,14 @@
 #+OPTIONS: toc:t
 * CONTENTS:TOC_5_gh:
 - [[#my-keymap][MY KEYMAP]]
+   - [[#sparse-keymap][SPARSE KEYMAP]]
+   - [[#minor-mode][MINOR MODE]]
+   - [[#globalized-minor-mode][GLOBALIZED MINOR MODE]]
+   - [[#override-minor-mode-maps][OVERRIDE MINOR MODE MAPS]]
+   - [[#turn-off-function][TURN OFF FUNCTION]]
+   - [[#turn-off-in-minibuffer][TURN OFF IN MINIBUFFER]]
+   - [[#turn-on-globally][TURN ON GLOBALLY]]
+   - [[#define-macro][DEFINE MACRO]]
 - [[#space-cadet-bindings][SPACE CADET BINDINGS]]
 - [[#evaluation-bindings][EVALUATION BINDINGS]]
 - [[#toggling-bindings][TOGGLING BINDINGS]]
@@ -26,10 +34,14 @@ https://emacs.stackexchange.com/a/27943
 https://stackoverflow.com/a/683575
 https://emacs.stackexchange.com/a/358
 
+** SPARSE KEYMAP
+
 #+BEGIN_SRC emacs-lisp
   (defvar my/keymap (make-sparse-keymap)
     "Keymap for `my/key-mode'.")
 #+END_SRC
+
+** MINOR MODE
 
 If init-value is not set to t, this mode does not get enabled in
 ~fundamental-mode~ buffers even after doing ~(my/global-keys-mode 1)~.
@@ -46,10 +58,14 @@ More info: http://emacs.stackexchange.com/q/16693/115
     :keymap my/keymap)
 #+END_SRC
 
+** GLOBALIZED MINOR MODE
+
 #+BEGIN_SRC emacs-lisp
   ;;;###autoload
   (define-globalized-minor-mode my/global-keys-mode my/key-mode my/key-mode)
 #+END_SRC
+
+** OVERRIDE MINOR MODE MAPS
 
 https://github.com/jwiegley/use-package/blob/master/bind-key.el
 
@@ -60,17 +76,35 @@ The keymaps in `emulation-mode-map-alists' take precedence over
   (add-to-list 'emulation-mode-map-alists `((my/key-mode . ,my/keymap)))
 #+END_SRC
 
-Turn off the minor mode in the minibuffer
+** TURN OFF FUNCTION
 
 #+BEGIN_SRC emacs-lisp
   (defun turn-off-my/key-mode ()
     "Turn off my/key-mode in the minibuffer."
     (my/key-mode -1))
+#+END_SRC
+
+** TURN OFF IN MINIBUFFER
+
+Turn off the minor mode in the minibuffer
+
+#+BEGIN_SRC emacs-lisp
   (add-hook 'minibuffer-setup-hook #'turn-off-my/key-mode)
 #+END_SRC
 
+** TURN ON GLOBALLY
+
 #+BEGIN_SRC emacs-lisp
   (my/global-keys-mode 1)
+#+END_SRC
+
+** DEFINE MACRO
+
+This should make writing keybindings easier...
+
+#+BEGIN_SRC emacs-lisp
+  (defmacro my/bind (key function)
+    `(define-key my/keymap (kbd ,key) ',function))
 #+END_SRC
 
 * SPACE CADET BINDINGS
@@ -84,108 +118,108 @@ To set up [[http://xahlee.info/kbd/space-cadet_keyboard.html][Space Cadet]] bind
 macOS. For Windows I recommend uing [[https://github.com/randyrants/sharpkeys/releases][SharpKeys]].
 
 #+BEGIN_SRC emacs-lisp
-  (define-key my/keymap (kbd "C-!") 'shell-command)
-  (define-key my/keymap (kbd "C-$") 'ispell-word)
-  (define-key my/keymap (kbd "C-%") 'query-replace)
-  (define-key my/keymap (kbd "C-(") 'insert-parentheses)
-  (define-key my/keymap (kbd "C-)") 'move-past-close-and-reindent)
-  (define-key my/keymap (kbd "C-:") 'pp-eval-expression)
-  (define-key my/keymap (kbd "C-;") 'comment-line)
-  (define-key my/keymap (kbd "M-;") 'comment-or-uncomment-region)
-  (define-key my/keymap (kbd "C-<") 'beginning-of-buffer)
-  (define-key my/keymap (kbd "C->") 'end-of-buffer)
-  (define-key my/keymap (kbd "C-^") 'delete-indentation)
-  (define-key my/keymap (kbd "C-~") 'not-modified)
-  (define-key my/keymap (kbd "C-w") 'kill-ring-save)
-  (define-key my/keymap (kbd "M-w") 'kill-region)
-  (define-key my/keymap (kbd "C-z") 'zap-up-to-char)
-  (define-key my/keymap (kbd "M-z") 'zap-up-char)
+  (my/bind "C-!" shell-command)
+  (my/bind "C-$" ispell-word)
+  (my/bind "C-%" query-replace)
+  (my/bind "C-(" insert-parentheses)
+  (my/bind "C-)" move-past-close-and-reindent)
+  (my/bind "C-:" pp-eval-expression)
+  (my/bind "C-;" comment-line)
+  (my/bind "M-;" comment-or-uncomment-region)
+  (my/bind "C-<" beginning-of-buffer)
+  (my/bind "C->" end-of-buffer)
+  (my/bind "C-^" delete-indentation)
+  (my/bind "C-~" not-modified)
+  (my/bind "C-w" kill-ring-save)
+  (my/bind "M-w" kill-region)
+  (my/bind "C-z" zap-up-to-char)
+  (my/bind "M-z" zap-up-char)
 #+END_SRC
 
 * EVALUATION BINDINGS
 
 #+BEGIN_SRC emacs-lisp
-  (define-key my/keymap (kbd "C-c e b") 'eval-buffer)
-  (define-key my/keymap (kbd "C-c e c") 'eval-current-buffer)
-  (define-key my/keymap (kbd "C-c e e") 'pp-eval-last-sexp)
-  (define-key my/keymap (kbd "C-c e f") 'eval-defun)
-  (define-key my/keymap (kbd "C-c e m") 'lisp-interaction-mode)
-  (define-key my/keymap (kbd "C-c e r") 'eval-region)
-  (define-key my/keymap (kbd "C-c e s") 'eshell)
+  (my/bind "C-c e b" eval-buffer)
+  (my/bind "C-c e c" eval-current-buffer)
+  (my/bind "C-c e e" pp-eval-last-sexp)
+  (my/bind "C-c e f" eval-defun)
+  (my/bind "C-c e m" lisp-interaction-mode)
+  (my/bind "C-c e r" eval-region)
+  (my/bind "C-c e s" eshell)
 #+END_SRC
 
 * TOGGLING BINDINGS
 
 #+BEGIN_SRC emacs-lisp
-  (define-key my/keymap (kbd "C-c t a") 'toggle-text-mode-autofill)
-  (define-key my/keymap (kbd "C-c t d E") 'toggle-debug-on-entry)
-  (define-key my/keymap (kbd "C-c t d e") 'toggle-debug-on-error)
-  (define-key my/keymap (kbd "C-c t d q") 'toggle-debug-on-quit)
-  (define-key my/keymap (kbd "C-c t l") 'linum-mode)
-  (define-key my/keymap (kbd "C-c t t") 'toggle-truncate-lines)
+  (my/bind "C-c t a" toggle-text-mode-autofill)
+  (my/bind "C-c t d E" toggle-debug-on-entry)
+  (my/bind "C-c t d e" toggle-debug-on-error)
+  (my/bind "C-c t d q" toggle-debug-on-quit)
+  (my/bind "C-c t l" linum-mode)
+  (my/bind "C-c t t" toggle-truncate-lines)
 #+END_SRC
 
 * HIGHLIGHT CHANGES BINDINGS
 
 #+BEGIN_SRC emacs-lisp
-  (define-key my/keymap (kbd "C-c ]") 'highlight-changes-next-change)
-  (define-key my/keymap (kbd "C-c [") 'highlight-changes-previous-change)
-  (define-key my/keymap (kbd "C-S-n") 'highlight-changes-next-change)
-  (define-key my/keymap (kbd "C-S-p") 'highlight-changes-previous-change)
+  (my/bind "C-c ]" highlight-changes-next-change)
+  (my/bind "C-c [" highlight-changes-previous-change)
+  (my/bind "C-S-n" highlight-changes-next-change)
+  (my/bind "C-S-p" highlight-changes-previous-change)
 #+END_SRC
 
 * BUFFER BINDINGS
 
 #+BEGIN_SRC emacs-lisp
-  (define-key my/keymap (kbd "C-<tab>") 'next-buffer)
-  (define-key my/keymap (kbd "C-<iso-lefttab>") 'previous-buffer)
-  (define-key my/keymap (kbd "C-x c") 'save-buffers-kill-emacs)
-  (define-key my/keymap (kbd "C-x M-c") 'save-buffers-kill-emacs)
-  (define-key my/keymap (kbd "C-x C-b") 'ibuffer)
-  (define-key my/keymap (kbd "C-x M-k") 'kill-buffer)
+  (my/bind "C-<tab>" next-buffer)
+  (my/bind "C-<iso-lefttab>" previous-buffer)
+  (my/bind "C-x c" save-buffers-kill-emacs)
+  (my/bind "C-x M-c" save-buffers-kill-emacs)
+  (my/bind "C-x C-b" ibuffer)
+  (my/bind "C-x M-k" kill-buffer)
 #+END_SRC
 
 * FRAME BINDINGS
 
 #+BEGIN_SRC emacs-lisp
-  (define-key my/keymap (kbd "C-<f10>") 'toggle-frame-maximized)
-  (define-key my/keymap (kbd "C-<f11>") 'toggle-frame-fullscreen)
-  (define-key my/keymap (kbd "C-s-f") 'toggle-frame-fullscreen)
-  (define-key my/keymap (kbd "C-s-m") 'toggle-frame-maximized)
-  (define-key my/keymap (kbd "M-<escape>") 'other-frame)
-  (define-key my/keymap (kbd "M-<tab>") 'next-multiframe-window)
-  (define-key my/keymap (kbd "M-<iso-lefttab>") 'previous-multiframe-window)
+  (my/bind "C-<f10>" toggle-frame-maximized)
+  (my/bind "C-<f11>" toggle-frame-fullscreen)
+  (my/bind "C-s-f" toggle-frame-fullscreen)
+  (my/bind "C-s-m" toggle-frame-maximized)
+  (my/bind "M-<escape>" other-frame)
+  (my/bind "M-<tab>" next-multiframe-window)
+  (my/bind "M-<iso-lefttab>" previous-multiframe-window)
 #+END_SRC
 
 * ISEARCH BINDINGS
 
 #+BEGIN_SRC emacs-lisp
-  (define-key my/keymap (kbd "C-r") 'isearch-backward-regexp)
-  (define-key my/keymap (kbd "C-s") 'isearch-forward-regexp)
-  (define-key my/keymap (kbd "C-M-r") 'multi-isearch-buffers-regexp)
-  (define-key my/keymap (kbd "C-S-r") 'multi-isearch-files-regexp)
-  (define-key my/keymap (kbd "C-M-s") 'isearch-forward-symbol-at-point)
+  (my/bind "C-r" isearch-backward-regexp)
+  (my/bind "C-s" isearch-forward-regexp)
+  (my/bind "C-M-r" multi-isearch-buffers-regexp)
+  (my/bind "C-S-r" multi-isearch-files-regexp)
+  (my/bind "C-M-s" isearch-forward-symbol-at-point)
 #+END_SRC
 
 * MISC BINDINGS
 
 #+BEGIN_SRC emacs-lisp
-  (define-key my/keymap (kbd "<f12>") 'recentf-open-files)
-  (define-key my/keymap (kbd "<f6>") 'desktop-read)
-  (define-key my/keymap (kbd "S-<f6>") 'desktop-save)
-  (define-key my/keymap (kbd "S-<f10>") 'menu-bar-mode)
-  (define-key my/keymap (kbd "C-S-v") 'scroll-other-window-down)
-  ;; (define-key my/keymap (kbd "C-M-v") 'scroll-other-window)
-  (define-key my/keymap (kbd "C-c C-/") 'winner-undo)
-  (define-key my/keymap (kbd "C-c C-?") 'winner-redo)
-  (define-key my/keymap (kbd "C-c M-c") 'calculator)
-  (define-key my/keymap (kbd "C-c c") 'calc)
-  (define-key my/keymap (kbd "C-c i") 'imenu)
-  (define-key my/keymap (kbd "C-c x") 'execute-extended-command)
-  (define-key my/keymap (kbd "C-x j") 'jump-to-register)
-  (define-key my/keymap (kbd "C-x p") 'pop-to-mark-command)
-  (define-key my/keymap (kbd "M-SPC") 'cycle-spacing)
-  (define-key my/keymap (kbd "M-/") 'hippie-expand)
+  (my/bind "<f12>" recentf-open-files)
+  (my/bind "<f6>" desktop-read)
+  (my/bind "S-<f6>" desktop-save)
+  (my/bind "S-<f10>" menu-bar-mode)
+  (my/bind "C-S-v" scroll-other-window-down)
+  ;; (my/bind "C-M-v" scroll-other-window)
+  (my/bind "C-c C-/" winner-undo)
+  (my/bind "C-c C-?" winner-redo)
+  (my/bind "C-c M-c" calculator)
+  (my/bind "C-c c" calc)
+  (my/bind "C-c i" imenu)
+  (my/bind "C-c x" execute-extended-command)
+  (my/bind "C-x j" jump-to-register)
+  (my/bind "C-x p" pop-to-mark-command)
+  (my/bind "M-SPC" cycle-spacing)
+  (my/bind "M-/" hippie-expand)
 #+END_SRC
 
 * SIMPLE/SPECIAL MODE BINDINGS

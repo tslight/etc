@@ -114,15 +114,15 @@
 * KEYBINDINGS
 
 #+BEGIN_SRC emacs-lisp
-  (define-key my/keymap (kbd "C-<escape>") 'my/last-buffer)
-  (define-key my/keymap (kbd "C-M-<escape>") 'my/toggle-buffer)
-  (define-key my/keymap (kbd "C-c TAB") 'my/indent-buffer)
-  (define-key my/keymap (kbd "C-c b i") 'my/indent-buffer)
-  (define-key my/keymap (kbd "C-c z") 'my/toggle-maximize-buffer)
-  (define-key my/keymap (kbd "C-c M-n") 'my/nuke-buffers)
-  (define-key my/keymap (kbd "C-c s") 'my/save-buffers-silently)
-  (define-key my/keymap (kbd "C-x k") 'my/kill-this-buffer)
-  (define-key my/keymap (kbd "M-s s") 'my/search-all-buffers)
-  (define-key my/keymap (kbd "C-c t m") '(lambda () (interactive) (my/toggle-buffer "*Messages*")))
-  (define-key my/keymap (kbd "C-c t s") '(lambda () (interactive) (my/toggle-buffer "*scratch*")))
+  (my/bind "C-<escape>" my/last-buffer)
+  (my/bind "C-M-<escape>" my/toggle-buffer)
+  (my/bind "C-c TAB" my/indent-buffer)
+  (my/bind "C-c b i" my/indent-buffer)
+  (my/bind "C-c z" my/toggle-maximize-buffer)
+  (my/bind "C-c M-n" my/nuke-buffers)
+  (my/bind "C-c s" my/save-buffers-silently)
+  (my/bind "C-x k" my/kill-this-buffer)
+  (my/bind "M-s s" my/search-all-buffers)
+  (my/bind "C-c t m" (lambda () (interactive) (my/toggle-buffer "*Messages*")))
+  (my/bind "C-c t s" (lambda () (interactive) (my/toggle-buffer "*scratch*")))
 #+END_SRC

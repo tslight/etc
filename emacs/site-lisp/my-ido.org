@@ -139,8 +139,8 @@ that as the starting point for filename selection.
 * KEYBINDINGS
 
 #+BEGIN_SRC emacs-lisp
-  (define-key my/keymap (kbd "C-c r") 'my/ido-find-recentf)
-  (define-key my/keymap (kbd "C-M-y") 'my/ido-kill-ring)
+  (my/bind "C-c r" my/ido-find-recentf)
+  (my/bind "C-M-y" my/ido-kill-ring)
   (define-key my/keymap (kbd "M-x") (lambda () (interactive)
                                       (call-interactively
                                        (intern
