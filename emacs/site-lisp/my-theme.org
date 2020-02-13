@@ -6,8 +6,13 @@
 #+PROPERTY: header-args+ :tangle ~/.emacs.d/site-lisp/my-theme.el
 #+PROPERTY: header-args+ :tangle-mode (identity #o644)
 #+OPTIONS: toc:t
+* CONTENTS:TOC_5_gh:
+- [[#after-make-frame][AFTER MAKE FRAME]]
+- [[#disable-themes][DISABLE THEMES]]
+- [[#settings][SETTINGS]]
+- [[#keybindings][KEYBINDINGS]]
 
-* AFTER-MAKE-FRAME
+* AFTER MAKE FRAME
 
 #+BEGIN_SRC emacs-lisp
   (defun my/after-make-frame (frame)

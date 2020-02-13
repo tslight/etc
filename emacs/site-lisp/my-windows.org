@@ -6,6 +6,17 @@
 #+PROPERTY: header-args+ :tangle ~/.emacs.d/site-lisp/my-windows.el
 #+PROPERTY: header-args+ :tangle-mode (identity #o644)
 #+OPTIONS: toc:t
+* CONTENTS:TOC_5_gh:
+- [[#three-way-split][THREE WAY SPLIT]]
+- [[#kill-buffer-other-window][KILL BUFFER OTHER WINDOW]]
+- [[#last-window][LAST WINDOW]]
+- [[#open-buffer-other-window][OPEN BUFFER OTHER WINDOW]]
+- [[#prev-window][PREV WINDOW]]
+- [[#recenter-window][RECENTER WINDOw]]
+- [[#hsplit-last-buffer][HSPLIT LAST BUFFER]]
+- [[#vsplit-last-buffer][VSPLIT LAST BUFFER]]
+- [[#toggle-split][TOGGLE SPLIT]]
+- [[#keybindings][KEYBINDINGS]]
 
 * THREE WAY SPLIT
 

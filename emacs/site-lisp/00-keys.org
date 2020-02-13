@@ -6,6 +6,19 @@
 #+PROPERTY: header-args+ :tangle ~/.emacs.d/site-lisp/00-keys.el
 #+PROPERTY: header-args+ :tangle-mode (identity #o644)
 #+OPTIONS: toc:t
+* CONTENTS:TOC_5_gh:
+- [[#my-keymap][MY KEYMAP]]
+- [[#space-cadet-bindings][SPACE CADET BINDINGS]]
+- [[#evaluation-bindings][EVALUATION BINDINGS]]
+- [[#toggling-bindings][TOGGLING BINDINGS]]
+- [[#highlight-changes-bindings][HIGHLIGHT CHANGES BINDINGS]]
+- [[#buffer-bindings][BUFFER BINDINGS]]
+- [[#frame-bindings][FRAME BINDINGS]]
+- [[#isearch-bindings][ISEARCH BINDINGS]]
+- [[#misc-bindings][MISC BINDINGS]]
+- [[#simplespecial-mode-bindings][SIMPLE/SPECIAL MODE BINDINGS]]
+
+* MY KEYMAP
 
 This gives me ~bind*~ without have to have use-package installed.
 
@@ -60,7 +73,15 @@ Turn off the minor mode in the minibuffer
   (my/global-keys-mode 1)
 #+END_SRC
 
-* Space Cadet Re-Bindings
+* SPACE CADET BINDINGS
+
+Make frequently used bindings such as ~beginning-of-buffer~ and ~end-of-buffer~
+use the ~Ctrl~ modifier instead of ~Meta~, since ~Ctrl~ is not the most
+accessible modifier. This also means that when I am on a system without Space
+Cadet bindings, these shortcuts are in the same place.
+
+To set up [[http://xahlee.info/kbd/space-cadet_keyboard.html][Space Cadet]] bindings, please see [[file:~/etc/linux/space-cadet.org][here]] for Linux and [[file:~/etc/macos/karabiner.org][here]] for
+macOS. For Windows I recommend uing [[https://github.com/randyrants/sharpkeys/releases][SharpKeys]].
 
 #+BEGIN_SRC emacs-lisp
   (define-key my/keymap (kbd "C-!") 'shell-command)
@@ -81,7 +102,7 @@ Turn off the minor mode in the minibuffer
   (define-key my/keymap (kbd "M-z") 'zap-up-char)
 #+END_SRC
 
-* Evaluation Bindings
+* EVALUATION BINDINGS
 
 #+BEGIN_SRC emacs-lisp
   (define-key my/keymap (kbd "C-c e b") 'eval-buffer)
@@ -93,7 +114,7 @@ Turn off the minor mode in the minibuffer
   (define-key my/keymap (kbd "C-c e s") 'eshell)
 #+END_SRC
 
-* Toggling Bindings
+* TOGGLING BINDINGS
 
 #+BEGIN_SRC emacs-lisp
   (define-key my/keymap (kbd "C-c t a") 'toggle-text-mode-autofill)
@@ -104,7 +125,7 @@ Turn off the minor mode in the minibuffer
   (define-key my/keymap (kbd "C-c t t") 'toggle-truncate-lines)
 #+END_SRC
 
-* Highlight Changes Bindings
+* HIGHLIGHT CHANGES BINDINGS
 
 #+BEGIN_SRC emacs-lisp
   (define-key my/keymap (kbd "C-c ]") 'highlight-changes-next-change)
@@ -113,17 +134,18 @@ Turn off the minor mode in the minibuffer
   (define-key my/keymap (kbd "C-S-p") 'highlight-changes-previous-change)
 #+END_SRC
 
-* Buffer Bindings
+* BUFFER BINDINGS
 
 #+BEGIN_SRC emacs-lisp
   (define-key my/keymap (kbd "C-<tab>") 'next-buffer)
   (define-key my/keymap (kbd "C-<iso-lefttab>") 'previous-buffer)
   (define-key my/keymap (kbd "C-x C") 'save-buffers-kill-emacs)
+  (define-key my/keymap (kbd "C-x M-c") 'save-buffers-kill-emacs)
   (define-key my/keymap (kbd "C-x C-b") 'ibuffer)
   (define-key my/keymap (kbd "C-x M-k") 'kill-buffer)
 #+END_SRC
 
-* Frame Bindings
+* FRAME BINDINGS
 
 #+BEGIN_SRC emacs-lisp
   (define-key my/keymap (kbd "C-<f10>") 'toggle-frame-maximized)
@@ -135,7 +157,7 @@ Turn off the minor mode in the minibuffer
   (define-key my/keymap (kbd "M-<iso-lefttab>") 'previous-multiframe-window)
 #+END_SRC
 
-* Isearch Bindings
+* ISEARCH BINDINGS
 
 #+BEGIN_SRC emacs-lisp
   (define-key my/keymap (kbd "C-r") 'isearch-backward-regexp)
@@ -145,7 +167,7 @@ Turn off the minor mode in the minibuffer
   (define-key my/keymap (kbd "C-M-s") 'isearch-forward-symbol-at-point)
 #+END_SRC
 
-* Misc Bindings
+* MISC BINDINGS
 
 #+BEGIN_SRC emacs-lisp
   (define-key my/keymap (kbd "<f12>") 'recentf-open-files)
@@ -166,7 +188,7 @@ Turn off the minor mode in the minibuffer
   (define-key my/keymap (kbd "M-/") 'hippie-expand)
 #+END_SRC
 
-* Simple/Special Mode Bindings
+* SIMPLE/SPECIAL MODE BINDINGS
 
 #+BEGIN_SRC emacs-lisp
   ;; for help modes, and simple/special modes

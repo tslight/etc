@@ -6,8 +6,19 @@
 #+PROPERTY: header-args+ :tangle ~/.emacs.d/site-lisp/my-buffers.el
 #+PROPERTY: header-args+ :tangle-mode (identity #o644)
 #+OPTIONS: toc:t
+* CONTENTS:TOC_5_gh:
+- [[#fill-buffer][FILL BUFFER]]
+- [[#indent-buffer][INDENT BUFFER]]
+- [[#kill-this-buffer][KILL THIS BUFFER]]
+- [[#last-buffer][LAST BUFFER]]
+- [[#nuke-buffers][NUKE BUFFERS]]
+- [[#save-buffers-silently][SAVE BUFFERS SILENTLY]]
+- [[#search-all-buffers][SEARCH ALL BUFFERS]]
+- [[#toggle-buffer][TOGGLE BUFFER]]
+- [[#toggle-maximize-buffer][TOGGLE MAXIMIZE BUFFER]]
+- [[#keybindings][KEYBINDINGS]]
 
-* FILL-BUFFER
+* FILL BUFFER
 
 #+BEGIN_SRC emacs-lisp
   (defun my/fill-buffer ()
@@ -16,7 +27,7 @@
     (fill-region (point-min) (point-max)))
 #+END_SRC
 
-* INDENT-BUFFER
+* INDENT BUFFER
 
 #+BEGIN_SRC emacs-lisp
   (defun my/indent-buffer ()
@@ -25,7 +36,7 @@
     (indent-region (point-min) (point-max)))
 #+END_SRC
 
-* KILL-THIS-BUFFER
+* KILL THIS BUFFER
 
 #+BEGIN_SRC emacs-lisp
   (defun my/kill-this-buffer ()
@@ -34,7 +45,7 @@
     (kill-buffer (current-buffer)))
 #+END_SRC
 
-* LAST-BUFFER
+* LAST BUFFER
 
 #+BEGIN_SRC emacs-lisp
   (defun my/last-buffer ()
@@ -43,7 +54,7 @@
     (switch-to-buffer (other-buffer (current-buffer) 1)))
 #+END_SRC
 
-* NUKE-BUFFERS
+* NUKE BUFFERS
 
 #+BEGIN_SRC emacs-lisp
   (defun my/nuke-buffers ()
@@ -57,7 +68,7 @@
         (delete-other-windows)))
 #+END_SRC
 
-* SAVE-BUFFERS-SILENTLY
+* SAVE BUFFERS SILENTLY
 
 #+BEGIN_SRC emacs-lisp
   (defun my/save-buffers-silently ()
@@ -67,7 +78,7 @@
     (message "Saving all buffers..."))
 #+END_SRC
 
-* SEARCH-ALL-BUFFERS
+* SEARCH ALL BUFFERS
 
 #+BEGIN_SRC emacs-lisp
   (defun my/search-all-buffers (regexp)
@@ -76,7 +87,7 @@
     (multi-occur-in-matching-buffers "." regexp t))
 #+END_SRC
 
-* TOGGLE-BUFFER
+* TOGGLE BUFFER
 
 #+BEGIN_SRC emacs-lisp
   (defun my/toggle-buffer (buffer)
@@ -87,7 +98,7 @@
       (switch-to-buffer buffer)))
 #+END_SRC
 
-* TOGGLE-MAXIMIZE-BUFFER
+* TOGGLE MAXIMIZE BUFFER
 
 #+BEGIN_SRC emacs-lisp
   (defun my/toggle-maximize-buffer ()
@@ -99,6 +110,7 @@
         (window-configuration-to-register '_)
         (delete-other-windows))))
 #+END_SRC
+
 * KEYBINDINGS
 
 #+BEGIN_SRC emacs-lisp

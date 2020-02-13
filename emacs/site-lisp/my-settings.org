@@ -6,6 +6,41 @@
 #+PROPERTY: header-args+ :tangle ~/.emacs.d/site-lisp/my-settings.el
 #+PROPERTY: header-args+ :tangle-mode (identity #o644)
 #+OPTIONS: toc:t
+* CONTENTS:TOC_5_gh:
+- [[#abbrevs][ABBREVS]]
+- [[#auto-window-vscroll][AUTO WINDOW VSCROLL]]
+- [[#autosave][AUTOSAVE]]
+- [[#backups][BACKUPS]]
+- [[#bells][BELLS]]
+- [[#clipboard][CLIPBOARD]]
+- [[#display-line-numbers][DISPLAY LINE NUMBERS]]
+- [[#doc-view][DOC VIEW]]
+- [[#ediff][EDIFF]]
+- [[#editing][EDITING]]
+- [[#encoding][ENCODING]]
+- [[#epa][EPA]]
+- [[#erc][ERC]]
+- [[#eshell][ESHELL]]
+- [[#gnus][GNUS]]
+- [[#highlight-changes][HIGHLIGHT CHANGES]]
+- [[#history][HISTORY]]
+- [[#loading][LOADING]]
+- [[#misc][MISC]]
+- [[#mouse][MOUSE]]
+- [[#programming][PROGRAMMING]]
+- [[#python][PYTHON]]
+- [[#recentf][RECENTF]]
+- [[#registers][REGISTERS]]
+- [[#scrolling][SCROLLING]]
+- [[#startup][STARTUP]]
+- [[#term-buffer-size][TERM BUFFER SIZE]]
+- [[#tramp][TRAMP]]
+- [[#undo-limits][UNDO LIMITS]]
+- [[#uniquify][UNIQUIFY]]
+- [[#user][USER]]
+- [[#version-control][VERSION CONTROL]]
+- [[#windows][WINDOWS]]
+- [[#yes-or-no][YES OR NO]]
 
 * ABBREVS
 

@@ -9,6 +9,17 @@
 #+BEGIN_SRC emacs-lisp
   (require 'ido)
 #+END_SRC
+* CONTENTS:TOC_5_gh:
+- [[#settings][SETTINGS]]
+   - [[#vertical-ido][VERTICAL IDO]]
+- [[#icomplete-setup][ICOMPLETE SETUP]]
+- [[#functions][FUNCTIONS]]
+   - [[#ido-find-recentf][IDO FIND RECENTF]]
+   - [[#ido-kill-ring][IDO KILL RING]]
+   - [[#ido-keys][IDO KEYS]]
+- [[#keybindings][KEYBINDINGS]]
+- [[#hooks][HOOKS]]
+- [[#init][INIT]]
 
 * SETTINGS
 

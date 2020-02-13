@@ -11,6 +11,17 @@
   (require 'dired)
   (require 'find-dired)
 #+END_SRC
+* CONTENTS:TOC_5_gh:
+- [[#dired-get-size][DIRED GET SIZE]]
+- [[#dired-open-marked-files][DIRED OPEN MARKED FILES]]
+- [[#dired-sort][DIRED SORT]]
+- [[#dired-back-to-top][DIRED BACK TO TOP]]
+- [[#dired-jump-to-bottom][DIRED JUMP TO BOTTOM]]
+- [[#dired-view-current][DIRED VIEW CURRENT]]
+- [[#settings][SETTINGS]]
+- [[#dired-compress-files-alist][DIRED COMPRESS FILES ALIST]]
+- [[#keybindings][KEYBINDINGS]]
+- [[#hooks][HOOKS]]
 
 * DIRED GET SIZE
 
