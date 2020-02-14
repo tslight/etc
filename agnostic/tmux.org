@@ -16,12 +16,17 @@
   set -g escape-time 0 # default is 500ms which feels like forever..
   #set -g mode-keys vi
 
+  ## STATUS BAR
+  set-option -g status-interval 5
+  set-option -g automatic-rename on
+  set-option -g automatic-rename-format '#{b:pane_current_path}'
+
   ## COLORS
   set -g message-style bg=default,fg=brightgreen
   set -g mode-style bg=default,fg=brightgreen
   set -g status-style bg=default,fg=brightgreen
   set -g window-status-style bold
-  set -g window-status-current-style underscore
+  set -g window-status-current-style underscore,fg=brightyellow
 
   ## STATUS
   set -g status-interval 60

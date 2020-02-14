@@ -141,12 +141,12 @@ that as the starting point for filename selection.
 #+BEGIN_SRC emacs-lisp
   (my/bind "C-c r" my/ido-find-recentf)
   (my/bind "C-M-y" my/ido-kill-ring)
-  (define-key my/keymap (kbd "M-x") (lambda () (interactive)
-                                      (call-interactively
-                                       (intern
-                                        (ido-completing-read
-                                         "M-x "
-                                         (all-completions "" obarray 'commandp))))))
+  (my/bind "M-x" (lambda () (interactive)
+                   (call-interactively
+                    (intern
+                     (ido-completing-read
+                      "M-x "
+                      (all-completions "" obarray 'commandp))))))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
