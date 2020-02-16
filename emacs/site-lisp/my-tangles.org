@@ -241,6 +241,7 @@ Tangle block to PATH if VENDOR string matches the relevant FILE in
   (defun my/os-tangle (os)
     (when (not (equal system-type os)) "no"))
 #+END_SRC
+
 * KEYBINDINGS
 
 #+BEGIN_SRC emacs-lisp
