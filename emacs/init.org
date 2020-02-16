@@ -24,6 +24,7 @@ local variables.
         (gc-cons-threshold most-positive-fixnum)
         (gc-cons-percentage 0.8))
 
+    (byte-recompile-file (concat user-emacs-directory "keys.el") 'nil 0 t)
     (add-to-list 'load-path (concat user-emacs-directory "site-lisp/"))
     (byte-recompile-directory (concat user-emacs-directory "site-lisp") 0)
     (mapc (lambda (file) (load file))
