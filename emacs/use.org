@@ -11,14 +11,14 @@
 - [[#amx][AMX]]
 - [[#anaconda-mode][ANACONDA MODE]]
 - [[#ansible][ANSIBLE]]
-- [[#ansible-doc][ANSIBLE DOC]]
+   - [[#ansible-doc][ANSIBLE DOC]]
 - [[#async][ASYNC]]
 - [[#browse-kill-ring][BROWSE KILL RING]]
 - [[#change-inner][CHANGE INNER]]
 - [[#company][COMPANY]]
-- [[#company-anaconda][COMPANY ANACONDA]]
-- [[#company-go][COMPANY GO]]
-- [[#company-terraform][COMPANY TERRAFORM]]
+   - [[#company-anaconda][COMPANY ANACONDA]]
+   - [[#company-go][COMPANY GO]]
+   - [[#company-terraform][COMPANY TERRAFORM]]
 - [[#default-text-scale][DEFAULT TEXT SCALE]]
 - [[#diminish][DIMINISH]]
 - [[#docker][DOCKER]]
@@ -59,7 +59,7 @@
 - [[#which-key][WHICH KEY]]
 - [[#yaml-mode][YAML MODE]]
 - [[#yasnippet][YASNIPPET]]
-- [[#yasnippet-snippets][YASNIPPET SNIPPETS]]
+   - [[#yasnippet-snippets][YASNIPPET SNIPPETS]]
 
 * ACE WINDOW
 
@@ -115,7 +115,7 @@
     "\\.pb.yml\\'")
 #+END_SRC
 
-* ANSIBLE DOC
+** ANSIBLE DOC
 
 #+BEGIN_SRC emacs-lisp
   (use-package ansible-doc
@@ -162,7 +162,7 @@
     (prog-mode . company-mode))
 #+END_SRC
 
-* COMPANY ANACONDA
+** COMPANY ANACONDA
 
 #+BEGIN_SRC emacs-lisp
   (use-package company-anaconda
@@ -170,7 +170,7 @@
     :after (:all company-mode anaconda-mode))
 #+END_SRC
 
-* COMPANY GO
+** COMPANY GO
 
 #+BEGIN_SRC emacs-lisp
   (use-package company-go
@@ -178,13 +178,14 @@
     :after company-mode go-mode)
 #+END_SRC
 
-* COMPANY TERRAFORM
+** COMPANY TERRAFORM
 
 #+BEGIN_SRC emacs-lisp
   (use-package company-terraform
     :ensure t
     :after (:all company-mode terraform-mode))
 #+END_SRC
+
 * DEFAULT TEXT SCALE
 
 #+BEGIN_SRC emacs-lisp
@@ -669,7 +670,7 @@
     (prog-mode . yas-minor-mode))
 #+END_SRC
 
-* YASNIPPET SNIPPETS
+** YASNIPPET SNIPPETS
 
 #+BEGIN_SRC emacs-lisp
   (use-package yasnippet-snippets
