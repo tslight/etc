@@ -126,27 +126,28 @@
 https://orgmode.org/worg/org-contrib/babel/languages.html
 
 #+BEGIN_SRC emacs-lisp
-    (org-babel-do-load-languages
-     'org-babel-load-languages
-     '((awk . t)
-       (C . t)
-       (clojure . t)
-       (css . t)
-       (emacs-lisp . t)
-       (haskell . t)
-       (java . t)
-       (js . t)
-       (latex . t)
-       (lisp . t)
-       (makefile . t)
-       (python . t)
-       (perl . t)
-       (ruby . t)
-       (scheme . t)
-       (sed . t)
-       (shell . t)
-       (sql . t)
-       (sqlite . t)))
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((awk . t)
+     (C . t)
+     (clojure . t)
+     (css . t)
+     (emacs-lisp . t)
+     (haskell . t)
+     (java . t)
+     (js . t)
+     (latex . t)
+     (lisp . t)
+     (makefile . t)
+     (perl . t)
+     (python . t)
+     (plantuml . t)
+     (ruby . t)
+     (scheme . t)
+     (sed . t)
+     (shell . t)
+     (sql . t)
+     (sqlite . t)))
 #+END_SRC
 
 * KEYBINDINGS
