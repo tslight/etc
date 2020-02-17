@@ -154,10 +154,8 @@ https://orgmode.org/worg/org-contrib/babel/languages.html
 #+BEGIN_SRC emacs-lisp
   (my/bind "C-c o a" org-agenda)
   (my/bind "C-c o c" org-capture)
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-  (define-key org-mode-map (kbd "C-c o l") 'org-store-link)
+  (my/bind "C-c o l" org-store-link)
+  (my/bind "C-c o t" org-time-stamp)
 #+END_SRC
 
 * HOOKS
