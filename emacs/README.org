@@ -17,7 +17,7 @@ configuration [[file:use.org][here]].
    in the block.
 
    #+BEGIN_SRC emacs-lisp
-     (org-babel-load-file (concat default-directory "/site-lisp/my-tangles.org"))
+     (org-babel-load-file (file-truename (concat default-directory "/site-lisp/my-tangles.org")))
      (my/tangle-directory default-directory)
    #+END_SRC
 
