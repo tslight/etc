@@ -132,6 +132,7 @@ https://orgmode.org/worg/org-contrib/babel/languages.html
      (C . t)
      (clojure . t)
      (css . t)
+     (dot . t) ;; graphviz language
      (emacs-lisp . t)
      (haskell . t)
      (java . t)
