@@ -11,7 +11,7 @@
   (require 'org)
 #+END_SRC
 
-* ORG-RECURSIVE-SORT
+* ORG RECURSIVE SORT
 
 #+BEGIN_SRC emacs-lisp
   (defun my/org-recursive-sort ()
@@ -24,7 +24,7 @@
          (user-error)))))
 #+END_SRC
 
-* ORG-TANGLE-BLOCK
+* ORG TANGLE BLOCK
 
 #+BEGIN_SRC emacs-lisp
   (defun my/org-tangle-block ()
@@ -121,6 +121,34 @@
                '("sh" "#+BEGIN_SRC sh\n?\n#+END_SRC"
                  "<src lang=\"sh\">\n\n</src>"))
 #+END_SRC
+* LOAD BABEL LANGUAGES
+
+https://orgmode.org/worg/org-contrib/babel/languages.html
+
+#+BEGIN_SRC emacs-lisp
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     '((awk . t)
+       (C . t)
+       (clojure . t)
+       (css . t)
+       (emacs-lisp . t)
+       (haskell . t)
+       (java . t)
+       (js . t)
+       (latex . t)
+       (lisp . t)
+       (makefile . t)
+       (python . t)
+       (perl . t)
+       (ruby . t)
+       (scheme . t)
+       (sed . t)
+       (shell . t)
+       (sql . t)
+       (sqlite . t)))
+#+END_SRC
+
 * KEYBINDINGS
 
 #+BEGIN_SRC emacs-lisp
