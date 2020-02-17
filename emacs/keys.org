@@ -162,8 +162,6 @@ macOS. For Windows I recommend uing [[https://github.com/randyrants/sharpkeys/re
 * HIGHLIGHT CHANGES BINDINGS
 
 #+BEGIN_SRC emacs-lisp
-  (my/bind "C-c ]" highlight-changes-next-change)
-  (my/bind "C-c [" highlight-changes-previous-change)
   (my/bind "C-S-n" highlight-changes-next-change)
   (my/bind "C-S-p" highlight-changes-previous-change)
 #+END_SRC
