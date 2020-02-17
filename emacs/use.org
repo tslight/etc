@@ -615,6 +615,8 @@ Check by running:
     (setq vterm-kill-buffer-on-exit t))
 #+END_SRC
 
+ (require 'org-tempo)
+
 * WEB MODE
 
 #+BEGIN_SRC emacs-lisp
