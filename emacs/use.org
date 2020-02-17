@@ -54,6 +54,7 @@
 - [[#systemd][SYSTEMD]]
 - [[#terraform-mode][TERRAFORM MODE]]
 - [[#undo-tree][UNDO TREE]]
+- [[#vterm][VTERM]]
 - [[#web-mode][WEB MODE]]
 - [[#wgrep][WGREP]]
 - [[#which-key][WHICH KEY]]
@@ -467,45 +468,45 @@
 ** BULLETS
 
 #+BEGIN_SRC emacs-lisp
-(use-package org-bullets
-  :defer t
-  :if window-system
-  :ensure t
-  :hook
-  (org-mode . org-bullets-mode))
+  (use-package org-bullets
+    :defer t
+    :if window-system
+    :ensure t
+    :hook
+    (org-mode . org-bullets-mode))
 #+END_SRC
 
 ** HTMLIZE
 
 #+BEGIN_SRC emacs-lisp
-;; source code syntax highlighting when html exporting
-(use-package htmlize
-  :defer t
-  :ensure t)
+  ;; source code syntax highlighting when html exporting
+  (use-package htmlize
+    :defer t
+    :ensure t)
 #+END_SRC
 
 ** TOC
 
 #+BEGIN_SRC emacs-lisp
-(use-package toc-org
-  :defer t
-  :ensure t
-  :hook
-  (org-mode . toc-org-enable))
+  (use-package toc-org
+    :defer t
+    :ensure t
+    :hook
+    (org-mode . toc-org-enable))
 #+END_SRC
 
 ** LATEX
 
 #+BEGIN_SRC emacs-lisp
-(use-package ox-latex
-  :defer t
-  :config
-  (add-to-list 'org-latex-packages-alist '("" "minted"))
-  (setq org-latex-listings 'minted)
-  (setq org-latex-pdf-process
-        '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-          "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-          "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f")))
+  (use-package ox-latex
+    :defer t
+    :config
+    (add-to-list 'org-latex-packages-alist '("" "minted"))
+    (setq org-latex-listings 'minted)
+    (setq org-latex-pdf-process
+          '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+            "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+            "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f")))
 #+END_SRC
 
 * PAREDIT
@@ -593,6 +594,25 @@
     (setq undo-tree-auto-save-history t)
     (setq undo-tree-history-directory-alist
           `(("." . ,(expand-file-name "~/.emacs.d/undos/")))))
+#+END_SRC
+* VTERM
+
+Make sure Emacs is built with ~--with-modules~ module support.
+
+Check by running:
+
+#+BEGIN_SRC emacs-lisp :tangle no
+  system-configuration-options
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package vterm
+    :ensure t
+    :bind*
+    ("C-c M-t" . vterm)
+    ("C-c 4 M-t" . vterm-other-window)
+    :config
+    (setq vterm-kill-buffer-on-exit t))
 #+END_SRC
 
 * WEB MODE

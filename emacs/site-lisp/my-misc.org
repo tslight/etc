@@ -86,8 +86,8 @@
 * KEYBINDINGS
 
 #+BEGIN_SRC emacs-lisp
-  (my/bind "C-c G" my/google)
-  (my/bind "C-x t" my/switch-to-ansi-term)
+  (my/bind "C-c M-g" my/google)
+  (my/bind "C-c M-t" my/switch-to-ansi-term)
 #+END_SRC
 
 * HOOKS

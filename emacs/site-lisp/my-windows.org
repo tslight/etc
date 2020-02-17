@@ -177,5 +177,5 @@
 #+BEGIN_SRC emacs-lisp
   (define-key ctl-x-4-map "k" 'my/kill-buffer-other-window)
   (define-key ctl-x-4-map "o" 'my/open-buffer-other-window)
-  (define-key ctl-x-4-map "t" 'my/toggle-split)
+  (define-key ctl-x-4-map "s" 'my/toggle-split)
 #+END_SRC

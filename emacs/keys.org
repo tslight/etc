@@ -21,6 +21,7 @@
 - [[#toggling-bindings][TOGGLING BINDINGS]]
 - [[#highlight-changes-bindings][HIGHLIGHT CHANGES BINDINGS]]
 - [[#buffer-bindings][BUFFER BINDINGS]]
+- [[#tab-bindings][TAB BINDINGS]]
 - [[#frame-bindings][FRAME BINDINGS]]
 - [[#isearch-bindings][ISEARCH BINDINGS]]
 - [[#misc-bindings][MISC BINDINGS]]
@@ -169,12 +170,25 @@ macOS. For Windows I recommend uing [[https://github.com/randyrants/sharpkeys/re
 * BUFFER BINDINGS
 
 #+BEGIN_SRC emacs-lisp
-  (my/bind "C-<tab>" next-buffer)
-  (my/bind "C-<iso-lefttab>" previous-buffer)
+  ;; (my/bind "C-<tab>" next-buffer)
+  ;; (my/bind "C-<iso-lefttab>" previous-buffer)
   (my/bind "C-x c" save-buffers-kill-emacs)
   (my/bind "C-x M-c" save-buffers-kill-emacs)
   (my/bind "C-x C-b" ibuffer)
   (my/bind "C-x M-k" kill-buffer)
+#+END_SRC
+
+* TAB BINDINGS
+
+Only relevant in Emacs >= 27
+
+#+BEGIN_SRC emacs-lisp
+  (when (>= emacs-major-version 27)
+    (my/bind "C-S-t" tab-bar-new-tab)
+    (my/bind "C-S-w" tab-bar-close-tab)
+    (my/bind "C-`" tab-bar-switch-to-recent-tab)
+    (my/bind "C-<tab>" tab-bar-switch-to-next-tab)
+    (my/bind "C-<iso-lefttab>" tab-bar-switch-to-previous-tab))
 #+END_SRC
 
 * FRAME BINDINGS
