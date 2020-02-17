@@ -205,12 +205,14 @@ Only relevant in Emacs >= 27
 
 * ISEARCH BINDINGS
 
+Don't use ~my/bind~ for these as I end up clobbering ~vterm~ and ~ansi-term~.
+
 #+BEGIN_SRC emacs-lisp
-  (my/bind "C-r" isearch-backward-regexp)
-  (my/bind "C-s" isearch-forward-regexp)
-  (my/bind "C-M-r" multi-isearch-buffers-regexp)
-  (my/bind "C-S-r" multi-isearch-files-regexp)
-  (my/bind "C-M-s" isearch-forward-symbol-at-point)
+  (global-set-key (kbd "C-r") 'isearch-backward-regexp)
+  (global-set-key (kbd "C-s") 'isearch-forward-regexp)
+  (global-set-key (kbd "C-M-r") 'multi-isearch-buffers-regexp)
+  (global-set-key (kbd "C-S-r") 'multi-isearch-files-regexp)
+  (global-set-key (kbd "C-M-s") 'isearch-forward-symbol-at-point)
 #+END_SRC
 
 * MISC BINDINGS
