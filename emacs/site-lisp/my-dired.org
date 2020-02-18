@@ -157,9 +157,9 @@
 * KEYBINDINGS
 
 #+BEGIN_SRC emacs-lisp
-  (my/bind "C-x M-d" list-directory)
-  (my/bind "C-x C-d" dired)
-  (my/bind "C-x d" dired-jump)
+  (my/bind-always "C-x M-d" list-directory)
+  (my/bind-always "C-x C-d" dired)
+  (my/bind-always "C-x d" dired-jump)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp

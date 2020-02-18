@@ -15,7 +15,7 @@
    - [[#turn-off-function][TURN OFF FUNCTION]]
    - [[#turn-off-in-minibuffer][TURN OFF IN MINIBUFFER]]
    - [[#turn-on-globally][TURN ON GLOBALLY]]
-   - [[#define-macro][DEFINE MACRO]]
+- [[#macros][MACROS]]
 - [[#space-cadet-bindings][SPACE CADET BINDINGS]]
 - [[#evaluation-bindings][EVALUATION BINDINGS]]
 - [[#toggling-bindings][TOGGLING BINDINGS]]
@@ -99,12 +99,17 @@ Turn off the minor mode in the minibuffer
   (my/global-keys-mode 1)
 #+END_SRC
 
-** DEFINE MACRO
+* MACROS
 
 This should make writing keybindings easier...
 
 #+BEGIN_SRC emacs-lisp
   (defmacro my/bind (key function)
+    `(global-set-key (kbd ,key) ',function))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (defmacro my/bind-always (key function)
     `(define-key my/keymap (kbd ,key) ',function))
 #+END_SRC
 
@@ -119,63 +124,63 @@ To set up [[http://xahlee.info/kbd/space-cadet_keyboard.html][Space Cadet]] bind
 macOS. For Windows I recommend uing [[https://github.com/randyrants/sharpkeys/releases][SharpKeys]].
 
 #+BEGIN_SRC emacs-lisp
-  (my/bind "C-!" shell-command)
-  (my/bind "C-$" ispell-word)
-  (my/bind "C-%" query-replace)
-  (my/bind "C-(" insert-parentheses)
-  (my/bind "C-)" move-past-close-and-reindent)
-  (my/bind "C-:" pp-eval-expression)
-  (my/bind "C-;" comment-line)
-  (my/bind "M-;" comment-or-uncomment-region)
-  (my/bind "C-<" beginning-of-buffer)
-  (my/bind "C->" end-of-buffer)
-  (my/bind "C-^" delete-indentation)
-  (my/bind "C-~" not-modified)
-  (my/bind "C-w" kill-ring-save)
-  (my/bind "M-w" kill-region)
-  (my/bind "C-z" zap-up-to-char)
-  (my/bind "M-z" zap-up-char)
+  (my/bind-always "C-!" shell-command)
+  (my/bind-always "C-$" ispell-word)
+  (my/bind-always "C-%" query-replace)
+  (my/bind-always "C-(" insert-parentheses)
+  (my/bind-always "C-)" move-past-close-and-reindent)
+  (my/bind-always "C-:" pp-eval-expression)
+  (my/bind-always "C-;" comment-line)
+  (my/bind-always "M-;" comment-or-uncomment-region)
+  (my/bind-always "C-<" beginning-of-buffer)
+  (my/bind-always "C->" end-of-buffer)
+  (my/bind-always "C-^" delete-indentation)
+  (my/bind-always "C-~" not-modified)
+  (my/bind-always "C-w" kill-ring-save)
+  (my/bind-always "M-w" kill-region)
+  (my/bind-always "C-z" zap-up-to-char)
+  (my/bind-always "M-z" zap-up-char)
 #+END_SRC
 
 * EVALUATION BINDINGS
 
 #+BEGIN_SRC emacs-lisp
-  (my/bind "C-c e b" eval-buffer)
-  (my/bind "C-c e c" eval-current-buffer)
-  (my/bind "C-c e e" pp-eval-last-sexp)
-  (my/bind "C-c e f" eval-defun)
-  (my/bind "C-c e m" lisp-interaction-mode)
-  (my/bind "C-c e r" eval-region)
-  (my/bind "C-c e s" eshell)
+  (my/bind-always "C-c e b" eval-buffer)
+  (my/bind-always "C-c e c" eval-current-buffer)
+  (my/bind-always "C-c e e" pp-eval-last-sexp)
+  (my/bind-always "C-c e f" eval-defun)
+  (my/bind-always "C-c e m" lisp-interaction-mode)
+  (my/bind-always "C-c e r" eval-region)
+  (my/bind-always "C-c e s" eshell)
 #+END_SRC
 
 * TOGGLING BINDINGS
 
 #+BEGIN_SRC emacs-lisp
-  (my/bind "C-c t a" toggle-text-mode-autofill)
-  (my/bind "C-c t d E" toggle-debug-on-entry)
-  (my/bind "C-c t d e" toggle-debug-on-error)
-  (my/bind "C-c t d q" toggle-debug-on-quit)
-  (my/bind "C-c t l" linum-mode)
-  (my/bind "C-c t t" toggle-truncate-lines)
+  (my/bind-always "C-c t a" toggle-text-mode-autofill)
+  (my/bind-always "C-c t d E" toggle-debug-on-entry)
+  (my/bind-always "C-c t d e" toggle-debug-on-error)
+  (my/bind-always "C-c t d q" toggle-debug-on-quit)
+  (my/bind-always "C-c t l" linum-mode)
+  (my/bind-always "C-c t t" toggle-truncate-lines)
 #+END_SRC
 
 * HIGHLIGHT CHANGES BINDINGS
 
 #+BEGIN_SRC emacs-lisp
-  (my/bind "C-S-n" highlight-changes-next-change)
-  (my/bind "C-S-p" highlight-changes-previous-change)
+  (my/bind-always "C-S-n" highlight-changes-next-change)
+  (my/bind-always "C-S-p" highlight-changes-previous-change)
 #+END_SRC
 
 * BUFFER BINDINGS
 
 #+BEGIN_SRC emacs-lisp
-  ;; (my/bind "C-<tab>" next-buffer)
-  ;; (my/bind "C-<iso-lefttab>" previous-buffer)
-  (my/bind "C-x c" save-buffers-kill-emacs)
-  (my/bind "C-x M-c" save-buffers-kill-emacs)
-  (my/bind "C-x C-b" ibuffer)
-  (my/bind "C-x M-k" kill-buffer)
+  ;; (my/bind-always "C-<tab>" next-buffer)
+  ;; (my/bind-always "C-<iso-lefttab>" previous-buffer)
+  (my/bind-always "C-x c" save-buffers-kill-emacs)
+  (my/bind-always "C-x M-c" save-buffers-kill-emacs)
+  (my/bind-always "C-x C-b" ibuffer)
+  (my/bind-always "C-x M-k" kill-buffer)
 #+END_SRC
 
 * TAB BINDINGS
@@ -184,56 +189,57 @@ Only relevant in Emacs >= 27
 
 #+BEGIN_SRC emacs-lisp
   (when (>= emacs-major-version 27)
-    (my/bind "C-S-t" tab-bar-new-tab)
-    (my/bind "C-S-w" tab-bar-close-tab)
-    (my/bind "C-`" tab-bar-switch-to-recent-tab)
-    (my/bind "C-<tab>" tab-bar-switch-to-next-tab)
-    (my/bind "C-<iso-lefttab>" tab-bar-switch-to-previous-tab))
+    (my/bind-always "C-x t t" tab-bar-select-tab-by-name)
+    (my/bind-always "C-S-t" tab-bar-new-tab)
+    (my/bind-always "C-S-w" tab-bar-close-tab)
+    (my/bind-always "C-`" tab-bar-switch-to-recent-tab)
+    (my/bind-always "C-<tab>" tab-bar-switch-to-next-tab)
+    (my/bind-always "C-<iso-lefttab>" tab-bar-switch-to-prev-tab))
 #+END_SRC
 
 * FRAME BINDINGS
 
 #+BEGIN_SRC emacs-lisp
-  (my/bind "C-<f10>" toggle-frame-maximized)
-  (my/bind "C-<f11>" toggle-frame-fullscreen)
-  (my/bind "C-s-f" toggle-frame-fullscreen)
-  (my/bind "C-s-m" toggle-frame-maximized)
-  (my/bind "M-<escape>" other-frame)
-  (my/bind "M-<tab>" next-multiframe-window)
-  (my/bind "M-<iso-lefttab>" previous-multiframe-window)
+  (my/bind-always "C-<f10>" toggle-frame-maximized)
+  (my/bind-always "C-<f11>" toggle-frame-fullscreen)
+  (my/bind-always "C-s-f" toggle-frame-fullscreen)
+  (my/bind-always "C-s-m" toggle-frame-maximized)
+  (my/bind-always "M-<escape>" other-frame)
+  (my/bind-always "M-<tab>" next-multiframe-window)
+  (my/bind-always "M-<iso-lefttab>" previous-multiframe-window)
 #+END_SRC
 
 * ISEARCH BINDINGS
 
-Don't use ~my/bind~ for these as I end up clobbering ~vterm~ and ~ansi-term~.
+Don't use ~my/bind-always~ for these as I end up clobbering ~vterm~ and ~ansi-term~.
 
 #+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "C-r") 'isearch-backward-regexp)
-  (global-set-key (kbd "C-s") 'isearch-forward-regexp)
-  (global-set-key (kbd "C-M-r") 'multi-isearch-buffers-regexp)
-  (global-set-key (kbd "C-S-r") 'multi-isearch-files-regexp)
-  (global-set-key (kbd "C-M-s") 'isearch-forward-symbol-at-point)
+  (my/bind "C-r" isearch-backward-regexp)
+  (my/bind "C-s" isearch-forward-regexp)
+  (my/bind "C-M-r" multi-isearch-buffers-regexp)
+  (my/bind "C-S-r" multi-isearch-files-regexp)
+  (my/bind "C-M-s" isearch-forward-symbol-at-point)
 #+END_SRC
 
 * MISC BINDINGS
 
 #+BEGIN_SRC emacs-lisp
-  (my/bind "<f12>" recentf-open-files)
-  (my/bind "<f6>" desktop-read)
-  (my/bind "S-<f6>" desktop-save)
-  (my/bind "S-<f10>" menu-bar-mode)
-  (my/bind "C-S-v" scroll-other-window-down)
-  ;; (my/bind "C-M-v" scroll-other-window)
-  (my/bind "C-c C-/" winner-undo)
-  (my/bind "C-c C-?" winner-redo)
-  (my/bind "C-c M-c" calculator)
-  (my/bind "C-c c" calc)
-  (my/bind "C-c i" imenu)
-  (my/bind "C-c x" execute-extended-command)
-  (my/bind "C-x j" jump-to-register)
-  (my/bind "C-x p" pop-to-mark-command)
-  (my/bind "M-SPC" cycle-spacing)
-  (my/bind "M-/" hippie-expand)
+  (my/bind-always "<f12>" recentf-open-files)
+  (my/bind-always "<f6>" desktop-read)
+  (my/bind-always "S-<f6>" desktop-save)
+  (my/bind-always "S-<f10>" menu-bar-mode)
+  (my/bind-always "C-S-v" scroll-other-window-down)
+  ;; (my/bind-always "C-M-v" scroll-other-window)
+  (my/bind-always "C-c C-/" winner-undo)
+  (my/bind-always "C-c C-?" winner-redo)
+  (my/bind-always "C-c M-c" calculator)
+  (my/bind-always "C-c c" calc)
+  (my/bind-always "C-c i" imenu)
+  (my/bind-always "C-c x" execute-extended-command)
+  (my/bind-always "C-x j" jump-to-register)
+  (my/bind-always "C-x p" pop-to-mark-command)
+  (my/bind-always "M-SPC" cycle-spacing)
+  (my/bind-always "M-/" hippie-expand)
 #+END_SRC
 
 * SIMPLE/SPECIAL MODE BINDINGS

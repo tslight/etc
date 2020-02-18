@@ -38,7 +38,9 @@
 - [[#js2-refactor][JS2 REFACTOR]]
 - [[#json-mode][JSON MODE]]
 - [[#json-navigator][JSON NAVIGATOR]]
+- [[#lsp-mode][LSP MODE]]
 - [[#magit][MAGIT]]
+- [[#makefile-executor][MAKEFILE EXECUTOR]]
 - [[#markdown-mode][MARKDOWN MODE]]
 - [[#nix-mode][NIX MODE]]
 - [[#nodejs-repl][NODEJS REPL]]
@@ -160,7 +162,10 @@
     :defer t
     :diminish company-mode
     :hook
-    (prog-mode . company-mode))
+    (prog-mode . company-mode)
+    :config
+    (setq company-minimum-prefix-length 1
+        company-idle-delay 0.0))
 #+END_SRC
 
 ** COMPANY ANACONDA
@@ -405,6 +410,51 @@
     :ensure t
     :defer t)
 #+END_SRC
+* LSP MODE
+
+https://github.com/emacs-lsp/lsp-mode#supported-languages
+
+#+begin_src shell :tangle no :results no
+  npm i -g bash-language-server
+  pip install cmake-language-server
+  npm install -g vscode-css-languageserver-bin
+  npm install -g dockerfile-language-server-nodejs
+  go get golang.org/x/tools/gopls@latest
+  # go get -u github.com/saibing/bingo
+  npm install -g vscode-html-languageserver-bin
+  npm i -g typescript-language-server
+  npm i -g typescript
+  npm i -g javascript-typescript-langserver
+  npm i -g vscode-json-languageserver
+  npm i intelephense -g
+  pip install python-language-server[all]
+  git clone https://github.com/juliosueiras/terraform-lsp /tmp && \
+      cd /tmp/terraform-lsp && \
+      go install
+  npm install -g yaml-language-server
+#+end_src
+
+#+begin_src emacs-lisp
+  (use-package lsp-mode
+    :ensure t
+    :init (setq lsp-keymap-prefix "C-c l")
+    :hook ((prog-mode . lsp)
+           (python-mode . lsp)
+           (lsp-mode . lsp-enable-which-key-integration))
+    :commands (lsp lsp-deferred))
+#+end_src
+
+#+begin_src emacs-lisp
+  (use-package lsp-ui
+    :ensure t
+    :commands lsp-ui-mode)
+#+end_src
+
+#+begin_src emacs-lisp
+  (use-package company-lsp
+    :ensure t
+    :commands company-lsp)
+#+end_src
 
 * MAGIT
 
@@ -427,6 +477,32 @@
     :config
     (setq magit-completing-read-function 'magit-ido-completing-read))
 #+END_SRC
+
+* MAKEFILE EXECUTOR
+
+Interactively selecting a make target and running it. Bound to C-c C-e in
+makefile-mode when makefile-executor-mode is enabled.
+
+Re-running the last execution. We usually run things in Makefiles many times
+after all! Bound to C-c C-c in makefile-mode when makefile-executor-mode is
+enabled.
+
+Running a makefile target in a dedicated buffer. Useful when starting services
+and other long-running things! Bound to C-c C-d in makefile-mode when
+makefile-executor-mode is enabled.
+
+Calculation of variables et.c.; $(BINARY) will show up as what it evaluates to.
+
+*If projectile is installed, execution from any buffer in a project. If more*
+*than one Makefile is found, an interactive prompt for one is shown. This is*
+*added to the projectile-commander on the m key.* - /So Nice!/
+
+#+begin_src emacs-lisp
+  (use-package makefile-executor
+    :ensure t
+    :hook
+    (makefile-mode . makefile-executor-mode))
+#+end_src
 
 * MARKDOWN MODE
 
@@ -611,11 +687,11 @@ Check by running:
     :bind*
     ("C-c M-t" . vterm)
     ("C-c 4 M-t" . vterm-other-window)
+    (:map vterm-mode-map
+          ("C-c C-j" . vterm-copy-mode))
     :config
     (setq vterm-kill-buffer-on-exit t))
 #+END_SRC
-
- (require 'org-tempo)
 
 * WEB MODE
 

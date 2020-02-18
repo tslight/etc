@@ -244,6 +244,8 @@ Tangle block to PATH if VENDOR string matches the relevant FILE in
 
 * KEYBINDINGS
 
+We don't have ~my/bind~ necessarily when evaluating this.
+
 #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "C-c v d") 'my/tangle-directory)
   (global-set-key (kbd "C-c v a") 'my/tangle-all)

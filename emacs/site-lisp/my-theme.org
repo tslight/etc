@@ -89,5 +89,5 @@
 * KEYBINDINGS
 
 #+BEGIN_SRC emacs-lisp
-  (my/bind "C-c t C-t" my/disable-themes)
+  (my/bind-always "C-c t C-t" my/disable-themes)
 #+END_SRC
