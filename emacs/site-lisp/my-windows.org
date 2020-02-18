@@ -170,8 +170,9 @@
   (my/bind "C-c 2" my/hsplit-last-buffer)
   (my/bind "M-<" my/top-of-window)
   (my/bind "M->" my/bottom-of-window)
-  (my/bind "M-p" my/scroll-line-up)
-  (my/bind "M-n" my/scroll-line-down)
+  ;; I don't want these overwritten in every mode
+  (global-set-key (kbd "M-p") 'my/scroll-line-up)
+  (global-set-key (kbd "M-n") 'my/scroll-line-down)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
