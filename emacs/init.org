@@ -54,4 +54,5 @@ local variables.
     (byte-recompile-file (concat user-emacs-directory "init.el") 'nil 0 'nil)
     (byte-recompile-file (concat user-emacs-directory "use.el") 'nil 0 t)
     (message "Hacks and glory await! :-)"))
+  (setq gc-cons-threshold 100000000)
 #+END_SRC
