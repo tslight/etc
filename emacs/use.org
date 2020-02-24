@@ -50,6 +50,7 @@
    - [[#toc][TOC]]
    - [[#latex][LATEX]]
 - [[#paredit][PAREDIT]]
+- [[#powershell][POWERSHELL]]
 - [[#projectile][PROJECTILE]]
 - [[#py-autopep8][PY AUTOPEP8]]
 - [[#restclient][RESTCLIENT]]
@@ -164,8 +165,8 @@
     :hook
     (prog-mode . company-mode)
     :config
-    (setq company-minimum-prefix-length 1
-        company-idle-delay 0.0))
+    (setq company-minimum-prefix-length 2
+          company-idle-delay 0.2))
 #+END_SRC
 
 ** COMPANY ANACONDA
@@ -441,7 +442,12 @@ https://github.com/emacs-lsp/lsp-mode#supported-languages
     :hook ((prog-mode . lsp)
            (python-mode . lsp)
            (lsp-mode . lsp-enable-which-key-integration))
-    :commands (lsp lsp-deferred))
+    :commands (lsp lsp-deferred)
+    :config
+    ;; https://github.com/emacs-lsp/lsp-mode#performance
+    (setq read-process-output-max (* 1024 1024)) ;; 1mb
+    (setq lsp-prefer-capf t)
+    (setq lsp-idle-delay 0.500))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -604,6 +610,13 @@ Calculation of variables et.c.; $(BINARY) will show up as what it evaluates to.
     :config
     (unbind-key "M-s" paredit-mode-map))
 #+END_SRC
+* POWERSHELL
+
+#+begin_src emacs-lisp
+    (use-package powershell
+      :ensure t
+      :mode (("\\.ps1\\'" . powershell-mode)))
+#+end_src
 
 * PROJECTILE
 
