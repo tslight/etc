@@ -38,7 +38,9 @@ read & understood all the documentation here and linked to!/
    in the block:
 
    #+BEGIN_SRC emacs-lisp
-     (org-babel-load-file (concat default-directory "/emacs/site-lisp/my-tangles.org"))
+     (load-file
+      (car (org-babel-tangle-file
+	    (concat default-directory "/emacs/site-lisp/my-tangles.org"))))
      (my/tangle-all)
    #+END_SRC
 
@@ -53,8 +55,8 @@ read & understood all the documentation here and linked to!/
 
    #+BEGIN_SRC sh
      emacs -Q --batch \
-           --eval '(org-babel-load-file "'$PWD'/emacs/site-lisp/my-tangles.org")' \
-           --eval '(my/tangle-all)'
+	   --eval '(org-babel-load-file "'$PWD'/emacs/site-lisp/my-tangles.org")' \
+	   --eval '(my/tangle-all)'
    #+END_SRC
 
 4) Wait for all the appropriate org files to [[https://www.gnu.org/software/emacs/manual/html_node/org/Extracting-source-code.html][tangle]] (this may take a while...)
