@@ -133,11 +133,12 @@
 #+END_SRC
 
 * BASH COMPLETIONS
+** DEVCD
 
 #+begin_src shell :tangle ~/.bash_completions
   [[ -z "$DEVPATH" ]] && DEVPATH="$HOME/src/oe-developers"
 
-  get_gitdirs_relpaths() {
+  _devrelpaths() {
       RELPATHS=$(find "$DEVPATH" \
                       -maxdepth 10 \
                       -type d \
@@ -147,9 +148,63 @@
       COMPREPLY=($(compgen -W "$RELPATHS" "${COMP_WORDS[1]}"))
   }
 
-  complete -F get_gitdirs_relpaths gcd
+  complete -F _devrelpaths devcd
 
-  alias gcd='f() { cd "$DEVPATH/$1"; }; f'
+  alias devcd='f() { cd "$DEVPATH/$1"; }; f'
+#+end_src
+
+** BECD
+
+#+begin_src shell :tangle ~/.bash_completions
+  _berelpaths() {
+      RELPATHS=$(find "$DEVPATH/be" \
+                      -maxdepth 10 \
+                      -type d \
+                      -name ".git" \
+                      -printf "%P " | \
+                     sed 's/\/\.git//g')
+      COMPREPLY=($(compgen -W "$RELPATHS" "${COMP_WORDS[1]}"))
+  }
+
+  complete -F _berelpaths becd
+
+  alias becd='f() { cd "$DEVPATH/be/$1"; }; f'
+#+end_src
+
+** DSCD
+
+#+begin_src shell :tangle ~/.bash_completions
+  _dsrelpaths() {
+      RELPATHS=$(find "$DEVPATH/ds" \
+                      -maxdepth 10 \
+                      -type d \
+                      -name ".git" \
+                      -printf "%P " | \
+                     sed 's/\/\.git//g')
+      COMPREPLY=($(compgen -W "$RELPATHS" "${COMP_WORDS[1]}"))
+  }
+
+  complete -F _dsrelpaths dscd
+
+  alias dscd='f() { cd "$DEVPATH/ds/$1"; }; f'
+#+end_src
+
+** GCD
+
+#+begin_src shell :tangle ~/.bash_completions
+  _gitrelpaths() {
+      RELPATHS=$(find . \
+                      -maxdepth 10 \
+                      -type d \
+                      -name ".git" \
+                      -printf "%P " | \
+                     sed 's/\/\.git//g')
+      COMPREPLY=($(compgen -W "$RELPATHS" "${COMP_WORDS[1]}"))
+  }
+
+  complete -F _gitrelpaths gcd
+
+  alias gcd='f() { cd "./$1"; }; f'
 #+end_src
 
 * INPUTRC
