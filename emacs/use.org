@@ -660,6 +660,7 @@ Calculation of variables et.c.; $(BINARY) will show up as what it evaluates to.
       :ensure t
       :mode (("\\.ps1\\'" . powershell-mode)))
 #+end_src
+
 * POWERLINE
 
 #+begin_src emacs-lisp
