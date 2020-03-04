@@ -39,7 +39,7 @@
         (load-theme 'wombat)
         (xterm-mouse-mode 1)
         (mouse-avoidance-mode 'banish)
-        (setq linum-format "%d ")
+        ;; (setq linum-format "%d ")
         (setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
         (setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
         (setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; one line at a time
@@ -76,16 +76,18 @@
 #+BEGIN_SRC emacs-lisp
   ;; mode line stuff
   (setq display-time-format "%H:%M %d/%m")
+  (setq display-time-default-load-average 'nil)
   (column-number-mode t)
-  (display-time-mode 1)
-  (display-battery-mode 1)
-  (size-indication-mode t)
+  ;; (display-time-mode t)
+  ;; (display-battery-mode t)
+  ;; (size-indication-mode t)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
   (setq prettify-symbols-unprettify-at-point 'right-edge)
   (global-prettify-symbols-mode 1)
 #+END_SRC
+
 * KEYBINDINGS
 
 #+BEGIN_SRC emacs-lisp

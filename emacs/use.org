@@ -23,6 +23,7 @@
 - [[#diminish][DIMINISH]]
 - [[#docker][DOCKER]]
 - [[#dockerfile-mode][DOCKERFILE MODE]]
+- [[#doom-themes][DOOM THEMES]]
 - [[#dot-mode][DOT MODE]]
 - [[#exec-path-from-shell][EXEC PATH FROM SHELL]]
 - [[#flx-ido][FLX IDO]]
@@ -51,6 +52,7 @@
    - [[#latex][LATEX]]
 - [[#paredit][PAREDIT]]
 - [[#powershell][POWERSHELL]]
+- [[#powerline][POWERLINE]]
 - [[#projectile][PROJECTILE]]
 - [[#py-autopep8][PY AUTOPEP8]]
 - [[#restclient][RESTCLIENT]]
@@ -207,10 +209,22 @@
 
 * DIMINISH
 
+[[https://www.wisdomandwonder.com/link/10214/httpsgithub-commagnars-emacs-dblobmastersite-lispdiminish-ell87why-you-cant-diminish-auto-fill-mode][Why you can't diminish auto-fill-mode...]]
+
 #+BEGIN_SRC emacs-lisp
   (use-package diminish
     :ensure t
-    :defer 4)
+    :defer 2
+    :config
+    (diminish 'abbrev-mode)
+    (diminish 'auto-fill-function) ;; wtf?!
+    (diminish 'eldoc-mode)
+    (diminish 'hs-minor-mode)
+    (diminish 'highlight-changes-mode)
+    (diminish 'my/key-mode)
+    (diminish 'org-indent-mode)
+    (diminish 'org-src-mode)
+    (diminish 'subword-mode))
 #+END_SRC
 
 * DOCKER
@@ -228,12 +242,37 @@
     :ensure t
     :defer t )
 #+END_SRC
+* DOOM THEMES
+
+#+begin_src emacs-lisp
+  (use-package doom-themes
+    :ensure t
+    :defer t
+    :config
+    ;; Global settings (defaults)
+    (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+          doom-themes-enable-italic t) ; if nil, italics is universally disabled
+    ;; (load-theme 'doom-one t)
+
+    ;; Enable flashing mode-line on errors
+    (doom-themes-visual-bell-config)
+
+    ;; Enable custom neotree theme (all-the-icons must be installed!)
+    (doom-themes-neotree-config)
+    ;; or for treemacs users
+    (setq doom-themes-treemacs-theme "doom-colors") ; use the colorful treemacs theme
+    (doom-themes-treemacs-config)
+
+    ;; Corrects (and improves) org-mode's native fontification.
+    (doom-themes-org-config))
+#+end_src
 
 * DOT MODE
 
 #+BEGIN_SRC emacs-lisp
   (use-package dot-mode
     :ensure t
+    :diminish dot-mode
     :config
     (global-dot-mode))
 #+END_SRC
@@ -505,7 +544,7 @@ Calculation of variables et.c.; $(BINARY) will show up as what it evaluates to.
 *than one Makefile is found, an interactive prompt for one is shown. This is*
 *added to the projectile-commander on the m key.* - /So Nice!/
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package makefile-executor
     :ensure t
     :hook
@@ -598,6 +637,7 @@ Calculation of variables et.c.; $(BINARY) will show up as what it evaluates to.
 #+BEGIN_SRC emacs-lisp
   (use-package paredit
     :ensure t
+    :diminish paredit-mode
     :bind
     ("C-c t p" . paredit-mode)
     ("C-c (" . paredit-forward-slurp-sexp)
@@ -612,12 +652,21 @@ Calculation of variables et.c.; $(BINARY) will show up as what it evaluates to.
     :config
     (unbind-key "M-s" paredit-mode-map))
 #+END_SRC
+
 * POWERSHELL
 
 #+begin_src emacs-lisp
     (use-package powershell
       :ensure t
       :mode (("\\.ps1\\'" . powershell-mode)))
+#+end_src
+* POWERLINE
+
+#+begin_src emacs-lisp
+  (use-package powerline
+    :ensure t
+    :config
+    (powerline-default-theme))
 #+end_src
 
 * PROJECTILE
@@ -773,6 +822,7 @@ Check by running:
   (use-package which-key
     :ensure t
     :defer 5
+    :diminish which-key-mode
     :config
     (which-key-mode))
 #+END_SRC
