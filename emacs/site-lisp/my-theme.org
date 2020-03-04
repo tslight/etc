@@ -75,8 +75,8 @@
 
 #+BEGIN_SRC emacs-lisp
   ;; mode line stuff
-  (setq display-time-format "%H:%M %d/%m")
-  (setq display-time-default-load-average 'nil)
+  ;; (setq display-time-format "%H:%M %d/%m")
+  ;; (setq display-time-default-load-average 'nil)
   (column-number-mode t)
   ;; (display-time-mode t)
   ;; (display-battery-mode t)
