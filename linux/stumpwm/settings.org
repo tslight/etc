@@ -10,7 +10,7 @@ StumpWM global variable configuration.
 
 * FONT
 
-#+BEGIN_SRC common-lisp :tangle no
+#+BEGIN_SRC common-lisp
   (set-font "-*-terminus-bold-*-*-*-14-*")
 #+END_SRC
 
@@ -25,7 +25,7 @@ Requires [[https://github.com/tslight/stumpwm-contrib/tree/merged/util/ttf-fonts
 Also xft fonts kinda fuck up help page formatting, so let's stick to terminal
 fonts...
 
-#+BEGIN_SRC common-lisp
+#+BEGIN_SRC common-lisp :tangle no
   ;; (xft:cache-fonts) ; slows down startup ALOT!
   (set-font (make-instance 'xft:font
                            :family "DejaVu Sans"

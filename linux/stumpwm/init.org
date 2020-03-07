@@ -37,7 +37,7 @@ Please see the relevant READMEs in the fork for more details.
                           "end-session"
                           "sensors"
                           "shell-command-history"
-                          "ttf-fonts"
+                          ;; "ttf-fonts"
                           "volume"
                           "xdgmenu"))
 #+END_SRC
