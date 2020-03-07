@@ -210,21 +210,24 @@
 * DIMINISH
 
 [[https://www.wisdomandwonder.com/link/10214/httpsgithub-commagnars-emacs-dblobmastersite-lispdiminish-ell87why-you-cant-diminish-auto-fill-mode][Why you can't diminish auto-fill-mode...]]
+https://emacs.stackexchange.com/questions/22531/diminish-org-indent-mode
 
 #+BEGIN_SRC emacs-lisp
   (use-package diminish
     :ensure t
     :defer 2
-    :config
-    (diminish 'abbrev-mode)
-    (diminish 'auto-fill-function) ;; wtf?!
-    (diminish 'eldoc-mode)
-    (diminish 'hs-minor-mode)
-    (diminish 'highlight-changes-mode)
-    (diminish 'my/key-mode)
-    (diminish 'org-indent-mode)
-    (diminish 'org-src-mode)
-    (diminish 'subword-mode))
+    :diminish abbrev-mode
+    :diminish auto-fill-function ;; wtf?!
+    :diminish eldoc-mode
+    :diminish hs-minor-mode
+    :diminish highlight-changes-mode
+    :diminish my/key-mode
+    :diminish org-indent-mode
+    :diminish org-src-mode
+    :diminish subword-mode
+    :hook
+    (org-indent-mode . (lambda () (diminish 'org-indent-mode)))
+    (hs-minor-mode . (lambda () (diminish 'hs-minor-mode))))
 #+END_SRC
 
 * DOCKER
