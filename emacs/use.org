@@ -667,11 +667,11 @@ Calculation of variables et.c.; $(BINARY) will show up as what it evaluates to.
 * POWERLINE
 
 #+begin_src emacs-lisp
-    (use-package powerline
-      :ensure t
-      :config
-      (powerline-default-theme)
-      (setq powerline-default-separator 'bar))
+  (use-package powerline
+    :ensure t
+    :config
+    ;; (setq powerline-default-separator 'bar)
+    (powerline-default-theme))
 #+end_src
 
 * PROJECTILE
