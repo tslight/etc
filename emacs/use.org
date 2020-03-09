@@ -56,6 +56,7 @@
 - [[#projectile][PROJECTILE]]
 - [[#py-autopep8][PY AUTOPEP8]]
 - [[#restclient][RESTCLIENT]]
+- [[#slime][SLIME]]
 - [[#systemd][SYSTEMD]]
 - [[#terraform-mode][TERRAFORM MODE]]
 - [[#undo-fu][UNDO FU]]
@@ -715,6 +716,24 @@ Calculation of variables et.c.; $(BINARY) will show up as what it evaluates to.
     :ensure t
     :defer t)
 #+END_SRC
+* SLIME
+
+#+begin_src emacs-lisp
+  (use-package slime
+    :ensure t
+    :defer t
+    :config
+    (setq inferior-lisp-program "sbcl")
+    (load (expand-file-name "~/quicklisp/slime-helper.el")))
+#+end_src
+
+#+begin_src emacs-lisp
+  (use-package slime-company
+    :ensure t
+    :defer t
+    :config
+    (slime-setup '(slime-company)))
+#+end_src
 
 * SYSTEMD
 
