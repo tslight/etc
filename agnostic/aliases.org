@@ -107,9 +107,9 @@
   alias j='jobs -l'
   alias lc='grep -cv "^$"' # line count ignoring empty lines
   alias lgf='lazygitfind.sh'
-  alias lgh='lazygithub.sh'
-  alias lghs='lazygithub.sh status -s'
-  alias lghp='lazygithub.sh status pull'
+  alias lgh='lazygithub'
+  alias lghs='lazygithub --run status'
+  alias lghf='lazygithub --run fetch-or-clone'
   alias lgl='lazygitlab'
   alias lgls='lazygitlab --run status'
   alias lglf='lazygitlab --run fetch-or-clone'
