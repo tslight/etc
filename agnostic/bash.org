@@ -18,7 +18,7 @@
   export PAGER="/usr/bin/less"
   export GTK_THEME=Emacs
   export GOPATH=$HOME/go
-  export ANSIBLE=$HOME/src/tspub/devops/ansible
+  export ANSIBLE=$HOME/src/gitlab/tspub/devops/ansible
   export DEVPATH=$HOME/src/oe-developers
   export DEVOPS=$HOME/src/oe-developers/be/devops
   export PATH=$HOME/bin:$PATH

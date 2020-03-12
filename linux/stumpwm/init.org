@@ -18,7 +18,7 @@ fork of [[https://github.com/tslight/stumpwm-contrib/tree/merged][StumpWM Contri
 
   (set-module-dir
    (pathname-as-directory
-    (concat (getenv "HOME") "/src/tspub/lisp/stumpwm-contrib")))
+    (concat (getenv "HOME") "/src/gitlab/tspub/lisp/stumpwm-contrib")))
 #+END_SRC
 
 * LOCK & LOAD

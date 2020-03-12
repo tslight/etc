@@ -27,7 +27,7 @@ This is horrible. There has to be a clever way to do this with recursion...
   (defgroup my/configuration-directories nil
     "Quick manipulation of textual checkboxes."
     :group 'convenience)
-  (defcustom my/config-directory "~/src/tspub/devops/etc/"
+  (defcustom my/config-directory "~/src/gitlab/tspub/devops/etc/"
     "Path to parent configuration directory."
     :group 'my/configuration-directories
     :type 'directory)
