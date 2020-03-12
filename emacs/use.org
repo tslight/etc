@@ -51,6 +51,7 @@
    - [[#toc][TOC]]
    - [[#latex][LATEX]]
 - [[#paredit][PAREDIT]]
+- [[#pdf-tools][PDF TOOLS]]
 - [[#powershell][POWERSHELL]]
 - [[#powerline][POWERLINE]]
 - [[#projectile][PROJECTILE]]
@@ -656,6 +657,13 @@ Calculation of variables et.c.; $(BINARY) will show up as what it evaluates to.
     :config
     (unbind-key "M-s" paredit-mode-map))
 #+END_SRC
+* PDF TOOLS
+
+#+begin_src emacs-lisp
+  (use-package pdf-tools
+    :ensure t
+    :defer t)
+#+end_src
 
 * POWERSHELL
 
