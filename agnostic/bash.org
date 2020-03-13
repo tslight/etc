@@ -19,8 +19,8 @@
   export GTK_THEME=Emacs
   export GOPATH=$HOME/go
   export ANSIBLE=$HOME/src/gitlab/tspub/devops/ansible
-  export DEVPATH=$HOME/src/oe-developers
-  export DEVOPS=$HOME/src/oe-developers/be/devops
+  export DEVPATH=$HOME/src/gitlab/oe-developers
+  export DEVOPS=$HOME/src/gitlab/oe-developers/be/devops
   export PATH=$HOME/bin:$PATH
   export PATH=$DEVOPS/bin:$PATH
   export PATH=$HOME/.local/bin:$PATH
@@ -136,7 +136,7 @@
 ** DEVCD
 
 #+begin_src shell :tangle ~/.bash_completions
-  [[ -z "$DEVPATH" ]] && DEVPATH="$HOME/src/oe-developers"
+  [[ -z "$DEVPATH" ]] && DEVPATH="$HOME/src/gitlab/oe-developers"
 
   _devrelpaths() {
       RELPATHS=$(find "$DEVPATH" \
