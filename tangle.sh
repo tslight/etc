@@ -11,16 +11,24 @@ or all my org mode configuration files.
 }
 
 refresh_packages () {
-    emacs -Q --batch --eval '(package-refresh-contents)'
+    emacs --quiet \
+	  --batch \
+	  --eval '(package-refresh-contents)'
 }
 
 tangle_tangles () {
-    emacs -Q --batch --eval '(org-babel-load-file "'$ETC'/emacs/site-lisp/my-tangles.org")'
+    emacs --quiet \
+	  --batch \
+	  --eval '(org-babel-load-file "'$ETC'/emacs/site-lisp/my-tangles.org")'
 }
 
 tangle_all () {
-    refresh_packages && tangle_tangles && \
-    emacs -Q --batch -l ~/.emacs.d/site-lisp/my-tangles.el --eval '(my/tangle-all)'
+    refresh_packages && \
+	tangle_tangles && \
+	emacs --quick \
+	      --batch \
+	      --load ~/.emacs.d/site-lisp/my-tangles.el \
+	      --eval '(my/tangle-all)'
 }
 
 tangle_dir () {
@@ -29,7 +37,9 @@ tangle_dir () {
     [[ -z "$dir" ]] && { echo "Invalid directory"; exit 1; }
     [[ "$dir" =~ .*emacs.* ]] && { refresh_packages; tangle_tangles; }
 
-    emacs -Q --batch -l ~/.emacs.d/site-lisp/my-tangles.el \
+    emacs --quiet \
+	  --batch \
+	  --load ~/.emacs.d/site-lisp/my-tangles.el \
 	  --eval '(my/tangle-directory "'$dir'")'
 }
 
