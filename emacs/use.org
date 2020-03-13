@@ -60,8 +60,6 @@
 - [[#slime][SLIME]]
 - [[#systemd][SYSTEMD]]
 - [[#terraform-mode][TERRAFORM MODE]]
-- [[#undo-fu][UNDO FU]]
-   - [[#undo-fu-session][UNDO FU SESSION]]
 - [[#vterm][VTERM]]
 - [[#web-mode][WEB MODE]]
 - [[#wgrep][WGREP]]
@@ -758,27 +756,6 @@ Calculation of variables et.c.; $(BINARY) will show up as what it evaluates to.
     :ensure t
     :defer t)
 #+END_SRC
-
-* UNDO FU
-
-#+BEGIN_SRC emacs-lisp
-  (use-package undo-fu
-    :ensure t
-    :bind
-    ("C-/" . undo-fu-only-undo)
-    ("C-?" . undo-fu-only-redo)
-    ("C-x u" . undo-fu-only-redo-all))
-#+END_SRC
-
-** UNDO FU SESSION
-
-#+begin_src emacs-lisp
-  (use-package undo-fu-session
-    :ensure t
-    :config
-    (global-undo-fu-session-mode)
-    (setq undo-fu-session-incompatible-files '("/COMMIT_EDITMSG\\'" "/git-rebase-todo\\'")))
-#+end_src
 
 * VTERM
 
