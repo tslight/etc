@@ -27,13 +27,6 @@ configuration [[file:use.org][here]].
 ** OPTION 2
 
 1) Clone this repo & cd into this directory.
-2) Run ~install.sh~, or the command below, in a terminal, from this directory:
-
-   #+BEGIN_SRC sh
-     emacs -Q --batch \
-	   --eval '(org-babel-load-file "'$PWD'/site-lisp/my-tangles.org")' \
-	   --eval '(my/tangle-directory "'$PWD'/")'
-   #+END_SRC
-
+2) Run ~./install.el~, in a terminal, from this directory.
 3) Wait for packages to install (this may take a while...)
 4) ...Profit!
