@@ -60,6 +60,7 @@
 - [[#slime][SLIME]]
 - [[#systemd][SYSTEMD]]
 - [[#terraform-mode][TERRAFORM MODE]]
+- [[#undo-tree][UNDO TREE]]
 - [[#vterm][VTERM]]
 - [[#web-mode][WEB MODE]]
 - [[#wgrep][WGREP]]
@@ -757,6 +758,21 @@ Calculation of variables et.c.; $(BINARY) will show up as what it evaluates to.
     :defer t)
 #+END_SRC
 
+* UNDO TREE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package undo-tree
+    :ensure t
+    :diminish undo-tree-mode
+    :bind
+    ("C-x u" . undo-tree-visualize)
+    :config
+    (global-undo-tree-mode 1)
+    (setq undo-tree-auto-save-history t)
+    (setq undo-tree-history-directory-alist
+          `(("." . ,(expand-file-name "~/.emacs.d/undos/")))))
+#+END_SRC
+
 * VTERM
 
 Make sure Emacs is built with ~--with-modules~ module support.
@@ -860,6 +876,9 @@ Check by running:
 #+BEGIN_SRC emacs-lisp
   (use-package yasnippet-snippets
     :ensure t
-    :defer t
-    :after yasnippet)
+    :defer t)
+
+  (use-package yasnippet-classic-snippets
+    :ensure t
+    :defer t)
 #+END_SRC
