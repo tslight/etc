@@ -224,7 +224,6 @@ Don't use ~my/bind-always~ for these as I end up clobbering ~vterm~ and ~ansi-te
 * MISC BINDINGS
 
 #+BEGIN_SRC emacs-lisp
-  (my/bind-always "C-?" redo)
   (my/bind-always "<f12>" recentf-open-files)
   (my/bind-always "<f6>" desktop-read)
   (my/bind-always "S-<f6>" desktop-save)
