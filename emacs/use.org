@@ -227,6 +227,7 @@ https://emacs.stackexchange.com/questions/22531/diminish-org-indent-mode
     :diminish org-src-mode
     :diminish subword-mode
     :hook
+    (my/key-mode . (lambda () (diminish 'my/key-mode)))
     (org-indent-mode . (lambda () (diminish 'org-indent-mode)))
     (hs-minor-mode . (lambda () (diminish 'hs-minor-mode))))
 #+END_SRC
