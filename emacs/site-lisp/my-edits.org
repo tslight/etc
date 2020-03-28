@@ -20,7 +20,6 @@
 - [[#generate-numbered-list][GENERATE NUMBERED LIST]]
 - [[#hide-dos-eol][HIDE DOS EOL]]
 - [[#insert-date][INSERT DATE]]
-- [[#insert-fortune][INSERT FORTUNE]]
 - [[#isearch][ISEARCH]]
 - [[#jump-to-mark][JUMP TO MARK]]
 - [[#narrow-or-widen-dwim][NARROW OR WIDEN DWIM]]
@@ -280,19 +279,6 @@
     "Insert a timestamp according to locale's date and time format."
     (interactive)
     (insert (format-time-string "%c" (current-time))))
-#+END_SRC
-
-* INSERT FORTUNE
-
-#+BEGIN_SRC emacs-lisp
-  (defun my/fortune ()
-    "Insert a fortune into the minibuffer unless called with
-  `prefix-arg', in which case - insert output of the fortune
-  command into the buffer, before the point."
-    (interactive)
-    (if current-prefix-arg
-        (insert (shell-command-to-string "fortune"))
-      (message (string-trim (shell-command-to-string "fortune -s -n 100")))))
 #+END_SRC
 
 * ISEARCH
