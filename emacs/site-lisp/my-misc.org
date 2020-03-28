@@ -50,6 +50,37 @@
       (message (string-trim (shell-command-to-string "fortune -s -n 100")))))
 #+END_SRC
 
+* GITLAB
+
+#+begin_src emacs-lisp
+(defgroup my/api-keys nil
+  "API keys."
+  :group 'convenience)
+
+(defcustom my/gitlab-api-key (my/read-file "~/.gitlab.key")
+  "GitLab API key"
+  :group 'my/api-keys
+  :type 'string)
+
+(defcustom my/github-api-key (my/read-file "~/.github.key")
+  "GitHub API key"
+  :group 'my/api-keys
+  :type 'string)
+
+(defun my/gitlab-api-retriever (slug)
+  "Retrieve stuff from GitLab."
+  (interactive "sEnter an endpoint: ")
+  (switch-to-buffer
+   (let ((base-url "https://gitlab.com/api/v4/")
+         (attr "?per_page=100&owned=true&membership=true")
+         (url-request-method "GET")
+         ;; https://stackoverflow.com/a/24188208
+         (url-request-extra-headers `(("PRIVATE-TOKEN" . ,my/gitlab-api-key))))
+     (url-retrieve-synchronously (concat base-url slug attr))))
+  (delete-region (point-min) url-http-end-of-headers)
+  (json-pretty-print-buffer))
+#+end_src
+
 * GOOGLE
 
 #+BEGIN_SRC emacs-lisp

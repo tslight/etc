@@ -12,6 +12,7 @@
 - [[#make-backup][MAKE BACKUP]]
 - [[#make-backup-and-save][MAKE BACKUP AND SAVE]]
 - [[#rename-this-file-and-buffer][RENAME THIS FILE AND BUFFER]]
+- [[#string-from-file][STRING FROM FILE]]
 - [[#sudoedit][SUDOEDIT]]
 - [[#keybindings][KEYBINDINGS]]
 
@@ -100,6 +101,24 @@
           (rename-buffer new-name)
           (set-visited-file-name new-name)))))
 #+END_SRC
+
+* STRING FROM FILE
+
+#+begin_src emacs-lisp
+(defun my/read-file (file)
+  "Return `file' file content as a string."
+  (with-temp-buffer
+    (insert-file-contents file)
+    (buffer-string)))
+#+end_src
+
+#+begin_src emacs-lisp
+(defun my/read-lines (file)
+  "Return a list of lines of a file at `file'."
+  (with-temp-buffer
+    (insert-file-contents file)
+    (split-string (buffer-string) "\n" t)))
+#+end_src
 
 * SUDOEDIT
 
