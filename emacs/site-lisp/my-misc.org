@@ -53,6 +53,20 @@
        (concat "http://www.google.com/search?ie=utf-8&oe=utf-8&q=" query))))
 #+END_SRC
 
+* KANYE
+
+Having fun with url wrangling...
+
+#+begin_src emacs-lisp
+(defun my/kanye ()
+  "Get a random Kanye quote in the minibuffer."
+  (interactive)
+  (message
+   (with-temp-buffer
+     (url-insert-file-contents "https://api.kanye.rest/")
+     (cdr (assoc 'quote (json-read))))))
+#+end_src
+
 * TRAMP-TERM
 
 #+BEGIN_SRC emacs-lisp
