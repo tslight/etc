@@ -285,11 +285,16 @@
 * INSERT FORTUNE
 
 #+BEGIN_SRC emacs-lisp
-  (defun my/insert-fortune ()
-    "Insert output of the fortune command into the buffer, before the point."
+  (defun my/fortune ()
+    "Insert a fortune into the minibuffer unless called with
+  `prefix-arg', in which case - insert output of the fortune
+  command into the buffer, before the point."
     (interactive)
-    (insert (shell-command-to-string "fortune")))
+    (if current-prefix-arg
+        (insert (shell-command-to-string "fortune"))
+      (message (string-trim (shell-command-to-string "fortune -s -n 100")))))
 #+END_SRC
+
 * ISEARCH
 
 https://www.reddit.com/r/emacs/comments/f1x0jq/blog_post_my_first_emacs_lisp/
