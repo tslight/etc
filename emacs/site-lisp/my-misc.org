@@ -93,15 +93,33 @@
 #+end_src
 
 #+begin_src emacs-lisp
-  (defun my/url-retriever (url &optional headers)
-    "Retrieve resources from URL, with optional HEADERS."
-    (switch-to-buffer
-     (let ((url-request-method "GET")
-           (url-request-extra-headers headers))
-       (url-retrieve-synchronously url)))
+  (defun my/get-next-page-link ()
+    (beginning-of-buffer)
+    (let ((begin (re-search-forward "Link: <"))
+          (end (re-search-forward ">; rel=\"next\"" nil t)))
+      (if (and begin end)
+          (buffer-substring-no-properties begin (- end 13))
+        nil)))
+
+  (defun my/cleanup-buffer ()
     (delete-region (point-min) url-http-end-of-headers)
     (json-pretty-print-buffer)
     (json-read-from-string (buffer-string)))
+
+  (defun my/url-retriever (url &optional headers)
+    "Retrieve resources from URL, with optional HEADERS."
+    (set-buffer
+     (let ((url-request-method "GET")
+           (url-request-extra-headers headers))
+       (url-retrieve-synchronously url)
+       ;; (my/url-retriever (my/get-next-page-link) headers)
+       ))
+    (let ((next-page (my/get-next-page-link)))
+      (if next-page
+          (my/url-retriever next-page headers)))
+    (my/cleanup-buffer))
+
+  (my/get-next-page-link)
 
   (defun my/url-get-values (url keys &optional headers)
     "Retrieve values from KEYS from a list of URL json objects."
@@ -128,7 +146,7 @@
     (interactive "sEnter an endpoint: ")
     (my/url-retriever (concat "https://api.github.com/"
                               endpoint
-                              "?per_page=100&page=1")
+                              "?per_page=1&page=1")
                       ;; https://stackoverflow.com/a/24188208
                       `(("Authorization" . ,(concat "token " my/github-api-key)))))
 
@@ -188,10 +206,7 @@
     (my/clone-or-pull (my/github-get-values "user/repos" (list 'full_name
                                                                'name
                                                                'ssh_url))
-                      'full_name
-                      'name
-                      'ssh_url
-                      directory))
+                      'full_name 'name 'ssh_url directory))
 #+end_src
 
 * GOOGLE
