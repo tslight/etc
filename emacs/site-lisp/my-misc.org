@@ -62,6 +62,18 @@
       (message (string-trim (shell-command-to-string "fortune -s -n 100")))))
 #+END_SRC
 
+* GET ASSOCIATION LIST
+
+#+begin_src emacs-lisp
+  (defun my/get-assoc-list (list key value)
+    "Retrieve an association list from a LIST of association lists
+  that has KEY VALUE pair."
+    (car (remove-if nil (mapcar (lambda (e)
+                                  (if (eq value (cdr (assoc key e)))
+                                      e))
+                                list))))
+#+end_src
+
 * GITHUB/GITLAB
 
 #+begin_src emacs-lisp
@@ -137,52 +149,46 @@
                        keys
                        ;; https://stackoverflow.com/a/24188208
                        `(("Authorization" . ,(concat "token " my/github-api-key)))))
+#+end_src
 
-  (defun my/gitlab-projects (directory)
-    "Prompt for a GitLab project, then clone that project to DIRECTORY."
+** CLONE OR PULL
+
+#+begin_src emacs-lisp
+  (defun my/gitlab-clone-or-pull (directory)
+    "Prompt for a Gitlab project, then clone that project to DIRECTORY."
     (interactive "DDirectory to clone to: ")
     (let* ((projects (my/gitlab-get-values "projects" (list 'path_with_namespace
+                                                            'name
                                                             'ssh_url_to_repo)))
-           (project (completing-read "Project to clone: "
-                                     (mapcar  (lambda (prj)
-                                                (cdr (assoc 'path_with_namespace prj)))
-                                              projects)))
-           (ssh_url (car (remove-if nil
-                                    (mapcar
-                                     (lambda (prj)
-                                       (if (eq project (cdr (assoc 'path_with_namespace prj)))
-                                           (cdr (assoc 'ssh_url_to_repo prj))))
-                                     projects)))))
-      (magit-clone-regular ssh_url directory nil)))
+           (paths (mapcar (lambda (p) (cdr (assoc 'path_with_namespace p))) projects))
+           (path (completing-read "Project to clone: " paths))
+           (project (my/get-assoc-list projects 'path_with_namespace path))
+           (sshurl (cdr (assoc 'ssh_url_to_repo project)))
+           (name (cdr (assoc 'name project)))
+           (dest (concat directory name)))
+      (if (file-directory-p dest)
+          (message (string-trim (shell-command-to-string (concat "git -C " dest " pull"))))
+        (progn
+          (message (concat "Cloning " sshurl " to " dest "..."))
+          (magit-clone-regular sshurl (concat directory name) nil)))))
 
-  (defun my/github-repos (directory)
+  (defun my/github-clone-or-pull (directory)
     "Prompt for a Github repo, then clone that repo to DIRECTORY."
     (interactive "DDirectory to clone to: ")
     (let* ((repos (my/github-get-values "user/repos" (list 'full_name
                                                            'name
                                                            'ssh_url)))
-           (repo (completing-read "Repo to clone: "
-                                  (mapcar  (lambda (r)
-                                             (cdr (assoc 'full_name r)))
-                                           repos)))
-           (sshurl (car (remove-if nil
-                                   (mapcar
-                                    (lambda (r)
-                                      (if (eq repo (cdr (assoc 'full_name r)))
-                                          (cdr (assoc 'ssh_url r))))
-                                    repos))))
-           (name (car (remove-if nil
-                                 (mapcar
-                                  (lambda (r)
-                                    (if (eq repo (cdr (assoc 'full_name r)))
-                                        (cdr (assoc 'name r))))
-                                  repos))))
+           (fullnames (mapcar (lambda (r) (cdr (assoc 'full_name r))) repos))
+           (fullname (completing-read "Repo to clone: " fullnames))
+           (repo (my/get-assoc-list repos 'full_name fullname))
+           (sshurl (cdr (assoc 'ssh_url repo)))
+           (name (cdr (assoc 'name repo)))
            (dest (concat directory name)))
       (if (file-directory-p dest)
-          (progn
-            (setq default-directory dest)
-            (magit-pull-from-upstream))
-        (magit-clone-regular sshurl (concat directory name) nil))))
+          (message (string-trim (shell-command-to-string (concat "git -C " dest " pull"))))
+        (progn
+          (message (concat "Cloning " sshurl " to " dest "..."))
+          (magit-clone-regular sshurl (concat directory name) nil)))))
 #+end_src
 
 * GOOGLE
