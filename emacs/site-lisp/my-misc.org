@@ -68,7 +68,7 @@
   (defun my/get-assoc-list (list key value)
     "Retrieve an association list from a LIST of association lists
   that has KEY VALUE pair."
-    (car (remove-if nil (mapcar (lambda (e)
+    (car (cl-remove-if nil (mapcar (lambda (e)
                                   (if (eq value (cdr (assoc key e)))
                                       e))
                                 list))))
