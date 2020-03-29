@@ -101,7 +101,7 @@
 
   (defun my/github-retriever (endpoint)
     "Retrieve resources from GitHub ENDPOINT."
-    (interactive "sEnter an endpoint")
+    (interactive "sEnter an endpoint: ")
     (my/url-retriever (concat "https://api.github.com/"
                               endpoint
                               "?per_page=100&page=1")
