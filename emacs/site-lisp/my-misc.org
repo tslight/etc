@@ -50,7 +50,7 @@
       (message (string-trim (shell-command-to-string "fortune -s -n 100")))))
 #+END_SRC
 
-* GITLAB
+* GITHUB/GITLAB
 
 #+begin_src emacs-lisp
   (defgroup my/api-keys nil
@@ -66,37 +66,76 @@
     "GitHub API key."
     :group 'my/api-keys
     :type 'string)
+#+end_src
 
-  (defun my/gitlab-api-retriever (endpoint)
-    "Retrieve resources from GitLab ENDPOINT."
-    (interactive "sEnter an endpoint: ")
+#+begin_src emacs-lisp
+  (defun my/url-retriever (url &optional headers)
+    "Retrieve resources from URL, with optional HEADERS."
     (switch-to-buffer
-     (let ((base-url "https://gitlab.com/api/v4/")
-           (attr "?per_page=100&owned=true&membership=true")
-           (url-request-method "GET")
-           ;; https://stackoverflow.com/a/24188208
-           (url-request-extra-headers `(("PRIVATE-TOKEN" . ,my/gitlab-api-key))))
-       (url-retrieve-synchronously (concat base-url endpoint attr))))
+     (let ((url-request-method "GET")
+           (url-request-extra-headers headers))
+       (url-retrieve-synchronously url)))
     (delete-region (point-min) url-http-end-of-headers)
     (json-pretty-print-buffer)
     (json-read-from-string (buffer-string)))
 
-  (defun my/gitlab-get-value (endpoint value)
-    "Retrieve VALUE from GitLab ENDPOINT resources."
+  (defun my/url-get-values (url key &optional headers)
+    "Retrieve values from KEY from a list of URL json objects."
     (let ((response (with-temp-buffer
-                      (let ((base-url "https://gitlab.com/api/v4/")
-                            (attr "?per_page=100&owned=true&membership=true")
-                            (url-request-method "GET")
-                            ;; https://stackoverflow.com/a/24188208
-                            (url-request-extra-headers `(("PRIVATE-TOKEN" . ,my/gitlab-api-key))))
-                        (url-insert-file-contents (concat base-url endpoint attr))
+                      (let ((url-request-method "GET")
+                            (url-request-extra-headers headers))
+                        (url-insert-file-contents url)
                         (json-read)))))
-      (mapcar (lambda (r) (cdr (assoc value r))) response)))
+      (mapcar (lambda (r) (cdr (assoc key r))) response)))
+#+end_src
 
-  (defun my/gitlab-project ()
+#+begin_src emacs-lisp
+  (defun my/gitlab-retriever (endpoint)
+    "Retrieve resources from GitLab ENDPOINT."
+    (interactive "sEnter an endpoint: ")
+    (my/url-retriever (concat "https://gitlab.com/api/v4/"
+                              endpoint
+                              "?per_page=100&owned=true&membership=true")
+                      ;; https://stackoverflow.com/a/24188208
+                      `(("PRIVATE-TOKEN" . ,my/gitlab-api-key))))
+
+  (defun my/github-retriever (endpoint)
+    "Retrieve resources from GitHub ENDPOINT."
+    (interactive "sEnter an endpoint")
+    (my/url-retriever (concat "https://api.github.com/"
+                              endpoint
+                              "?per_page=100&page=1")
+                      ;; https://stackoverflow.com/a/24188208
+                      `(("Authorization" . ,(concat "token " my/github-api-key)))))
+
+  (defun my/gitlab-get-values (endpoint key)
+    "Retrieve values from KEY of GitLab ENDPOINT json resources."
+    (my/url-get-values (concat "https://gitlab.com/api/v4/"
+                               endpoint
+                               "?per_page=100&owned=true&membership=true")
+                       key
+                       ;; https://stackoverflow.com/a/24188208
+                       `(("PRIVATE-TOKEN" . ,my/gitlab-api-key))))
+
+  (defun my/github-get-values (endpoint key)
+    "Retrieve values from KEY of GitHub ENDPOINT json resources."
+    (my/url-get-values (concat "https://api.github.com/"
+                               endpoint
+                               "?per_page=100&page=1")
+                       key
+                       ;; https://stackoverflow.com/a/24188208
+                       `(("Authorization" . ,(concat "token " my/github-api-key)))))
+
+  (defun my/gitlab-projects ()
     "Prompt for a GitLab project."
     (interactive)
-    (let ((projects (my/gitlab-get-value "projects" 'name)))
+    (let ((projects (my/gitlab-get-values "projects" 'name)))
+      (message "%s" (completing-read "Choose project: " projects))))
+
+  (defun my/github-repos ()
+    "Prompt for a GitHub repo."
+    (interactive)
+    (let ((projects (my/github-get-values "user/repos" 'name)))
       (message "%s" (completing-read "Choose project: " projects))))
 #+end_src
 
