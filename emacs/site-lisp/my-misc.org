@@ -138,12 +138,12 @@
                        ;; https://stackoverflow.com/a/24188208
                        `(("Authorization" . ,(concat "token " my/github-api-key)))))
 
-  (defun my/gitlab-projects ()
-    "Prompt for a GitLab project."
-    (interactive)
+  (defun my/gitlab-projects (directory)
+    "Prompt for a GitLab project, then clone that project to DIRECTORY."
+    (interactive "DDirectory to clone to: ")
     (let* ((projects (my/gitlab-get-values "projects" (list 'path_with_namespace
                                                             'ssh_url_to_repo)))
-           (project (completing-read "Choose project: "
+           (project (completing-read "Project to clone: "
                                      (mapcar  (lambda (prj)
                                                 (cdr (assoc 'path_with_namespace prj)))
                                               projects)))
@@ -153,13 +153,36 @@
                                        (if (eq project (cdr (assoc 'path_with_namespace prj)))
                                            (cdr (assoc 'ssh_url_to_repo prj))))
                                      projects)))))
-      ssh_url))
+      (magit-clone-regular ssh_url directory nil)))
 
-  (defun my/github-repos ()
-    "Prompt for a GitHub repo."
-    (interactive)
-    (let ((projects (my/github-get-values "user/repos" 'full_name)))
-      (message "%s" (completing-read "Choose project: " projects))))
+  (defun my/github-repos (directory)
+    "Prompt for a Github repo, then clone that repo to DIRECTORY."
+    (interactive "DDirectory to clone to: ")
+    (let* ((repos (my/github-get-values "user/repos" (list 'full_name
+                                                           'name
+                                                           'ssh_url)))
+           (repo (completing-read "Repo to clone: "
+                                  (mapcar  (lambda (r)
+                                             (cdr (assoc 'full_name r)))
+                                           repos)))
+           (sshurl (car (remove-if nil
+                                   (mapcar
+                                    (lambda (r)
+                                      (if (eq repo (cdr (assoc 'full_name r)))
+                                          (cdr (assoc 'ssh_url r))))
+                                    repos))))
+           (name (car (remove-if nil
+                                 (mapcar
+                                  (lambda (r)
+                                    (if (eq repo (cdr (assoc 'full_name r)))
+                                        (cdr (assoc 'name r))))
+                                  repos))))
+           (dest (concat directory name)))
+      (if (file-directory-p dest)
+          (progn
+            (setq default-directory dest)
+            (magit-pull-from-upstream))
+        (magit-clone-regular sshurl (concat directory name) nil))))
 #+end_src
 
 * GOOGLE
