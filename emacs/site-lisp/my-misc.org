@@ -154,41 +154,44 @@
 ** CLONE OR PULL
 
 #+begin_src emacs-lisp
-  (defun my/gitlab-clone-or-pull (directory)
-    "Prompt for a Gitlab project, then clone that project to DIRECTORY."
-    (interactive "DDirectory to clone to: ")
-    (let* ((projects (my/gitlab-get-values "projects" (list 'path_with_namespace
-                                                            'name
-                                                            'ssh_url_to_repo)))
-           (paths (mapcar (lambda (p) (cdr (assoc 'path_with_namespace p))) projects))
-           (path (completing-read "Project to clone: " paths))
-           (project (my/get-assoc-list projects 'path_with_namespace path))
-           (sshurl (cdr (assoc 'ssh_url_to_repo project)))
-           (name (cdr (assoc 'name project)))
-           (dest (concat directory name)))
+  (defun my/clone-or-pull (repos path name url directory)
+    "Prompt for a Github REPOS, then clone that repo to DIRECTORY.
+  Using PATH, NAME & URL."
+    (let* ((paths (mapcar (lambda (r) (cdr (assoc path r))) repos))
+           (choice (completing-read "Repo to clone: " paths))
+           (repo (my/get-assoc-list repos path choice))
+           (cloneurl (cdr (assoc url repo)))
+           (reponame (cdr (assoc name repo)))
+           (dest (concat directory reponame)))
       (if (file-directory-p dest)
-          (message (string-trim (shell-command-to-string (concat "git -C " dest " pull"))))
+          (progn
+            (message (string-trim (shell-command-to-string (concat "git -C " dest " pull"))))
+            (magit-status dest))
         (progn
-          (message (concat "Cloning " sshurl " to " dest "..."))
-          (magit-clone-regular sshurl (concat directory name) nil)))))
+          (message (concat "Cloning " cloneurl " to " dest "..."))
+          (magit-clone-regular cloneurl dest nil)))))
+
+  (defun my/gitlab-clone-or-pull (directory)
+    "Clone or pull repo to DIRECTORY."
+    (interactive "DDirectory to clone to: ")
+    (my/clone-or-pull (my/gitlab-get-values "projects" (list 'path_with_namespace
+                                                             'name
+                                                             'ssh_url_to_repo))
+                      'path_with_namespace
+                      'name
+                      'ssh_url_to_repo
+                      directory))
 
   (defun my/github-clone-or-pull (directory)
-    "Prompt for a Github repo, then clone that repo to DIRECTORY."
+    "Clone or pull repo to DIRECTORY."
     (interactive "DDirectory to clone to: ")
-    (let* ((repos (my/github-get-values "user/repos" (list 'full_name
-                                                           'name
-                                                           'ssh_url)))
-           (fullnames (mapcar (lambda (r) (cdr (assoc 'full_name r))) repos))
-           (fullname (completing-read "Repo to clone: " fullnames))
-           (repo (my/get-assoc-list repos 'full_name fullname))
-           (sshurl (cdr (assoc 'ssh_url repo)))
-           (name (cdr (assoc 'name repo)))
-           (dest (concat directory name)))
-      (if (file-directory-p dest)
-          (message (string-trim (shell-command-to-string (concat "git -C " dest " pull"))))
-        (progn
-          (message (concat "Cloning " sshurl " to " dest "..."))
-          (magit-clone-regular sshurl (concat directory name) nil)))))
+    (my/clone-or-pull (my/github-get-values "user/repos" (list 'full_name
+                                                               'name
+                                                               'ssh_url))
+                      'full_name
+                      'name
+                      'ssh_url
+                      directory))
 #+end_src
 
 * GOOGLE
