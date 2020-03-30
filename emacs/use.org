@@ -456,6 +456,7 @@ https://emacs.stackexchange.com/questions/22531/diminish-org-indent-mode
     :ensure t
     :defer t)
 #+END_SRC
+
 * LSP MODE
 
 https://github.com/emacs-lsp/lsp-mode#supported-languages

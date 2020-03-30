@@ -93,58 +93,92 @@
 #+end_src
 
 #+begin_src emacs-lisp
-  (defun my/get-next-page-link ()
+  ;; -*- lexical-binding: t; -*-
+  (defun my/url-link-to-next-page ()
     (beginning-of-buffer)
-    (let ((begin (re-search-forward "Link: <"))
+    (let ((begin (re-search-forward "Link: <" nil t))
           (end (re-search-forward ">; rel=\"next\"" nil t)))
       (if (and begin end)
           (buffer-substring-no-properties begin (- end 13))
         nil)))
 
-  (defun my/cleanup-buffer ()
-    (delete-region (point-min) url-http-end-of-headers)
-    (json-pretty-print-buffer)
-    (json-read-from-string (buffer-string)))
-
-  (defun my/url-retriever (url &optional headers)
-    "Retrieve resources from URL, with optional HEADERS."
+  (defun my/url-retrieve-paginated-bodies (url &optional headers items)
+    "Retrieve resource body ITEMS from URL, with optional
+  HEADERS. Supports key-based pagination - i.e) if returned headers
+  have a link to the next page. Returns all pages bodies as a
+  single string."
     (set-buffer
      (let ((url-request-method "GET")
            (url-request-extra-headers headers))
-       (url-retrieve-synchronously url)
-       ;; (my/url-retriever (my/get-next-page-link) headers)
-       ))
-    (let ((next-page (my/get-next-page-link)))
-      (if next-page
-          (my/url-retriever next-page headers)))
-    (my/cleanup-buffer))
+       (url-retrieve-synchronously url)))
+    (let ((next-page (my/url-link-to-next-page)))
+      (delete-region (point-min) url-http-end-of-headers)
+      (let* ((retrieved-items (cons (buffer-string) items)))
+        (if next-page
+            (my/url-retrieve-paginated-bodies next-page headers retrieved-items)
+          retrieved-items))))
 
-  (my/get-next-page-link)
+  (defun my/flatten-json (items)
+    (concat "[" (mapconcat
+                 (lambda (item)
+                   (let*
+                       ((trimmed (replace-regexp-in-string "^\\[" "" item))
+                        (trimmed (if (equal item (car (last items)))
+                                     (replace-regexp-in-string "\\]$" "" trimmed)
+                                   (replace-regexp-in-string "\\]$" "," trimmed))))
+                     trimmed))
+                 items "")
+            "]"))
+
+  (defun my/url-parse-retrieved-json (url &optional headers)
+    (let* ((json (my/url-retrieve-paginated-bodies url headers))
+           (json-array-type 'list)
+           (parsed-json (json-read-from-string (my/flatten-json json))))
+      parsed-json))
+
+  (defun my/url-view-retrieved-json (url &optional headers)
+    (let* ((items (my/url-retrieve-paginated-bodies url headers)))
+      (switch-to-buffer (concat url ".json"))
+      (erase-buffer)
+      (insert (my/flatten-json items))
+      (json-pretty-print-buffer)))
 
   (defun my/url-get-values (url keys &optional headers)
     "Retrieve values from KEYS from a list of URL json objects."
-    (let ((response (with-temp-buffer
-                      (let ((url-request-method "GET")
-                            (url-request-extra-headers headers))
-                        (url-insert-file-contents url)
-                        (json-read)))))
+    (let ((response (my/url-parse-retrieved-json url headers)))
       (my/filter-keys response keys)))
+
+  ;; (my/url-parse-retrieved-json "https://api.github.com/user/repos?per_page=1&page=1"
+  ;;                         `(("Authorization" . ,(concat "token " my/github-api-key))))
+
+  ;; (my/url-view-retrieved-json "https://api.github.com/user/repos?per_page=1&page=1"
+  ;;                        `(("Authorization" . ,(concat "token " my/github-api-key))))
+
+  ;; (my/url-retrieve-paginated-bodies "https://api.kanye.rest")
+
+  ;; (my/gitlab-get-values "projects" (list 'path_with_namespace
+  ;;                                        'name
+  ;;                                        'ssh_url_to_repo))
+
+  ;; (my/github-get-values "user/repos" (list 'full_name
+                                           ;; 'name
+                                           ;; 'ssh_url))
 #+end_src
 
 #+begin_src emacs-lisp
   (defun my/gitlab-retriever (endpoint)
     "Retrieve resources from GitLab ENDPOINT."
     (interactive "sEnter an endpoint: ")
-    (my/url-retriever (concat "https://gitlab.com/api/v4/"
+    (my/url-view-retrieved-json (concat "https://gitlab.com/api/v4/"
                               endpoint
-                              "?per_page=100&owned=true&membership=true")
+                              "?pagination=keyset&per_page=1&owned=true&membership=true")
                       ;; https://stackoverflow.com/a/24188208
                       `(("PRIVATE-TOKEN" . ,my/gitlab-api-key))))
 
   (defun my/github-retriever (endpoint)
     "Retrieve resources from GitHub ENDPOINT."
     (interactive "sEnter an endpoint: ")
-    (my/url-retriever (concat "https://api.github.com/"
+    (my/url-view-retrieved-json (concat "https://api.github.com/"
                               endpoint
                               "?per_page=1&page=1")
                       ;; https://stackoverflow.com/a/24188208
@@ -154,7 +188,7 @@
     "Retrieve values from KEYS of GitLab ENDPOINT json resources."
     (my/url-get-values (concat "https://gitlab.com/api/v4/"
                                endpoint
-                               "?per_page=100&owned=true&membership=true")
+                               "?per_page=1&owned=true&membership=true")
                        keys
                        ;; https://stackoverflow.com/a/24188208
                        `(("PRIVATE-TOKEN" . ,my/gitlab-api-key))))
@@ -163,7 +197,7 @@
     "Retrieve values from KEYS of GitHub ENDPOINT json resources."
     (my/url-get-values (concat "https://api.github.com/"
                                endpoint
-                               "?per_page=100&page=1")
+                               "?per_page=1&page=1")
                        keys
                        ;; https://stackoverflow.com/a/24188208
                        `(("Authorization" . ,(concat "token " my/github-api-key)))))
