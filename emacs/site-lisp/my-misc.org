@@ -93,7 +93,6 @@
 #+end_src
 
 #+begin_src emacs-lisp
-  ;; -*- lexical-binding: t; -*-
   (defun my/url-link-to-next-page ()
     (beginning-of-buffer)
     (let ((begin (re-search-forward "Link: <" nil t))
@@ -119,6 +118,8 @@
           retrieved-items))))
 
   (defun my/flatten-json (items)
+    "Take a list of json arrays as ITEMS and flatten them into a
+  single json array."
     (concat "[" (mapconcat
                  (lambda (item)
                    (let*
@@ -131,17 +132,22 @@
             "]"))
 
   (defun my/url-parse-retrieved-json (url &optional headers)
+    "Translate a list of json objects retrieved from URL with
+  optional HEADERS into an association list."
     (let* ((json (my/url-retrieve-paginated-bodies url headers))
            (json-array-type 'list)
            (parsed-json (json-read-from-string (my/flatten-json json))))
       parsed-json))
 
   (defun my/url-view-retrieved-json (url &optional headers)
+    "View the json retreived from URL, with optional HEADERS,
+  properly formatted in a buffer."
     (let* ((items (my/url-retrieve-paginated-bodies url headers)))
       (switch-to-buffer (concat url ".json"))
       (erase-buffer)
       (insert (my/flatten-json items))
-      (json-pretty-print-buffer)))
+      (json-pretty-print-buffer)
+      (beginning-of-buffer)))
 
   (defun my/url-get-values (url keys &optional headers)
     "Retrieve values from KEYS from a list of URL json objects."
