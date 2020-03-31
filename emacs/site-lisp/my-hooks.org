@@ -13,6 +13,7 @@
   (add-hook 'emacs-lisp-mode 'eldoc-mode)
   (add-hook 'emacs-lisp-mode (lambda () (add-hook 'after-save-hook 'check-parens nil t)))
 #+END_SRC
+
 * LISP INTERACTION MODE
 
 #+BEGIN_SRC emacs-lisp
@@ -82,5 +83,19 @@ https://www.emacswiki.org/emacs/MakingScriptsExecutableOnSave
 * WHITESPACE CLEANUP
 
 #+BEGIN_SRC emacs-lisp
+  (setq indent-tabs-mode 'nil) ;; don't undo untabify
+  (setq whitespace-style '(face
+                           tabs
+                           spaces
+                           trailing
+                           lines
+                           space-before-tab::space
+                           newline
+                           indentation::space
+                           empty
+                           space-after-tab::space
+                           space-mark
+                           tab-mark
+                           newline-mark))
   (add-hook 'before-save-hook 'whitespace-cleanup)
 #+END_SRC
