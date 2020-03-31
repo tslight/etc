@@ -51,13 +51,12 @@
     "Retrieve an association list from a LIST of association lists
   that has KEY VALUE pair."
     (car (cl-remove-if nil (mapcar (lambda (e)
-                                  (if (eq value (cdr (assoc key e)))
+                                  (if (equal value (cdr (assoc key e)))
                                       e))
                                 list))))
 #+end_src
 
 * URL FUNCTIONS
-
 #+begin_src emacs-lisp
   (defun my/url-link-to-next-page ()
     (goto-char (point-min))
