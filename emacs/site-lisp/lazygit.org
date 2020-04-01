@@ -50,13 +50,13 @@
   (defun my/get-assoc-list (list key value)
     "Retrieve an association list from a LIST of association lists
   that has KEY VALUE pair."
-    (car (cl-remove-if nil (mapcar (lambda (e)
-                                  (if (equal value (cdr (assoc key e)))
-                                      e))
-                                list))))
+    (car (cl-remove-if nil (mapcar
+                            (lambda (e) (if (equal value (cdr (assoc key e))) e))
+                            list))))
 #+end_src
 
 * URL FUNCTIONS
+
 #+begin_src emacs-lisp
   (defun my/url-link-to-next-page ()
     (goto-char (point-min))
@@ -128,8 +128,28 @@
 ** CLONE OR PULL
 
 #+begin_src emacs-lisp
+  (defun my/git-clone-or-pull (directory url &optional with-magit)
+    (if (file-directory-p directory)
+        (progn
+          (message
+           (concat directory ": "
+                   (string-trim
+                    (shell-command-to-string
+                     (concat "git -C " directory " pull")))))
+          (if (and with-magit (package-installed-p 'magit))
+              (magit-status-setup-buffer directory)))
+      (progn
+        (if (and with-magit (package-installed-p 'magit))
+            (magit-clone-regular url directory nil)
+          (message
+           (string-trim
+            (shell-command-to-string
+             (concat "git clone " url " " directory))))))))
+#+end_src
+
+#+begin_src emacs-lisp
   (defun my/clone-or-pull (repos path name url directory)
-    "Prompt for a Github REPOS, then clone that repo to DIRECTORY.
+    "Prompt for a repo from REPOS, then clone that repo to DIRECTORY.
   Using PATH, NAME & URL."
     (let* ((paths (mapcar (lambda (r) (cdr (assoc path r))) repos))
            (choice (completing-read "Repo to clone: " paths))
@@ -137,13 +157,7 @@
            (cloneurl (cdr (assoc url repo)))
            (reponame (cdr (assoc name repo)))
            (dest (concat directory reponame)))
-      (if (file-directory-p dest)
-          (progn
-            (message (string-trim (shell-command-to-string (concat "git -C " dest " pull"))))
-            (magit-status-setup-buffer dest))
-        (progn
-          (message (concat "Cloning " cloneurl " to " dest "..."))
-          (magit-clone-regular cloneurl dest nil)))))
+      (my/git-clone-or-pull directory cloneurl t)))
 #+end_src
 
 * GITLAB WRAPPERS
@@ -156,7 +170,7 @@
                                         endpoint
                                         "?pagination=keyset&per_page=100&"
                                         "order_by=id&sort=asc"
-                                        "&owned=true&membership=true")
+                                        "&membership=true")
                                 ;; https://stackoverflow.com/a/24188208
                                 `(("PRIVATE-TOKEN" . ,my/gitlab-api-key))))
 
@@ -166,7 +180,7 @@
                                endpoint
                                "?pagination=keyset&per_page=100&"
                                "order_by=id&sort=asc"
-                               "&owned=true&membership=true")
+                               "&membership=true")
                        keys
                        ;; https://stackoverflow.com/a/24188208
                        `(("PRIVATE-TOKEN" . ,my/gitlab-api-key))))
@@ -182,32 +196,45 @@
                       'ssh_url_to_repo
                       directory))
 
+  (defun my/gitlab-subgroups (groups)
+    "Return a list of subgroups from GROUPS."
+    (cl-remove-if nil
+                  (mapcar
+                   (lambda (g)
+                     (if (string-prefix-p choice
+                                          (cdr (assoc 'full_path g)))
+                         g))
+                   groups)))
+
+  (defun my/gitlab-group-projects (groups)
+    "Return a list of projects from GROUPS."
+    (let ((ids (mapcar (lambda (g) (cdr (assoc 'id g))) groups)))
+      (apply #'append
+             (cl-remove-if nil
+                           (mapcar
+                            (lambda (id)
+                              (my/gitlab-get-values
+                               (concat "groups/" (number-to-string id) "/projects")
+                               (list 'path_with_namespace
+                                     'name
+                                     'ssh_url_to_repo)))
+                            ids)))))
 
   (defun my/gitlab-group-clone-or-pull (directory)
-    "Prompt for a Github REPOS, then clone that repo to DIRECTORY.
-    Using PATH, NAME & URL."
+    "Prompt for a group, then clone that repo to DIRECTORY."
     (interactive "DDirectory to clone to: ")
     (let* ((groups (my/gitlab-get-values "groups" (list 'full_path 'id)))
            (paths (mapcar (lambda (g) (cdr (assoc 'full_path g))) groups))
            (choice (completing-read "Group or subgroup to batch clone: " paths))
-           (groups (cl-remove-if nil
-                                 (mapcar
-                                  (lambda (g)
-                                    (if (string-prefix-p choice
-                                                         (cdr (assoc 'full_path g)))
-                                        g))
-                                  groups)))
-           (groupids (mapcar (lambda (g) (cdr (assoc 'id g))) groups))
-           (projects (cl-remove-if nil
-                                   (mapcar
-                                    (lambda (id)
-                                      (my/gitlab-get-values
-                                       (concat "groups/" (number-to-string id) "/projects")
-                                       (list 'path_with_namespace
-                                             'name
-                                             'ssh_url_to_repo)))
-                                    groupids))))
-      (message projects)))
+           (groups (my/gitlab-subgroups groups))
+           (paths (mapcar (lambda (g) (cdr (assoc 'full_path g))) groups))
+           (projects (my/gitlab-group-projects groups)))
+      (mapc (lambda (p) (make-directory (concat directory "/" p) t)) paths)
+      (mapcar (lambda (p)
+                (my/git-clone-or-pull
+                 (concat directory "/" (cdr (assoc 'path_with_namespace p)))
+                 (cdr (assoc 'ssh_url_to_repo p))))
+              projects)))
 #+end_src
 
 * GITHUB WRAPPERS
