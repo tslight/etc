@@ -181,6 +181,33 @@
                       'name
                       'ssh_url_to_repo
                       directory))
+
+
+  (defun my/gitlab-group-clone-or-pull (directory)
+    "Prompt for a Github REPOS, then clone that repo to DIRECTORY.
+    Using PATH, NAME & URL."
+    (interactive "DDirectory to clone to: ")
+    (let* ((groups (my/gitlab-get-values "groups" (list 'full_path 'id)))
+           (paths (mapcar (lambda (g) (cdr (assoc 'full_path g))) groups))
+           (choice (completing-read "Group or subgroup to batch clone: " paths))
+           (groups (cl-remove-if nil
+                                 (mapcar
+                                  (lambda (g)
+                                    (if (string-prefix-p choice
+                                                         (cdr (assoc 'full_path g)))
+                                        g))
+                                  groups)))
+           (groupids (mapcar (lambda (g) (cdr (assoc 'id g))) groups))
+           (projects (cl-remove-if nil
+                                   (mapcar
+                                    (lambda (id)
+                                      (my/gitlab-get-values
+                                       (concat "groups/" (number-to-string id) "/projects")
+                                       (list 'path_with_namespace
+                                             'name
+                                             'ssh_url_to_repo)))
+                                    groupids))))
+      (message projects)))
 #+end_src
 
 * GITHUB WRAPPERS
