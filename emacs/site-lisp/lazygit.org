@@ -192,7 +192,7 @@
                        ;; https://stackoverflow.com/a/24188208
                        `(("PRIVATE-TOKEN" . ,gitlab/api-key))))
 
-  (defun gitlab/clone-or-pull (directory)
+  (defun gitlab/clone-or-pull-project (directory)
     "Clone or pull repo to DIRECTORY."
     (interactive "DDirectory to clone to: ")
     (lg/clone-or-pull-repo (gitlab/get-values "projects" (list 'path_with_namespace
@@ -203,7 +203,7 @@
                            'ssh_url_to_repo
                            directory))
 
-  (defun gitlab/subgroups (groups)
+  (defun gitlab/subgroups (groups choice)
     "Return a list of subgroups from GROUPS."
     (cl-remove-if nil
                   (mapcar
@@ -227,21 +227,21 @@
                                      'ssh_url_to_repo)))
                             ids)))))
 
-  (defun gitlab/group-clone-or-pull (directory)
+  (defun gitlab/clone-or-pull-group (directory)
     "Prompt for a group, then clone that repo to DIRECTORY."
     (interactive "DDirectory to clone to: ")
     (let* ((groups (gitlab/get-values "groups" (list 'full_path 'id)))
            (paths (mapcar (lambda (g) (cdr (assoc 'full_path g))) groups))
            (choice (completing-read "Group or subgroup to batch clone: " paths))
-           (groups (gitlab/subgroups groups))
+           (groups (gitlab/subgroups groups choice))
            (paths (mapcar (lambda (g) (cdr (assoc 'full_path g))) groups))
            (projects (gitlab/group-projects groups)))
       (mapc (lambda (p) (make-directory (concat directory "/" p) t)) paths)
-      (mapcar (lambda (p)
-                (lg/clone-or-pull
-                 (concat directory "/" (cdr (assoc 'path_with_namespace p)))
-                 (cdr (assoc 'ssh_url_to_repo p))))
-              projects)))
+      (mapc (lambda (p)
+              (lg/clone-or-pull
+               (concat directory "/" (cdr (assoc 'path_with_namespace p)))
+               (cdr (assoc 'ssh_url_to_repo p))))
+            projects)))
 #+end_src
 
 * GITHUB WRAPPERS
@@ -265,11 +265,23 @@
                        ;; https://stackoverflow.com/a/24188208
                        `(("Authorization" . ,(concat "token " github/api-key)))))
 
-  (defun github/clone-or-pull (directory)
+  (defun github/clone-or-pull-repo (directory)
     "Clone or pull repo to DIRECTORY."
     (interactive "DDirectory to clone to: ")
     (lg/clone-or-pull-repo (github/get-values "user/repos" (list 'full_name
                                                                  'name
                                                                  'ssh_url))
                            'full_name 'name 'ssh_url directory))
+
+  (defun github/clone-or-pull-all (directory)
+    "Clone or pull ALL repos to DIRECTORY."
+    (interactive "DDirectory to clone to: ")
+    (let* ((repos (github/get-values "user/repos" (list 'full_name 'ssh_url)))
+           (paths (mapcar (lambda (r) (cdr (assoc 'full_name r))) repos)))
+      (mapc (lambda (p) (make-directory (concat directory "/" p) t)) paths)
+      (mapc (lambda (r)
+              (lg/clone-or-pull
+               (concat directory "/" (cdr (assoc 'full_name r)))
+               (cdr (assoc 'ssh_url r))))
+            repos)))
 #+end_src
