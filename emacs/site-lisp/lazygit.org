@@ -16,18 +16,18 @@
       (insert-file-contents file)
       (buffer-string)))
 
-  (defgroup my/api-keys nil
+  (defgroup lg/api-keys nil
     "API keys."
     :group 'convenience)
 
-  (defcustom my/gitlab-api-key (my/read-file "~/.gitlab.key")
+  (defcustom gitlab/api-key (my/read-file "~/.gitlab.key")
     "GitLab API key."
-    :group 'my/api-keys
+    :group 'lg/api-keys
     :type 'string)
 
-  (defcustom my/github-api-key (my/read-file "~/.github.key")
+  (defcustom github/api-key (my/read-file "~/.github.key")
     "GitHub API key."
-    :group 'my/api-keys
+    :group 'lg/api-keys
     :type 'string)
 #+end_src
 
@@ -53,6 +53,25 @@
     (car (cl-remove-if nil (mapcar
                             (lambda (e) (if (equal value (cdr (assoc key e))) e))
                             list))))
+#+end_src
+
+** FLATTEN JSON
+
+#+begin_src emacs-lisp
+  (defun my/flatten-json (items)
+    "Take a list of json arrays as ITEMS and flatten them into a
+  single json array."
+    (concat "[" (mapconcat
+                 (lambda (item)
+                   (let*
+                       ((trimmed (replace-regexp-in-string "^\\[\\]$" "" item))
+                        (trimmed (replace-regexp-in-string "^\\[" "" trimmed))
+                        (trimmed (if (equal item (car (last items)))
+                                     (replace-regexp-in-string "\\]$" "" trimmed)
+                                   (replace-regexp-in-string "\\]$" "," trimmed))))
+                     trimmed))
+                 items "")
+            "]"))
 #+end_src
 
 * URL FUNCTIONS
@@ -81,21 +100,6 @@
         (if next-page
             (my/url-retrieve-paginated-bodies next-page headers retrieved-items)
           retrieved-items))))
-
-  (defun my/flatten-json (items)
-    "Take a list of json arrays as ITEMS and flatten them into a
-  single json array."
-    (concat "[" (mapconcat
-                 (lambda (item)
-                   (let*
-                       ((trimmed (replace-regexp-in-string "^\\[\\]$" "" item))
-                        (trimmed (replace-regexp-in-string "^\\[" "" trimmed))
-                        (trimmed (if (equal item (car (last items)))
-                                     (replace-regexp-in-string "\\]$" "" trimmed)
-                                   (replace-regexp-in-string "\\]$" "," trimmed))))
-                     trimmed))
-                 items "")
-            "]"))
 
   (defun my/url-parse-retrieved-json (url &optional headers)
     "Translate a list of json objects retrieved from URL with
@@ -128,7 +132,7 @@
 ** CLONE OR PULL
 
 #+begin_src emacs-lisp
-  (defun my/git-clone-or-pull (directory url &optional with-magit)
+  (defun lg/clone-or-pull (directory url &optional with-magit)
     (if (file-directory-p directory)
         (progn
           (message
@@ -148,7 +152,7 @@
 #+end_src
 
 #+begin_src emacs-lisp
-  (defun my/clone-or-pull (repos path name url directory)
+  (defun lg/clone-or-pull-repo (repos path name url directory)
     "Prompt for a repo from REPOS, then clone that repo to DIRECTORY.
   Using PATH, NAME & URL."
     (let* ((paths (mapcar (lambda (r) (cdr (assoc path r))) repos))
@@ -157,13 +161,13 @@
            (cloneurl (cdr (assoc url repo)))
            (reponame (cdr (assoc name repo)))
            (dest (concat directory reponame)))
-      (my/git-clone-or-pull directory cloneurl t)))
+      (lg/clone-or-pull dest cloneurl t)))
 #+end_src
 
 * GITLAB WRAPPERS
 
 #+begin_src emacs-lisp
-  (defun my/gitlab-retriever (endpoint)
+  (defun gitlab/retriever (endpoint)
     "Retrieve resources from GitLab ENDPOINT."
     (interactive "sEnter an endpoint: ")
     (my/url-view-retrieved-json (concat "https://gitlab.com/api/v4/"
@@ -172,9 +176,9 @@
                                         "order_by=id&sort=asc"
                                         "&membership=true")
                                 ;; https://stackoverflow.com/a/24188208
-                                `(("PRIVATE-TOKEN" . ,my/gitlab-api-key))))
+                                `(("PRIVATE-TOKEN" . ,gitlab/api-key))))
 
-  (defun my/gitlab-get-values (endpoint keys)
+  (defun gitlab/get-values (endpoint keys)
     "Retrieve values from KEYS of GitLab ENDPOINT json resources."
     (my/url-get-values (concat "https://gitlab.com/api/v4/"
                                endpoint
@@ -183,12 +187,12 @@
                                "&membership=true")
                        keys
                        ;; https://stackoverflow.com/a/24188208
-                       `(("PRIVATE-TOKEN" . ,my/gitlab-api-key))))
+                       `(("PRIVATE-TOKEN" . ,gitlab/api-key))))
 
-  (defun my/gitlab-clone-or-pull (directory)
+  (defun gitlab/clone-or-pull (directory)
     "Clone or pull repo to DIRECTORY."
     (interactive "DDirectory to clone to: ")
-    (my/clone-or-pull (my/gitlab-get-values "projects" (list 'path_with_namespace
+    (lg/clone-or-pull-repo (gitlab/get-values "projects" (list 'path_with_namespace
                                                              'name
                                                              'ssh_url_to_repo))
                       'path_with_namespace
@@ -196,7 +200,7 @@
                       'ssh_url_to_repo
                       directory))
 
-  (defun my/gitlab-subgroups (groups)
+  (defun gitlab/subgroups (groups)
     "Return a list of subgroups from GROUPS."
     (cl-remove-if nil
                   (mapcar
@@ -206,32 +210,32 @@
                          g))
                    groups)))
 
-  (defun my/gitlab-group-projects (groups)
+  (defun gitlab/group-projects (groups)
     "Return a list of projects from GROUPS."
     (let ((ids (mapcar (lambda (g) (cdr (assoc 'id g))) groups)))
       (apply #'append
              (cl-remove-if nil
                            (mapcar
                             (lambda (id)
-                              (my/gitlab-get-values
+                              (gitlab/get-values
                                (concat "groups/" (number-to-string id) "/projects")
                                (list 'path_with_namespace
                                      'name
                                      'ssh_url_to_repo)))
                             ids)))))
 
-  (defun my/gitlab-group-clone-or-pull (directory)
+  (defun gitlab/group-clone-or-pull (directory)
     "Prompt for a group, then clone that repo to DIRECTORY."
     (interactive "DDirectory to clone to: ")
-    (let* ((groups (my/gitlab-get-values "groups" (list 'full_path 'id)))
+    (let* ((groups (gitlab/get-values "groups" (list 'full_path 'id)))
            (paths (mapcar (lambda (g) (cdr (assoc 'full_path g))) groups))
            (choice (completing-read "Group or subgroup to batch clone: " paths))
-           (groups (my/gitlab-subgroups groups))
+           (groups (gitlab/subgroups groups))
            (paths (mapcar (lambda (g) (cdr (assoc 'full_path g))) groups))
-           (projects (my/gitlab-group-projects groups)))
+           (projects (gitlab/group-projects groups)))
       (mapc (lambda (p) (make-directory (concat directory "/" p) t)) paths)
       (mapcar (lambda (p)
-                (my/git-clone-or-pull
+                (lg/clone-or-pull
                  (concat directory "/" (cdr (assoc 'path_with_namespace p)))
                  (cdr (assoc 'ssh_url_to_repo p))))
               projects)))
@@ -240,29 +244,29 @@
 * GITHUB WRAPPERS
 
 #+begin_src emacs-lisp
-  (defun my/github-retriever (endpoint)
+  (defun github/retriever (endpoint)
     "Retrieve resources from GitHub ENDPOINT."
     (interactive "sEnter an endpoint: ")
     (my/url-view-retrieved-json (concat "https://api.github.com/"
                                         endpoint
                                         "?per_page=100&page=1")
                                 ;; https://stackoverflow.com/a/24188208
-                                `(("Authorization" . ,(concat "token " my/github-api-key)))))
+                                `(("Authorization" . ,(concat "token " github/api-key)))))
 
-  (defun my/github-get-values (endpoint keys)
+  (defun github/get-values (endpoint keys)
     "Retrieve values from KEYS of GitHub ENDPOINT json resources."
     (my/url-get-values (concat "https://api.github.com/"
                                endpoint
                                "?per_page=100&page=1")
                        keys
                        ;; https://stackoverflow.com/a/24188208
-                       `(("Authorization" . ,(concat "token " my/github-api-key)))))
+                       `(("Authorization" . ,(concat "token " github/api-key)))))
 
-  (defun my/github-clone-or-pull (directory)
+  (defun github/clone-or-pull (directory)
     "Clone or pull repo to DIRECTORY."
     (interactive "DDirectory to clone to: ")
-    (my/clone-or-pull (my/github-get-values "user/repos" (list 'full_name
-                                                               'name
-                                                               'ssh_url))
-                      'full_name 'name 'ssh_url directory))
+    (lg/clone-or-pull-repo (github/get-values "user/repos" (list 'full_name
+                                                                 'name
+                                                                 'ssh_url))
+                           'full_name 'name 'ssh_url directory))
 #+end_src
