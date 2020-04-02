@@ -196,12 +196,12 @@
     "Clone or pull repo to DIRECTORY."
     (interactive "DDirectory to clone to: ")
     (lg/clone-or-pull-repo (gitlab/get-values "projects" (list 'path_with_namespace
-                                                             'name
-                                                             'ssh_url_to_repo))
-                      'path_with_namespace
-                      'name
-                      'ssh_url_to_repo
-                      directory))
+                                                               'name
+                                                               'ssh_url_to_repo))
+                           'path_with_namespace
+                           'name
+                           'ssh_url_to_repo
+                           directory))
 
   (defun gitlab/subgroups (groups)
     "Return a list of subgroups from GROUPS."
