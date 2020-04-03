@@ -39,6 +39,7 @@
 - [[#js2-refactor][JS2 REFACTOR]]
 - [[#json-mode][JSON MODE]]
 - [[#json-navigator][JSON NAVIGATOR]]
+- [[#lazygit][LAZYGIT]]
 - [[#lsp-mode][LSP MODE]]
 - [[#magit][MAGIT]]
 - [[#makefile-executor][MAKEFILE EXECUTOR]]
@@ -327,7 +328,6 @@ https://emacs.stackexchange.com/questions/22531/diminish-org-indent-mode
     :ensure t
     :defer t)
 #+END_SRC
-
 * GITLAB CI MODE
 
 #+BEGIN_SRC emacs-lisp
@@ -456,6 +456,33 @@ https://emacs.stackexchange.com/questions/22531/diminish-org-indent-mode
     :ensure t
     :defer t)
 #+END_SRC
+* LAZYGIT
+
+#+begin_src emacs-lisp
+  (use-package lazygit
+    :load-path "~/src/gitlab/tspub/lisp/lazygit"
+    :config
+    (setq gitlab/api-key-file "~/.gitlab.key")
+    (setq github/api-key-file "~/.github.key"))
+#+end_src
+
+#+begin_src emacs-lisp
+  (use-package gitlab
+    :after lazygit
+    :bind
+    ("C-c C-g l c" . gitlab/clone-or-pull-project)
+    ("C-c C-g l g" . gitlab/clone-or-pull-group)
+    ("C-c C-g l r" . gitlab/retriever))
+#+end_src
+
+#+begin_src emacs-lisp
+  (use-package github
+    :after lazygit
+    :bind
+    ("C-c C-g h a" . github/clone-or-pull-all)
+    ("C-c C-g h c" . github/clone-or-pull-repo)
+    ("C-c C-g h r" . github/retriever))
+#+end_src
 
 * LSP MODE
 
@@ -669,9 +696,9 @@ Calculation of variables et.c.; $(BINARY) will show up as what it evaluates to.
 * POWERSHELL
 
 #+begin_src emacs-lisp
-    (use-package powershell
-      :ensure t
-      :mode (("\\.ps1\\'" . powershell-mode)))
+  (use-package powershell
+    :ensure t
+    :mode (("\\.ps1\\'" . powershell-mode)))
 #+end_src
 
 * POWERLINE
