@@ -132,26 +132,45 @@
 #+end_src
 
 * GIT FUNCTIONS
+** GIT REPO?
+
+#+begin_src emacs-lisp
+  (defun git-repo-p (directory)
+    "Return true if there is a git repo in DIRECTORY, false otherwise."
+    (and
+     (file-directory-p (concat directory "/.git"))
+     (file-directory-p (concat directory "/.git/info"))
+     (file-directory-p (concat directory "/.git/objects"))
+     (file-directory-p (concat directory "/.git/refs"))
+     (file-regular-p (concat directory "/.git/HEAD"))))
+#+end_src
+
 ** CLONE OR PULL
 
 #+begin_src emacs-lisp
   (defun lg/clone-or-pull (directory url &optional with-magit)
-    (if (file-directory-p directory)
-        (progn
-          (message
-           (concat directory ": "
-                   (string-trim
-                    (shell-command-to-string
-                     (concat "git -C " directory " pull")))))
-          (if (and with-magit (package-installed-p 'magit))
-              (magit-status-setup-buffer directory)))
+    (if (git-repo-p directory)
+        (if (and with-magit (package-installed-p 'magit))
+            (progn
+              (message
+               (concat directory ": "
+                       (string-trim
+                        (shell-command-to-string
+                         (concat "git -C " directory " pull")))))
+              (magit-status-setup-buffer directory))
+          (progn
+            (let ((buffer (get-buffer-create "*git-clone*"))
+                  (command (concat "git -C " directory " pull")))
+              (display-buffer buffer)
+              (start-process-shell-command command buffer command))))
       (progn
         (if (and with-magit (package-installed-p 'magit))
             (magit-clone-regular url directory nil)
-          (message
-           (string-trim
-            (shell-command-to-string
-             (concat "git clone " url " " directory))))))))
+          (progn
+            (let ((buffer (get-buffer-create "*git-clone*"))
+                  (command (concat "git clone -q " url " " directory)))
+              (display-buffer buffer)
+              (start-process-shell-command command buffer command)))))))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -276,10 +295,9 @@
   (defun github/clone-or-pull-all (directory)
     "Clone or pull ALL repos to DIRECTORY."
     (interactive "DDirectory to clone to: ")
-    (let* ((repos (github/get-values "user/repos" (list 'full_name 'ssh_url)))
-           (paths (mapcar (lambda (r) (cdr (assoc 'full_name r))) repos)))
-      (mapc (lambda (p) (make-directory (concat directory "/" p) t)) paths)
+    (let ((repos (github/get-values "user/repos" (list 'full_name 'ssh_url))))
       (mapc (lambda (r)
+              (make-directory (concat directory "/" (cdr (assoc 'full_name r))) t)
               (lg/clone-or-pull
                (concat directory "/" (cdr (assoc 'full_name r)))
                (cdr (assoc 'ssh_url r))))
