@@ -460,22 +460,15 @@ https://emacs.stackexchange.com/questions/22531/diminish-org-indent-mode
 
 #+begin_src emacs-lisp
   (use-package lazygit
-    :load-path "~/src/gitlab/tspub/lisp/lazygit"
-    :config
-    (setq gitlab/api-key-file "~/.gitlab.key")
-    (setq github/api-key-file "~/.github.key"))
-#+end_src
+    :load-path "~/src/gitlab/tspub/lisp/lazygit")
 
-#+begin_src emacs-lisp
   (use-package gitlab
     :after lazygit
     :bind
     ("C-c C-g l c" . gitlab/clone-or-pull-project)
     ("C-c C-g l g" . gitlab/clone-or-pull-group)
     ("C-c C-g l r" . gitlab/retriever))
-#+end_src
 
-#+begin_src emacs-lisp
   (use-package github
     :after lazygit
     :bind
