@@ -73,6 +73,17 @@
                  items "")
             "]"))
 #+end_src
+** DISPLAY ASYNC COMMAND
+
+#+begin_src emacs-lisp
+  (defun display-async-shell-command-buffer (command buffer-name &optional erase)
+    "Display the results of asynchronous COMMAND in BUFFER-NAME.
+  If ERASE is true erase the buffer first"
+    (let ((buffer (get-buffer-create buffer-name)))
+      (if erase (progn (set-buffer buffer) (erase-buffer)))
+      (display-buffer buffer)
+      (start-process-shell-command command buffer command)))
+#+end_src
 
 * URL FUNCTIONS
 
@@ -158,19 +169,13 @@
                         (shell-command-to-string
                          (concat "git -C " directory " pull")))))
               (magit-status-setup-buffer directory))
-          (progn
-            (let ((buffer (get-buffer-create "*git-clone*"))
-                  (command (concat "git -C " directory " pull")))
-              (display-buffer buffer)
-              (start-process-shell-command command buffer command))))
+          (display-async-shell-command-buffer
+           (concat "git -C " directory " pull --quiet") "*lazygit*" t))
       (progn
         (if (and with-magit (package-installed-p 'magit))
             (magit-clone-regular url directory nil)
-          (progn
-            (let ((buffer (get-buffer-create "*git-clone*"))
-                  (command (concat "git clone -q " url " " directory)))
-              (display-buffer buffer)
-              (start-process-shell-command command buffer command)))))))
+          (display-async-shell-command-buffer
+           (concat "git clone --quiet " url " " directory) "*lazygit*" t)))))
 #+end_src
 
 #+begin_src emacs-lisp
