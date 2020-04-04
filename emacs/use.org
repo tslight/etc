@@ -464,13 +464,16 @@ https://emacs.stackexchange.com/questions/22531/diminish-org-indent-mode
 
   (use-package gitlab
     :after lazygit
+    :commands gl/all gl/api gl/grp gl/prj
     :bind
+    ("C-c g l a" . gitlab/clone-or-pull-all)
     ("C-c g l c" . gitlab/clone-or-pull-project)
     ("C-c g l g" . gitlab/clone-or-pull-group)
     ("C-c g l r" . gitlab/retriever))
 
   (use-package github
     :after lazygit
+    :command gh/all gh/api gh/repo
     :bind
     ("C-c g h a" . github/clone-or-pull-all)
     ("C-c g h c" . github/clone-or-pull-repo)
