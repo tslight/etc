@@ -473,7 +473,7 @@ https://emacs.stackexchange.com/questions/22531/diminish-org-indent-mode
 
   (use-package github
     :after lazygit
-    :command gh/all gh/api gh/repo
+    :commands gh/all gh/api gh/repo
     :bind
     ("C-c g h a" . github/clone-or-pull-all)
     ("C-c g h c" . github/clone-or-pull-repo)
