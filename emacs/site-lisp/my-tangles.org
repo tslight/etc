@@ -71,7 +71,7 @@ Return the file name, so that this function can be piped to other functions,
 such as ~my/compile-and-load-file~.
 
 #+BEGIN_SRC emacs-lisp
-  (defun my/insert-boilerplate (&optional file)
+  (defun my/insert-boilerplate (file &optional commentary)
     "Take a FILE as an argument & insert elisp header and footer
   comments into it, if it's an elisp FILE.
 
@@ -80,39 +80,33 @@ such as ~my/compile-and-load-file~.
 
   Return the file name, so that this function can be piped to other
   functions, such as `my/compile-and-load-file'."
-    (when file
-      (when (equal (file-name-extension file) "el")
-        (let ((temp-buffer (set-buffer (find-file-noselect file))))
-          (when temp-buffer
-            (unwind-protect
-                (progn
-                  (let* ((filename (file-name-sans-extension
-                                    (file-name-nondirectory file)))
-                         (copyright (concat
-                                     (format-time-string "%Y")
-                                     " "
-                                     user-full-name))
-                         (author (concat user-full-name " " user-mail-address))
-                         (header (concat ";;; " filename ".el ---\n\n"
-                                         ";;; Commentary:\n\n"
-                                         ";; Copyright (C) " copyright "\n"
-                                         ";; Author: " author "\n\n"
-                                         ";;; Code:\n"
-                                         ";; -*- lexical-binding: t; -*-\n"))
-                         (footer (concat "\n(provide '" filename ")\n"
-                                         ";;; " filename ".el ends here")))
-                    (goto-char (point-min))
-                    (insert header)
-                    (goto-char (point-max))
-                    (insert footer))
-                  (message (concat "Inserted boilerplate into " file)))
-              (save-buffer temp-buffer)
-              (kill-buffer temp-buffer))))
-        (message (concat "Cleaning up " file"~ backup file..."))
-        (when (file-readable-p (concat file "~"))
-          (delete-file (concat file "~"))
-          (message (concat "Deleted " file "~ backup file"))))
-      file))
+    (when (equal (file-name-extension file) "el")
+      (with-current-buffer (find-file-noselect file)
+        (let* ((filename (file-name-sans-extension
+                          (file-name-nondirectory file)))
+               (copyright (concat (format-time-string "%Y")
+                                  " " user-full-name))
+               (author (concat user-full-name " " user-mail-address))
+               (header (concat "\n\n;;; " filename ".el ---\n\n"
+                               ";;; Commentary: " commentary "\n\n"
+                               ";; Copyright (C) " copyright "\n"
+                               ";; Author: " author "\n\n"
+                               ";;; Code:\n"))
+               (footer (concat "\n(provide '" filename ")\n"
+                               ";;; " filename ".el ends here")))
+          (goto-char (point-min))
+          (add-file-local-variable-prop-line 'lexical-binding t)
+          (end-of-line)
+          (insert header)
+          (goto-char (point-max))
+          (insert footer)
+          (save-buffer)
+          (kill-buffer)
+          (message (concat "Inserted boilerplate into " file))))
+      (when (file-readable-p (concat file "~"))
+        (delete-file (concat file "~"))
+        (message (concat "Deleted " file "~ backup file"))))
+    file)
 #+END_SRC
 
 * COMPILE AND LOAD CONFIG
@@ -140,16 +134,17 @@ If the directory being tangled is my emacs configuration directory, run
 #+BEGIN_SRC emacs-lisp
   (defun my/tangle-directory (directory)
     "Takes a DIRECTORY as an argument and recursively tangles all
-    the org-mode files in it and it's child directories.
+      the org-mode files in it and it's child directories.
 
-    If the directory being tangled is my emacs configuration
-    directory, run my/compile-and-load-config."
+      If the directory being tangled is my emacs configuration
+      directory, run my/compile-and-load-config."
     (interactive "DDirectory: ")
     (unless (featurep 'org) (require 'org)) ; needed for bootstrap
 
     (mapc (lambda (file)
             (my/insert-boilerplate
-             (format "%s" (car (org-babel-tangle-file file)))))
+             (format "%s" (car (org-babel-tangle-file file)))
+             "Emacs Configuration"))
           (directory-files-recursively directory ".*\\.org$"))
     (when (string-prefix-p
            (replace-regexp-in-string "/$" ""
@@ -191,13 +186,13 @@ OS.
 #+BEGIN_SRC emacs-lisp
   (defun my/auto-tangle ()
     "Auto tangle files in the directories specified below when they
-  are edited. Providing the system-type value is
+    are edited. Providing the system-type value is
 
-  It doesn't make sense to tangle openbsd configurations files on
-  to a linux box, for example.
+    It doesn't make sense to tangle openbsd configurations files on
+    to a linux box, for example.
 
-  However, I may want to be able to edit them without auto tangling
-  from another OS."
+    However, I may want to be able to edit them without auto tangling
+    from another OS."
     ;; first check we are not editing something in the .git metadata directory
     ;; (ie COMMIT_EDITMSG - we don't want to try and compile and load that!)
     (if (not (string-match-p "/.git/" buffer-file-name))
@@ -209,7 +204,8 @@ OS.
                                   current-directory-path)
                  (byte-compile-file
                   (my/insert-boilerplate
-                   (expand-file-name (car (org-babel-tangle))))
+                   (expand-file-name (car (org-babel-tangle)))
+                   "Emacs Configuration")
                   0))
                 ((or (string-prefix-p (expand-file-name my/agnostic-config-directory)
                                       current-directory-path)
