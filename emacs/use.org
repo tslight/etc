@@ -462,22 +462,22 @@ https://emacs.stackexchange.com/questions/22531/diminish-org-indent-mode
   (use-package lazygit
     :load-path "~/src/gitlab/tspub/lisp/lazygit")
 
-  (use-package gitlab
+  (use-package lazygitlab
     :after lazygit
     :commands gl/all gl/api gl/grp gl/prj
     :bind
-    ("C-c g l a" . gitlab/clone-or-pull-all)
-    ("C-c g l c" . gitlab/clone-or-pull-project)
-    ("C-c g l g" . gitlab/clone-or-pull-group)
-    ("C-c g l r" . gitlab/retriever))
+    ("C-c g l a" . lazygitlab-clone-or-pull-all)
+    ("C-c g l c" . lazygitlab-clone-or-pull-project)
+    ("C-c g l g" . lazygitlab-clone-or-pull-group)
+    ("C-c g l r" . lazygitlab-retriever))
 
-  (use-package github
+  (use-package lazygithub
     :after lazygit
     :commands gh/all gh/api gh/repo
     :bind
-    ("C-c g h a" . github/clone-or-pull-all)
-    ("C-c g h c" . github/clone-or-pull-repo)
-    ("C-c g h r" . github/retriever))
+    ("C-c g h a" . lazygithub-clone-or-pull-all)
+    ("C-c g h c" . lazygithub-clone-or-pull-repo)
+    ("C-c g h r" . lazygithub-retriever))
 #+end_src
 
 * LSP MODE
