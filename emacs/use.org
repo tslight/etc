@@ -548,6 +548,7 @@ https://github.com/emacs-lsp/lsp-mode#supported-languages
             ("Commit" 8 magit-repolist-column-dirty t)
             ("Path" 99 magit-repolist-column-path)))
     :config
+    (setq magit-clone-set-remote.pushDefault t)
     (setq magit-completing-read-function 'magit-ido-completing-read))
 #+END_SRC
 
