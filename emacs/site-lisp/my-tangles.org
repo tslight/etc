@@ -81,16 +81,16 @@ such as ~my/compile-and-load-file~.
                           (file-name-nondirectory file)))
                (copyright (concat (format-time-string "%Y")
                                   " " user-full-name))
-               (author (concat user-full-name " " user-mail-address))
+               (author (concat user-full-name " <"user-mail-address">"))
                (header (concat ";;; " filename ".el --- " filename "\n\n"
                                ";;; Commentary:\n"
                                "\n;; " commentary "\n\n"
-                               ";; Copyright (C) " copyright "\n"
+                               ";; Copyright: (C) " copyright "\n"
                                ";; Author: " author "\n\n"
                                ";;; Code:\n"))
                (footer (concat "\n(provide '" filename ")\n"
                                ";; Local Variables:\n"
-                               ";; indent-tabs-mode: nil"
+                               ";; indent-tabs-mode: nil\n"
                                ";; byte-compile-warnings: (not free-vars noruntime)\n"
                                ";; End:\n"
                                ";;; " filename ".el ends here")))
