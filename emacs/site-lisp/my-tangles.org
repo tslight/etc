@@ -72,14 +72,9 @@ such as ~my/compile-and-load-file~.
 
 #+BEGIN_SRC emacs-lisp
   (defun my/insert-boilerplate (file &optional commentary)
-    "Take a FILE as an argument & insert elisp header and footer
-  comments into it, if it's an elisp FILE.
-
-  If the file is in my conf directory also insert a provide
-  expression, so that the FILE can be loaded as a package.
-
-  Return the file name, so that this function can be piped to other
-  functions, such as `my/compile-and-load-file'."
+    "Insert elisp documentation boilerplate into FILE, using COMMENTARY.
+    Return the file name, so that this function can be piped to other
+    functions, such as `my/compile-and-load-file'."
     (when (equal (file-name-extension file) "el")
       (with-current-buffer (find-file-noselect file)
         (let* ((filename (file-name-sans-extension
@@ -87,21 +82,21 @@ such as ~my/compile-and-load-file~.
                (copyright (concat (format-time-string "%Y")
                                   " " user-full-name))
                (author (concat user-full-name " " user-mail-address))
-               (header (concat "\n\n;;; " filename ".el ---\n\n"
-                               ";;; Commentary: " commentary "\n\n"
+               (header (concat ";;; " filename ".el --- " filename "\n\n"
+                               ";;; Commentary:\n"
+                               "\n;; " commentary "\n\n"
                                ";; Copyright (C) " copyright "\n"
                                ";; Author: " author "\n\n"
                                ";;; Code:\n"))
                (footer (concat "\n(provide '" filename ")\n"
+                               ";; Local Variables:\n"
+                               ";; byte-compile-warnings: (not free-vars noruntime)\n"
+                               ";; End:\n"
                                ";;; " filename ".el ends here")))
-          (goto-char (point-min))
+          (goto-char (point-min)) (insert header)
+          (goto-char (point-max)) (insert footer)
           (add-file-local-variable-prop-line 'lexical-binding t)
-          (end-of-line)
-          (insert header)
-          (goto-char (point-max))
-          (insert footer)
-          (save-buffer)
-          (kill-buffer)
+          (save-buffer) (kill-buffer)
           (message (concat "Inserted boilerplate into " file))))
       (when (file-readable-p (concat file "~"))
         (delete-file (concat file "~"))
