@@ -86,6 +86,23 @@ To check this has worked, run the following:
    KEYBOARD_KEY_700e4=leftmeta      # ctrl  --> leftmeta
 #+END_SRC
 
+* Microsoft Sculpt Ergonomic Keyboard
+
+Shows up in ~/proc/bus/input/devices~ as "Microsoft Microsoft® Nano Transceiver v2.1"
+
+#+begin_src conf
+  # Microsoft Sculpt Ergonomic Keyboard
+  evdev:input:b0003v045Ep07A5*
+   KEYBOARD_KEY_70029=capslock      # esc   --> caps
+   KEYBOARD_KEY_70039=esc           # caps  --> esc
+   KEYBOARD_KEY_700e2=leftctrl      # alt   --> leftctrl
+   KEYBOARD_KEY_700e3=leftalt       # super --> leftalt
+   KEYBOARD_KEY_700e0=leftmeta      # ctrl  --> super
+   KEYBOARD_KEY_700e6=leftctrl      # altgr --> leftctrl
+   KEYBOARD_KEY_70065=leftalt       # menu  --> leftalt
+   KEYBOARD_KEY_700e4=leftmeta      # ctrl  --> leftmeta
+#+end_src
+
 * Microsoft Wired USB
 
 #+BEGIN_SRC conf
