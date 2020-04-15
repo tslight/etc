@@ -135,7 +135,7 @@
 * APPLICATION DEPENDENT
 
 #+BEGIN_SRC sh
-  command -v bat >/dev/null 2>&1 && alias cat='bat'
+  # command -v bat >/dev/null 2>&1 && alias cat='bat'
   command -v colordiff >/dev/null 2>&1 && alias diff='colordiff'
   command -v emacs &>/dev/null && alias e='emacs'
   command -v emacsclient &>/dev/null && alias ec='emacsclient -c -a ""'

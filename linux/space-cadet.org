@@ -7,7 +7,7 @@
 #+PROPERTY: header-args+ :tangle /sudo::/etc/udev/hwdb.d/90-kbd.hwdb
 
 For maximum Emacs comfort, I remap my keyboard to conform to the Symbolics'
-[[http://xahlee.info/kbd/space-cadet_keyboard.html][Space-Cadet]] Lisp Machine keyboard layout. The was the keyboard Emacs' was
+[[http://xahlee.info/kbd/space-cadet_keyboard.html][Space-Cadet]] Lisp Machine keyboard layout. This was the keyboard Emacs' was
 originally written on/with.
 
 #+CAPTION: The Venerable Space Cadet Keyboard
@@ -18,9 +18,9 @@ This layout not only makes so much more sense for Emacs, but for most other
 applications too. Typically the Control key is the most commonly used modifier,
 followed by Alt /(Meta)/, and then the Super /(Windows)/ key.
 
-Therefore it makes the most sense to me, to have the most used modifiers
-accessible with one's strongest digits (the thumbs), and the least used
-modifiers using the weakest digit - one's pinkies.
+It makes the most sense to me, to have the most used modifiers accessible with
+one's strongest digits (the thumbs), and the least used modifiers using the
+weakest digit - one's pinkies.
 
 It also means that your modifiers are symmetrical, so you can use them in the
 same touch-typing fashion as the shift key (ie. one hand presses modifier, the
