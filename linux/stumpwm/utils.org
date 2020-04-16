@@ -172,8 +172,12 @@ Reload StumpWM and then re-load config.
      '(:class "URxvt")))
 
   (defcommand sttabbed () ()
-    "run-or-raise simple terminal"
-    (run-or-raise "tabbed -c -r 2 st -w ''" '(:class "st-256color")))
+    "run-or-raise a tabbed suckless terminal"
+    (run-or-raise "tabbed -c -r 2 st -w ''" '(:class "tabbed")))
+
+  (defcommand stterm () ()
+    "run-or-raise suckless terminal"
+    (run-or-raise "st" '(:class "st-256color")))
 
   (defcommand web-browser () ()
     "run-or-raise a web browser"
