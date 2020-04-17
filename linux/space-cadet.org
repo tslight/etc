@@ -71,10 +71,10 @@ To check this has worked, run the following:
   udevadm info /dev/input/eventX | grep KEYBOARD_KEY
 #+END_SRC
 
-* Microsoft Ergonomic Keyboard 4000
+* Microsoft Natural Ergonomic Keyboard 4000
 
 #+BEGIN_SRC conf
-  # Microsoft Ergonomic Keyboard 4000
+  # Microsoft Natural Ergonomic Keyboard 4000
   evdev:input:b0003v045Ep00DB*
    KEYBOARD_KEY_70029=capslock      # esc   --> caps
    KEYBOARD_KEY_70039=esc           # caps  --> esc
@@ -102,7 +102,6 @@ Shows up in ~/proc/bus/input/devices~ as "Microsoft Microsoft® Nano Transceiver
    KEYBOARD_KEY_70065=leftalt       # menu  --> leftalt
    KEYBOARD_KEY_700e4=leftmeta      # ctrl  --> leftmeta
 #+end_src
-
 * Microsoft Wired USB
 
 #+BEGIN_SRC conf
