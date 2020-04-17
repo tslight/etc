@@ -25,6 +25,23 @@
     (ansi-color-apply-on-region compilation-filter-start (point)))
 #+END_SRC
 
+* CYCLE LINE NUMBERS
+
+#+begin_src emacs-lisp
+  (defun my/cycle-line-numbers ()
+    "Cycle through all the line numbering configurations."
+    (interactive)
+    (if display-line-numbers
+        (if current-prefix-arg
+            (if (eq display-line-numbers 'relative)
+                (setq display-line-numbers t)
+              (setq display-line-numbers 'relative))
+          (setq display-line-numbers nil))
+      (if current-prefix-arg
+          (setq display-line-numbers 'relative)
+        (setq display-line-numbers t))))
+#+end_src
+
 * SWITCH-TO-ANSI-TERM
 
 #+BEGIN_SRC emacs-lisp
@@ -71,13 +88,21 @@
 Having fun with url wrangling...
 
 #+begin_src emacs-lisp
-  (defun my/kanye ()
+  (defun my/kanye-west-quote ()
     "Get a random Kanye quote in the minibuffer."
     (interactive)
     (message
      (with-temp-buffer
        (url-insert-file-contents "https://api.kanye.rest/")
        (cdr (assoc 'quote (json-read))))))
+
+  (defun my/chuck-norris-joke ()
+    "Get a random Chuck Norris joke in the minibuffer."
+    (interactive)
+    (message
+     (with-temp-buffer
+       (url-insert-file-contents "https://api.chucknorris.io/jokes/random")
+       (cdr (assoc 'value (json-read))))))
 #+end_src
 
 * TRAMP-TERM
@@ -116,6 +141,10 @@ Having fun with url wrangling...
 #+BEGIN_SRC emacs-lisp
   (my/bind-always "C-c M-g" my/google)
   (my/bind-always "C-c M-t" my/switch-to-ansi-term)
+  (my/bind-always "C-c t l" my/cycle-line-numbers)
+  (my/bind "C-c q c" my/chuck-norris-joke)
+  (my/bind "C-c q k" my/kanye-west-quote)
+  (my/bind "C-c q f" my/fortune)
 #+END_SRC
 
 * HOOKS

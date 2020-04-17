@@ -166,16 +166,6 @@ macOS. For Windows I recommend uing [[https://github.com/randyrants/sharpkeys/re
   (my/bind-always "C-c t d E" toggle-debug-on-entry)
   (my/bind-always "C-c t d e" toggle-debug-on-error)
   (my/bind-always "C-c t d q" toggle-debug-on-quit)
-  (my/bind-always "C-c t l" (lambda () (interactive)
-                              (if display-line-numbers
-                                  (if current-prefix-arg
-                                      (if (eq display-line-numbers 'relative)
-                                          (setq display-line-numbers t)
-                                        (setq display-line-numbers 'relative))
-                                    (setq display-line-numbers nil))
-                                (if current-prefix-arg
-                                    (setq display-line-numbers 'relative)
-                                  (setq display-line-numbers t)))))
   (my/bind-always "C-c t t" toggle-truncate-lines)
 #+END_SRC
 
