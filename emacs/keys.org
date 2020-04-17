@@ -179,8 +179,6 @@ macOS. For Windows I recommend uing [[https://github.com/randyrants/sharpkeys/re
 * BUFFER BINDINGS
 
 #+BEGIN_SRC emacs-lisp
-  (my/bind-always "C-<tab>" next-buffer)
-  (my/bind-always "C-<iso-lefttab>" previous-buffer)
   (my/bind-always "C-x c" save-buffers-kill-emacs)
   (my/bind-always "C-x M-c" save-buffers-kill-emacs)
   (my/bind-always "C-x C-b" ibuffer)
@@ -195,9 +193,14 @@ Only relevant in Emacs >= 27
   (when (>= emacs-major-version 27)
     (my/bind-always "C-x t t" tab-bar-select-tab-by-name)
     (my/bind-always "C-S-t" tab-bar-new-tab)
+    (my/bind-always "C-x t c" tab-bar-new-tab)
     (my/bind-always "C-S-w" tab-bar-close-tab)
-    ;; (my/bind-always "C-<tab>" tab-bar-switch-to-next-tab)
-    ;; (my/bind-always "C-<iso-lefttab>" tab-bar-switch-to-prev-tab)
+    (my/bind-always "C-x t k" tab-bar-close-tab)
+    (my/bind-always "C-<tab>" tab-bar-switch-to-next-tab)
+    (my/bind-always "C-x t n" tab-bar-switch-to-next-tab)
+    (my/bind-always "C-<iso-lefttab>" tab-bar-switch-to-prev-tab)
+    (my/bind-always "C-x t p" tab-bar-switch-to-prev-tab)
+    (my/bind-always "C-x t l" tab-bar-switch-to-recent-tab)
     (my/bind-always "C-`" tab-bar-switch-to-recent-tab))
 #+END_SRC
 
