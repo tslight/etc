@@ -293,6 +293,7 @@ This is new in Emacs 26 :-)
   (setq scroll-step 4)
   (setq scroll-margin 6)
   (setq scroll-conservatively 8)
+  (setq scroll-preserve-screen-position t)
 #+END_SRC
 
 * STARTUP
