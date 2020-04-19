@@ -15,6 +15,7 @@
 - [[#auto-recompile][AUTO RECOMPILE]]
 - [[#recompile-site-lisp][RECOMPILE SITE LISP]]
 - [[#change-pairs][CHANGE PAIRS]]
+- [[#change-number-at-point][CHANGE NUMBER AT POINT]]
 - [[#convert-to-unix-coding-system][CONVERT TO UNIX CODING SYSTEM]]
 - [[#delete-inside][DELETE INSIDE]]
 - [[#generate-numbered-list][GENERATE NUMBERED LIST]]
@@ -222,6 +223,29 @@
                     (while (search-forward $fromRight nil t)
                       (replace-match $toRight "FIXEDCASE" "LITERAL")))))))))))
 #+END_SRC
+* CHANGE NUMBER AT POINT
+
+#+begin_src elisp
+  (defun my/change-number-at-point (change)
+    (let ((number (number-at-point))
+          (point (point)))
+      (when number
+        (progn
+          (forward-word)
+          (search-backward (number-to-string number))
+          (replace-match (number-to-string (funcall change number)))
+          (goto-char point)))))
+
+  (defun my/increment-number-at-point ()
+    "Increment number at point like vim's C-a"
+    (interactive)
+    (my/change-number-at-point '1+))
+
+  (defun my/decrement-number-at-point ()
+    "Decrement number at point like vim's C-x"
+    (interactive)
+    (my/change-number-at-point '1-))
+#+end_src
 
 * CONVERT TO UNIX CODING SYSTEM
 
@@ -689,6 +713,8 @@ https://www.reddit.com/r/emacs/comments/f1tmkf/underlining_plain_text_in_emacs/
   ;; (my/bind-always "C-y" my/yank)
   ;; (my/bind-always "C-M-y" (lambda () (interactive) (my/yank t)))
   (my/bind-always "M-Q" my/unfill-region)
+  (my/bind "C-c +" my/increment-number-at-point)
+  (my/bind "C-c -" my/decrement-number-at-point)
 #+END_SRC
 
 * HOOKS
