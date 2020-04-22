@@ -55,9 +55,11 @@
 ** ANSI
 
 #+begin_src shell
-  for i in {30..38}; do
-      echo -e "\033[0;${i}m Normal: (0;$i); \033[1;${i}m Light: (1;$i)"
-  done
+  ansi() {
+      for i in {30..38}; do
+          echo -e "\033[0;${i}m Normal: (0;$i); \033[1;${i}m Light: (1;$i)"
+      done
+  }
 #+end_src
 
 ** BZIPR
@@ -104,6 +106,20 @@ Get useful information on commands.
       curl cheat.sh/${1:-cheat};
   }
 #+END_SRC
+** COUNTDOWN
+
+#+begin_src shell
+  countdown() {
+      clear
+      for i in $(seq "${1-10}" -1 0); do
+          printf "%04d\n" "${i}" |figlet |lolcat
+          sleep 1
+          clear
+      done
+      play -q -n synth .8 sine 4100 fade q 0.1 .3 0.1 repeat 3
+  }
+#+end_src
+
 ** EMOJIS
 
 #+begin_src shell
@@ -115,7 +131,6 @@ Get useful information on commands.
       echo
   }
 #+end_src
-
 ** RECURSIVE DOS 2 UNIX
 
 https://stackoverflow.com/questions/4767396/linux-command-how-to-find-only-text-files
@@ -179,8 +194,35 @@ Make a directory and cd into it.
       mkdir -p "$1" && cd "$1"
   }
 #+END_SRC
+** MEMORY SUM
 
-** MTAIL
+#+begin_src shell
+  memsum() {
+      ps -eo size,pid,user,command --sort -size | \
+          awk '{ hr=$1/1024 ; printf("%13.2f Mb ",hr) } { for ( x=4 ; x<=NF ; x++ ) { printf("%s ",$x) } print "" }' | \
+          cut -d "" -f2 | \
+          cut -d "-" -f1| \
+          grep "${1}" | grep -v grep
+  }
+#+end_src
+
+** MEMORY USAGE
+
+#+begin_src shell
+  memusage() {
+      #Report Total Used and Available mem in human readable format
+      total=$(head -1 /proc/meminfo |awk '{print $2}')
+      avail=$(head -2 /proc/meminfo |tail -1 |awk '{print $2}')
+      used=$(( total - avail ))
+      totalMB=$(( total / 1024 ))
+      availMB=$(( avail / 1024 ))
+      usedMB=$(( used / 1024 ))
+      #echo -ne "From a total of ${DARK_BLUE} ${totalMB}${reset} MB, you are using ${DARK_RED}${usedMB}${reset} MB's, which leaves you with ${DARK_GREEN}${availMB}${reset} MB free memory.\n"
+      echo -ne "${LIGHT_BLUE}${totalMB}${reset} MB total, ${DARK_RED}${usedMB}${reset} MB used, ${DARK_GREEN}${availMB}${reset} MB free.\n"
+  }
+#+end_src
+
+** MULTI TAIL
 
 #+BEGIN_SRC sh
 mtail () {
@@ -277,3 +319,16 @@ Create panes for horizontal monitor.
            select-pane -t 1
   }
 #+END_SRC
+** WEATHER
+
+#+begin_src shell
+  weather() {
+      # https://twitter.com/igor_chubin # Try wttr moon
+      curl "https://wttr.in/${1:-London}"
+  }
+
+  moon() {
+      # https://twitter.com/igor_chubin # Try wttr moon
+      curl "https://wttr.in/${1:-moon}"
+  }
+#+end_src
