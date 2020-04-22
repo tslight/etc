@@ -47,6 +47,13 @@
   export MANPATH+=":${HOME}/.local/share/man"
   export MANPATH+=":${HOME}/opt/share/man"
 
+  export RED="\\[\\e[1;31m\\]"
+  export GRN="\\[\\e[1;32m\\]"
+  export YEL="\\[\\e[1;33m\\]"
+  export MAG="\\[\\e[1;35m\\]"
+  export CYN="\\[\\e[1;36m\\]"
+  export OFF="\\[\\e[0m\\]"
+
   if [ -d "$HOME/.nix-profile" ]; then
       export XDG_DATA_DIRS=$HOME/.nix-profile/share:$XDG_DATA_DIRS
       export NIX_PATH=$HOME/.nix-defexpr/channels${NIX_PATH:+:}$NIX_PATH
@@ -89,6 +96,8 @@
   # Append new history lines, clear the history list, re-read the history list,
   # print prompt.
   # export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
+  # keep synced:
+  export PROMPT_COMMAND='history -a'
 
   [ -z "$PS1" ] && return # If not running interactively, don't do anything
   [ -f /etc/bash.bashrc ] && source /etc/bash.bashrc
@@ -112,17 +121,10 @@
 
   [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
-  red="\\[\\e[1;31m\\]"
-  grn="\\[\\e[1;32m\\]"
-  yel="\\[\\e[1;33m\\]"
-  mag="\\[\\e[1;35m\\]"
-  cyn="\\[\\e[1;36m\\]"
-  res="\\[\\e[0m\\]"
-
   if [ "$(id -u)" -eq 0 ]; then
-      export PS1="${red}\\u${yel}@${red}\\h${yel}:${mag}\\W ${cyn}\$(__git_ps1 '(%s)')\\n${yel}\$? \$ ${res}"
+      export PS1="${RED}\\u${YEL}@${RED}\\h${YEL}:${MAG}\\W ${CYN}\$(__git_ps1 '(%s)')\\n${YEL}\$? \$ ${OFF}"
   else
-      export PS1="${grn}\\u${yel}@${grn}\\h${yel}:${mag}\\W ${cyn}\$(__git_ps1 '(%s)')\\n${yel}\$? \$ ${res}"
+      export PS1="${GRN}\\u${YEL}@${GRN}\\h${YEL}:${MAG}\\W ${CYN}\$(__git_ps1 '(%s)')\\n${YEL}\$? \$ ${OFF}"
   fi
 
   stty -ixon # disable ctrl-s/q flow control
