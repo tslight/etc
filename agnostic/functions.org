@@ -52,6 +52,14 @@
 #+END_SRC
 
 * OS AGNOSTIC
+** ANSI
+
+#+begin_src shell
+  for i in {30..38}; do
+      echo -e "\033[0;${i}m Normal: (0;$i); \033[1;${i}m Light: (1;$i)"
+  done
+#+end_src
+
 ** BZIPR
 
 Bzip all files in directory.
@@ -96,6 +104,17 @@ Get useful information on commands.
       curl cheat.sh/${1:-cheat};
   }
 #+END_SRC
+** EMOJIS
+
+#+begin_src shell
+  emojis() {
+      for (( x = 2600; x <= 2700; x++ )); do
+          echo -n -e " \u${x}"
+          sleep .1
+      done
+      echo
+  }
+#+end_src
 
 ** RECURSIVE DOS 2 UNIX
 
@@ -108,6 +127,22 @@ https://stackoverflow.com/questions/4767396/linux-command-how-to-find-only-text-
            -exec dos2unix {} \;
   }
 #+END_SRC
+** RECURSIVE GREP
+
+#+begin_src shell
+  rgrep() {
+      # https://stackoverflow.com/questions/16956810/how-do-i-find-all-files-containing-specific-text-on-linux
+      grep -rnw "${2}" -e "${1}"
+  }
+#+end_src
+
+** RECURSIVE WORD COUNT
+
+#+begin_src shell
+  rwc() {
+      find "$1" -iname "$2" -exec wc -l {} +
+  }
+#+end_src
 
 ** DUSORT
 
@@ -146,6 +181,7 @@ Make a directory and cd into it.
 #+END_SRC
 
 ** MTAIL
+
 #+BEGIN_SRC sh
 mtail () {
     trap 'kill $(jobs -p)' EXIT
@@ -155,6 +191,7 @@ mtail () {
     wait
 }
 #+END_SRC
+
 ** PEEK
 
 https://github.com/lf94/peek-for-tmux
@@ -183,6 +220,7 @@ Find and kill all processes with a given name
       fi
   }
 #+END_SRC
+
 ** PSEE
 
 I have since found ~pgrep -ail~...
