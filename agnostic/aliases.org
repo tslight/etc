@@ -37,6 +37,7 @@
           alias bye="systemctl poweroff"
           alias powertune='sudo powertop --auto-tune'
           alias enabled_services='systemctl list-unit-files | grep enabled'
+          alias ipa="ip -brief -color -pretty address | grep -v lo"
           alias ls='ls --color=always'
           alias l='ls -F'
           alias la='ls -aF'

@@ -7,6 +7,7 @@
 
 #+BEGIN_SRC sh :tangle ~/.bash_profile
   #!/usr/bin/env bash
+  #shellcheck disable=SC2155,SC1090,SC2093
 
   [ -f "$HOME"/etc/profile ] && source "$HOME"/etc/profile
   [ -f "$HOME"/.profile ] && source "$HOME"/.profile
@@ -15,16 +16,33 @@
   export EDITOR="emacsclient -c -nw"
   export ALTERNATE_EDITOR=""
   export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
-  export PAGER="/usr/bin/less"
+  export PAGER="$(type -P less || type -P more)"
   export GTK_THEME=Emacs
   export GOPATH=$HOME/go
+
+  # Colorfull manpages (works with less as a pager)
+  # https://www.tecmint.com/view-colored-man-pages-in-linux/
+  export LESS_TERMCAP_mb=$'\e[1;32m'
+  export LESS_TERMCAP_md=$'\e[1;32m'
+  export LESS_TERMCAP_me=$'\e[0m'
+  export LESS_TERMCAP_se=$'\e[0m'
+  export LESS_TERMCAP_so=$'\e[01;33m'
+  export LESS_TERMCAP_ue=$'\e[0m'
+  export LESS_TERMCAP_us=$'\e[1;4;31m'
+
+  export GIT_PS1_SHOWDIRTYSTATE=yes
+  export GIT_PS1_SHOWSTASHSTATE=yes
+  export GIT_PS1_SHOWUNTRACKEDFILES=true
+  export GIT_PS1_SHOWUPSTREAM=yes
+
   export ANSIBLE=$HOME/src/gitlab/tspub/devops/ansible
   export DEVPATH=$HOME/src/gitlab/oe-developers
   export DEVOPS=$HOME/src/gitlab/oe-developers/be/devops
-  export PATH=$HOME/bin:$PATH
-  export PATH=$DEVOPS/bin:$PATH
-  export PATH=$HOME/.local/bin:$PATH
-  export PATH=$HOME/conda/bin:$PATH
+
+  export PATH+=$HOME/bin
+  export PATH+=$DEVOPS/bin
+  export PATH+=$HOME/.local/bin
+  export PATH+=$HOME/conda/bin
 
   if [ -d "$HOME/.nix-profile" ]; then
       export XDG_DATA_DIRS=$HOME/.nix-profile/share:$XDG_DATA_DIRS
