@@ -39,13 +39,15 @@
   export DEVPATH=$HOME/src/gitlab/oe-developers
   export DEVOPS=$HOME/src/gitlab/oe-developers/be/devops
 
-  export PATH+=":${HOME}/bin"
-  export PATH+=":${DEVOPS}/bin"
-  export PATH+=":${HOME}/.local/bin"
-  export PATH+=":${HOME}/conda/bin"
+  PATH="${HOME}/bin:${PATH}"
+  PATH="${DEVOPS}/bin:${PATH}"
+  PATH="${HOME}/.local/bin:${PATH}"
+  PATH="${HOME}/conda/bin:${PATH}"
+  export PATH
 
-  export MANPATH+=":${HOME}/.local/share/man"
-  export MANPATH+=":${HOME}/opt/share/man"
+  MANPATH+="${HOME}/.local/share/man:${MANPATH}"
+  MANPATH+="${HOME}/opt/share/man:${MANPATH}"
+  export MANPATH
 
   export RED="\\[\\e[1;31m\\]"
   export GRN="\\[\\e[1;32m\\]"
