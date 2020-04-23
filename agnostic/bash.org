@@ -45,8 +45,8 @@
   PATH="${HOME}/conda/bin:${PATH}"
   export PATH
 
-  MANPATH+="${HOME}/.local/share/man:${MANPATH}"
-  MANPATH+="${HOME}/opt/share/man:${MANPATH}"
+  MANPATH="${HOME}/.local/share/man:${MANPATH}"
+  MANPATH="${HOME}/opt/share/man:${MANPATH}"
   export MANPATH
 
   export RED="\\[\\e[1;31m\\]"
