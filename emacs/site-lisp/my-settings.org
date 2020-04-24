@@ -33,6 +33,7 @@
 - [[#registers][REGISTERS]]
 - [[#scrolling][SCROLLING]]
 - [[#startup][STARTUP]]
+- [[#tabs-vs-spaces][TABS VS SPACES]]
 - [[#term-buffer-size][TERM BUFFER SIZE]]
 - [[#tramp][TRAMP]]
 - [[#undo-limits][UNDO LIMITS]]
@@ -251,7 +252,7 @@ This is new in Emacs 26 :-)
 
 #+BEGIN_SRC emacs-lisp
   (setq python-fill-docstring-style 'django)
-  (setq fill-column 78)
+  (setq fill-column 79)
   (when (executable-find "ipython")
     (setq python-shell-interpreter "ipython"))
 #+END_SRC
@@ -305,6 +306,26 @@ This is new in Emacs 26 :-)
   (setq initial-major-mode 'fundamental-mode)
 #+END_SRC
 
+* TABS VS SPACES
+
+#+begin_src emacs-lisp
+  ;; make indent commands use space only (never tab character)
+  ;; emacs 23.1 to 26, default to t
+
+  ;; If indent-tabs-mode is t, it means it may use tab, resulting mixed space and
+  ;; tab
+  (setq-default indent-tabs-mode nil)
+
+  ;; make tab key always call a indent command.
+  ;; (setq-default tab-always-indent t)
+
+  ;; make tab key call indent command or insert tab character, depending on cursor position
+  ;; (setq-default tab-always-indent nil)
+
+  ;; make tab key do indent first then completion.
+  (setq-default tab-always-indent 'complete)
+#+end_src
+
 * TERM BUFFER SIZE
 
 #+BEGIN_SRC emacs-lisp
@@ -325,6 +346,7 @@ This is new in Emacs 26 :-)
   (setq undo-limit 150000)
   (setq undo-strong-limit 300000)
 #+END_SRC
+
 * UNIQUIFY
 
 #+BEGIN_SRC emacs-lisp
@@ -354,6 +376,7 @@ This is new in Emacs 26 :-)
   (setq split-width-threshold 160)
   (setq split-height-threshold 80)
 #+END_SRC
+
 * YES OR NO
 
 #+BEGIN_SRC emacs-lisp
