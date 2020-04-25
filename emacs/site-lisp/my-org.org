@@ -130,7 +130,7 @@ https://orgmode.org/worg/org-contrib/babel/languages.html
      (emacs-lisp . t)
      (gnuplot . t)
      (haskell . t)
-     (http . t)
+     ;; (http . t)
      (java . t)
      (js . t)
      (latex . t)

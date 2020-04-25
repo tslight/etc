@@ -7,6 +7,7 @@
 Collection of custom XDG desktop entries.
 
 * TABBED
+
 #+BEGIN_SRC conf :tangle ~/.local/share/applications/tmux.desktop
   [Desktop Entry]
   Type=Application
