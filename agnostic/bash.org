@@ -99,7 +99,7 @@
   # print prompt.
   # export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
   # keep synced:
-  export PROMPT_COMMAND='history -a'
+  # export PROMPT_COMMAND='history -a'
 
   [ -z "$PS1" ] && return # If not running interactively, don't do anything
   [ -f /etc/bash.bashrc ] && source /etc/bash.bashrc
