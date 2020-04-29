@@ -12,8 +12,8 @@
     <StartupCommand>sct 5000</StartupCommand>
     <StartupCommand>xset r rate 200 40 s 240 dpms 480 600 820</StartupCommand>
     <StartupCommand>xrdb ~/.Xresources</StartupCommand>
-    <StartupCommand>alttab -mk Control_L -kk Escape -vp pointer -d 1</StartupCommand>
-    <StartupCommand>alttab -mk Alt_L -kk Escape -vp pointer</StartupCommand>
+    <!-- <StartupCommand>alttab -mk Control_L -kk Escape -vp pointer -d 1</StartupCommand> -->
+    <!-- <StartupCommand>alttab -mk Alt_L -kk Escape -vp pointer</StartupCommand> -->
     <StartupCommand>xautolock -locker slock</StartupCommand>
     <StartupCommand>nm-applet</StartupCommand>
     <StartupCommand>clipit</StartupCommand>
@@ -24,22 +24,22 @@
       <Program label="Chromium">chromium-browser</Program>
       <Program label="The GIMP">gimp</Program>
       <Menu label="Emacs">
-        <Program label="Emacs">lilyterm -x emacs -nw</Program>
-        <Program label="Emacs Quick">lilyterm -x emacs -nw -q</Program>
-        <Program label="Emacs Debug">lilyterm -x emacs -nw --debug-init</Program>
-        <Program label="Emacs Daemon">lilyterm -x emacsclient -nw -c -a ""</Program>
+        <Program label="Emacs">st -x emacs -nw</Program>
+        <Program label="Emacs Quick">st -x emacs -nw -q</Program>
+        <Program label="Emacs Debug">st -x emacs -nw --debug-init</Program>
+        <Program label="Emacs Daemon">st -x emacsclient -nw -c -a ""</Program>
         <Program label="GTK Emacs">emacs</Program>
         <Program label="GTK Emacs Quick">emacs -Q</Program>
         <Program label="GTK Emacs Debug">emacs --debug-init</Program>
         <Program label="GTK Emacs Daemon">emacsclient -c -a ""</Program>
       </Menu>
-      <Program label="Tmux">lilyterm -x tmux</Program>
-      <Program label="Term">lilyterm</Program>
+      <Program label="Tmux">st -x tmux</Program>
+      <Program label="Term">st</Program>
       <Program label="Lock">slock</Program>
       <Menu label="Utilities">
         <Program label="Fonts">xfontsel</Program>
         <Restart label="Restart WM"/>
-        <Program label="XEventViewer">lilyterm -x xev</Program>
+        <Program label="XEventViewer">st -x xev</Program>
         <Program label="XProp">xprop | xmessage -file -</Program>
         <Program label="XWinInfo">xwininfo | xmessage -file -</Program>
       </Menu>
@@ -184,11 +184,11 @@
     <Key mask="4" key="r">exec:dmenu_run</Key>
     <Key mask="4" key="space">exec:dmenu_run</Key>
     <Key mask="C" key="F2">exec:exec:dmenu_run</Key>
-    <Key mask="4" key="Return">exec:lilyterm</Key>
+    <Key mask="4" key="Return">exec:st</Key>
     <Key mask="4" key="e">exec:emacsclient -c -a ""</Key>
     <Key mask="4C" key="e">exec:emacs</Key>
-    <Key mask="4" key="t">exec:lilyterm -x tmux</Key>
-    <Key mask="4C" key="t">exec:lilyterm -x tmux attach</Key>
+    <Key mask="4" key="t">exec:st -x tmux</Key>
+    <Key mask="4C" key="t">exec:st -x tmux attach</Key>
     <Key mask="4" key="w">exec:firefox</Key>
     <Key mask="4C" key="w">exec:chromium-browser</Key>
 
@@ -197,8 +197,8 @@
     <Key mask="4C" key="space">window</Key>
     <Key mask="A" key="F1">window</Key>
 
-    <!-- <Key mask="A" key="Tab">nextstacked</Key> -->
-    <!-- <Key mask="AS" key="Tab">prevstacked</Key> -->
+    <Key mask="A" key="Tab">nextstacked</Key>
+    <Key mask="AS" key="Tab">prevstacked</Key>
     <Key mask="C" key="F4">close</Key>
     <Key mask="C" key="F10">maximize</Key>
     <Key mask="C" key="F11">fullscreen</Key>
