@@ -102,6 +102,7 @@ Shows up in ~/proc/bus/input/devices~ as "Microsoft Microsoft® Nano Transceiver
    KEYBOARD_KEY_70065=leftalt       # menu  --> leftalt
    KEYBOARD_KEY_700e4=leftmeta      # ctrl  --> leftmeta
 #+end_src
+
 * Microsoft Wired USB
 
 #+BEGIN_SRC conf

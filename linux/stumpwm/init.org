@@ -90,7 +90,8 @@ After loading all our lisp, run some shell programs to make things more comfy.
 
 #+BEGIN_SRC common-lisp
   (run-shell-command "xsetroot -cursor_name left_ptr -solid grey9")
-  (run-shell-command "sct 5000")
+  ;; (run-shell-command "sct 5000")
+  (run-shell-command "redshift -t 5000:3000")
   (run-shell-command "xset r rate 200 40 s 240 dpms 480 600 820")
   (run-shell-command "xrdb ~/.Xresources")
   ;; (run-shell-command "alttab -mk Control_L -kk Escape -vp pointer -d 1")
