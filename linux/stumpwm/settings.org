@@ -80,13 +80,8 @@ Requires my [[https://github.com/tslight/stumpwm-contrib/blob/merged/modeline/se
 #+BEGIN_SRC common-lisp
   (grename "Alpha")
   (gnewbg "Beta")
-  (gnewbg "Tau")
-  (gnewbg "Pi")
-  (gnewbg "Zeta")
-  (gnewbg "Teta")
-  (gnewbg "Phi")
-  (gnewbg "Rho")
-  (gnewbg "Lambda")
+  (gnewbg-float "Pi")
+  (gnewbg-float "Lambda")
 #+END_SRC
 
 #+BEGIN_SRC common-lisp
@@ -103,12 +98,12 @@ Requires my [[https://github.com/tslight/stumpwm-contrib/blob/merged/modeline/se
     (1 t t :role "browser")
     (1 t t :class "qBittorrent"))
 
-  (define-frame-preference "Tau"
+  (define-frame-preference "Pi"
     (2 t t :instance "libreoffice")
     (2 t t :role "file_manager")
     (2 t t :title "...File Manager"))
 
-  (define-frame-preference "Pi"
+  (define-frame-preference "Lambda"
     (1 t t :class "Qemu-system-x86_64")
     (1 t t :class "Virt-manager"))
 #+END_SRC
