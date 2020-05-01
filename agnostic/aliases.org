@@ -120,6 +120,7 @@
   alias mkdir='mkdir -p'
   alias mv='mv -i'
   alias p='pwd'
+  alias path="echo $PATH | tr -s : \\\n"
   alias pg='pgrep -ail'
   alias ping4='ping -c 4'
   alias pingg='ping -c 4 8.8.8.8'

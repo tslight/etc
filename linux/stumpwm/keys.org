@@ -293,7 +293,7 @@ http://dotshare.it/dots/396/
   (defkeys-top
     ("s-r" "exec")
     ("s-e" "emacs")
-    ("s-t" "terminal")
+    ("s-t" "sttabbed")
     ("s-b" "web-browser")
     ("s-f" "file-manager")
     ("s-SPC" "xdgmenu")
@@ -318,6 +318,7 @@ http://dotshare.it/dots/396/
 
 #+BEGIN_SRC common-lisp
   (defkeys-top
+    ("M-Tab" "cycle-mru")
     ("C-F4" "delete")
     ("M-F4" "kill")
     ("s-q" "delete")

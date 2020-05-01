@@ -37,22 +37,11 @@
   PATH="${HOME}/bin:${PATH}"
   PATH="${DEVOPS}/bin:${PATH}"
   PATH="${HOME}/.local/bin:${PATH}"
-  PATH="${HOME}/conda/bin:${PATH}"
   export PATH
 
   MANPATH="${HOME}/.local/share/man:${MANPATH}"
   MANPATH="${HOME}/opt/share/man:${MANPATH}"
   export MANPATH
-
-
-  if [ -d "$HOME/.nix-profile" ]; then
-      export XDG_DATA_DIRS=$HOME/.nix-profile/share:$XDG_DATA_DIRS
-      export NIX_PATH=$HOME/.nix-defexpr/channels${NIX_PATH:+:}$NIX_PATH
-      export LOCALE_ARCHIVE="$(nix-env --installed --no-name --out-path --query glibc-locales)/lib/locale/locale-archive"
-      if [ -f "$HOME/.nix-profile/etc/profile.d/nix.sh" ]; then
-          source "$HOME/.nix-profile/etc/profile.d/nix.sh"
-      fi
-  fi
 
   # https://wiki.archlinux.org/index.php/SSH_keys#Keychain
   # command -v keychain &>/dev/null && eval $(keychain --eval --quiet id_rsa)
@@ -84,11 +73,6 @@
   export HISTSIZE=999999
   export HISTIGNORE="h:history:[bf]g:exit:^ll$:^lla$:^ls$"
   export HISTTIMEFORMAT="%h %d %H:%M:%S "
-  # Append new history lines, clear the history list, re-read the history list,
-  # print prompt.
-  # export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
-  # keep synced:
-  # export PROMPT_COMMAND='history -a'
 
   [ -z "$PS1" ] && return # If not running interactively, don't do anything
   [ -f /etc/bash.bashrc ] && source /etc/bash.bashrc
@@ -121,21 +105,6 @@
   [ -f "$HOME"/.aliases ] && source "$HOME"/.aliases
   [ -f "$HOME"/.functions ] && source "$HOME"/.functions
   [ -f "$HOME"/.bash_completions ] && source "$HOME"/.bash_completions
-
-  # >>> conda initialize >>>
-  # !! Contents within this block are managed by 'conda init' !!
-  __conda_setup="$('/home/toby/conda/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
-  if [ $? -eq 0 ]; then
-      eval "$__conda_setup"
-  else
-      if [ -f "$HOME/conda/etc/profile.d/conda.sh" ]; then
-          . "$HOME/conda/etc/profile.d/conda.sh"
-      else
-          export PATH="$HOME/conda/bin:$PATH"
-      fi
-  fi
-  unset __conda_setup
-  # <<< conda initialize <<<
 
   export NVM_DIR="$HOME/.nvm"
   [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"

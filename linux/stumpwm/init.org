@@ -33,6 +33,7 @@ Please see the relevant READMEs in the fork for more details.
   (mapcar #'load-module '("acpi"
                           "clipboard-history"
                           "command-history"
+                          "cycle-mru"
                           "encouragement"
                           "end-session"
                           "sensors"
@@ -90,8 +91,8 @@ After loading all our lisp, run some shell programs to make things more comfy.
 
 #+BEGIN_SRC common-lisp
   (run-shell-command "xsetroot -cursor_name left_ptr -solid grey9")
-  ;; (run-shell-command "sct 5000")
-  (run-shell-command "redshift -t 5000:3000")
+  ;; (run-shell-command "sct 4000")
+  (run-shell-command "redshift -P -O 4000")
   (run-shell-command "xset r rate 200 50 s 240 dpms 480 600 820")
   (run-shell-command "xrdb ~/.Xresources")
   ;; (run-shell-command "alttab -mk Control_L -kk Escape -vp pointer -d 1")

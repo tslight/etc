@@ -40,7 +40,6 @@
 - [[#json-mode][JSON MODE]]
 - [[#json-navigator][JSON NAVIGATOR]]
 - [[#lazygit][LAZYGIT]]
-- [[#lsp-mode][LSP MODE]]
 - [[#magit][MAGIT]]
 - [[#makefile-executor][MAKEFILE EXECUTOR]]
 - [[#markdown-mode][MARKDOWN MODE]]
@@ -62,7 +61,6 @@
 - [[#systemd][SYSTEMD]]
 - [[#terraform-mode][TERRAFORM MODE]]
 - [[#undo-tree][UNDO TREE]]
-- [[#vterm][VTERM]]
 - [[#web-mode][WEB MODE]]
 - [[#wgrep][WGREP]]
 - [[#which-key][WHICH KEY]]
@@ -248,6 +246,7 @@ https://emacs.stackexchange.com/questions/22531/diminish-org-indent-mode
     :ensure t
     :defer t )
 #+END_SRC
+
 * DOOM THEMES
 
 #+begin_src emacs-lisp
@@ -487,58 +486,6 @@ https://emacs.stackexchange.com/questions/22531/diminish-org-indent-mode
     (defalias 'gh/repo 'lazygithub-clone-or-pull-repo))
 #+end_src
 
-* LSP MODE
-
-https://github.com/emacs-lsp/lsp-mode#supported-languages
-
-#+begin_src shell :tangle no :results no
-  npm i -g bash-language-server
-  pip install cmake-language-server
-  npm install -g vscode-css-languageserver-bin
-  npm install -g dockerfile-language-server-nodejs
-  go get golang.org/x/tools/gopls@latest
-  # go get -u github.com/saibing/bingo
-  npm install -g vscode-html-languageserver-bin
-  npm i -g typescript-language-server
-  npm i -g typescript
-  npm i -g javascript-typescript-langserver
-  npm i -g vscode-json-languageserver
-  npm i intelephense -g
-  pip install python-language-server[all]
-  git clone https://github.com/juliosueiras/terraform-lsp /tmp && \
-      cd /tmp/terraform-lsp && \
-      go install
-  npm install -g yaml-language-server
-#+end_src
-
-#+begin_src emacs-lisp :tangle no
-  (use-package lsp-mode
-    :ensure t
-    :init (setq lsp-keymap-prefix "C-c l")
-    :hook ((prog-mode . lsp)
-           (python-mode . lsp)
-           (lsp-mode . lsp-enable-which-key-integration))
-    :commands (lsp lsp-deferred)
-    :config
-    ;; https://github.com/emacs-lsp/lsp-mode#performance
-    (setq gc-cons-threshold (* 1024 1024 1024))
-    (setq read-process-output-max (* 1024 1024)) ;; 1mb
-    (setq lsp-prefer-capf t)
-    (setq lsp-idle-delay 0.500))
-#+end_src
-
-#+begin_src emacs-lisp :tangle no
-  (use-package lsp-ui
-    :ensure t
-    :commands lsp-ui-mode)
-#+end_src
-
-#+begin_src emacs-lisp :tangle no
-  (use-package company-lsp
-    :ensure t
-    :commands company-lsp)
-#+end_src
-
 * MAGIT
 
 #+BEGIN_SRC emacs-lisp
@@ -735,13 +682,6 @@ Calculation of variables et.c.; $(BINARY) will show up as what it evaluates to.
 
 * PY AUTOPEP8
 
-#+BEGIN_SRC emacs-lisp :tangle no
-  (use-package py-autopep8
-    :ensure t
-    :hook
-    (python-mode . py-autopep8-enable-on-save))
-#+END_SRC
-
 #+begin_src emacs-lisp
   (use-package blacken
     :ensure t
@@ -806,28 +746,6 @@ Calculation of variables et.c.; $(BINARY) will show up as what it evaluates to.
     (setq undo-tree-auto-save-history t)
     (setq undo-tree-history-directory-alist
           `(("." . ,(expand-file-name "~/.emacs.d/undos/")))))
-#+END_SRC
-
-* VTERM
-
-Make sure Emacs is built with ~--with-modules~ module support.
-
-Check by running:
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  system-configuration-options
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-  (use-package vterm
-    :ensure t
-    :bind*
-    ("C-c M-t" . vterm)
-    ("C-c 4 M-t" . vterm-other-window)
-    (:map vterm-mode-map
-          ("C-c C-j" . vterm-copy-mode))
-    :config
-    (setq vterm-kill-buffer-on-exit t))
 #+END_SRC
 
 * WEB MODE
