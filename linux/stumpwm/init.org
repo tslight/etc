@@ -91,14 +91,9 @@ After loading all our lisp, run some shell programs to make things more comfy.
 
 #+BEGIN_SRC common-lisp
   (run-shell-command "xsetroot -cursor_name left_ptr -solid grey9")
-  ;; (run-shell-command "sct 4000")
   (run-shell-command "redshift -P -O 4000")
   (run-shell-command "xset r rate 200 50 s 240 dpms 480 600 820")
   (run-shell-command "xrdb ~/.Xresources")
-  ;; (run-shell-command "alttab -mk Control_L -kk Escape -vp pointer -d 1")
-  ;; (run-shell-command "alttab -mk Alt_L -kk Escape -vp pointer")
-  ;; (run-shell-command "alttab -vp pointer -d 1")
-  ;; (run-shell-command "alttab -mk Super_L -vp pointer")
   (run-shell-command "xautolock -locker slock")
   (run-shell-command "[ -x $HOME/.dropbox-dist/dropboxd ] && $HOME/.dropbox-dist/dropboxd")
   (clipboard-history:start-clipboard-manager)
