@@ -33,7 +33,7 @@ Please see the relevant READMEs in the fork for more details.
   (mapcar #'load-module '("acpi"
                           "clipboard-history"
                           "command-history"
-                          "cycle-mru"
+                          ;; "cycle-mru"
                           "encouragement"
                           "end-session"
                           "sensors"

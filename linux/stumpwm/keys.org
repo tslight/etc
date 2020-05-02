@@ -283,8 +283,8 @@ http://dotshare.it/dots/396/
     ("XF86AudioLowerVolume" "volume Master 5%-")
     ("XF86AudioRaiseVolume" "volume Master 5%+")
     ("XF86AudioMute" "volume Master toggle")
-    ("XF86MonBrightnessDown" "exec xbacklight -dec 10%")
-    ("XF86MonBrightnessUp" "exec xbacklight -inc 10%"))
+    ("XF86MonBrightnessDown" "exec brightnessctl s 10%-")
+    ("XF86MonBrightnessUp" "exec brightnessctl s 10%+"))
 #+END_SRC
 
 ** LAUNCHERS
@@ -318,7 +318,8 @@ http://dotshare.it/dots/396/
 
 #+BEGIN_SRC common-lisp
   (defkeys-top
-    ("M-Tab" "cycle-mru")
+    ("M-Tab" "next")
+    ("M-ISO_Left_Tab" "prev")
     ("C-F4" "delete")
     ("M-F4" "kill")
     ("s-q" "delete")

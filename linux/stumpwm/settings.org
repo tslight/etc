@@ -84,7 +84,7 @@ Requires my [[https://github.com/tslight/stumpwm-contrib/blob/merged/modeline/se
   (gnewbg-float "Lambda")
 #+END_SRC
 
-#+BEGIN_SRC common-lisp
+#+BEGIN_SRC common-lisp :tangle no
   (clear-window-placement-rules)
   (define-frame-preference "Alpha"
     (0 t t :class "Emacs")
