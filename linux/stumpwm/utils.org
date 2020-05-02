@@ -163,7 +163,7 @@ Reload StumpWM and then re-load config.
     "run-or-raise lilyterm with tmux"
     (run-or-raise
      "lilyterm -x bash -c 'tmux -q has-session && tmux attach -d || tmux -u'"
-     '(:class "Lilyterm")))
+     '(:class "LilyTerm")))
 
   (defcommand urxvtmux () ()
     "run-or-raise urxvt with tmux"
