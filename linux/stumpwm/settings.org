@@ -10,7 +10,7 @@ StumpWM global variable configuration.
 
 * FONT
 
-#+BEGIN_SRC common-lisp
+#+BEGIN_SRC common-lisp :tangle no
   (set-font "-*-terminus-bold-*-*-*-14-*")
 #+END_SRC
 
@@ -25,12 +25,19 @@ Requires [[https://github.com/tslight/stumpwm-contrib/tree/merged/util/ttf-fonts
 Also xft fonts kinda fuck up help page formatting, so let's stick to terminal
 fonts...
 
-#+BEGIN_SRC common-lisp :tangle no
+This is currently broken and one needs to manually clone [[https://github.com/l04m33/clx-truetype][this]] to [[file:~/quicklisp/local-projects/][here]].
+
+https://github.com/stumpwm/stumpwm/issues/659
+
+*N.B.* The manual clone of =clx-truetype= to =~/quicklisp/local-projects=,
+means one also needs to =(ql:quickload "cl-fad")= and =(ql:quickload "cl-store")=.
+
+#+BEGIN_SRC common-lisp
   ;; (xft:cache-fonts) ; slows down startup ALOT!
   (set-font (make-instance 'xft:font
-                           :family "DejaVu Sans"
+                           :family "DejaVu Sans Mono"
                            :subfamily "Bold"
-                           :size 9))
+                           :size 12))
 #+END_SRC
 
 * COLORS
