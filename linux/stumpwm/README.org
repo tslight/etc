@@ -116,6 +116,12 @@ Next add the following line to your .xinitrc to be able to run with ~startx~:
   exec /usr/local/bin/stumpwm.sh
 #+END_SRC
 
+Or we can just do this:
+
+#+BEGIN_SRC bash :tangle ~/.xinitrc
+  sbcl --eval '(require :stumpwm)' --eval '(stumpwm:stumpwm)'
+#+END_SRC
+
 And/or tangle the block below to create a .desktop file to be read by your display
 manager.
 
