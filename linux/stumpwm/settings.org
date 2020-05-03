@@ -37,7 +37,7 @@ means one also needs to =(ql:quickload "cl-fad")= and =(ql:quickload "cl-store")
   (set-font (make-instance 'xft:font
                            :family "DejaVu Sans Mono"
                            :subfamily "Bold"
-                           :size 12))
+                           :size 11))
 #+END_SRC
 
 * COLORS
@@ -77,7 +77,7 @@ Requires my [[https://github.com/tslight/stumpwm-contrib/blob/merged/modeline/se
   (setf *mode-line-pad-y* 0)
   (setf *mode-line-border-width* 0)
   (setf *window-format* " [%n] [%s] [%m] %c ")
-  (setf *time-modeline-string* "^7*%H:%M %d/%m")
+  (setf *time-modeline-string* "^7*%H:%M%d/%m")
   (setf *screen-mode-line-format*
         (list "^B^2*[%n]^n ^7*%v ^>^B%B %S %d"))
 #+END_SRC
