@@ -223,8 +223,8 @@ http://dotshare.it/dots/396/
   (defkeys-root
     ("M-e" "encouragement")
     ("I" "info")
-    (";" "colon")
-    ("C-;" "eval")
+    ("x" "colon")
+    ("C-x" "eval")
     ("M-m" "lastmsg")
     ("m" "mode-line")
     ("S" "swank")
@@ -372,7 +372,7 @@ http://dotshare.it/dots/396/
    ("s-s" "vsplit")
    ("C-s-v" "my/toggle-split")
    ("s-v" "hsplit")
-   ("s-x" *exchange-window-map*))
+   ("s-S-x" *exchange-window-map*))
 
   (loop for (vi-key name) in '(("k" "up")
                                ("j" "down")
@@ -391,6 +391,8 @@ http://dotshare.it/dots/396/
 #+BEGIN_SRC common-lisp
   (defkeys-top
    ("s-m" "mode-line")
+   ("s-x" "colon")
+   ("C-s-x" "eval")
    ("M-s-r" "my/reload")
    ("C-s-XF86Eject" "exec slock")
    ("C-s-Delete" "exec slock")
