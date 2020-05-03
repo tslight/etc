@@ -165,6 +165,12 @@ Reload StumpWM and then re-load config.
      "lilyterm -x bash -c 'tmux -q has-session && tmux attach -d || tmux -u'"
      '(:class "LilyTerm")))
 
+  (defcommand kittmux () ()
+    "run-or-raise kitty with tmux"
+    (run-or-raise
+     "kitty -e bash -c 'tmux -q has-session && tmux attach -d || tmux -u'"
+     '(:class "kitty")))
+
   (defcommand urxvtmux () ()
     "run-or-raise urxvt with tmux"
     (run-or-raise

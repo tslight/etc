@@ -152,7 +152,7 @@ http://dotshare.it/dots/396/
     ("r" "exec")
     ("SPC" "xdgmenu")
     ("." "xdgmenu categories")
-    ("c" "lilytmux")
+    ("c" "kittmux")
     ("C-c" "sttabbed")
     ("e" "emacsclient")
     ("C-e" "exec emacs")
@@ -293,7 +293,7 @@ http://dotshare.it/dots/396/
   (defkeys-top
     ("s-r" "exec")
     ("s-e" "emacs")
-    ("s-t" "lilytmux")
+    ("s-t" "kittmux")
     ("s-c" "sttabbed")
     ("s-b" "web-browser")
     ("s-f" "file-manager")
