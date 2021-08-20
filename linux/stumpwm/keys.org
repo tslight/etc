@@ -1,0 +1,401 @@
+#+TITLE: HACK AND BE MERRY!
+#+AUTHOR: Toby Slight
+
+#+PROPERTY: header-args :cache yes
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :results silent
+#+PROPERTY: header-args+ :tangle ~/.stumpwm.d/keys.lisp
+#+PROPERTY: header-args+ :tangle-mode (identity #o644)
+
+Keybinding stuff goes in here.
+
+* OUT WITH THE OLD
+
+https://github.com/stumpwm/stumpwm/issues/480
+
+#+BEGIN_SRC common-lisp
+  (setf *root-map* (make-sparse-keymap))
+  (setf *groups-map* (make-sparse-keymap))
+  (setf *group-root-map* (make-sparse-keymap))
+  (setf *tile-group-root-map* (make-sparse-keymap))
+  (setf *float-group-root-map* (make-sparse-keymap))
+#+END_SRC
+
+* IN WITH THE NEW
+
+#+BEGIN_SRC common-lisp
+  (set-prefix-key (kbd "C-t"))
+#+END_SRC
+
+* APPLICATION MAP
+
+https://stumpwm.github.io/git/stumpwm-git_2.html#Remapped-Keys
+
+#+BEGIN_SRC common-lisp
+  (define-remapped-keys
+      '(("(Firefox|Chrome|Chromium|libreoffice-writer|libreoffice-calc|Spacefm|Thunar)"
+         ("C-n" . "Down")
+         ("C-p" . "Up")
+         ("C-f" . "Right")
+         ("C-b" . "Left")
+         ("C-<" . "Home")
+         ("C->" . "End")
+         ("M-b" . "C-Left")
+         ("M-f" . "C-Right")
+         ("C-M-b" . "M-Left")
+         ("C-M-f" . "M-Right"))))
+#+END_SRC
+
+* EXCHANGE MAP
+
+#+BEGIN_SRC common-lisp
+  (loop for (vi-key name) in '(("k" "up")
+                               ("j" "down")
+                               ("h" "left")
+                               ("l" "right"))
+     do (let ((key-combo (format nil "~A" vi-key)))
+          (define-key *exchange-window-map* (kbd key-combo)
+            (format nil "exchange-direction ~A" name))))
+  (define-key *exchange-window-map* (kbd "Escape") "C-g")
+  (define-key *exchange-window-map* (kbd "Escape") "abort")
+#+END_SRC
+
+* FRAMES MAP
+
+#+BEGIN_SRC common-lisp
+  (defvar *my-frames-map* (make-sparse-keymap))
+  (define-key *my-frames-map* (kbd "o") "fother")
+  (define-key *my-frames-map* (kbd "m") "send-escape")
+  (define-key *my-frames-map* (kbd "f") "fselect")
+  (define-key *my-frames-map* (kbd "n") "fnext")
+  (define-key *my-frames-map* (kbd "p") "fprev")
+  (define-key *my-frames-map* (kbd "c") "fclear")
+  (define-key *my-frames-map* (kbd "d") "remove")
+  (define-key *my-frames-map* (kbd "q") "only")
+  (define-key *my-frames-map* (kbd "z") "my/toggle-only")
+  (define-key *my-frames-map* (kbd "x") *exchange-window-map*)
+  (define-key *my-frames-map* (kbd "v") "hsplit")
+  (define-key *my-frames-map* (kbd "s") "vsplit")
+  (define-key *my-frames-map* (kbd "=") "balance-frames")
+  (define-key *my-frames-map* (kbd "SPC") "my/toggle-split")
+  (define-key *my-frames-map* (kbd "r") "iresize")
+  (define-key *my-frames-map* (kbd "o") "my/rotate-windows")
+  (define-key *my-frames-map* (kbd "Escape") "C-g")
+  (define-key *my-frames-map* (kbd "Escape") "abort")
+  (loop for (vi-key name) in '(("k" "up")
+                               ("j" "down")
+                               ("h" "left")
+                               ("l" "right"))
+     do (let ((key-combo (format nil "~A" vi-key))
+              (ctrl-key-combo (format nil "C-~A" vi-key)))
+          (define-key *my-frames-map* (kbd key-combo)
+            (format nil "move-focus ~A" name))
+          (define-key *my-frames-map* (kbd ctrl-key-combo)
+            (format nil "move-window ~A" name))))
+#+END_SRC
+
+* GROUPS MAP
+
+#+BEGIN_SRC common-lisp
+  (define-key *groups-map* (kbd "c") "gnew")
+  (define-key *groups-map* (kbd "o") "gother")
+  ;; (define-key *groups-map* (kbd "j") (send-fake-key (screen-current-window (current-screen)) (kbd "j")))
+  (define-key *groups-map* (kbd "n") "gnext")
+  (define-key *groups-map* (kbd "p") "gprev")
+  (define-key *groups-map* (kbd "C-n") "gnext-with-window")
+  (define-key *groups-map* (kbd "C-p") "gprev-with-window")
+  (define-key *groups-map* (kbd "g") "vgroups")
+  (define-key *groups-map* (kbd "l") "grouplist")
+  (define-key *groups-map* (kbd "m") "gmove")
+  (define-key *groups-map* (kbd "M-m") "gmove-marked")
+  (define-key *groups-map* (kbd "r") "grename")
+  (define-key *groups-map* (kbd "s") "gselect")
+  (define-key *groups-map* (kbd "k") "gkill")
+  (define-key *groups-map* (kbd "Escape") "C-g")
+  (define-key *groups-map* (kbd "Escape") "abort")
+  (dotimes (i 9)
+    (unless (eq i 0)
+      (define-key *groups-map* (kbd (format nil "~a" i))
+        (format nil "gselect ~a" i))
+      (define-key *groups-map* (kbd (format nil "M-~a" i))
+        (format nil "gmove ~a" i))
+      (define-key *groups-map* (kbd (format nil "C-~a" i))
+        (format nil "gmove-and-follow ~a" i))))
+#+END_SRC
+
+* MENU MAP
+
+#+BEGIN_SRC common-lisp
+  (define-key *menu-map* (kbd "TAB") 'menu-down)
+  (define-key *menu-map* (kbd "ISO_Left_Tab") 'menu-up)
+#+END_SRC
+
+* ROOT MAP
+** MACROS
+
+http://dotshare.it/dots/396/
+
+#+BEGIN_SRC common-lisp
+(defmacro defkey-root (key cmd)
+  `(define-key *root-map* (kbd ,key) ,cmd))
+
+(defmacro defkeys-root (&rest keys)
+  (let ((ks (mapcar #'(lambda (k) (cons 'defkey-root k)) keys)))
+    `(progn ,@ks)))
+#+END_SRC
+
+** APPLICATIONS
+
+#+BEGIN_SRC common-lisp
+  ;; applications
+  (defkeys-root
+    ("r" "exec")
+    ("SPC" "xdgmenu")
+    ("." "xdgmenu categories")
+    ("c" "kittmux")
+    ("C-c" "sttabbed")
+    ("e" "emacsclient")
+    ("C-e" "exec emacs")
+    ("b" "web-browser")
+    ("C-b" "exec chromium")
+    ("f" "file-manager")
+    ("y" "show-clipboard-history")
+    ("M-g" "google")
+    ("M-y" "youtube")
+    ("M-u" "prompt exec x-www-browser https://")
+    ("M-s" "prompt exec x-terminal-emulator -e ssh "))
+#+END_SRC
+
+** MAPS
+
+#+BEGIN_SRC common-lisp
+  ;; maps
+  (defkeys-root
+    ("f" '*my-frames-map*)
+    ("g" '*groups-map*)
+    ("h" '*help-map*)
+    ("C-s" '*my-screen-map*))
+#+END_SRC
+
+** WINDOWS
+
+#+BEGIN_SRC common-lisp
+  ;; windows
+  (defkeys-root
+    ("C-t" "other")
+    ("t" "send-escape")
+    ("n" "next")
+    ("p" "previous")
+    ("M-n" "pull-hidden-next")
+    ("M-p" "pull-hidden-previous")
+    ("o" "pull-hidden-other")
+    ("v" "expose")
+    ("s" "select")
+    ("w" "group-windowlist")
+    ("C-w" "windowlist")
+    ("M-w" "pull-from-windowlist")
+    ("C-f" "float-this")
+    ("M-f" "unfloat-this")
+    ("u" "next-urgent")
+    ("m" "mark")
+    ("M-m" "pull-marked")
+    ("F" "fullscreen")
+    ("d" "delete")
+    ("k" "kill")
+    ("z" "my/toggle-only")
+    ("C-o" "fother")
+    ("Delete" "repack-window-numbers")
+    ("M-i" "show-window-properties"))
+
+  (dotimes (i 9)
+    (define-key *root-map* (kbd (format nil "~a" i))
+        (format nil "select-window-by-number ~a" i)))
+
+  (dotimes (i 9)
+    (define-key *root-map* (kbd (format nil "C-~a" i))
+        (format nil "pull ~a" i)))
+#+END_SRC
+
+** MISC
+
+#+BEGIN_SRC common-lisp
+  ;; misc
+  (defkeys-root
+    ("M-e" "encouragement")
+    ("I" "info")
+    ("x" "colon")
+    ("C-x" "eval")
+    ("M-m" "lastmsg")
+    ("m" "mode-line")
+    ("S" "swank")
+    ("T" "title")
+    ("M-t" "time")
+    ("Escape" "abort")
+    ("C-g" "abort")
+    ("C-l" "exec slock")
+    ("l" "exec slock")
+    ("C-r" "loadrc")
+    ("M-r" "my/reload")
+    ("M-q" "quit")
+    ("q" "end-session")
+    ("C-q" "send-raw-key"))
+#+END_SRC
+
+** DISPLAYS
+
+#+BEGIN_SRC common-lisp
+  ;; displays
+  (defkeys-root
+    ("C-d" "redisplay")
+    ("C-h" "refresh-heads"))
+#+END_SRC
+
+* SCREEN MAP
+
+#+BEGIN_SRC common-lisp
+  (defvar *my-screen-map* (make-sparse-keymap))
+  (define-key *my-screen-map* (kbd "n") "snext")
+  (define-key *my-screen-map* (kbd "p") "sprev")
+  (define-key *my-screen-map* (kbd "C-s") "sother")
+  (define-key *my-screen-map* (kbd "r") "refresh-heads")
+  (define-key *my-screen-map* (kbd "Escape") "C-g")
+  (define-key *my-screen-map* (kbd "Escape") "abort")
+#+END_SRC
+
+* TOP MAP
+** MACROS
+
+http://dotshare.it/dots/396/
+
+#+BEGIN_SRC common-lisp
+(defmacro defkey-top (key cmd)
+  `(define-key *top-map* (kbd ,key) ,cmd))
+
+(defmacro defkeys-top (&rest keys)
+  (let ((ks (mapcar #'(lambda (k) (cons 'defkey-top k)) keys)))
+    `(progn ,@ks)))
+#+END_SRC
+
+** VOLUME
+
+#+BEGIN_SRC common-lisp
+  (defkeys-top
+    ("XF86AudioLowerVolume" "volume Master 5%-")
+    ("XF86AudioRaiseVolume" "volume Master 5%+")
+    ("XF86AudioMute" "volume Master toggle")
+    ("XF86MonBrightnessDown" "exec brightnessctl s 10%-")
+    ("XF86MonBrightnessUp" "exec brightnessctl s 10%+"))
+#+END_SRC
+
+** LAUNCHERS
+
+#+BEGIN_SRC common-lisp
+  (defkeys-top
+    ("s-r" "exec")
+    ("s-e" "emacs")
+    ("s-t" "kittmux")
+    ("s-c" "sttabbed")
+    ("s-b" "web-browser")
+    ("s-f" "file-manager")
+    ("s-SPC" "xdgmenu")
+    ("s-." "xdgmenu categories")
+    ("XF86Launch5" "emacs")
+    ("XF86Launch6" "terminal")
+    ("XF86Launch7" "web-browser")
+    ("XF86Launch8" "file-manager")
+    ("XF86Search" "xdgmenu")
+    ("XF86Favorites" "xdgmenu categories"))
+#+END_SRC
+
+** SCREENSHOTS
+
+#+BEGIN_SRC common-lisp
+  (defkeys-top
+    ("SunPrint_Screen" "exec maim -u -m 1 ~/Pictures/$(date '+%Y%m%d.%H%M%S').png")
+    ("C-SunPrint_Screen" "exec maim -s -u -m 1 ~/Pictures/$(date '+%Y%m%d.%H%M%S').png"))
+#+END_SRC
+
+** WINDOWS
+
+#+BEGIN_SRC common-lisp
+  (defkeys-top
+    ("M-Tab" "next")
+    ("M-ISO_Left_Tab" "prev")
+    ("C-F4" "delete")
+    ("M-F4" "kill")
+    ("s-q" "delete")
+    ("C-F11" "fullscreen")
+    ("C-F12" "expose")
+    ("C-s-w" "windowlist")
+    ("s-w" "group-windowlist")
+    ("C-s-f" "float-this")
+    ("M-s-f" "unfloat-this"))
+#+END_SRC
+
+** MAPS
+
+#+BEGIN_SRC common-lisp
+  (defkeys-top
+    ("C-s-s" *my-screen-map*)
+    ("C-F1" *help-map*))
+#+END_SRC
+
+** GROUPS
+
+#+BEGIN_SRC common-lisp
+  (defkeys-top
+   ("s-g" "grouplist")
+   ("C-s-g" "vgroups")
+   ("s-n" "gnext")
+   ("s-p" "gprev")
+   ("C-s-n" "gnext-with-window")
+   ("C-s-p" "gprev-with-window"))
+
+  (dotimes (i 9)
+    (unless (eq i 0)
+      (define-key *top-map* (kbd (format nil "s-~a" i))
+        (format nil "gselect ~a" i))
+      (define-key *top-map* (kbd (format nil "C-s-~a" i))
+        (format nil "gmove-and-follow ~a" i))
+      (define-key *top-map* (kbd (format nil "M-s-~a" i))
+        (format nil "gmove ~a" i))))
+#+END_SRC
+
+** FRAMES
+
+#+BEGIN_SRC common-lisp
+  (defkeys-top
+   ("s-o" "fother")
+   ("C-s-r" "iresize")
+   ("M-F10" "only")
+   ("C-F10" "my/toggle-only")
+   ("s-s" "vsplit")
+   ("C-s-v" "my/toggle-split")
+   ("s-v" "hsplit")
+   ("s-S-x" *exchange-window-map*))
+
+  (loop for (vi-key name) in '(("k" "up")
+                               ("j" "down")
+                               ("h" "left")
+                               ("l" "right"))
+     do (let ((super-key (format nil "s-~A" vi-key))
+              (ctrl-super-key (format nil "C-s-~A" vi-key)))
+          (define-key *top-map* (kbd super-key)
+            (format nil "move-focus ~A" name))
+          (define-key *top-map* (kbd ctrl-super-key)
+            (format nil "move-window ~A" name))))
+#+END_SRC
+
+** MISC
+
+#+BEGIN_SRC common-lisp
+  (defkeys-top
+   ("s-m" "mode-line")
+   ("s-x" "colon")
+   ("C-s-x" "eval")
+   ("M-s-r" "my/reload")
+   ("C-s-XF86Eject" "exec slock")
+   ("C-s-Delete" "exec slock")
+   ("C-s-q" "end-session")
+   ("C-M-S-q" "quit"))
+#+END_SRC

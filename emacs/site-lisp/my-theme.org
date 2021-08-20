@@ -1,0 +1,95 @@
+#+TITLE: THEMING FUNCTIONS & SETTINGS
+#+AUTHOR: Toby Slight
+#+PROPERTY: header-args :cache yes
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :results silent
+#+PROPERTY: header-args+ :tangle ~/.emacs.d/site-lisp/my-theme.el
+#+PROPERTY: header-args+ :tangle-mode (identity #o644)
+#+OPTIONS: toc:t
+* CONTENTS:TOC_5_gh:
+- [[#after-make-frame][AFTER MAKE FRAME]]
+- [[#disable-themes][DISABLE THEMES]]
+- [[#settings][SETTINGS]]
+- [[#keybindings][KEYBINDINGS]]
+
+* AFTER MAKE FRAME
+
+#+BEGIN_SRC emacs-lisp
+  (defun my/after-make-frame (frame)
+    (select-frame frame)
+    (when (eq system-type 'windows-nt)
+      (set-frame-font "Consolas 10" nil t))
+    (when (eq system-type 'darwin)
+      (set-frame-font "Monaco 10" nil t))
+    (when (or (eq system-type 'gnu/linux)
+              (eq system-type 'berkeley-unix))
+      (set-frame-font "Monospace 11" nil t))
+    (if (display-graphic-p)
+        (progn
+          (load-theme 'wombat)
+          (when (fboundp 'menu-bar-mode)
+            (menu-bar-mode -1))
+          (when (fboundp 'scroll-bar-mode)
+            (scroll-bar-mode -1))
+          (when (fboundp 'tool-bar-mode)
+            (tool-bar-mode -1))
+          (when (fboundp 'tooltip-mode)
+            (tooltip-mode -1)))
+      (progn
+        (load-theme 'wombat)
+        (xterm-mouse-mode 1)
+        (mouse-avoidance-mode 'banish)
+        ;; (setq linum-format "%d ")
+        (setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
+        (setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
+        (setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; one line at a time
+        (global-set-key [mouse-4] '(lambda () (interactive) (scroll-down 1)))
+        (global-set-key [mouse-5] '(lambda () (interactive) (scroll-up 1))))))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (if (daemonp)
+      (add-hook 'after-make-frame-functions #'my/after-make-frame(selected-frame))
+    (my/after-make-frame(selected-frame)))
+#+END_SRC
+
+* DISABLE THEMES
+
+#+BEGIN_SRC emacs-lisp
+  (defun my/disable-themes ()
+    "Disable all custom themes in one fail swoop :-)"
+    (interactive)
+    (mapc #'disable-theme custom-enabled-themes))
+#+END_SRC
+
+* SETTINGS
+
+#+BEGIN_SRC emacs-lisp
+  (setq default-frame-alist
+        '((fullscreen . maximized) (vertical-scroll-bars . nil)))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (setq frame-resize-pixelwise t) ;; jwm resize fix
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  ;; mode line stuff
+  ;; (setq display-time-format "%H:%M %d/%m")
+  ;; (setq display-time-default-load-average 'nil)
+  (column-number-mode t)
+  ;; (display-time-mode t)
+  ;; (display-battery-mode t)
+  ;; (size-indication-mode t)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (setq prettify-symbols-unprettify-at-point 'right-edge)
+  (global-prettify-symbols-mode 1)
+#+END_SRC
+
+* KEYBINDINGS
+
+#+BEGIN_SRC emacs-lisp
+  (my/bind-always "C-c t C-t" my/disable-themes)
+#+END_SRC

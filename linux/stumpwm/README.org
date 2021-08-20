@@ -1,0 +1,173 @@
+#+TITLE: HACKS AND GLORY AWAIT!
+#+AUTHOR: Toby Slight
+#+PROPERTY: header-args :cache yes
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :results silent
+#+CAPTION: Screenshot
+#+NAME:fig:screenshot
+[[./img/scrot.png]]
+
+#+BEGIN_QUOTE
+Stumpwm is a "everything-and-the-kitchen-sink WM" or "the emacs of WMs."
+
+StumpWM manages windows the way emacs manages buffers, or the way screen
+manages terminals. If you want a flexible, customizable, hackable desktop
+experience, look no further.
+
+-- [[https://github.com/stumpwm/stumpwm][StumpWM GitHub]]
+#+END_QUOTE
+
+* INSTALLATION
+
+*** ANSIBLE
+
+Use the playbook below. Also found in [[https://gitlab.com/tspub/devops/ansible/-/blob/master/stumpwm.yml][my Ansible repo]].
+
+#+BEGIN_SRC yaml
+  - name: Install StumpWM from Quicklisp
+    hosts: localhost
+    vars:
+      qlpath: ~/quicklisp.lisp
+      slpath: ~/quicklisp/setup.lisp
+    tasks:
+    - name: Download Quicklisp
+      get_url:
+        url: https://beta.quicklisp.org/quicklisp.lisp
+        dest: '{{qlpath}}'
+    - name: Check if Quicklisp already installed
+      stat:
+        path: ~/quicklisp/setup.lisp
+      register: setup
+    - name: Install Quicklisp
+      shell: |
+        echo '(quicklisp-quickstart:install)' | sbcl --load {{qlpath}}
+        echo '(ql:add-to-init-file)' | sbcl --load {{slpath}}
+      when: not setup.stat.exists
+    - name: Install Stumpwm
+      shell: |
+        echo '(ql:quickload :stumpwm)' | sbcl --load {{slpath}}
+        echo '(ql:quickload :xembed)' | sbcl --load {{slpath}}
+        echo '(ql:quickload :clx-truetype)' | sbcl --load {{slpath}}
+        echo '(ql:quickload :swank)' | sbcl --load {{slpath}}
+        echo '(ql:quickload :quicklisp-slime-helper)' | sbcl --load {{slpath}}
+        echo '(ql:quickload :zpng)' | sbcl --load {{slpath}}
+        echo '(ql:update-client)' | sbcl --load {{slpath}}
+        echo '(ql:update-dist "quicklisp")' | sbcl --load {{slpath}}
+#+END_SRC
+
+*** MANUAL
+
+Get Quicklisp from [[https://www.quicklisp.org/beta/][here]]:
+
+#+BEGIN_SRC bash
+  curl -O https://beta.quicklisp.org/quicklisp.lisp
+  curl -O https://beta.quicklisp.org/quicklisp.lisp.asc
+  gpg --verify quicklisp.lisp.asc quicklisp.lisp
+#+END_SRC
+
+Then load it into the REPL with:
+
+#+BEGIN_SRC bash
+  sbcl --load quicklisp.lisp
+#+END_SRC
+
+From the REPL, install it:
+
+#+BEGIN_SRC common-lisp
+  (quicklisp-quickstart:install)
+#+END_SRC
+
+And make sure you have added it to your lisp init file using:
+
+#+BEGIN_SRC common-lisp
+  (ql:add-to-init-file)
+#+END_SRC
+
+Install stumpwm and some packages we need for niceties.
+
+#+BEGIN_SRC common-lisp
+  (ql:quickload :stumpwm)                ;; Install stumpwm
+  (ql:quickload :xembed)                 ;; Required by stumptray
+  (ql:quickload :clx-truetype)           ;; Required by ttf-fonts
+  (ql:quickload :swank)                  ;; Required by slime-connect
+  (ql:quickload :quicklisp-slime-helper) ;; Required by slime-connect
+  (ql:quickload :zpng)                   ;; Required by screenshot
+#+END_SRC
+
+** STARTUP FILES
+
+Tangle this block to create a lisp file to start StumpWM in ~/usr/local/bin~:
+
+#+BEGIN_SRC common-lisp :tangle /sudo::/usr/local/bin/stumpwm.lisp :tangle-mode (identity #o644)
+  (require :stumpwm)
+  (stumpwm:stumpwm)
+#+END_SRC
+
+This block creates a script in ~/usr/local/bin~ that loads the lisp above into
+~sbcl~:
+
+#+BEGIN_SRC common-lisp :tangle /sudo::/usr/local/bin/stumpwm.sh :tangle-mode (identity #o755)
+  sbcl --load /usr/local/bin/stumpwm.lisp
+#+END_SRC
+
+Next add the following line to your .xinitrc to be able to run with ~startx~:
+
+#+BEGIN_SRC bash :tangle ~/.xinitrc
+  exec /usr/local/bin/stumpwm.sh
+#+END_SRC
+
+Or we can just do this:
+
+#+BEGIN_SRC bash :tangle ~/.xinitrc
+  sbcl --eval '(require :stumpwm)' --eval '(stumpwm:stumpwm)'
+#+END_SRC
+
+And/or tangle the block below to create a .desktop file to be read by your display
+manager.
+
+#+BEGIN_SRC conf :tangle /sudo::/usr/share/xsessions/stumpwm.desktop
+  [Desktop Entry]
+  Encoding=UTF-8
+  Name=StumpWM
+  Comment=Hacks and glory await!
+  TryExec=stumpwm.sh
+  Exec=/usr/local/bin/stumpwm.sh
+  Type=Application
+  [X-Window Manager]
+  SessionManaged=true
+#+END_SRC
+
+** CONTRIB REPO
+
+Clone my fork of the [[https://github.com/tslight/stumpwm-contrib/tree/merged][StumpWM Contrib]] repo to ~~/src/~, in order to access much
+of the code that does the interesting things present in my config.
+
+* CONFIGURATION
+
+Finally, now that we have StumpWM & StumpWM contrib installed and ready to be
+started with either ~startx~ or from a display manager, we need to tangle the
+code in the files linked below:
+
+- [[file:init.org][Initialisation]]
+- [[file:settings.org][Settings]]
+- [[file:utils.org][Utilities]]
+- [[file:keys.org][Keybindings]]
+
+To do this, execute the elisp source code block below using ~C-c C-c~ with your
+cursor in the block.
+
+#+BEGIN_SRC emacs-lisp :results silent
+  (org-babel-load-file (concat default-directory "../../emacs/site-lisp/my-tangles.org"))
+  (my/tangle-directory default-directory)
+#+END_SRC
+
+Please see the main [[file:../../README.org][etc README]] for more details on Emacs tangling, org-mode,
+literate programming and how I manage configuration files and such.
+
+* INSPIRATIONS
+
+https://dataswamp.org/~solene/2016-06-06-stumpwm.html
+
+https://github.com/areina/stumpwm.d
+
+https://github.com/stumpwm/stumpwm/wiki/Customize

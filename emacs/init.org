@@ -1,0 +1,57 @@
+#+TITLE: LETS GET THIS LISPARTY STARTED!
+#+AUTHOR: Toby Slight
+#+PROPERTY: header-args :cache yes
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :results silent
+#+PROPERTY: header-args+ :tangle ~/.emacs.d/init.el
+#+PROPERTY: header-args+ :tangle-mode (identity #o644)
+#+OPTIONS: toc:t
+
+[[https://www.reddit.com/r/emacs/comments/3kqt6e/2_easy_little_known_steps_to_speed_up_emacs_start/][Reddit Thread on Startup Speed]]
+
+[[https://github.com/hlissner/doom-emacs/wiki/FAQ#how-is-dooms-startup-so-fast][Doom Fast Startup Explanation from FAQ]]
+
+[[https://github.com/hlissner/doom-emacs/issues/310][Doom Fast Startup Explanation from GitHub Issue]]
+
+Wrap everything in a let expression that sets garbage collection variables to
+extremely high values and unset file-name-handler-list.
+
+However, have them be restored once the init code has run, since let only sets
+local variables.
+
+#+BEGIN_SRC emacs-lisp
+  (let ((file-name-handler-alist nil)
+        (gc-cons-threshold most-positive-fixnum)
+        (gc-cons-percentage 0.8))
+
+    (byte-recompile-file (concat user-emacs-directory "keys.el") 'nil 0 t)
+    (add-to-list 'load-path (concat user-emacs-directory "site-lisp/"))
+    (byte-recompile-directory (concat user-emacs-directory "site-lisp") 0)
+    (mapc (lambda (file) (load file))
+          (directory-files (concat user-emacs-directory "site-lisp") t "\.elc$"))
+
+    ;; setup package.el
+    (require 'package)
+    (setq package-enable-at-startup nil)
+    (setq package--init-file-ensured t)
+    (setq package-archives
+          '(("melpa" . "https://melpa.org/packages/")
+            ("gnu" . "https://elpa.gnu.org/packages/")))
+    (package-initialize)
+
+    ;; install use-package
+    (unless (package-installed-p 'use-package)
+      (package-refresh-contents)
+      (package-install 'use-package))
+
+    ;; `use-package' does all the heavy lifting in my config.
+    (setq use-package-enable-imenu-support t)
+    ;; (setq use-package-always-ensure t)
+    (setq use-package-verbose t)
+    (require 'use-package)
+    (require 'bind-key)
+
+    (byte-recompile-file (concat user-emacs-directory "init.el") 'nil 0 'nil)
+    (byte-recompile-file (concat user-emacs-directory "use.el") 'nil 0 t)
+    (message "Hacks and glory await! :-)"))
+#+END_SRC

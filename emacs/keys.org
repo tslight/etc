@@ -1,0 +1,264 @@
+#+TITLE: MY KEYS
+#+AUTHOR: Toby Slight
+#+PROPERTY: header-args :cache yes
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :results silent
+#+PROPERTY: header-args+ :tangle ~/.emacs.d/keys.el
+#+PROPERTY: header-args+ :tangle-mode (identity #o644)
+#+OPTIONS: toc:t
+* CONTENTS:TOC_5_gh:
+- [[#my-keymap][MY KEYMAP]]
+   - [[#sparse-keymap][SPARSE KEYMAP]]
+   - [[#minor-mode][MINOR MODE]]
+   - [[#globalized-minor-mode][GLOBALIZED MINOR MODE]]
+   - [[#override-minor-mode-maps][OVERRIDE MINOR MODE MAPS]]
+   - [[#turn-off-function][TURN OFF FUNCTION]]
+   - [[#turn-off-in-minibuffer][TURN OFF IN MINIBUFFER]]
+   - [[#turn-on-globally][TURN ON GLOBALLY]]
+- [[#macros][MACROS]]
+- [[#space-cadet-bindings][SPACE CADET BINDINGS]]
+- [[#evaluation-bindings][EVALUATION BINDINGS]]
+- [[#toggling-bindings][TOGGLING BINDINGS]]
+- [[#highlight-changes-bindings][HIGHLIGHT CHANGES BINDINGS]]
+- [[#buffer-bindings][BUFFER BINDINGS]]
+- [[#tab-bindings][TAB BINDINGS]]
+- [[#frame-bindings][FRAME BINDINGS]]
+- [[#isearch-bindings][ISEARCH BINDINGS]]
+- [[#misc-bindings][MISC BINDINGS]]
+- [[#simplespecial-mode-bindings][SIMPLE/SPECIAL MODE BINDINGS]]
+
+* MY KEYMAP
+
+This gives me ~bind*~ without have to have use-package installed.
+
+https://emacs.stackexchange.com/a/27943
+https://stackoverflow.com/a/683575
+https://emacs.stackexchange.com/a/358
+
+** SPARSE KEYMAP
+
+#+BEGIN_SRC emacs-lisp
+  (defvar my/keymap (make-sparse-keymap)
+    "Keymap for `my/key-mode'.")
+#+END_SRC
+
+** MINOR MODE
+
+If init-value is not set to t, this mode does not get enabled in
+~fundamental-mode~ buffers even after doing ~(my/global-keys-mode 1)~.
+
+More info: http://emacs.stackexchange.com/q/16693/115
+
+#+BEGIN_SRC emacs-lisp
+  ;;;###autoload
+  (define-minor-mode my/key-mode
+    "A minor mode so that my key settings override annoying major modes."
+    :global t
+    :init-value t
+    :lighter " my/key-mode"
+    :keymap my/keymap)
+#+END_SRC
+
+** GLOBALIZED MINOR MODE
+
+#+BEGIN_SRC emacs-lisp
+  ;;;###autoload
+  (define-globalized-minor-mode my/global-keys-mode my/key-mode my/key-mode)
+#+END_SRC
+
+** OVERRIDE MINOR MODE MAPS
+
+https://github.com/jwiegley/use-package/blob/master/bind-key.el
+
+The keymaps in `emulation-mode-map-alists' take precedence over
+~minor-mode-map-alist~.
+
+#+BEGIN_SRC emacs-lisp
+  (add-to-list 'emulation-mode-map-alists `((my/key-mode . ,my/keymap)))
+#+END_SRC
+
+** TURN OFF FUNCTION
+
+#+BEGIN_SRC emacs-lisp
+  (defun turn-off-my/key-mode ()
+    "Turn off my/key-mode in the minibuffer."
+    (my/key-mode -1))
+#+END_SRC
+
+** TURN OFF IN MINIBUFFER
+
+Turn off the minor mode in the minibuffer
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'minibuffer-setup-hook #'turn-off-my/key-mode)
+#+END_SRC
+
+** TURN ON GLOBALLY
+
+#+BEGIN_SRC emacs-lisp
+  (my/global-keys-mode 1)
+#+END_SRC
+
+* MACROS
+
+This should make writing keybindings easier...
+
+#+BEGIN_SRC emacs-lisp
+  (defmacro my/bind (key function)
+    `(global-set-key (kbd ,key) ',function))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (defmacro my/bind-always (key function)
+    `(define-key my/keymap (kbd ,key) ',function))
+#+END_SRC
+
+* SPACE CADET BINDINGS
+
+Make frequently used bindings such as ~beginning-of-buffer~ and ~end-of-buffer~
+use the ~Ctrl~ modifier instead of ~Meta~, since ~Ctrl~ is not the most
+accessible modifier. This also means that when I am on a system without Space
+Cadet bindings, these shortcuts are in the same place.
+
+To set up [[http://xahlee.info/kbd/space-cadet_keyboard.html][Space Cadet]] bindings, please see [[file:~/etc/linux/space-cadet.org][here]] for Linux and [[file:~/etc/macos/karabiner.org][here]] for
+macOS. For Windows I recommend uing [[https://github.com/randyrants/sharpkeys/releases][SharpKeys]].
+
+#+BEGIN_SRC emacs-lisp
+  (my/bind-always "C-!" shell-command)
+  (my/bind-always "C-$" ispell-word)
+  (my/bind-always "C-%" query-replace)
+  (my/bind-always "C-(" insert-parentheses)
+  (my/bind-always "C-)" move-past-close-and-reindent)
+  (my/bind-always "C-:" pp-eval-expression)
+  (my/bind-always "C-;" comment-line)
+  (my/bind-always "M-;" comment-or-uncomment-region)
+  (my/bind-always "C-<" beginning-of-buffer)
+  (my/bind-always "C->" end-of-buffer)
+  (my/bind-always "C-^" delete-indentation)
+  (my/bind-always "C-~" not-modified)
+  (my/bind-always "C-w" kill-ring-save)
+  (my/bind-always "M-w" kill-region)
+  (my/bind-always "C-z" zap-up-to-char)
+  (my/bind-always "M-z" zap-up-char)
+#+END_SRC
+
+* EVALUATION BINDINGS
+
+#+BEGIN_SRC emacs-lisp
+  (my/bind-always "C-c e b" (lambda () (interactive)
+                              (eval-buffer)
+                              (message "Evaluated %s" (current-buffer))))
+  (my/bind-always "C-c e e" pp-eval-last-sexp)
+  (my/bind-always "C-c e f" (lambda () (interactive)
+                              (eval-buffer)
+                              (message "Evaluated function.")))
+  (my/bind-always "C-c e m" lisp-interaction-mode)
+  (my/bind-always "C-c e r" (lambda () (interactive)
+                              (eval-buffer)
+                              (message "Evaluated region.")))
+  (my/bind-always "C-c e s" eshell)
+#+END_SRC
+
+* TOGGLING BINDINGS
+
+#+BEGIN_SRC emacs-lisp
+  (my/bind-always "C-c t a" toggle-text-mode-autofill)
+  (my/bind-always "C-c t d E" toggle-debug-on-entry)
+  (my/bind-always "C-c t d e" toggle-debug-on-error)
+  (my/bind-always "C-c t d q" toggle-debug-on-quit)
+  (my/bind-always "C-c t t" toggle-truncate-lines)
+#+END_SRC
+
+* HIGHLIGHT CHANGES BINDINGS
+
+#+BEGIN_SRC emacs-lisp
+  (my/bind-always "C-S-n" highlight-changes-next-change)
+  (my/bind-always "C-S-p" highlight-changes-previous-change)
+#+END_SRC
+
+* BUFFER BINDINGS
+
+#+BEGIN_SRC emacs-lisp
+  (my/bind-always "C-x c" save-buffers-kill-emacs)
+  (my/bind-always "C-x M-c" save-buffers-kill-emacs)
+  (my/bind-always "C-x C-b" ibuffer)
+  (my/bind-always "C-x M-k" kill-buffer)
+#+END_SRC
+
+* TAB BINDINGS
+
+Only relevant in Emacs >= 27
+
+#+BEGIN_SRC emacs-lisp
+  (when (>= emacs-major-version 27)
+    (my/bind-always "C-x t t" tab-bar-select-tab-by-name)
+    (my/bind-always "C-S-t" tab-bar-new-tab)
+    (my/bind-always "C-x t c" tab-bar-new-tab)
+    (my/bind-always "C-S-w" tab-bar-close-tab)
+    (my/bind-always "C-x t k" tab-bar-close-tab)
+    (my/bind-always "C-<tab>" tab-bar-switch-to-next-tab)
+    (my/bind-always "C-x t n" tab-bar-switch-to-next-tab)
+    (my/bind-always "C-<iso-lefttab>" tab-bar-switch-to-prev-tab)
+    (my/bind-always "C-x t p" tab-bar-switch-to-prev-tab)
+    (my/bind-always "C-x t l" tab-bar-switch-to-recent-tab)
+    (my/bind-always "C-`" tab-bar-switch-to-recent-tab))
+#+END_SRC
+
+* FRAME BINDINGS
+
+#+BEGIN_SRC emacs-lisp
+  (my/bind-always "C-<f10>" toggle-frame-maximized)
+  (my/bind-always "C-<f11>" toggle-frame-fullscreen)
+  (my/bind-always "C-s-f" toggle-frame-fullscreen)
+  (my/bind-always "C-s-m" toggle-frame-maximized)
+  (my/bind-always "M-<escape>" other-frame)
+  (my/bind-always "M-<tab>" next-multiframe-window)
+  (my/bind-always "M-<iso-lefttab>" previous-multiframe-window)
+#+END_SRC
+
+* ISEARCH BINDINGS
+
+Don't use ~my/bind-always~ for these as I end up clobbering ~vterm~ and ~ansi-term~.
+
+#+BEGIN_SRC emacs-lisp
+  (my/bind "C-r" isearch-backward-regexp)
+  (my/bind "C-s" isearch-forward-regexp)
+  (my/bind "C-M-r" multi-isearch-buffers-regexp)
+  (my/bind "C-S-r" multi-isearch-files-regexp)
+  (my/bind "C-M-s" isearch-forward-symbol-at-point)
+#+END_SRC
+
+* MISC BINDINGS
+
+#+BEGIN_SRC emacs-lisp
+  (my/bind-always "<f12>" recentf-open-files)
+  (my/bind-always "<f6>" desktop-read)
+  (my/bind-always "S-<f6>" desktop-save)
+  (my/bind-always "S-<f10>" menu-bar-mode)
+  (my/bind-always "C-S-v" scroll-other-window-down)
+  ;; (my/bind-always "C-M-v" scroll-other-window)
+  (my/bind-always "C-c C-/" winner-undo)
+  (my/bind-always "C-c C-?" winner-redo)
+  (my/bind-always "C-c M-c" calculator)
+  (my/bind-always "C-c c" calc)
+  (my/bind-always "C-c i" imenu)
+  (my/bind-always "C-c x" execute-extended-command)
+  (my/bind-always "C-x j" jump-to-register)
+  (my/bind-always "C-x p" pop-to-mark-command)
+  (my/bind-always "M-SPC" cycle-spacing)
+  (my/bind-always "M-/" hippie-expand)
+#+END_SRC
+
+* SIMPLE/SPECIAL MODE BINDINGS
+
+#+BEGIN_SRC emacs-lisp
+  ;; for help modes, and simple/special modes
+  (define-key special-mode-map "n" #'forward-button)
+  (define-key special-mode-map "p" #'backward-button)
+  (define-key special-mode-map "f" #'forward-button)
+  (define-key special-mode-map "b" #'backward-button)
+  (define-key special-mode-map "n" #'widget-forward)
+  (define-key special-mode-map "p" #'widget-backward)
+  (define-key special-mode-map "f" #'widget-forward)
+  (define-key special-mode-map "b" #'widget-backward)
+#+END_SRC

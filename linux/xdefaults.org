@@ -1,0 +1,65 @@
+#+PROPERTY: header-args :cache yes
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :tangle-mode (identity #o600)
+#+PROPERTY: header-args+ :results silent
+#+PROPERTY: header-args+ :padline no
+
+#+NAME: Xdefaults
+#+BEGIN_SRC conf :tangle ~/.Xdefaults
+  URxvt.font: xft: Monospace: size=9
+  URxvt.letterSpace: -1
+  URxvt.reverseVideo: on
+  URxvt.scrollBar: off
+
+  XClock*analog: false
+  XClock*reverseVideo: true
+  XClock*foreground: white
+  XClock*strftime: %H:%M %Y/%m/%d
+
+  XIdle.area: 4
+  XIdle.delay: 2
+  XIdle.position: se
+  XIdle.program: /usr/bin/slock
+  XIdle.timeout: 90
+
+  Xft.dpi: 96
+  Xft.antialias: true
+  Xft.rgba: rgb
+  Xft.hinting: true
+  Xft.hintstyle: hintslight
+  Xft.autohint: false
+  Xft.lcdfilter: lcddefault
+
+  Xcursor.size: 24
+
+  XTerm.utf8: 1
+  XTerm.BorderWidth: 0
+  XTerm.faceName: Monospace: size=9
+  XTerm.allowBoldFonts: false
+  XTerm.backarrowKeyIsErase: true
+  XTerm.fullscreen: never
+  XTerm.locale: true
+  XTerm.loginShell: true
+  XTerm.metaSendsEscape: true
+  XTerm.reverseVideo: on
+  XTerm.scrollBar: off
+  XTerm.selectToClipboard: true
+  XTerm.termName: xterm-256color
+
+  UXTerm.utf8: 1
+  UXTerm.BorderWidth: 0
+  UXTerm.faceName: Monospace: size=9
+  UXTerm.allowBoldFonts: false
+  UXTerm.backarrowKeyIsErase: true
+  UXTerm.fullscreen: never
+  UXTerm.locale: true
+  UXTerm.loginShell: true
+  UXTerm.metaSendsEscape: true
+  UXTerm.reverseVideo: on
+  UXTerm.scrollBar: off
+  UXTerm.selectToClipboard: true
+  UXTerm.termName: xterm-256color
+#+END_SRC
+#+BEGIN_SRC conf :noweb yes :tangle ~/.Xresources
+<<Xdefaults>>
+#+END_SRC

@@ -1,0 +1,232 @@
+#+PROPERTY: header-args :cache yes
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :padline no
+#+PROPERTY: header-args+ :results silent
+#+PROPERTY: header-args+ :tangle-mode (identity #o600)
+* BASH PROFILE
+
+#+BEGIN_SRC sh :tangle ~/.bash_profile
+  #!/usr/bin/env bash
+  #shellcheck disable=SC2155,SC1090,SC2093
+
+  [ -f "$HOME"/etc/profile ] && source "$HOME"/etc/profile
+  [ -f "$HOME"/.profile ] && source "$HOME"/.profile
+
+  export BLOCK_SIZE=human-readable
+  export EDITOR="emacsclient -c -nw"
+  export ALTERNATE_EDITOR=""
+  export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
+  export PAGER="$(type -P less || type -P more)"
+  export GTK_THEME=Emacs
+  export GOPATH=$HOME/go
+
+  # Colorfull manpages (works with less as a pager)
+  # https://www.tecmint.com/view-colored-man-pages-in-linux/
+  export LESS_TERMCAP_mb=$'\e[1;32m'
+  export LESS_TERMCAP_md=$'\e[1;32m'
+  export LESS_TERMCAP_me=$'\e[0m'
+  export LESS_TERMCAP_se=$'\e[0m'
+  export LESS_TERMCAP_so=$'\e[01;33m'
+  export LESS_TERMCAP_ue=$'\e[0m'
+  export LESS_TERMCAP_us=$'\e[1;4;31m'
+
+  export ANSIBLE=$HOME/src/gitlab/tspub/devops/ansible
+  export DEVPATH=$HOME/src/gitlab/oe-developers
+  export DEVOPS=$HOME/src/gitlab/oe-developers/be/devops
+
+  PATH="${HOME}/bin:${PATH}"
+  PATH="${DEVOPS}/bin:${PATH}"
+  PATH="${HOME}/.local/bin:${PATH}"
+  export PATH
+
+  MANPATH="${HOME}/.local/share/man:${MANPATH}"
+  MANPATH="${HOME}/opt/share/man:${MANPATH}"
+  export MANPATH
+
+  # https://wiki.archlinux.org/index.php/SSH_keys#Keychain
+  # command -v keychain &>/dev/null && eval $(keychain --eval --quiet id_rsa)
+
+  umask 022
+
+  [ -f "$HOME"/.bashrc ] && source "$HOME"/.bashrc
+
+  # startx on tty1 and logout when it xsession exits
+  [[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && { exec startx; logout; }
+#+END_SRC
+
+* BASH LOGOUT
+
+#+BEGIN_SRC sh :tangle ~/.bash_logout
+  # when leaving the console clear the screen to increase privacy
+  if [ "$SHLVL" = 1 ]; then
+      [ -x /usr/bin/clear_console ] && /usr/bin/clear_console -q
+  fi
+  # pgrep -u "$USER" ssh-agent && pkill -u "$USER" ssh-agent
+#+END_SRC
+
+* BASHRC
+
+#+BEGIN_SRC sh :tangle ~/.bashrc
+  #!/usr/bin/env bash
+  export HISTCONTROL=ignoreboth:erasedups
+  export HISTFILESIZE=999999
+  export HISTSIZE=999999
+  export HISTIGNORE="h:history:[bf]g:exit:^ll$:^lla$:^ls$"
+  export HISTTIMEFORMAT="%h %d %H:%M:%S "
+
+  [ -z "$PS1" ] && return # If not running interactively, don't do anything
+  [ -f /etc/bash.bashrc ] && source /etc/bash.bashrc
+
+  if [[ "${BASH_VERSINFO[0]}" -ge 4 ]]; then
+      shopt -s autocd       # cd without cd. who knew?
+      shopt -s checkjobs    # don't exit if we still have jobs running
+      shopt -s dirspell     # correct directory spelling
+      shopt -s globstar     # pattern match ** in filename context
+  fi
+
+  shopt -s cdspell      # correct minor cd spelling errors
+  shopt -s checkwinsize # update lines and columns when resizing
+  shopt -s cmdhist      # save multi line cmds as one entry
+  shopt -s dotglob      # show dotfiles when expanding
+  shopt -s extglob      # enable extended pattern matching
+  shopt -s histappend   # don't overwrite history file on exit
+  shopt -s nocaseglob   # match filename case insensitively
+  complete -cf sudo     # completion after sudo
+  complete -cf man      # same, but for man
+
+  [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+
+  stty -ixon # disable ctrl-s/q flow control
+
+  [ -f /usr/share/bash-completion/bash_completion ] && \
+      source /usr/share/bash-completion/bash_completion
+
+  [ -f "$HOME"/.bash_prompt ] && source "$HOME"/.bash_prompt
+  [ -f "$HOME"/.aliases ] && source "$HOME"/.aliases
+  [ -f "$HOME"/.functions ] && source "$HOME"/.functions
+  [ -f "$HOME"/.bash_completions ] && source "$HOME"/.bash_completions
+
+  export NVM_DIR="$HOME/.nvm"
+  [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
+  [ -s "$NVM_DIR/bash_completion" ] && source "$NVM_DIR/bash_completion"
+#+END_SRC
+
+* BASH PROMPT
+
+#+BEGIN_SRC sh :tangle ~/.bash_prompt
+  # https://bugzilla.redhat.com/show_bug.cgi?id=878428
+  [ -f  /usr/share/git-core/contrib/completion/git-prompt.sh ] && \
+      . /usr/share/git-core/contrib/completion/git-prompt.sh
+
+  export RED="\\[\\e[1;31m\\]"
+  export GRN="\\[\\e[1;32m\\]"
+  export YEL="\\[\\e[1;33m\\]"
+  export MAG="\\[\\e[1;35m\\]"
+  export CYN="\\[\\e[1;36m\\]"
+  export OFF="\\[\\e[0m\\]"
+
+  export GIT_PS1_SHOWDIRTYSTATE=yes
+  export GIT_PS1_SHOWSTASHSTATE=yes
+  export GIT_PS1_SHOWUNTRACKEDFILES=true
+  export GIT_PS1_SHOWUPSTREAM=yes
+
+  if [ "$(id -u)" -eq 0 ]; then
+      export PS1="${RED}\\u${YEL}@${RED}\\h${YEL}:${MAG}\\W ${CYN}\$(__git_ps1 '(%s)')\\n${YEL}\$? \$ ${OFF}"
+  else
+      export PS1="${GRN}\\u${YEL}@${GRN}\\h${YEL}:${MAG}\\W ${CYN}\$(__git_ps1 '(%s)')\\n${YEL}\$? \$ ${OFF}"
+  fi
+#+END_SRC
+
+* BASH COMPLETIONS
+** DEVCD
+
+#+begin_src shell :tangle ~/.bash_completions
+  [[ -z "$DEVPATH" ]] && DEVPATH="$HOME/src/gitlab/oe-developers"
+
+  _devrelpaths() {
+      RELPATHS=$(find "$DEVPATH" \
+                      -maxdepth 10 \
+                      -type d \
+                      -name ".git" \
+                      -printf "%P " | \
+                     sed 's/\/\.git//g')
+      COMPREPLY=($(compgen -W "$RELPATHS" "${COMP_WORDS[1]}"))
+  }
+
+  complete -F _devrelpaths devcd
+
+  alias devcd='f() { cd "$DEVPATH/$1"; }; f'
+#+end_src
+
+** BECD
+
+#+begin_src shell :tangle ~/.bash_completions
+  _berelpaths() {
+      RELPATHS=$(find "$DEVPATH/be" \
+                      -maxdepth 10 \
+                      -type d \
+                      -name ".git" \
+                      -printf "%P " | \
+                     sed 's/\/\.git//g')
+      COMPREPLY=($(compgen -W "$RELPATHS" "${COMP_WORDS[1]}"))
+  }
+
+  complete -F _berelpaths becd
+
+  alias becd='f() { cd "$DEVPATH/be/$1"; }; f'
+#+end_src
+
+** DSCD
+
+#+begin_src shell :tangle ~/.bash_completions
+  _dsrelpaths() {
+      RELPATHS=$(find "$DEVPATH/ds" \
+                      -maxdepth 10 \
+                      -type d \
+                      -name ".git" \
+                      -printf "%P " | \
+                     sed 's/\/\.git//g')
+      COMPREPLY=($(compgen -W "$RELPATHS" "${COMP_WORDS[1]}"))
+  }
+
+  complete -F _dsrelpaths dscd
+
+  alias dscd='f() { cd "$DEVPATH/ds/$1"; }; f'
+#+end_src
+
+** GCD
+
+#+begin_src shell :tangle ~/.bash_completions
+  _gitrelpaths() {
+      RELPATHS=$(find . \
+                      -maxdepth 10 \
+                      -type d \
+                      -name ".git" \
+                      -printf "%P " | \
+                     sed 's/\/\.git//g')
+      COMPREPLY=($(compgen -W "$RELPATHS" "${COMP_WORDS[1]}"))
+  }
+
+  complete -F _gitrelpaths gcd
+
+  alias gcd='f() { cd "./$1"; }; f'
+#+end_src
+
+* INPUTRC
+
+#+BEGIN_SRC sh :tangle ~/.inputrc
+  $include /etc/inputrc
+
+  set show-all-if-ambiguous on
+  set show-all-if-unmodified on
+  set completion-ignore-case on
+
+  #menu-complete-display-prefix on
+  # TAB: menu-complete
+  # "\e[Z": menu-complete-backward
+
+  "\en": history-search-forward
+  "\ep": history-search-backward
+  "\em": "\C-a\eb\ed\C-y\e#man \C-y\C-m\C-p\C-p\C-a\C-d\C-e"
+  "\eh": "\C-a\eb\ed\C-y\e#man \C-y\C-m\C-p\C-p\C-a\C-d\C-e"
+#+END_SRC

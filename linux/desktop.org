@@ -1,0 +1,127 @@
+#+PROPERTY: header-args :cache yes
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :tangle-mode (identity #o644)
+#+PROPERTY: header-args+ :results silent
+#+PROPERTY: header-args+ :padline no
+
+Collection of custom XDG desktop entries.
+
+* TABBED
+
+#+BEGIN_SRC conf :tangle ~/.local/share/applications/tmux.desktop
+  [Desktop Entry]
+  Type=Application
+  Name=Tabbed
+  Comment=Launches a tabbed xterm
+  Icon=utilities-terminal
+  Terminal=true
+  Exec=tabbed -c xterm -into
+  Categories=ConsoleOnly;System;Utility
+  MimeType=inode/directory;
+  Keywords=Terminal
+#+END_SRC
+
+* TMUX
+
+#+BEGIN_SRC conf :tangle ~/.local/share/applications/tmux.desktop
+  [Desktop Entry]
+  Type=Application
+  Name=Tmux
+  Comment=Launches a terminal multiplexer
+  Icon=utilities-terminal
+  Terminal=true
+  Exec=tmux
+  Categories=ConsoleOnly;System;Utility
+  MimeType=inode/directory;
+  Keywords=Terminal
+#+END_SRC
+
+#+BEGIN_SRC conf :tangle ~/.local/share/applications/tmux.desktop
+  [Desktop Entry]
+  Type=Application
+  Name=Tmux Attach
+  Comment=Attaches to a currently running tmux session
+  Icon=utilities-terminal
+  Terminal=true
+  Exec=tmux attach
+  Categories=ConsoleOnly;System;Utility
+  MimeType=inode/directory;
+  Keywords=Terminal
+#+END_SRC
+
+* EMACS
+
+#+BEGIN_SRC conf :tangle ~/.local/share/applications/emacsclient.desktop
+[Desktop Entry]
+Name=Emacsclient
+GenericName=Text Editor
+Comment=Launch or connect to an Emacs daemon
+MimeType=text/english;text/plain;text/x-makefile;text/x-c++hdr;text/x-c++src;text/x-chdr;text/x-csrc;text/x-java;text/x-moc;text/x-pascal;text/x-tcl;text/x-tex;application/x-shellscript;text/x-c;text/x-c++;
+Exec=emacsclient -c -a ""
+Icon=emacs
+Type=Application
+Terminal=false
+Categories=Development;TextEditor;
+StartupWMClass=Emacs
+Keywords=Text;Editor;
+#+END_SRC
+
+#+BEGIN_SRC conf :tangle ~/.local/share/applications/emacs-quick.desktop
+[Desktop Entry]
+Name=Emacs Quick
+GenericName=Text Editor
+Comment=Run Emacs with no configuration
+MimeType=text/english;text/plain;text/x-makefile;text/x-c++hdr;text/x-c++src;text/x-chdr;text/x-csrc;text/x-java;text/x-moc;text/x-pascal;text/x-tcl;text/x-tex;application/x-shellscript;text/x-c;text/x-c++;
+Exec=emacs --quick
+Icon=emacs
+Type=Application
+Terminal=false
+Categories=Development;TextEditor;
+StartupWMClass=Emacs
+Keywords=Text;Editor;
+#+END_SRC
+
+#+BEGIN_SRC conf :tangle ~/.local/share/applications/emacs-debug.desktop
+[Desktop Entry]
+Name=Emacs Debug
+GenericName=Text Editor
+Comment=Run Emacs in debug mode
+MimeType=text/english;text/plain;text/x-makefile;text/x-c++hdr;text/x-c++src;text/x-chdr;text/x-csrc;text/x-java;text/x-moc;text/x-pascal;text/x-tcl;text/x-tex;application/x-shellscript;text/x-c;text/x-c++;
+Exec=emacs --debug-init
+Icon=emacs
+Type=Application
+Terminal=false
+Categories=Development;TextEditor;
+StartupWMClass=Emacs
+Keywords=Text;Editor;
+#+END_SRC
+
+#+BEGIN_SRC conf :tangle ~/.local/share/applications/emacs-nox.desktop
+[Desktop Entry]
+Name=Emacs NOX
+GenericName=Text Editor
+Comment=Emacs in a terminal
+MimeType=text/english;text/plain;text/x-makefile;text/x-c++hdr;text/x-c++src;text/x-chdr;text/x-csrc;text/x-java;text/x-moc;text/x-pascal;text/x-tcl;text/x-tex;application/x-shellscript;text/x-c;text/x-c++;
+Exec=emacs -nw
+Icon=emacs
+Type=Application
+Terminal=true
+Categories=Development;TextEditor;
+StartupWMClass=Emacs
+Keywords=Text;Editor;
+#+END_SRC
+
+#+BEGIN_SRC conf :tangle ~/.local/share/applications/emacsclient-nox.desktop
+[Desktop Entry]
+Name=Emacsclient NOX
+GenericName=Text Editor
+Comment=Launch or connect to the Emacs daemon in a terminal
+MimeType=text/english;text/plain;text/x-makefile;text/x-c++hdr;text/x-c++src;text/x-chdr;text/x-csrc;text/x-java;text/x-moc;text/x-pascal;text/x-tcl;text/x-tex;application/x-shellscript;text/x-c;text/x-c++;
+Exec=emacsclient -c -a "" -nw
+Icon=emacs
+Type=Application
+Terminal=true
+Categories=Development;TextEditor;
+StartupWMClass=Emacs
+Keywords=Text;Editor;
+#+END_SRC

@@ -1,0 +1,51 @@
+#+PROPERTY: header-args :cache yes
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :tangle-mode (identity #o600)
+#+PROPERTY: header-args+ :results silent
+#+PROPERTY: header-args+ :padline no
+#+NAME: Xdefaults
+#+BEGIN_SRC conf :tangle ~/.Xdefaults
+  XClock*analog: false
+  XClock*reverseVideo: true
+  XClock*foreground: white
+  XClock*strftime: %H:%M %Y/%m/%d
+
+  XIdle.area: 4
+  XIdle.delay: 2
+  XIdle.position: se
+  XIdle.program: /usr/X11R6/bin/xlock
+  XIdle.timeout: 90
+
+  XLock.dpmsstandby: 1
+  XLock.dpmssuspend: 2
+  XLock.dpmsoff: 3
+  XLock.mode: blank
+  XLock.program: /usr/games/fortune -os
+  XLock.startCmd: /home/toby/bin/zzzdelay
+
+  Xft.dpi: 96
+  Xft.antialias: true
+  Xft.rgba: rgb
+  Xft.hinting: true
+  Xft.hintstyle: hintslight
+  Xft.autohint: false
+  Xft.lcdfilter: lcddefault
+
+  XTerm*utf8: 1
+  XTerm*BorderWidth: 0
+  XTerm*faceName: Monospace: size=9
+  XTerm*allowBoldFonts: false
+  XTerm*backarrowKeyIsErase: true
+  XTerm*fullscreen: never
+  XTerm*locale: true
+  XTerm*loginShell: true
+  XTerm*metaSendsEscape: true
+  XTerm*reverseVideo: on
+  XTerm*scrollBar: off
+  XTerm*selectToClipboard: true
+  XTerm*termName: xterm-256color
+  XTerm*ttyModes: erase^? kill ^U
+#+END_SRC
+#+BEGIN_SRC conf :noweb yes :tangle ~/.Xresources
+<<Xdefaults>>
+#+END_SRC

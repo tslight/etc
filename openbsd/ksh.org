@@ -1,0 +1,60 @@
+#+PROPERTY: header-args :cache yes
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :tangle-mode (identity #o600)
+#+PROPERTY: header-args+ :results silent
+#+PROPERTY: header-args+ :padline no
+* PROFILE
+#+BEGIN_SRC sh :tangle ~/.profile
+  PATH=$HOME/bin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin:/usr/games:/usr/libexec:/usr/local/libexec:.
+
+  [ -z $TMUX ] && [ -z $DISPLAY ] && TERM=pccon0 || TERM=linux
+
+  BLOCKSIZE="M"
+
+  EDITOR="emacsclient -nw -c"
+  ALTERNATE_EDITOR=""
+
+  PAGER="less"
+
+  HISTFILE=$HOME/.ksh_history
+  HISTSIZE=4242
+
+  [ -f /etc/ksh.kshrc ] && . /etc/ksh.kshrc
+  ENV=$HOME/.kshrc
+
+  export PATH HOME TERM BLOCKSIZE EDITOR ALTERNATE_EDITOR PAGER HISTORY HISTSIZE ENV
+#+END_SRC
+* KSHRC
+#+BEGIN_SRC sh :tangle ~/.kshrc
+  if [ $(id -u) -eq 0 ]; then
+      PS1='\[\e[1;31m\]\h \w \$\[\e[m\] '
+  else
+      PS1='\[\e[1;32m\]\h \w \$\[\e[m\] '
+  fi
+
+  stty -ixon
+
+  set -o emacs
+  set -o csh-history
+
+  bind -m '^L'='^U'clear'^J''^Y'
+
+  [ -f ~/.ssh/known_hosts ] && KNOWN_HOSTS=$(awk '{split($1,a,","); print a[1]}' ~/.ssh/known_hosts)
+  PKG_LIST=$(pkg_info -q)
+
+  set -A complete_emacs -- --daemon --debug-init -Q -nw
+  set -A complete_emacsclient -- -c -t -a
+  set -A complete_git -- pull push mpull mpush clone checkout status
+  set -A complete_kill_1 -- -9 -HUP -INFO -KILL -TERM
+  set -A complete_pkill_1 -- -9 -HUP -INFO -KILL -TERM
+  set -A complete_make_1 -- install clean repackage reinstall
+  set -A complete_pkg_delete -- $PKG_LIST
+  set -A complete_pkg_info -- $PKG_LIST
+  set -A complete_rcctl_1 -- disable enable get ls order set
+  set -A complete_rcctl_2 -- $(ls /etc/rc.d)
+  set -A complete_ssh_1 -- $KNOWN_HOSTS
+  set -A complete_sftp_1 -- $KNOWN_HOSTS
+
+  [ -f ~/.aliases ] && . ~/.aliases
+  [ -f ~/.functions ] && . ~/.functions
+#+END_SRC

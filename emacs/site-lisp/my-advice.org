@@ -1,0 +1,56 @@
+#+TITLE: ADVICES
+#+AUTHOR: Toby Slight
+#+PROPERTY: header-args :cache yes
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :results silent
+#+PROPERTY: header-args+ :tangle ~/.emacs.d/site-lisp/my-advice.el
+#+PROPERTY: header-args+ :tangle-mode (identity #o644)
+#+OPTIONS: toc:t
+* CONTENTS:TOC_5_gh:
+- [[#align-to-spaces-not-tabs][ALIGN TO SPACES NOT TABS]]
+- [[#reload-theme][RELOAD THEME]]
+- [[#kill-term-on-shell-exit][KILL TERM ON SHELL EXIT]]
+- [[#all-buffer-text-scale][ALL BUFFER TEXT SCALE]]
+
+* ALIGN TO SPACES NOT TABS
+
+#+BEGIN_SRC emacs-lisp
+  (defadvice align-regexp (around align-regexp-with-spaces activate)
+    "Force alignment commands to use spaces, not tabs."
+    (let ((indent-tabs-mode nil))
+      ad-do-it))
+#+END_SRC
+
+* RELOAD THEME
+
+#+BEGIN_SRC emacs-lisp
+  (defadvice load-theme (before theme-dont-propagate activate)
+    "Disable theme before loading new one."
+    (mapc #'disable-theme custom-enabled-themes))
+#+END_SRC
+
+* KILL TERM ON SHELL EXIT
+
+#+BEGIN_SRC emacs-lisp
+  (defadvice term-handle-exit (after term-kill-buffer-on-exit activate)
+    "Kill term when shell exits."
+    (kill-buffer))
+#+END_SRC
+
+* ALL BUFFER TEXT SCALE
+
+https://www.emacswiki.org/emacs/GlobalTextScaleMode
+
+This doesn't really do what I want so let's not tangle anymore, but leaving
+here for reference.
+
+[[https://github.com/purcell/default-text-scale][This]] does exactly what I want so I'm using Steve Purcell's ~default-text-scale~
+instead.
+
+#+BEGIN_SRC emacs-lisp :tangle no
+  (defadvice text-scale-increase (around all-buffers (arg) activate)
+    "Make all buffers increase font size with `text-scale-increase'."
+    (dolist (buffer (buffer-list))
+      (with-current-buffer buffer
+        ad-do-it)))
+#+END_SRC

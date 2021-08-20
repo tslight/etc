@@ -1,0 +1,17 @@
+#+TITLE: THE COLD DARK IGLOO OF TERRIBLE TUX
+#+AUTHOR: Toby Slight
+#+PROPERTY: header-args+ :results silent
+
+* INSTALLATION
+
+1) Clone this repo & open this file in Emacs
+2) Execute the elisp source code block below using ~C-c C-c~ with your cursor
+   in the block.
+
+   #+BEGIN_SRC emacs-lisp :results silent
+     (org-babel-load-file (concat default-directory "../emacs/site-lisp/my-tangles.org"))
+     (my/tangle-directory default-directory)
+   #+END_SRC
+
+3) Wait for files to tangle.
+4) ...Profit!

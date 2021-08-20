@@ -1,0 +1,158 @@
+#+PROPERTY: header-args :cache yes
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :tangle-mode (identity #o600)
+#+PROPERTY: header-args+ :results silent
+#+PROPERTY: header-args+ :padline no
+#+BEGIN_SRC conf :tangle ~/.cwmrc
+  # MISC
+  borderwidth 1
+  gap 0 0 36 0
+  sticky yes
+  snapdist
+  moveamount 2
+  ignore xclock
+  ignore tint2
+
+  # COLORS
+  color activeborder '#0044DD'
+  color groupborder '#00BB44'
+  color inactiveborder '#808080'
+  color ungroupborder '#BB8800'
+  color urgencyborder '#FF0000'
+
+  color menubg '#000000'
+  color menufg '#0044BB'
+  color font '#CCCCCC'
+  color selfont '#FFFFFF'
+
+  # AUTOGROUP
+  # autogroup 1 Emacs
+  # autogroup 1 XTerm
+  # autogroup 2 Chromium-browser
+  # autogroup 2 Firefox
+
+  # KEYBOARD
+  unbind-key all
+
+  bind-key 4-BackSpace restart
+  bind-key 4C-BackSpace quit
+
+  bind-key 4-Return terminal
+  bind-key 4C-Return 'tabbed -c xterm -into'
+  bind-key 4-t 'xterm -e tmux'
+  bind-key 4C-t 'xterm -e tmux attach'
+  bind-key 4-e 'emacsclient -c -a ""'
+  bind-key 4C-e 'emacs'
+  bind-key 4-w chrome
+  bind-key 4C-w firefox
+  bind-key 4-p maim
+  bind-key 4C-p 'maim -s'
+  bind-key 4-f thunar
+  bind-key 4C-f 'xterm -e ranger'
+  bind-key 4-Delete lock
+
+  bind-key 4-c menu-cmd
+  bind-key 4-s menu-ssh
+  bind-key 4-r menu-exec
+  bind-key 4C-r menu-exec-wm
+  bind-key 4-g menu-group
+  bind-key 4-a menu-window
+  bind-key 4C-a menu-window-hidden
+
+  # bind-key M-Tab group-cycle
+  # bind-key MS-Tab group-rcycle
+
+  bind-key 4-1 group-only-1
+  bind-key 4-2 group-only-2
+  bind-key 4-3 group-only-3
+  bind-key 4-4 group-only-4
+  bind-key 4-5 group-only-5
+  bind-key 4-6 group-only-6
+  bind-key 4-7 group-only-7
+  bind-key 4-8 group-only-8
+  bind-key 4-9 group-only-9
+
+  bind-key 4S-1 group-toggle-1
+  bind-key 4S-2 group-toggle-2
+  bind-key 4S-3 group-toggle-3
+  bind-key 4S-4 group-toggle-4
+  bind-key 4S-5 group-toggle-5
+  bind-key 4S-6 group-toggle-6
+  bind-key 4S-7 group-toggle-7
+  bind-key 4S-8 group-toggle-8
+  bind-key 4S-9 group-toggle-9
+
+  bind-key 4C-1 window-movetogroup-1
+  bind-key 4C-2 window-movetogroup-2
+  bind-key 4C-3 window-movetogroup-3
+  bind-key 4C-4 window-movetogroup-4
+  bind-key 4C-5 window-movetogroup-5
+  bind-key 4C-6 window-movetogroup-6
+  bind-key 4C-7 window-movetogroup-7
+  bind-key 4C-8 window-movetogroup-8
+  bind-key 4C-9 window-movetogroup-9
+
+  bind-key 4-0 group-toggle-all
+  bind-key 4C-0 window-group
+
+  # bind-key C-Tab window-cycle
+  # bind-key CS-Tab window-rcycle
+  # bind-key 4-Tab window-cycle-ingroup
+  # bind-key 4C-Tab window-rcycle-ingroup
+
+  bind-key C-F4 window-delete
+  bind-key C-q window-delete
+  bind-key C-F7 window-menu-label
+  bind-key C-F8 window-stick
+  bind-key C-F9 window-hide
+  bind-key C-F10 window-maximize
+  bind-key CS-F10 window-vmaximize
+  bind-key 4C-F10 window-hmaximize
+  bind-key C-F11 window-fullscreen
+  bind-key C-F12 window-vtile
+  bind-key CS-F12 window-htile
+
+  bind-key 4-k window-move-up-big
+  bind-key 4-j window-move-down-big
+  bind-key 4-l window-move-right-big
+  bind-key 4-h window-move-left-big
+
+  bind-key 4C-k window-resize-up-big
+  bind-key 4C-j window-resize-down-big
+  bind-key 4C-l window-resize-right-big
+  bind-key 4C-h window-resize-left-big
+
+  # MOUSE
+  unbind-mouse all
+
+  bind-mouse R-1 menu-window
+  bind-mouse R-2 menu-window-hidden
+  bind-mouse R-3 menu-cmd
+  bind-mouse R-4 group-cycle
+  bind-mouse R-5 group-rcycle
+
+  bind-mouse C-1 window-move
+  bind-mouse C-2 window-group
+  bind-mouse C-3 window-resize
+  bind-mouse C-4 window-lower
+  bind-mouse C-5 window-raise
+
+  # MENU
+  command 'chrome'       'chrome'
+  command 'firefox'      'firefox'
+  command 'emacs'        'emacs'
+  command 'emacsclient'  'emacsclient -c -a ""'
+  command 'xterm'        'xterm'
+  command 'xterm tabbed' 'tabbed -c xterm -into'
+  command 'tmux'         'xterm -e tmux'
+  command 'tmux attach'  'xterm -e tmux attach'
+  command 'thunar'       'thunar'
+  command 'gimp'         'gimp'
+  command 'libreoffice'  'libreoffice'
+  command 'maim'         'maim'
+  command 'maim select'  'maim -s'
+  command 'xlock'        'xlock'
+  command 'zzz'          'zzz'
+  command 'reboot'       'shutdown -r now'
+  command 'shutdown'     'shutdown -p now'
+#+END_SRC

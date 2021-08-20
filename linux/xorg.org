@@ -1,0 +1,181 @@
+#+TITLE: XORG STUFF
+#+PROPERTY: header-args :cache yes
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :tangle-mode (identity #o644)
+#+PROPERTY: header-args+ :results silent
+#+PROPERTY: header-args+ :padline no
+
+* INTEL
+
+[[https://wiki.archlinux.org/index.php/Intel_graphics#Xorg_configuration][Archlinux Intel Xorg Configuration]]
+
+[[https://www.reddit.com/r/debian/comments/bhehm0/debian_9_xfce_black_screen_after_suspend/elt5b14?utm_source=share&utm_medium=web2x][Reddit thread Debian 9]]
+
+[[https://www.reddit.com/r/archlinux/comments/an3t1p/power_manager_blank_after_option_doesnt_let_me/efr3j3e?utm_source=share&utm_medium=web2x][Reddit thread blanking screen]]
+
+[[https://forum.manjaro.org/t/solved-manjaro-brightness-hotkey-is-writing-to-intel-backlight-instead-of-gmux-backlight/62365/8][Manjaro forums]]
+
+#+NAME: intel
+#+BEGIN_SRC conf :tangle (my/hardware-tangle "Apple Inc" "chassis_vendor" "/sudo::/usr/share/X11/xorg.conf.d/20-intel.conf")
+  Section "Device"
+    Identifier  "Intel Graphics"
+    Driver      "intel"
+    Option      "AccelMethod" "sna"
+    Option      "Backlight"  "gmux_backlight"
+    # BusID       "PCI:0:2:0"
+  EndSection
+#+END_SRC
+
+#+BEGIN_SRC conf :noweb yes :tangle (my/hardware-tangle "Apple Inc" "chassis_vendor" "/sudo::/etc/X11/xorg.conf.d/20-intel.conf")
+  <<intel>>
+#+END_SRC
+
+* LINPUT
+
+https://wiki.archlinux.org/index.php/Libinput#Via_Xorg_configuration_file
+
+#+NAME: libinput
+#+BEGIN_SRC conf :tangle (my/hardware-tangle "Apple Inc" "chassis_vendor" "/sudo::/usr/share/X11/xorg.conf.d/30-touchpad.conf")
+  Section "InputClass"
+      Identifier "Touchpad"
+      Driver "libinput"
+      MatchIsPointer "on"
+      Option "Tapping" "false"
+      Option "ClickMethod" "clickfinger"
+      Option "HorizontalScrolling" "true"
+      Option "NaturalScrolling" "false"
+      Option "ScrollMethod" "twofinger"
+      Option "DisableWhileTyping" "true"
+      Option "ButtonMapping" "1 3 2"
+  EndSection
+#+END_SRC
+
+#+BEGIN_SRC conf :noweb yes :tangle (my/hardware-tangle "Apple Inc" "chassis_vendor" "/sudo::/etc/X11/xorg.conf.d/30-touchpad.conf")
+  <<libinput>>
+#+END_SRC
+
+* MTRACK
+
+https://github.com/p2rkw/xf86-input-mtrack
+https://int3ractive.com/2018/09/make-the-best-of-MacBook-touchpad-on-Ubuntu.html
+https://bill.harding.blog/2017/12/27/toward-a-linux-touchpad-as-smooth-as-macbook-pro/
+https://howchoo.com/g/mdy0ngziogm/the-perfect-almost-touchpad-settings-on-linux-2
+
+#+NAME: mtrack
+#+BEGIN_SRC conf :tangle (my/hardware-tangle "Apple Inc" "chassis_vendor" "/sudo::/usr/share/X11/xorg.conf.d/50-mtrack.conf")
+  # Install mtrack driver 0.5.0++
+  # Save this file to /usr/share/X11/xorg.conf.d/50-mtrack.conf
+  # This config is specialized for MacBook Pro 2012 (9,2)
+  Section "InputClass"
+          MatchIsTouchpad "true"
+          Identifier      "Multitouch Touchpad"
+          Driver          "mtrack"
+          MatchDevicePath "/dev/input/event*"
+          Driver          "mtrack"
+          # The faster you move, the more distance pointer will travel, using
+          # "polynomial" profile
+          Option          "AccelerationProfile" "2"
+          # Tweak cursor movement speed with this
+          Option          "Sensitivity" "0.25"
+          # Pressure at which a finger is detected as a touch
+          # Option          "FingerHigh" "4"
+          # Pressure at which a finger is detected as a release
+          # Option          "FingerLow" "4"
+          # I often use thumb to press down the physical button, so let's not
+          # ignore it
+          # Option          "IgnoreThumb" "true"
+          # Option          "ThumbRatio" "70"
+          # Option          "ThumbSize" "25"
+          # Ignore palm, with palm takes up to 30% of your touch pad
+          # Option          "IgnorePalm" "true"
+          # Option          "PalmSize" "35"
+          # Trigger mouse button when tap: 1 finger - left click, 2 finger - right
+          # click, 3 - middle click
+          Option          "TapButton1" "0"
+          Option          "TapButton2" "0"
+          Option          "TapButton3" "0"
+          Option          "TapButton4" "0"
+          # Option          "ClickTime" "24"
+          # Disable tap-to-drag, we're using three finger drag instead
+          Option          "TapDragEnable" "false"
+          # While touching the touch pad with # fingers, press the touchpad
+          # physical click button
+          Option          "ClickFinger1" "1"
+          Option          "ClickFinger2" "2"
+          Option          "ClickFinger3" "3"
+          # Option          "ButtonMoveEmulate" "false"
+          # Option          "ButtonIntegrated" "true"
+          # Option          "ButtonZonesEnable" "true"
+          # Option          "FirstZoneButton" "1"
+          # Option          "SecondZoneButton" "2"
+          # Option          "ThirdZoneButton" "3"
+          # Option          "LimitButtonZonesToBottomEdge" "false"
+          # The momentum after scroll fingers released
+          Option          "ScrollCoastDuration" "600"
+          Option          "ScrollCoastEnableSpeed" "0.5"
+          # Natural scrolling with two fingers
+          Option          "ScrollSmooth" "true"
+          Option          "ScrollUpButton" "5"
+          Option          "ScrollDownButton" "4"
+          Option          "ScrollLeftButton" "7"
+          Option          "ScrollRightButton" "6"
+          # Tweak scroll sensitivity with ScrollDistance, don't touch
+          # ScrollSensitivity
+          Option          "ScrollDistance" "284"
+          Option          "ScrollClickTime" "8"
+          # Three finger drag
+          # Option          "SwipeDistance" "1"
+          # Option          "SwipeUpButton" "1"
+          # Option          "SwipeDownButton" "1"
+          # Option          "SwipeClickTime" "300"
+          # Option          "SwipeSensitivity" "1500"
+          # Four finger swipe, 8 & 9 are for browsers navigating back and forth
+          # respectively
+          Option          "SwipeLeftButton" "9"
+          Option          "SwipeRightButton" "8"
+          Option          "Swipe4LeftButton" "9"
+          Option          "Swipe4RightButton" "8"
+          # Mouse button >= 10 are not used by Xorg, so we'll map them with
+          # xbindkeys and xdotool later
+          # Option          "Swipe4UpButton" "11"
+          # Option          "Swipe4DownButton" "10"
+          # Mouse buttons triggered by 2-finger pinching gesture
+          Option          "ScaleDistance" "300"
+          Option          "ScaleUpButton" "12"
+          Option          "ScaleDownButton" "13"
+          # Mouse buttons trigger by 2-finger rotating gesture, disabled to
+          # enhance the pinch gesture
+          Option          "RotateLeftButton" "0"
+          Option          "RotateRightButton" "0"
+          # Without this option set to a high value, there are types of
+          # click+hold-and-move functionality (most easily reproed by click and then move
+          # up-right) that get ignored
+          Option          "Hold1Move1StationaryMaxMove" "1200"
+  EndSection
+#+END_SRC
+
+#+BEGIN_SRC conf :noweb yes :tangle (my/hardware-tangle "Apple Inc" "chassis_vendor" "/sudo::/etc/X11/xorg.conf.d/50-mtrack.conf")
+  <<mtrack>>
+#+END_SRC
+
+* MONITOR
+
+#+NAME: monitor
+#+BEGIN_SRC conf :tangle /sudo::/usr/share/X11/xorg.conf.d/10-monitor.conf
+Section "Monitor"
+    Identifier "LVDS0"
+    Option "DPMS" "true"
+EndSection
+
+Section "ServerLayout"
+    Identifier "ServerLayout0"
+    Option "StandbyTime" "8"
+    Option "SuspendTime" "10"
+    Option "OffTime"     "12"
+    Option "BlankTime"   "4"
+EndSection
+#+END_SRC
+
+#+BEGIN_SRC conf :noweb yes :tangle /sudo::/etc/X11/xorg.conf.d/10-monitor.conf
+  <<monitor>>
+#+END_SRC

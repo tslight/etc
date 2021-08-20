@@ -1,0 +1,74 @@
+#+PROPERTY: header-args :cache yes
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :tangle-mode (identity #o600)
+#+PROPERTY: header-args+ :results silent
+#+PROPERTY: header-args+ :padline no
+* ZSHENV
+#+BEGIN_SRC sh :tangle ~/.zshenv
+  [ -f ~/.profile ] && . ~/.profile
+  export PATH=$PATH:$HOME/bin:$HOME/.local/bin:$HOME/.gem/ruby/2.3.0/bin
+  export FPATH=$FPATH:$HOME/.zsh_functions
+  export HISTFILE=$HOME/.zsh_history
+  export HISTSIZE=4242
+  export SAVEHIST=$HISTSIZE
+  export EDITOR="emacsclient -nw -c"
+  export ALTERNATE_EDITOR=""
+  export PAGER=less
+  export BLOCK_SIZE=human-readable
+  export DIRSTACKSIZE=12
+  export KEYTIMEOUT=1
+  export WORDCHARS=${WORDCHARS/\-} # adds - to word delimiter
+  export WORDCHARS=${WORDCHARS/\.} # adds . to word delimiter
+  export WORDCHARS=${WORDCHARS/\/} # adds / to word delimiter
+#+END_SRC
+* ZSHRC
+#+BEGIN_SRC sh :tangle ~/.zshrc
+  zstyle ':completion:*:default' list-colors "${(@s.:.)LS_COLORS}"
+  zstyle ':completion:*' menu select # arrow select
+  zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*' # case insensitivity
+  zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
+  zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,user,%cpu,tty,cputime,cmd'
+  zstyle ':vcs_info:*' enable git svn
+
+  autoload -U compinit && compinit -u  # completion library
+  autoload -U colors && colors         # colour library
+  autoload -U promptinit && promptinit # prompt library
+  autoload -U vcs_info                 # version control library
+  autoload -U zmv                      # batch rename library
+
+  setopt auto_name_dirs         # absolute name becomes dir
+  setopt autocd                 # cd without typing cd. omg.
+  setopt chaselinks             # follow links in cd.
+  setopt complete_in_word       # complete unique matches
+  setopt completealiases        # allow aliases to be completed
+  setopt correct                # allow me to be slack
+  setopt extended_glob          # set awesome to max
+  setopt hist_expire_dups_first # trim duplicates from file first
+  setopt hist_find_no_dups      # when searching don't find duplicates
+  setopt hist_ignore_all_dups   # don't store duplicates
+  setopt hist_ignore_space      # don't store cmds that start with a space
+  setopt hist_no_store          # don't store history cmds
+  setopt inc_append_history     # immediately write cmd after enter
+  setopt longlistjobs           # display PID when suspending processes as well
+  setopt list_ambiguous         # complete until it gets ambiguous
+  setopt magic_equal_subst      # expand inside equals
+  setopt nobeep                 # stop harassing me
+  setopt nonomatch              # try to avoid the 'zsh: no matches found...'
+  setopt prompt_subst           # param expansion, cmd substitution, &  math
+  unsetopt flow_control         # stty ixon doesn't work, but this does.
+  ttyctl -f                     # avoid having to manually reset the terminal
+
+  bindkey '^[[Z' reverse-menu-complete # shift-tab cycles backwards
+  bindkey \^U backward-kill-line # ctrl-u (whole-line by default)
+
+  if [ $(id -u) -eq 0 ]; then
+      PROMPT="%{$fg_bold[red]%}%m %{$fg_bold[cyan]%}%~ %{$fg_bold[yellow]%}%#%{$reset_color%} "
+  else
+      PROMPT="%{$fg_bold[green]%}%m %{$fg_bold[cyan]%}%~ %{$fg_bold[yellow]%}%#%{$reset_color%} "
+  fi
+
+  [ -f ~/.aliases ] && . ~/.aliases
+  [ -f ~/.functions ] && . ~/.functions
+
+  [[ $TERM == "dumb" ]] && unsetopt zle && PS1='$ ' # emacs tramp workaround
+#+END_SRC
