@@ -30,10 +30,6 @@
   export LESS_TERMCAP_ue=$'\e[0m'
   export LESS_TERMCAP_us=$'\e[1;4;31m'
 
-  export ANSIBLE=$HOME/src/gitlab/tspub/devops/ansible
-  export DEVPATH=$HOME/src/gitlab/oe-developers
-  export DEVOPS=$HOME/src/gitlab/oe-developers/be/devops
-
   PATH="${HOME}/bin:${PATH}"
   PATH="${DEVOPS}/bin:${PATH}"
   PATH="${HOME}/.local/bin:${PATH}"
