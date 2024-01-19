@@ -5,42 +5,82 @@
 #+PROPERTY: header-args+ :padline no
 * ZSHENV
 #+BEGIN_SRC sh :tangle ~/.zshenv
-  [ -f ~/.profile ] && . ~/.profile
-  export PATH=$PATH:$HOME/bin:$HOME/.local/bin:$HOME/.gem/ruby/2.3.0/bin
-  export FPATH=$FPATH:$HOME/.zsh_functions
   export HISTFILE=$HOME/.zsh_history
-  export HISTSIZE=4242
+  export HISTSIZE=100000
   export SAVEHIST=$HISTSIZE
   export EDITOR="emacsclient -nw -c"
   export ALTERNATE_EDITOR=""
   export PAGER=less
+  export GTK_THEME=Emacs
   export BLOCK_SIZE=human-readable
   export DIRSTACKSIZE=12
   export KEYTIMEOUT=1
-  export WORDCHARS=${WORDCHARS/\-} # adds - to word delimiter
-  export WORDCHARS=${WORDCHARS/\.} # adds . to word delimiter
-  export WORDCHARS=${WORDCHARS/\/} # adds / to word delimiter
+  export EMPLOYER="oe-developers"
+  export DEVPATH="$HOME/$EMPLOYER"
+
+  WORDCHARS=${WORDCHARS/\-} # adds - to word delimiter
+  WORDCHARS=${WORDCHARS/\.} # adds . to word delimiter
+  WORDCHARS=${WORDCHARS/\/} # adds / to word delimiter
+  WORDCHARS=${WORDCHARS/\\} # adds \ to word delimiter
+  WORDCHARS=${WORDCHARS/\=} # adds = to word delimiter
+  WORDCHARS=${WORDCHARS/\_} # adds _ to word delimiter
+  export WORDCHARS
+
+  export GOPATH="$HOME/go"
+  export GOROOT="/usr/local/go"
+
+  typeset -U PATH path
+  path=(
+      $HOME/bin
+      $HOME/.local/bin
+      $GOPATH/bin
+      $GOROOT/bin
+      $path
+  )
+
+  [ -d /snap/bin ] && path=(/snap/bin $path)
+  [ -d /opt/homebrew/Caskroom/miniconda/base/bin ] && \
+      path=(/opt/homebrew/Caskroom/miniconda/base/bin $path)
+
+  PIPPATH="$(python3 -m site --user-base)"
+  [ -d "$PIPPATH/bin" ] && path=($PIPPATH/bin $path)
+
+  export PATH
+
+  typeset -U CDPATH cdpath
+  # https://superuser.com/a/1054825
+  cdpath=(
+      $HOME
+      $HOME/src
+      "$HOME/$EMPLOYER"
+      $cdpath
+  )
+
+  umask 022
 #+END_SRC
 * ZSHRC
 #+BEGIN_SRC sh :tangle ~/.zshrc
-  zstyle ':completion:*:default' list-colors "${(@s.:.)LS_COLORS}"
-  zstyle ':completion:*' menu select # arrow select
   zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*' # case insensitivity
-  zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
+  zstyle ':completion:*' menu select # arrow select
+  zstyle ':completion:*' rehash true # auto add new commands
+  zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;32'
+  zstyle ':completion:*:default' list-colors "${(@s.:.)LS_COLORS}"
   zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,user,%cpu,tty,cputime,cmd'
-  zstyle ':vcs_info:*' enable git svn
+  zstyle ':completion:*:make:*:targets' call-command true # make target completions
+  zstyle ':completion:*:make::' tag-order targets variables # show targets before variables
+  zstyle ':completion:*:processes' command 'ps -au $USER'
+  zstyle ':completion:*:processes-names' command 'ps -e -o comm='
 
-  autoload -U compinit && compinit -u  # completion library
-  autoload -U colors && colors         # colour library
-  autoload -U promptinit && promptinit # prompt library
-  autoload -U vcs_info                 # version control library
-  autoload -U zmv                      # batch rename library
+  autoload -Uz compinit && compinit -u      # completion library
+  autoload -Uz bashcompinit && bashcompinit # bash completions too please
+  autoload -Uz colors && colors             # colour library
+  autoload -Uz zmv                          # batch rename library
+  # autoload -Uz promptinit && promptinit && prompt vcs
 
   setopt auto_name_dirs         # absolute name becomes dir
   setopt autocd                 # cd without typing cd. omg.
   setopt chaselinks             # follow links in cd.
   setopt complete_in_word       # complete unique matches
-  setopt completealiases        # allow aliases to be completed
   setopt correct                # allow me to be slack
   setopt extended_glob          # set awesome to max
   setopt hist_expire_dups_first # trim duplicates from file first
@@ -56,19 +96,60 @@
   setopt nonomatch              # try to avoid the 'zsh: no matches found...'
   setopt prompt_subst           # param expansion, cmd substitution, &  math
   unsetopt flow_control         # stty ixon doesn't work, but this does.
+  unsetopt completealiases      # supposedly allows aliases to be completed, but
+                                # I turn it off because it breaks mine..
   ttyctl -f                     # avoid having to manually reset the terminal
 
   bindkey '^[[Z' reverse-menu-complete # shift-tab cycles backwards
   bindkey \^U backward-kill-line # ctrl-u (whole-line by default)
 
-  if [ $(id -u) -eq 0 ]; then
-      PROMPT="%{$fg_bold[red]%}%m %{$fg_bold[cyan]%}%~ %{$fg_bold[yellow]%}%#%{$reset_color%} "
-  else
-      PROMPT="%{$fg_bold[green]%}%m %{$fg_bold[cyan]%}%~ %{$fg_bold[yellow]%}%#%{$reset_color%} "
-  fi
+  # Alt-n & Alt-p to search history using current input
+  autoload -Uz history-search-end
+  zle -N history-beginning-search-backward-end history-search-end
+  zle -N history-beginning-search-forward-end history-search-end
+  bindkey '\ep' history-beginning-search-backward-end
+  bindkey '\en' history-beginning-search-forward-end
 
-  [ -f ~/.aliases ] && . ~/.aliases
-  [ -f ~/.functions ] && . ~/.functions
+  # Arrow keys to do history search
+  autoload -Uz up-line-or-beginning-search down-line-or-beginning-search
+  zle -N up-line-or-beginning-search
+  zle -N down-line-or-beginning-search
+  bindkey "^[[A" up-line-or-beginning-search
+  bindkey "^[[B" down-line-or-beginning-search
 
   [[ $TERM == "dumb" ]] && unsetopt zle && PS1='$ ' # emacs tramp workaround
+
+  # Directory shortcuts
+  hash -d src=$HOME/src
+  hash -d wrk="$HOME/$EMPLOYER"
+
+  command -v kubectl &>/dev/null && source <(kubectl completion zsh)
+
+  prompt_vcs_setup() {
+      zstyle ':vcs_info:*' enable git svn
+      zstyle ':vcs_info:git:*' formats '%B%F{cyan}(%b)%f'
+
+      autoload -Uz vcs_info
+
+      precmd_vcs_info() { vcs_info; }
+      precmd_functions+=( precmd_vcs_info )
+
+      setopt prompt_subst
+
+      local user_at_host="%B%F{green}%n%B%F{yellow}@%B%F{green}%m%b%f"
+      local cwd="%B%F{yellow}:%F{magenta}%1~%b%f"
+      local git_branch=\$vcs_info_msg_0_
+      local exit_status="%B%(?.%F{yellow}√.%F{red}%?)"
+      local priv="%B%F{yellow}%#%b%f"
+
+      PS1="${user_at_host}${cwd} ${git_branch}"$'\n'"${exit_status} ${priv} "
+      PS2="> "
+
+      prompt_opts=( cr percent )
+  }
+
+  prompt_vcs_setup "$@"
+
+  [ -f $HOME/.aliases ] && . $HOME/.aliases
+  [ -f $HOME/.functions ] && . $HOME/.functions
 #+END_SRC
