@@ -4,11 +4,7 @@
 #+PROPERTY: header-args+ :tangle-mode (identity #o600)
 #+PROPERTY: header-args+ :results silent
 #+PROPERTY: header-args+ :padline no
-#+PROPERTY: header-args+ :tangle ~/.functions
-
-* BASH LIBRARY
-
-#+BEGIN_SRC sh
+#+BEGIN_SRC sh :tangle ~/.functions
   if echo "$0" | grep -q bash; then
       if [ -d "$HOME"/bin/lib/bash ]; then
           for f in "$HOME"/bin/lib/bash/*; do
@@ -16,99 +12,45 @@
           done
       fi
   fi
-#+END_SRC
 
-* OS SPECIFIC
-
-#+BEGIN_SRC sh
-  case "$OSTYPE" in
-      darwin*)
-      ;;
-      freebsd*)
-      ;;
-      linux*)
-      ;;
-      netbsd*)
-      ;;
-      openbsd*)
-          lsdisk () {
-              sysctl hw.disknames | sed -n 1'p' | tr ',' '\n'\
-                  | while read word; do
-                  echo $word | sed -e 's/^hw.disknames=//g'
-              done
-          }
-
-          lspart() {
-              echo " "
-              lsblk | cut -c3 | while read number; do
-                  doas disklabel -h sd$number\
-                      | sed -ne '/unused/d;1p;/size/,$p'\
-                      | cut -c -21,40-46,67-
-                  echo " "
-              done
-          }
-          ;;
-  esac
-#+END_SRC
-
-* OS AGNOSTIC
-** ANSI
-
-#+begin_src shell
   ansi() {
       for i in {30..38}; do
           echo -e "\033[0;${i}m Normal: (0;$i); \033[1;${i}m Light: (1;$i)"
       done
   }
-#+end_src
 
-** BZIPR
-
-Bzip all files in directory.
-
-#+BEGIN_SRC sh
   bzipr () {
       for dir in "$1"; do
           base=$(basename "$dir")
           tar cvjf "${base}.tar.bz2" "$dir"
       done
   }
-#+END_SRC
 
-** CD NUMBER
+  # cd () {
+  #     builtin cd "$@"
+  #     if [ -f "Pipfile" ] ; then
+  #         pipenv shell
+  #     fi
+  # }
 
-Go up \x\ directories...
+  ddpp() {
+      sudo dd if="$1" of=/dev/"$2" conv=fsync status=progress bs=4M && sudo sync
+  }
 
-#+BEGIN_SRC sh
   cdot () {
       for x in $(seq "$1"); do
           cd ..
       done
   }
-#+END_SRC
 
-** CALC
-
-Floating point from shell.
-
-#+BEGIN_SRC sh
   calc () {
       echo "scale=3;$@" | bc -l
   }
-#+END_SRC
 
-** CHEAT
-
-Get useful information on commands.
-
-#+BEGIN_SRC sh
   cheat () {
       curl cheat.sh/${1:-cheat};
   }
-#+END_SRC
-** COUNTDOWN
 
-#+begin_src shell
   countdown() {
       clear
       for i in $(seq "${1-10}" -1 0); do
@@ -118,85 +60,36 @@ Get useful information on commands.
       done
       play -q -n synth .8 sine 4100 fade q 0.1 .3 0.1 repeat 3
   }
-#+end_src
 
-** EMOJIS
-
-#+begin_src shell
-  emojis() {
-      for (( x = 2600; x <= 2700; x++ )); do
-          echo -n -e " \u${x}"
-          sleep .1
-      done
-      echo
-  }
-#+end_src
-** RECURSIVE DOS 2 UNIX
-
-https://stackoverflow.com/questions/4767396/linux-command-how-to-find-only-text-files
-
-#+BEGIN_SRC sh
   dos2unix_recursive () {
       find "$1" -type f\
            -exec grep -Ilq "" {} \; \
            -exec dos2unix {} \;
   }
-#+END_SRC
-** RECURSIVE GREP
 
-#+begin_src shell
-  rgrep() {
-      # https://stackoverflow.com/questions/16956810/how-do-i-find-all-files-containing-specific-text-on-linux
-      grep -rnw "${2}" -e "${1}"
-  }
-#+end_src
-
-** RECURSIVE WORD COUNT
-
-#+begin_src shell
-  rwc() {
-      find "$1" -iname "$2" -exec wc -l {} +
-  }
-#+end_src
-
-** DUSORT
-
-Sort directory by human readable size.
-
-#+BEGIN_SRC sh
   dusort () {
       # d1 = depth 1, sort -hr = human-readable & reverse
       du -hd1 "$1" | sort -hr
   }
-#+END_SRC
 
-** FIXPERMS
+  emojis() {
+      for (( x = 2600; x <= 2700; x++ )); do
+          echo -n -e " \u${x}"
+      done
+      echo
+  }
 
-Recursive chmod on files and directories.
+  f() {
+      find . -iname "*$1*" -exec ls -1rt "{}" +
+  } 2>/dev/null
 
-Usage: fixperms [DIRECTORY OCTAL] [FILE OCTAL] [PATH]
-
-#+BEGIN_SRC sh
   fixperms () {
       local path=$(eval echo "${3//>}") # santize input so find doesn't break on spaces or ~
       local -i fileperms="$2" dirperms="$1"
       find "$path" -type d -exec chmod "$dirperms" {} \;
       find "$path" -type f -exec chmod "$fileperms" {} \;
   }
-#+END_SRC
 
-** MKCD
-
-Make a directory and cd into it.
-
-#+BEGIN_SRC sh
-  mkcd () {
-      mkdir -p "$1" && cd "$1"
-  }
-#+END_SRC
-** MEMORY SUM
-
-#+begin_src shell
   memsum() {
       ps -eo size,pid,user,command --sort -size | \
           awk '{ hr=$1/1024 ; printf("%13.2f Mb ",hr) } { for ( x=4 ; x<=NF ; x++ ) { printf("%s ",$x) } print "" }' | \
@@ -204,11 +97,7 @@ Make a directory and cd into it.
           cut -d "-" -f1| \
           grep "${1}" | grep -v grep
   }
-#+end_src
 
-** MEMORY USAGE
-
-#+begin_src shell
   memusage() {
       #Report Total Used and Available mem in human readable format
       total=$(head -1 /proc/meminfo |awk '{print $2}')
@@ -217,38 +106,25 @@ Make a directory and cd into it.
       totalMB=$(( total / 1024 ))
       availMB=$(( avail / 1024 ))
       usedMB=$(( used / 1024 ))
-      #echo -ne "From a total of ${DARK_BLUE} ${totalMB}${reset} MB, you are using ${DARK_RED}${usedMB}${reset} MB's, which leaves you with ${DARK_GREEN}${availMB}${reset} MB free memory.\n"
-      echo -ne "${LIGHT_BLUE}${totalMB}${reset} MB total, ${DARK_RED}${usedMB}${reset} MB used, ${DARK_GREEN}${availMB}${reset} MB free.\n"
+      echo -ne "${totalMB} MB total, ${usedMB} MB used, ${availMB} MB free.\n"
   }
-#+end_src
 
-** MULTI TAIL
+  mkcd () {
+      mkdir -p "$1" && cd "$1"
+  }
 
-#+BEGIN_SRC sh
-mtail () {
-    trap 'kill $(jobs -p)' EXIT
-    for file in "$@"; do
-        tail -f "$file" &
-    done
-    wait
-}
-#+END_SRC
+  mtail () {
+      trap 'kill $(jobs -p)' EXIT
+      for file in "$@"; do
+          tail -f "$file" &
+      done
+      wait
+  }
 
-** PEEK
-
-https://github.com/lf94/peek-for-tmux
-
-#+BEGIN_SRC sh
   peek () {
       tmux split-window -h -p 48 "$PAGER" "$@" || exit
   }
-#+END_SRC
 
-** PGREPKILL
-
-Find and kill all processes with a given name
-
-#+BEGIN_SRC sh
   pgrepkill () {
       if pid=($(pgrep -i "$1")); then
           for p in "${pid[@]}"; do
@@ -261,13 +137,7 @@ Find and kill all processes with a given name
           echo "No $1 processes found."
       fi
   }
-#+END_SRC
 
-** PSEE
-
-I have since found ~pgrep -ail~...
-
-#+BEGIN_SRC sh
   psee () {
       tput setaf 3
       printf "\nYou should probably be using $(tput setaf 6)pgrep -ail$(tput setaf 3)...\n\n"
@@ -276,23 +146,21 @@ I have since found ~pgrep -ail~...
       ps aux | grep -i "[$char]$rest" | awk '{printf ("%s %i %s %s\n", $1, $2, $9, $11)}'
       echo
   }
-#+END_SRC
 
-** RSS GET
+  rgrep() {
+      # https://stackoverflow.com/questions/16956810/how-do-i-find-all-files-containing-specific-text-on-linux
+      grep -rnw "${2}" -e "${1}"
+  }
 
-Great for downloading all episodes in a podcast feed.
+  rwc() {
+      find "$1" -iname "$2" -exec wc -l {} +
+  }
 
-#+BEGIN_SRC sh
+
   rssget () {
       curl "$1" | grep -E "http.*\.$2" | sed "s/.*\(http.*\.$2\).*/\1/" | xargs wget -nc
   }
-#+END_SRC
 
-** TMUX
-
-Create panes for vertical monitor.
-
-#+BEGIN_SRC sh
   tv() {
       tmux new-session \; \
            split-window -v ranger\; \
@@ -303,11 +171,7 @@ Create panes for vertical monitor.
            select-pane -t 1 \; \
            split-window -h\;
   }
-#+END_SRC
 
-Create panes for horizontal monitor.
-
-#+BEGIN_SRC sh
   th() {
       tmux new-session \; \
            split-window -h ipython3\; \
@@ -318,10 +182,7 @@ Create panes for horizontal monitor.
            select-window -t 1\; \
            select-pane -t 1
   }
-#+END_SRC
-** WEATHER
 
-#+begin_src shell
   weather() {
       # https://twitter.com/igor_chubin # Try wttr moon
       curl "https://wttr.in/${1:-London}"
@@ -331,4 +192,8 @@ Create panes for horizontal monitor.
       # https://twitter.com/igor_chubin # Try wttr moon
       curl "https://wttr.in/${1:-moon}"
   }
-#+end_src
+#+END_SRC
+* COMMENT Local Variables                                  :NOEXPORT:ARCHIVE:
+# Local Variables:
+# eval: (add-hook 'after-save-hook 'org-babel-tangle nil t)
+# End:

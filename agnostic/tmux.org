@@ -4,89 +4,99 @@
 #+PROPERTY: header-args+ :results silent
 #+PROPERTY: header-args+ :padline no
 #+BEGIN_SRC conf :tangle ~/.tmux.conf
-  ## MISC
-  set -g base-index 1
-  set -g pane-base-index 1
-  set -g history-limit 42420
-  set -g renumber-windows on
-  set -g set-titles on
-  set -g set-titles-string "#T: [#S] #I: #W: #P"
-  set -g display-panes-time 4000 # I'm slow and indecisive!
-  set -g default-terminal "screen-256color"
-  set -g escape-time 0 # default is 500ms which feels like forever..
-  #set -g mode-keys vi
+## RE-BIND PREFIX
+# set -g prefix C-j
+# unbind-key C-b
+# bind C-j send-prefix
 
-  ## STATUS BAR
-  set-option -g status-interval 5
-  set-option -g automatic-rename on
-  set-option -g automatic-rename-format '#{b:pane_current_path}'
+## MISC
+set -g base-index 1
+set -g pane-base-index 1
+set -g history-limit 42420
+set -g renumber-windows on
+set -g set-titles on
+set -g set-titles-string "#T: [#S] #I: #W: #P"
+set -g display-panes-time 4000 # I'm slow and indecisive!
+set -g default-terminal "screen-256color"
+set -g escape-time 0 # default is 500ms which feels like forever..
+#set -g mode-keys vi
 
-  ## COLORS
-  set -g message-style bg=default,fg=brightgreen
-  set -g mode-style bg=default,fg=brightgreen
-  set -g status-style bg=default,fg=brightgreen
-  set -g window-status-style bold
-  set -g window-status-current-style underscore,fg=brightyellow
+## STATUS BAR
+set-option -g status-interval 5
+set-option -g automatic-rename on
+set-option -g automatic-rename-format '#{b:pane_current_path}'
 
-  ## STATUS
-  set -g status-interval 60
-  set -g status-left "[#S] "
-  set -g status-left-length 50
-  set -g status-right "%H:%M %a %d/%m/%y"
-  set -g status-right-length 50
-  set -g window-status-current-format "#I: #W.#P*"
+## COLORS
+set -g message-style bg=default,fg=brightgreen
+set -g mode-style bg=default,fg=brightgreen
+set -g status-style bg=default,fg=brightgreen
+set -g window-status-style bold
+set -g window-status-current-style underscore,fg=brightyellow
 
-  ## MOUSE
-  set -g mouse on
-  bind -n MouseDown2Status copy-mode
+## STATUS
+set -g status-interval 60
+set -g status-left "[#S] "
+set -g status-left-length 50
+set -g status-right "%H:%M %a %d/%m/%y"
+set -g status-right-length 50
+set -g window-status-current-format "#I: #W.#P*"
 
-  ## KEYS
-  bind C-l switch-client -l
-  bind C-c new-session
-  bind C-x kill-session
-  bind v split-window -h
-  bind h split-window -v
-  bind C-r source-file ~/.tmux.conf \; display-message "~/.tmux.conf reloaded"
-  bind C neww -n cmus cmus
-  bind e neww -n emacs 'emacsclient -nw -c -a ""'
-  bind E neww -n emacs 'emacs -nw'
-  bind H neww -n htop htop
-  bind r neww -n fm ranger
-  bind R neww -n sfm 'sudo ranger'
-  bind M-r neww -n dl rtorrent
-  bind S neww -n su 'sudo -s'
-  bind t splitw -h -p 42 top
-  # bind u copy-mode
-  bind -n C-Space copy-mode
-  bind -n M-Space display-panes
-  bind -n M-Up select-pane -U
-  bind -n M-Down select-pane -D
-  bind -n M-Left select-pane -L
-  bind -n M-Right select-pane -R
-  bind -n C-Up resize-pane -U 5
-  bind -n C-Down resize-pane -D 5
-  bind -n C-Left resize-pane -L 5
-  bind -n C-Right resize-pane -R 5
-  # copy to system clipboard using xsel
-  bind -T copy-mode C-w send -X copy-pipe-and-cancel "xsel -i -b"
-  bind -T copy-mode w send -X copy-pipe "xsel -i -b"
-  bind -T copy-mode MouseDragEnd1Pane send -X copy-pipe-and-cancel "xsel -i -b"
-  bind -T copy-mode Space send -X begin-selection
-  bind -T copy-mode k send -X copy-end-of-line "xsel -i -b"
-  # copy mode motion
-  bind -T copy-mode b send -X cursor-left
-  bind -T copy-mode f send -X cursor-right
-  bind -T copy-mode n send -X cursor-down
-  bind -T copy-mode p send -X cursor-up
-  bind -T copy-mode a send -X start-of-line
-  bind -T copy-mode e send -X end-of-line
-  bind -T copy-mode [ send -X previous-paragraph
-  bind -T copy-mode ] send -X next-paragraph
-  bind -T copy-mode C-< send -X top-line
-  bind -T copy-mode C-> send -X bottom-line
-  bind -T copy-mode < send -X history-top
-  bind -T copy-mode > send -X history-bottom
-  # search pane
-  bind -T copy-mode r command-prompt -i -I "#{pane_search_string}" -p "(search up)" "send -X search-backward-incremental \"%%%\""
-  bind -T copy-mode s command-prompt -i -I "#{pane_search_string}" -p "(search down)" "send -X search-forward-incremental \"%%%\""
+## MOUSE
+set -g mouse on
+bind -n MouseDown2Status copy-mode
+
+## KEYS
+# bind -n C-tab next
+# bind -n C-S-tab prev
+bind C-l switch-client -l
+bind C-c new-session
+# bind C-x kill-session
+bind v split-window -h
+bind h split-window -v
+bind C-r source-file ~/.tmux.conf \; display-message "~/.tmux.conf reloaded"
+bind e neww -n emacs 'emacsclient -nw -c -a ""'
+bind C-e neww -n emacs 'emacs -nw'
+bind C-h neww -n htop htop
+bind r neww -n fm ranger
+bind C-r neww -n sfm 'sudo ranger'
+bind M-r neww -n dl rtorrent
+bind C-s neww -n su 'sudo -s'
+bind t splitw -h -p 42 top
+# bind u copy-mode
+# bind -n C-Space copy-mode
+# bind -n M-Space display-panes
+bind -n M-Up select-pane -U
+bind -n M-Down select-pane -D
+bind -n M-Left select-pane -L
+bind -n M-Right select-pane -R
+bind -n C-Up resize-pane -U 5
+bind -n C-Down resize-pane -D 5
+bind -n C-Left resize-pane -L 5
+bind -n C-Right resize-pane -R 5
+# copy to system clipboard using xsel
+bind -T copy-mode C-w send -X copy-pipe "xsel -i -b"
+bind -T copy-mode w send -X copy-pipe "xsel -i -b"
+bind -T copy-mode MouseDragEnd1Pane send -X copy-pipe-and-cancel "xsel -i -b"
+bind -T copy-mode Space send -X begin-selection
+bind -T copy-mode k send -X copy-end-of-line "xsel -i -b"
+# copy mode motion
+bind -T copy-mode b send -X cursor-left
+bind -T copy-mode f send -X cursor-right
+bind -T copy-mode n send -X cursor-down
+bind -T copy-mode p send -X cursor-up
+bind -T copy-mode a send -X start-of-line
+bind -T copy-mode e send -X end-of-line
+bind -T copy-mode [ send -X previous-paragraph
+bind -T copy-mode ] send -X next-paragraph
+bind -T copy-mode C-< send -X top-line
+bind -T copy-mode C-> send -X bottom-line
+bind -T copy-mode < send -X history-top
+bind -T copy-mode > send -X history-bottom
+# search pane
+bind -T copy-mode r command-prompt -i -I "#{pane_search_string}" -p "(search up)" "send -X search-backward-incremental \"%%%\""
+bind -T copy-mode s command-prompt -i -I "#{pane_search_string}" -p "(search down)" "send -X search-forward-incremental \"%%%\""
 #+END_SRC
+* COMMENT Local Variables                                  :NOEXPORT:ARCHIVE:
+# Local Variables:
+# eval: (add-hook 'after-save-hook 'org-babel-tangle nil t)
+# End:

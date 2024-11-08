@@ -3,153 +3,168 @@
 #+PROPERTY: header-args+ :tangle-mode (identity #o600)
 #+PROPERTY: header-args+ :results silent
 #+PROPERTY: header-args+ :padline no
-* ZSHENV
+*** ZSHENV
 #+BEGIN_SRC sh :tangle ~/.zshenv
-  export HISTFILE=$HOME/.zsh_history
-  export HISTSIZE=100000
-  export SAVEHIST=$HISTSIZE
-  export EDITOR="emacsclient -nw -c"
-  export ALTERNATE_EDITOR=""
-  export PAGER=less
-  export GTK_THEME=Emacs
-  export BLOCK_SIZE=human-readable
-  export DIRSTACKSIZE=12
-  export KEYTIMEOUT=1
-  export EMPLOYER="oe-developers"
-  export DEVPATH="$HOME/$EMPLOYER"
+export HISTFILE=$HOME/.zsh_history
+export HISTSIZE=100000
+export SAVEHIST=$HISTSIZE
+export EDITOR="emacsclient -nw -c"
+export ALTERNATE_EDITOR=""
+export PAGER=less
+export GTK_THEME=Emacs
+export BLOCK_SIZE=human-readable
+export DIRSTACKSIZE=12
+export KEYTIMEOUT=1
+export EMPLOYER="oe-developers"
+export DEVPATH="$HOME/$EMPLOYER"
 
-  WORDCHARS=${WORDCHARS/\-} # adds - to word delimiter
-  WORDCHARS=${WORDCHARS/\.} # adds . to word delimiter
-  WORDCHARS=${WORDCHARS/\/} # adds / to word delimiter
-  WORDCHARS=${WORDCHARS/\\} # adds \ to word delimiter
-  WORDCHARS=${WORDCHARS/\=} # adds = to word delimiter
-  WORDCHARS=${WORDCHARS/\_} # adds _ to word delimiter
-  export WORDCHARS
+WORDCHARS=${WORDCHARS/\-} # adds - to word delimiter
+WORDCHARS=${WORDCHARS/\.} # adds . to word delimiter
+WORDCHARS=${WORDCHARS/\/} # adds / to word delimiter
+WORDCHARS=${WORDCHARS/\\} # adds \ to word delimiter
+WORDCHARS=${WORDCHARS/\=} # adds = to word delimiter
+WORDCHARS=${WORDCHARS/\_} # adds _ to word delimiter
+export WORDCHARS
 
-  export GOPATH="$HOME/go"
-  export GOROOT="/usr/local/go"
+[ -d "$HOME/go" ] && export GOPATH="$HOME/go"
+[ -d "/usr/local/go" ] && export GOROOT="/usr/local/go"
+command -v brew &> /dev/null && export GOROOT="$(brew --prefix golang)/libexec"
 
-  typeset -U PATH path
-  path=(
-      $HOME/bin
-      $HOME/.local/bin
-      $GOPATH/bin
-      $GOROOT/bin
-      $path
-  )
+typeset -U CDPATH cdpath
+# https://superuser.com/a/1054825
+cdpath=(
+    $HOME
+    $HOME/src
+    "$HOME/$EMPLOYER"
+    $cdpath
+)
 
-  [ -d /snap/bin ] && path=(/snap/bin $path)
-  [ -d /opt/homebrew/Caskroom/miniconda/base/bin ] && \
-      path=(/opt/homebrew/Caskroom/miniconda/base/bin $path)
-
-  PIPPATH="$(python3 -m site --user-base)"
-  [ -d "$PIPPATH/bin" ] && path=($PIPPATH/bin $path)
-
-  export PATH
-
-  typeset -U CDPATH cdpath
-  # https://superuser.com/a/1054825
-  cdpath=(
-      $HOME
-      $HOME/src
-      "$HOME/$EMPLOYER"
-      $cdpath
-  )
-
-  umask 022
+umask 022
 #+END_SRC
-* ZSHRC
+*** ZSHRC
 #+BEGIN_SRC sh :tangle ~/.zshrc
-  zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*' # case insensitivity
-  zstyle ':completion:*' menu select # arrow select
-  zstyle ':completion:*' rehash true # auto add new commands
-  zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;32'
-  zstyle ':completion:*:default' list-colors "${(@s.:.)LS_COLORS}"
-  zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,user,%cpu,tty,cputime,cmd'
-  zstyle ':completion:*:make:*:targets' call-command true # make target completions
-  zstyle ':completion:*:make::' tag-order targets variables # show targets before variables
-  zstyle ':completion:*:processes' command 'ps -au $USER'
-  zstyle ':completion:*:processes-names' command 'ps -e -o comm='
+typeset -U PATH path
+path=(
+    $HOME/bin
+    $HOME/.local/bin
+    $GOPATH/bin
+    $GOROOT/bin
+    $path
+)
 
-  autoload -Uz compinit && compinit -u      # completion library
-  autoload -Uz bashcompinit && bashcompinit # bash completions too please
-  autoload -Uz colors && colors             # colour library
-  autoload -Uz zmv                          # batch rename library
-  # autoload -Uz promptinit && promptinit && prompt vcs
+if [[ "$(uname)" == "Darwin" ]]; then
+    if [[ "$(arch)" == "i386" ]]; then
+        alias ibrew='arch -x86_64 /usr/local/homebrew/bin/brew'
+        if [[ -d /usr/local/homebrew/bin ]]; then
+            path=(/usr/local/homebrew/bin $path)
+        fi
+        if [[ -d /usr/local/homebrew/Caskroom/miniconda/base/bin ]]; then
+            path=(/usr/local/homebrew/Caskroom/miniconda/base/bin $path)
+        fi
+    elif [[ "$(arch)" == "arm64" &&  -d  /opt/homebrew/Caskroom/miniconda/base/bin ]]; then
+        path=(/opt/homebrew/Caskroom/miniconda/base/bin $path)
+    fi
+fi
 
-  setopt auto_name_dirs         # absolute name becomes dir
-  setopt autocd                 # cd without typing cd. omg.
-  setopt chaselinks             # follow links in cd.
-  setopt complete_in_word       # complete unique matches
-  setopt correct                # allow me to be slack
-  setopt extended_glob          # set awesome to max
-  setopt hist_expire_dups_first # trim duplicates from file first
-  setopt hist_find_no_dups      # when searching don't find duplicates
-  setopt hist_ignore_all_dups   # don't store duplicates
-  setopt hist_ignore_space      # don't store cmds that start with a space
-  setopt hist_no_store          # don't store history cmds
-  setopt inc_append_history     # immediately write cmd after enter
-  setopt longlistjobs           # display PID when suspending processes as well
-  setopt list_ambiguous         # complete until it gets ambiguous
-  setopt magic_equal_subst      # expand inside equals
-  setopt nobeep                 # stop harassing me
-  setopt nonomatch              # try to avoid the 'zsh: no matches found...'
-  setopt prompt_subst           # param expansion, cmd substitution, &  math
-  unsetopt flow_control         # stty ixon doesn't work, but this does.
-  unsetopt completealiases      # supposedly allows aliases to be completed, but
-                                # I turn it off because it breaks mine..
-  ttyctl -f                     # avoid having to manually reset the terminal
+PIPPATH="$(python3 -m site --user-base)"
+[ -d "$PIPPATH/bin" ] && path=($PIPPATH/bin $path)
 
-  bindkey '^[[Z' reverse-menu-complete # shift-tab cycles backwards
-  bindkey \^U backward-kill-line # ctrl-u (whole-line by default)
+export PATH
 
-  # Alt-n & Alt-p to search history using current input
-  autoload -Uz history-search-end
-  zle -N history-beginning-search-backward-end history-search-end
-  zle -N history-beginning-search-forward-end history-search-end
-  bindkey '\ep' history-beginning-search-backward-end
-  bindkey '\en' history-beginning-search-forward-end
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*' # case insensitivity
+zstyle ':completion:*' menu select # arrow select
+zstyle ':completion:*' rehash true # auto add new commands
+zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;32'
+zstyle ':completion:*:default' list-colors "${(@s.:.)LS_COLORS}"
+zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,user,%cpu,tty,cputime,cmd'
+zstyle ':completion:*:make:*:targets' call-command true # make target completions
+zstyle ':completion:*:make::' tag-order targets variables # show targets before variables
+zstyle ':completion:*:processes' command 'ps -au $USER'
+zstyle ':completion:*:processes-names' command 'ps -e -o comm='
 
-  # Arrow keys to do history search
-  autoload -Uz up-line-or-beginning-search down-line-or-beginning-search
-  zle -N up-line-or-beginning-search
-  zle -N down-line-or-beginning-search
-  bindkey "^[[A" up-line-or-beginning-search
-  bindkey "^[[B" down-line-or-beginning-search
+autoload -Uz compinit && compinit -u      # completion library
+autoload -Uz bashcompinit && bashcompinit # bash completions too please
+autoload -Uz colors && colors             # colour library
+autoload -Uz zmv                          # batch rename library
+# autoload -Uz promptinit && promptinit && prompt vcs
 
-  [[ $TERM == "dumb" ]] && unsetopt zle && PS1='$ ' # emacs tramp workaround
+setopt auto_name_dirs         # absolute name becomes dir
+setopt autocd                 # cd without typing cd. omg.
+setopt chaselinks             # follow links in cd.
+setopt complete_in_word       # complete unique matches
+setopt correct                # allow me to be slack
+setopt extended_glob          # set awesome to max
+setopt hist_expire_dups_first # trim duplicates from file first
+setopt hist_find_no_dups      # when searching don't find duplicates
+setopt hist_ignore_all_dups   # don't store duplicates
+setopt hist_ignore_space      # don't store cmds that start with a space
+setopt hist_no_store          # don't store history cmds
+setopt inc_append_history     # immediately write cmd after enter
+setopt longlistjobs           # display PID when suspending processes as well
+setopt list_ambiguous         # complete until it gets ambiguous
+setopt magic_equal_subst      # expand inside equals
+setopt nobeep                 # stop harassing me
+setopt nonomatch              # try to avoid the 'zsh: no matches found...'
+setopt prompt_subst           # param expansion, cmd substitution, &  math
+unsetopt flow_control         # stty ixon doesn't work, but this does.
+unsetopt completealiases      # supposedly allows aliases to be completed, but
+                              # I turn it off because it breaks mine..
+ttyctl -f                     # avoid having to manually reset the terminal
 
-  # Directory shortcuts
-  hash -d src=$HOME/src
-  hash -d wrk="$HOME/$EMPLOYER"
+bindkey '^[[Z' reverse-menu-complete # shift-tab cycles backwards
+bindkey \^U backward-kill-line # ctrl-u (whole-line by default)
 
-  command -v kubectl &>/dev/null && source <(kubectl completion zsh)
+# Alt-n & Alt-p to search history using current input
+autoload -Uz history-search-end
+zle -N history-beginning-search-backward-end history-search-end
+zle -N history-beginning-search-forward-end history-search-end
+bindkey '\ep' history-beginning-search-backward-end
+bindkey '\en' history-beginning-search-forward-end
 
-  prompt_vcs_setup() {
-      zstyle ':vcs_info:*' enable git svn
-      zstyle ':vcs_info:git:*' formats '%B%F{cyan}(%b)%f'
+# Arrow keys to do history search
+autoload -Uz up-line-or-beginning-search down-line-or-beginning-search
+zle -N up-line-or-beginning-search
+zle -N down-line-or-beginning-search
+bindkey "^[[A" up-line-or-beginning-search
+bindkey "^[[B" down-line-or-beginning-search
 
-      autoload -Uz vcs_info
+[[ $TERM == "dumb" ]] && unsetopt zle && PS1='$ ' # emacs tramp workaround
 
-      precmd_vcs_info() { vcs_info; }
-      precmd_functions+=( precmd_vcs_info )
+# Directory shortcuts
+hash -d src=$HOME/src
+hash -d wrk="$HOME/$EMPLOYER"
 
-      setopt prompt_subst
+command -v kubectl &>/dev/null && source <(kubectl completion zsh)
 
-      local user_at_host="%B%F{green}%n%B%F{yellow}@%B%F{green}%m%b%f"
-      local cwd="%B%F{yellow}:%F{magenta}%1~%b%f"
-      local git_branch=\$vcs_info_msg_0_
-      local exit_status="%B%(?.%F{yellow}√.%F{red}%?)"
-      local priv="%B%F{yellow}%#%b%f"
+prompt_vcs_setup() {
+    zstyle ':vcs_info:*' enable git svn
+    zstyle ':vcs_info:git:*' formats '%B%F{cyan}(%b)%f'
 
-      PS1="${user_at_host}${cwd} ${git_branch}"$'\n'"${exit_status} ${priv} "
-      PS2="> "
+    autoload -Uz vcs_info
 
-      prompt_opts=( cr percent )
-  }
+    precmd_vcs_info() { vcs_info; }
+    precmd_functions+=( precmd_vcs_info )
 
-  prompt_vcs_setup "$@"
+    setopt prompt_subst
 
-  [ -f $HOME/.aliases ] && . $HOME/.aliases
-  [ -f $HOME/.functions ] && . $HOME/.functions
+    local user_at_host="%B%F{green}%n%B%F{yellow}@%B%F{green}%m%b%f"
+    local cwd="%B%F{yellow}:%F{magenta}%1~%b%f"
+    local git_branch=\$vcs_info_msg_0_
+    local exit_status="%B%(?.%F{yellow}√.%F{red}%?)"
+    local priv="%B%F{yellow}%#%b%f"
+
+    PS1="${user_at_host}${cwd} ${git_branch}"$'\n'"${exit_status} ${priv} "
+    PS2="> "
+
+    prompt_opts=( cr percent )
+}
+
+prompt_vcs_setup "$@"
+
+[ -f $HOME/.aliases ] && . $HOME/.aliases
+[ -f $HOME/.functions ] && . $HOME/.functions
 #+END_SRC
+* COMMENT Local Variables                                  :NOEXPORT:ARCHIVE:
+# Local Variables:
+# eval: (add-hook 'after-save-hook 'org-babel-tangle nil t)
+# End:

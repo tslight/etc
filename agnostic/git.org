@@ -4,22 +4,14 @@
 #+PROPERTY: header-args+ :results silent
 #+PROPERTY: header-args+ :padline no
 #+BEGIN_SRC conf :tangle ~/.config/git/config
-  [user]
-      name = tslight
-      email = tslight@pm.com
   [color]
       ui = true
   [push]
       default = current
   [alias]
       a = add
-      aa = add -A
-      ba = branch -a
-      bd = branch -d
       b = branch
       c = commit
-      ca = commit -a
-      cid = rev-parse --short HEAD
       cl = clone
       cm = commit -m
       co = checkout
@@ -27,18 +19,20 @@
       m = merge
       P = pull
       p = push
-      pa = push --all -u
-      pm = push origin master
-      po = push origin
       rb = rebase
       rv = revert
       r = remote
       s = status
-      ua = remote set-url --add --push origin
-      ud = remote set-url --delete --push origin
   [core]
       autocrlf = false
       whitespace = trailing-space,space-before-tab
+  [pull]
+      rebase = false
+  [init]
+      defaultBranch = main
+  [user]
+      name = tslight
+      email = tslight@pm.com
 #+END_SRC
 #+BEGIN_SRC conf :tangle ~/.config/git/ignore
   .DS_Store
@@ -48,4 +42,10 @@
   ,*~
   #*#
   #*
+  TAGS
+  tags
 #+END_SRC
+* COMMENT Local Variables                                  :NOEXPORT:ARCHIVE:
+# Local Variables:
+# eval: (add-hook 'after-save-hook 'org-babel-tangle nil t)
+# End:
