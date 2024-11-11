@@ -469,6 +469,11 @@
       PATH="/usr/local/Caskroom/miniconda/base/bin:$PATH"
   PIPPATH="$(python3 -m site --user-base)"
   PATH="$PIPPATH/bin:${PATH}"
+  [ -d "$HOME/go" ] && export GOPATH="$HOME/go"
+  [ -d "/usr/local/go" ] && export GOROOT="/usr/local/go"
+  command -v brew &> /dev/null && export GOROOT="$(brew --prefix golang)/libexec"
+  [ -n "$GOROOT" ] && PATH="$GOROOT/bin:${PATH}"
+  [ -n "$GOPATH" ] && PATH="$GOPATH/bin:${PATH}"
   export PATH
 
   MANPATH="${HOME}/.local/share/man:${MANPATH}"
