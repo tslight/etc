@@ -21,7 +21,7 @@ All in one handy dandy git repo. Fact.
 ** *Warning*
 
 Installing this stuff will overwrite any configuration files you currently have
-in place that are part of this repo, encluding your [[file:~/.emacs.d/][Emacs configuration]].
+in place that are part of this repo.
 
 Please inspect the blocks in the files you intend to tangle and back up any
 files that will be overwritten by [[https://www.gnu.org/software/emacs/manual/html_node/org/Extracting-source-code.html][tangling]] them.
@@ -33,55 +33,31 @@ read & understood all the documentation here and linked to!/
 
 1) Clone this repo & open this file in Emacs.
 2) *BACKUP ANY CONFIGURATION FILES YOU WANT TO KEEP THAT ARE DEFINED IN THIS REPO.*
-3) Execute the elisp source code block below using ~C-c C-c~ with your cursor
-   in the block:
-
-   #+BEGIN_SRC emacs-lisp
-     (load-file
-      (car (org-babel-tangle-file
-            (concat default-directory "/emacs/site-lisp/my-tangles.org"))))
-     (my/tangle-all)
-   #+END_SRC
-
-4) Wait for all the appropriate org files to [[https://www.gnu.org/software/emacs/manual/html_node/org/Extracting-source-code.html][tangle]] (this may take a while...)
+3) Open the org file you want to tangle and run ~(org-babel-tangle)~ or hit
+   ~C-c C-v t~
+4) Wait for all the appropriate org files to [[https://www.gnu.org/software/emacs/manual/html_node/org/Extracting-source-code.html][tangle]]
 5) ...Profit!
 
 ** Option 2
 
 1) Clone this repo & cd into this directory.
 2) *BACKUP ANY CONFIGURATION FILES YOU WANT TO KEEP THAT ARE DEFINED IN THIS REPO.*
-3) Run ~./install.el~, in a terminal, from this directory.
+3) Run ~./tangle.sh ./path-to-the-org-file-you-want-to-tangle.org~, in a
+   terminal, from this directory.
 4) Wait for all the appropriate org files to [[https://www.gnu.org/software/emacs/manual/html_node/org/Extracting-source-code.html][tangle]] (this may take a while...)
 5) ...Profit!
 
 ** But I only came here for an Emacs config!
 
-Please go [[file:emacs/README.org][here]]. Or execute the code block below in Emacs with ~C-c C-c~:
-
-   #+BEGIN_SRC sh
-     (org-babel-load-file (concat default-directory "/emacs/site-lisp/my-tangles.org"))
-     (my/tangle-directory (concat default-directory "/emacs/"))
-   #+END_SRC
+I have now moved my Emacs config to it's own dedicated repo [[https://github.com/tslight/emacs][here]].
 
 * How does all this work?
 
 I'm using Emacs' amazing [[https://orgmode.org/][org-mode]] as a basic cross platform configuration
 management system.
 
-The functions defined in [[file:emacs/site-lisp/my-tangles.org][this]] file, allow automated tangling of the files in
-this repository. However, only the files of the operating system you're
-currently using and the files in the [[file:emacs/][Emacs]] and [[file:agnostic/][agnostic]] directories will be
-tangled when using the [[file:emacs/site-lisp/my-tangles.org::*TANGLE%20ALL][my/tangle-all]] or [[file:emacs/site-lisp/my-tangles.org::*AUTO%20TANGLE][my/auto-tangle]] functions.
-
-Please see the [[file:emacs/README.org][Emacs configuration directory]] for more details on how this is
-implemented. Specifically the functions defined in [[file:emacs/site-lisp/my-tangles.org][this file]].
-
-The main functions were inspired by this guy's blog:
-
-[[http://fgiasson.com/blog/index.php/2016/10/26/literate-clojure-programming-tangle-all-in-org-mode/][Frederick Giasson's Literate Programming Blog]]
-
-For more information on tangling, please see the following entries in the
-org-mode manual:
+For more information on org-mode tangling, please see the following entries in
+the org-mode manual:
 
 [[https://orgmode.org/manual/Extracting-source-code.html][Extracting Source Code]]
 
@@ -90,8 +66,8 @@ org-mode manual:
 * Where can I see these mythical beasts?
 *** Emacs
 
-The main emacs configuration from which this strange odyssey of [[http://www.mncc.com.my/ossig/lists/general/2003-09/msg00143.html][sexp
-worship]] & literate unicorn summoning springs is located [[file:emacs/README.org][here]].
+The main emacs configuration from which this strange odyssey of [[http://www.mncc.com.my/ossig/lists/general/2003-09/msg00143.html][sexp worship]] &
+literate unicorn summoning springs is located in another repository [[https://github.com/tslight/emacs][here]] now.
 
 #+BEGIN_QUOTE
 I took a look at those nerds, and although a lot of their statements
@@ -111,7 +87,7 @@ with me…
 *** *BSD
 
 Configuration files dedicated to the [[Http://www.unixprogram.com/churchofbsd/][Church of BSD]] ([[https://www.openbsd.org/][OpenBSD]] and
-[[https://www.netbsd.org/][NetBSD]]), are located [[file:openbsd/README.org][here]] and [[file:netbsd/][here]], respectively.
+[[https://www.netbsd.org/][NetBSD]]), are located [[file:openbsd.org][here]] and [[file:netbsd.org][here]], respectively.
 
 #+BEGIN_QUOTE
 "One day I was at a restaurant explaining process control to one of my
@@ -138,7 +114,8 @@ didn't really want to stick around too long to find out."
 
 *** Linux
 
-Those dedicated to the infernal penguin are [[./linux/README.org][here]].
+Those dedicated to the infernal penguin have been banished to git history,
+since I no longer tinker like I used to, and simply don't need them anymore :-(
 
 #+BEGIN_QUOTE
 "I must say the linux community is a lot nicer than the unix
@@ -158,8 +135,8 @@ threats. With linux, it is like stirring up a nest of butterflies."
 
 Evil proprietary systems are also catered for...
 
-Cupertino's wickedness resides [[file:macos/README.org][here]], whilst Redmond's ghastliness
-dwells in [[file:windows/README.org][this]] unspeakable den of inquity.
+Cupertino's wickedness resides [[file:macos.org][here]], whilst Redmond's ghastliness
+dwells in [[file:windows.org][this]] unspeakable den of iniquity.
 
 #+BEGIN_QUOTE
 "They say when you play a Microsoft CD backwards you can hear satanic
@@ -177,7 +154,14 @@ Windows!"
 
 A whole directory dedicated to [[https://stumpwm.github.io/][hacks and glory]]!
 
-Your hacking starts... [[file:./linux/stumpwm/README.org][NOW!]]
+Like the Linux files, this has also been relegated to the git history of this
+repository I'm afraid.
+
+If you want to dig, please be my guest, but since I haven't run an X11 window
+manager or desktop in years, I think it's highly unlikely I'll ever use it
+again, but will leave this here as a pointer...
+
+Your hacking starts... In the past...
 
 #+BEGIN_QUOTE
 Stumpwm is a "everything-and-the-kitchen-sink WM" or "the emacs of WMs."
@@ -189,10 +173,10 @@ look no further.
 -- [[https://github.com/stumpwm/stumpwm][StumpWM GitHub]]
 #+END_QUOTE
 
-*** Agnostic
+*** Nixnostic
 
-And finally, those poor agnostic souls, forever lost in OS purgatory,
-are to be found [[./agnostic/README.org][here]].
+And finally, those poor *nixnostic souls, forever lost in Unix-like OS
+purgatory, are to be found [[./nixnostic.org][here]].
 
 * Will I be able to cope?
 
