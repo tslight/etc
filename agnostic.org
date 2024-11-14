@@ -79,7 +79,7 @@
   copy_on_select yes
   strip_trailing_spaces smart
   terminal_select_modifiers ctrl
-  hide_window_decorations no
+  hide_window_decorations yes
   clipboard_control write-clipboard write-primary no-append
   # term xterm-kitty
   term xterm-256color

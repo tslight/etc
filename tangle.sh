@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-ETC="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 usage() {
     echo "
@@ -10,54 +9,27 @@ or all my org mode configuration files.
 "
 }
 
-refresh_packages () {
-    emacs --quiet \
-	  --batch \
-	  --eval '(package-refresh-contents)'
-}
+tangle_file () {
+    local file="$1"
 
-tangle_tangles () {
-    emacs --quiet \
-	  --batch \
-	  --eval '(org-babel-load-file "'$ETC'/emacs/site-lisp/my-tangles.org")'
-}
-
-tangle_all () {
-    refresh_packages && \
-	tangle_tangles && \
-	emacs --quick \
-	      --batch \
-	      --load ~/.emacs.d/site-lisp/my-tangles.el \
-	      --eval '(my/tangle-all)'
-}
-
-tangle_dir () {
-    local dir="$1"
-
-    [[ -z "$dir" ]] && { echo "Invalid directory"; exit 1; }
-    [[ "$dir" =~ .*emacs.* ]] && { refresh_packages; tangle_tangles; }
-
-    emacs --quiet \
-	  --batch \
-	  --load ~/.emacs.d/site-lisp/my-tangles.el \
-	  --eval '(my/tangle-directory "'$dir'")'
+    [[ -f "$file" ]] || { echo "Invalid file"; exit 1; }
+    emacs --batch \
+          --eval "(require 'org)" \
+          --eval '(org-babel-tangle-file "'$file'")'
 }
 
 main () {
     if [[ -z "$1" ]]; then
-	tangle_all
+        echo "Needs an org file as an argument."
     else
-	case "$1" in
-	    -a|--all)
-		tangle_all
-		;;
-	    -h|--help)
-		usage
-		;;
-	    *)
-		tangle_dir "$1"
-		;;
-	esac
+        case "$1" in
+            -h|--help)
+                usage
+                ;;
+            *)
+                tangle_file "$1"
+                ;;
+        esac
     fi
 }
 

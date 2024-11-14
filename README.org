@@ -6,7 +6,7 @@
 
 #+CAPTION: This is a local config, for local Lispers. There's nothing for you here.
 #+NAME:fig:Edward_and_Tubbs
-     [[./img/local.jpg]]
+     [[./.img/local.jpg]]
 
 * We'll have no trouble here.
 
@@ -106,7 +106,7 @@ with me…
 
 #+CAPTION: Real Programmers
 #+NAME:fig:real programmers
-     [[./img/real_programmers.png]]
+     [[./.img/real_programmers.png]]
 
 *** *BSD
 
@@ -134,7 +134,7 @@ didn't really want to stick around too long to find out."
 
 #+CAPTION: Success
 #+NAME:fig:success
-     [[./img/success.png]]
+     [[./.img/success.png]]
 
 *** Linux
 
@@ -152,7 +152,7 @@ threats. With linux, it is like stirring up a nest of butterflies."
 
 #+CAPTION: Cautionary
 #+NAME:fig:cautionary
-     [[./img/cautionary.png]]
+     [[./.img/cautionary.png]]
 
 *** Proprietary
 
@@ -171,7 +171,7 @@ Windows!"
 
 #+CAPTION: Mac vs PC
 #+NAME:fig:mac_pc
-     [[./img/mac_pc.png]]
+     [[./.img/mac_pc.png]]
 
 *** StumpWM
 
