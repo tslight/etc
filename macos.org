@@ -5,7 +5,7 @@
 #+PROPERTY: header-args+ :results silent
 #+PROPERTY: header-args+ :padline no
 * SPACE CADET
-#+BEGIN_SRC javascript :tangle ~/.config/karabiner/assets/complex_modifications/spacecadet.json
+#+BEGIN_SRC javascript :tangle (if (eq system-type 'darwin) ~/.config/karabiner/assets/complex_modifications/spacecadet.json "no")
   {
     "title": "Space Cadet",
     "rules": [

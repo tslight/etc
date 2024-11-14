@@ -7,7 +7,7 @@
 * POWERSHELL PROFILE
 
 #+NAME: Powershell
-#+BEGIN_SRC powershell :tangle ~/Documents/WindowsPowershell/Microsoft.Powershell_profile.ps1
+#+BEGIN_SRC powershell :tangle (if (eq system-type 'windows-nt) ~/Documents/WindowsPowershell/Microsoft.Powershell_profile.ps1 "no")
   $env:PSModulePath = $env:PSModulePath + ";$env:USERPROFILE\src"
   $ChocolateyProfile = "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
 
@@ -35,7 +35,7 @@
   New-Alias -Name 'll' -Value 'Get-ChildItem' -Force
 #+END_SRC
 
-#+BEGIN_SRC powershell :tangle ~/Documents/WindowsPowershell/Microsoft.PowershellISE_profile.ps1
+#+BEGIN_SRC powershell :tangle (if (eq system-type 'windows-nt) ~/Documents/WindowsPowershell/Microsoft.PowershellISE_profile.ps1 "no")
   function Save-AllISEFiles {
       [CmdletBinding(SupportsShouldProcess)]
       Param ()
@@ -78,10 +78,10 @@
   Add-ISEMenuItemAndKey -Name "Save All" -Function "Save-AllISEFiles" -Key "Ctrl+Shift+s" -Verbose
 #+END_SRC
 
-#+BEGIN_SRC powershell :noweb yes :tangle ~/OneDrive/Documents/WindowsPowershell/Microsoft.Powershell_profile.ps1
+#+BEGIN_SRC powershell :noweb yes :tangle (if (eq system-type 'windows-nt) ~/Documents/WindowsPowershell/Microsoft.Powershell_profile.ps1 "no")
 <<Powershell>>
 #+END_SRC
 
-#+BEGIN_SRC powershell :noweb yes :tangle ~/OneDrive/Documents/WindowsPowershell/Microsoft.PowershellISE_profile.ps1
+#+BEGIN_SRC powershell :noweb yes :tangle (if (eq system-type 'windows-nt) ~/Documents/WindowsPowershell/Microsoft.PowershellISE_profile.ps1 "no")
 <<Powershell>>
 #+END_SRC
