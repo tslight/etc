@@ -2,10 +2,9 @@
 
 usage() {
     echo "
-$(basename "$0") [DIRECTORY] [-a/--all] [-h/--help]
+$(basename "$0") [FILE] [-h/--help]
 
-Run Emacs in batch mode to either tangle the contents of a specific directory
-or all my org mode configuration files.
+Run Emacs in batch mode to tangle the contents of a file with org-mode.
 "
 }
 
