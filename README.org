@@ -35,7 +35,7 @@ read & understood all the documentation here and linked to!/
 2) *BACKUP ANY CONFIGURATION FILES YOU WANT TO KEEP THAT ARE DEFINED IN THIS REPO.*
 3) Open the org file you want to tangle and run ~(org-babel-tangle)~ or hit
    ~C-c C-v t~
-4) Wait for all the appropriate org files to [[https://www.gnu.org/software/emacs/manual/html_node/org/Extracting-source-code.html][tangle]]
+4) Wait for all the appropriate org files to [[https://www.gnu.org/software/emacs/manual/html_node/org/Extracting-source-code.html][tangle]]...
 5) ...Profit!
 
 ** Option 2
@@ -44,12 +44,12 @@ read & understood all the documentation here and linked to!/
 2) *BACKUP ANY CONFIGURATION FILES YOU WANT TO KEEP THAT ARE DEFINED IN THIS REPO.*
 3) Run ~./tangle.sh ./path-to-the-org-file-you-want-to-tangle.org~, in a
    terminal, from this directory.
-4) Wait for all the appropriate org files to [[https://www.gnu.org/software/emacs/manual/html_node/org/Extracting-source-code.html][tangle]] (this may take a while...)
+4) Wait for all the appropriate org files to [[https://www.gnu.org/software/emacs/manual/html_node/org/Extracting-source-code.html][tangle]]...
 5) ...Profit!
 
 ** But I only came here for an Emacs config!
 
-I have now moved my Emacs config to it's own dedicated repo [[https://github.com/tslight/emacs][here]].
+I have moved my Emacs config to it's own dedicated repo [[https://github.com/tslight/emacs][here]].
 
 * How does all this work?
 
