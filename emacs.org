@@ -72,6 +72,7 @@ compile & evaluate it.
     ("C-s-f" . toggle-frame-fullscreen)
     ("C-z" . zap-up-to-char)
     ("C-c k" . (lambda () (interactive) (kill-buffer (current-buffer))))
+    ("C-c m" . compile)
     ("M-m". woman))
 #+end_src
 
@@ -95,7 +96,7 @@ compile & evaluate it.
     (interactive)
     (or (buffer-file-name) (error "No file is currently being edited"))
     (when (yes-or-no-p (format "Really delete '%s'?"
-			     (file-name-nondirectory buffer-file-name)))
+			       (file-name-nondirectory buffer-file-name)))
       (delete-file (buffer-file-name) t)
       (kill-this-buffer)))
   (keymap-global-set "C-c f d" 'my/delete-this-file)
@@ -112,10 +113,10 @@ compile & evaluate it.
     "Like `fill-paragraph', but unfill if used twice."
     (interactive)
     (let ((fill-column
-	 (if (eq last-command 'ts-fill-or-unfill)
-	     (progn (setq this-command nil)
-		    (point-max))
-	   fill-column)))
+	   (if (eq last-command 'ts-fill-or-unfill)
+	       (progn (setq this-command nil)
+		      (point-max))
+	     fill-column)))
       (call-interactively #'fill-paragraph)))
   (keymap-global-set "M-q" 'my/fill-or-unfill)
 #+end_src
@@ -131,8 +132,8 @@ compile & evaluate it.
       (interactive)
       (find-alternate-file ".."))
     :bind (:map dired-mode-map
-	      ("b" . my/dired-up-directory)
-	      ("f" . 'dired-find-alternate-file)))
+	        ("b" . my/dired-up-directory)
+	        ("f" . 'dired-find-alternate-file)))
 #+end_src
 
 * EWW
@@ -151,9 +152,9 @@ compile & evaluate it.
     (fido-vertical-mode t)
     (icomplete-compute-delay 0)
     :bind (:map icomplete-fido-mode-map
-	      ("<tab>" . icomplete-forward-completions)
-	      ("<backtab>" . icomplete-backward-completions)
-	      ("M-j" . exit-minibuffer)))
+	        ("<tab>" . icomplete-forward-completions)
+	        ("<backtab>" . icomplete-backward-completions)
+	        ("M-j" . exit-minibuffer)))
 #+end_src
 
 * LINE NUMBERS
@@ -192,21 +193,21 @@ compile & evaluate it.
     (modify-syntax-entry ?< "." org-mode-syntax-table)
     (add-to-list 'org-modules 'org-tempo)
     (setq org-structure-template-alist
-	(append org-structure-template-alist
-		'(("cl" . "src common-lisp")
-		  ("el" . "src emacs-lisp")
-		  ("go" . "src go")
-		  ("ja" . "src java")
-		  ("js" . "src javascript")
-		  ("kr" . "src c")
-		  ("nx" . "src nix")
-		  ("py" . "src python")
-		  ("sh" . "src shell")
-		  ("sq" . "src sql")
-		  ("tx" . "src text"))))
+	  (append org-structure-template-alist
+		  '(("cl" . "src common-lisp")
+		    ("el" . "src emacs-lisp")
+		    ("go" . "src go")
+		    ("ja" . "src java")
+		    ("js" . "src javascript")
+		    ("kr" . "src c")
+		    ("nx" . "src nix")
+		    ("py" . "src python")
+		    ("sh" . "src shell")
+		    ("sq" . "src sql")
+		    ("tx" . "src text"))))
     (defun my/org-babel-tangle-on-save ()
       (when (string-equal (file-name-directory buffer-file-name)
-			(concat (getenv "HOME") "/etc/"))
+			  (concat (getenv "HOME") "/etc/"))
 	(org-babel-tangle)))
     (defun my/compile-and-load ()
       (interactive)
@@ -238,6 +239,48 @@ compile & evaluate it.
     (after-save . executable-make-buffer-file-executable-if-script-p))
 #+end_src
 
+* TREESITTER
+
+https://www.masteringemacs.org/article/how-to-get-started-tree-sitter
+
+#+begin_src emacs-lisp
+  (use-package treesitter
+    :custom
+    (major-mode-remap-alist
+     '((yaml-mode . yaml-ts-mode)
+       (bash-mode . bash-ts-mode)
+       (js2-mode . js-ts-mode)
+       (go-mode . go-ts-mode)
+       (typescript-mode . typescript-ts-mode)
+       (json-mode . json-ts-mode)
+       (css-mode . css-ts-mode)
+       (python-mode . python-ts-mode)))
+    (treesit-language-source-alist
+     '((bash "https://github.com/tree-sitter/tree-sitter-bash")
+       (cmake "https://github.com/uyha/tree-sitter-cmake")
+       (css "https://github.com/tree-sitter/tree-sitter-css")
+       (elisp "https://github.com/Wilfred/tree-sitter-elisp")
+       (go "https://github.com/tree-sitter/tree-sitter-go")
+       (html "https://github.com/tree-sitter/tree-sitter-html")
+       (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
+       (json "https://github.com/tree-sitter/tree-sitter-json")
+       (make "https://github.com/alemuller/tree-sitter-make")
+       (markdown "https://github.com/ikatyang/tree-sitter-markdown")
+       (nix "https://github.com/nix-community/tree-sitter-nix")
+       (python "https://github.com/tree-sitter/tree-sitter-python")
+       (toml "https://github.com/tree-sitter/tree-sitter-toml")
+       (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
+       (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
+       (yaml "https://github.com/ikatyang/tree-sitter-yaml"))))
+#+end_src
+
+Bulk install all the grammars as a one of task, so don't tangle!
+
+#+begin_src emacs-lisp :tangle no
+  (mapc #'treesit-install-language-grammar
+	(mapcar #'car treesit-language-source-alist))
+#+end_src
+
 * 3RD PARTY
 
 #+begin_src emacs-lisp
@@ -262,8 +305,8 @@ compile & evaluate it.
   (use-package hungry-delete :ensure :config (global-hungry-delete-mode))
   (use-package kdl-mode :ensure)
   (use-package magit :ensure :bind* ("C-x g" . magit-status))
-  (use-package markdown-mode :ensure)
-  (use-package nix-mode :ensure)
+  (use-package markdown-ts-mode :ensure)
+  (use-package nix-ts-mode :ensure)
   (use-package vterm :ensure :bind* ("C-c t" . vterm))
   (use-package vundo :ensure :bind* ("C-c u" . vundo))
 #+end_src
