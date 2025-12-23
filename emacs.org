@@ -24,41 +24,42 @@ Be sure to back up your current =~/.emacs.d= with something like =mv
   ;; -*- lexical-binding: t; -*-
 #+end_src
 
-* Emacs
+* EMACS
 
 #+begin_src emacs-lisp
   (use-package emacs
     :init
     (column-number-mode)
-    (load-theme 'modus-vivendi)
-    (set-frame-font "JetBrainsMono Nerd Font 13" nil t)
-    (menu-bar-mode -1)
-    (scroll-bar-mode -1)
-    (tool-bar-mode -1)
-    (tooltip-mode -1)
-    (display-time)
     (display-battery-mode)
-    (savehist-mode)
-    (save-place-mode)
+    (display-time)
     (electric-pair-mode)
     (global-subword-mode)
+    (load-theme 'modus-vivendi)
+    (menu-bar-mode -1)
+    (save-place-mode)
+    (savehist-mode)
+    (scroll-bar-mode -1)
+    (set-frame-font "JetBrainsMono Nerd Font 13" nil t)
+    (tool-bar-mode -1)
+    (tooltip-mode -1)
     :custom
-    (backup-directory-alist '(("." . (concat user-emacs-directory "backups"))))
-    (custom-file (expand-file-name "custom.el" user-emacs-directory))
-    (display-time-format "%H:%M %a %d/%m")
-    (display-time-default-load-average 'nil)
-    (inhibit-startup-screen t)
-    (use-short-answers t)
     (auto-save-visited-mode t)
-    (disabled-command-function nil)
+    (backup-directory-alist '(("." . (concat user-emacs-directory "backups"))))
     (completion-styles '(flex initials partial-completion))
+    (custom-file (expand-file-name "custom.el" user-emacs-directory))
+    (disabled-command-function nil)
+    (display-time-default-load-average 'nil)
+    (display-time-format "%H:%M %a %d/%m")
+    (inhibit-startup-screen t)
     (mac-command-modifier 'control)
+    (mac-control-modifier 'super)
     (package-archives
      '(("gnu" . "https://elpa.gnu.org/packages/")
        ("melpa" . "https://melpa.org/packages/")
        ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
-    (use-package-enable-imenu-support t)
     (use-package-always-defer t)
+    (use-package-enable-imenu-support t)
+    (use-short-answers t)
     :bind
     ("C-!" . async-shell-command)
     ("C-&" . async-shell-command)
@@ -70,12 +71,13 @@ Be sure to back up your current =~/.emacs.d= with something like =mv
     ("C-c f r" . rename-visited-file)
     ("C-;" . comment-line)
     ("C-M-;" . comment-box)
-    ("C-c F" . toggle-frame-fullscreen)
+    ("C-s-f" . toggle-frame-fullscreen)
     ("C-z" . zap-up-to-char)
+    ("C-c k" . (lambda () (interactive) (kill-buffer (current-buffer))))
     ("M-m". woman))
 #+end_src
 
-* My/Defuns
+* MY/DEFUNS
 
 #+begin_src emacs-lisp
   (defun my/last-buffer ()
@@ -83,7 +85,6 @@ Be sure to back up your current =~/.emacs.d= with something like =mv
     (interactive)
     (switch-to-buffer (other-buffer (current-buffer) 1)))
   (keymap-global-set "C-c b" 'my/last-buffer)
-  (keymap-global-set "C-<escape>" 'my/last-buffer)
 
   (defun my/indent-buffer ()
     "Indent the contents of a buffer."
@@ -96,7 +97,7 @@ Be sure to back up your current =~/.emacs.d= with something like =mv
     (interactive)
     (or (buffer-file-name) (error "No file is currently being edited"))
     (when (yes-or-no-p (format "Really delete '%s'?"
-				 (file-name-nondirectory buffer-file-name)))
+			     (file-name-nondirectory buffer-file-name)))
       (delete-file (buffer-file-name) t)
       (kill-this-buffer)))
   (keymap-global-set "C-c f d" 'my/delete-this-file)
@@ -107,10 +108,10 @@ Be sure to back up your current =~/.emacs.d= with something like =mv
     (with-current-buffer (find-file-noselect file)
       (kill-new (buffer-substring-no-properties (point-min) (point-max))))
     (message "Saved contents of %s to the kill ring" file))
-  (keymap-global-set "C-c f w" 'my/buffer-kill-ring-save)
+  (keymap-global-set "C-c M-w" 'my/buffer-kill-ring-save)
 #+end_src
 
-* Dired
+* DIRED
 
 #+begin_src emacs-lisp
   (use-package dired
@@ -121,11 +122,11 @@ Be sure to back up your current =~/.emacs.d= with something like =mv
       (interactive)
       (find-alternate-file ".."))
     :bind (:map dired-mode-map
-		("b" . my/dired-up-directory)
-		("f" . 'dired-find-alternate-file)))
+	      ("b" . my/dired-up-directory)
+	      ("f" . 'dired-find-alternate-file)))
 #+end_src
 
-* Eww
+* EWW
 
 #+begin_src emacs-lisp
   (use-package eww
@@ -133,7 +134,7 @@ Be sure to back up your current =~/.emacs.d= with something like =mv
     :bind ("C-c w" . eww))
 #+end_src
 
-* Icomplete
+* ICOMPLETE
 
 #+begin_src emacs-lisp
   (use-package icomplete
@@ -141,23 +142,23 @@ Be sure to back up your current =~/.emacs.d= with something like =mv
     (fido-vertical-mode t)
     (icomplete-compute-delay 0)
     :bind (:map icomplete-fido-mode-map
-		("<tab>" . icomplete-forward-completions)
-		("<backtab>" . icomplete-backward-completions)
-		("M-j" . exit-minibuffer)))
+	      ("<tab>" . icomplete-forward-completions)
+	      ("<backtab>" . icomplete-backward-completions)
+	      ("M-j" . exit-minibuffer)))
 #+end_src
 
-* Line Numbers
+* LINE NUMBERS
 
 #+begin_src emacs-lisp
   (use-package display-line-numbers
-    :init
-    (setq display-line-numbers 'relative)
+    :custom
+    (display-line-numbers-type 'relative)
     :hook
     (prog-mode . display-line-numbers-mode)
     (sh-script-mode . display-line-numbers-mode))
 #+end_src
 
-* Misc
+* MISC
 
 #+begin_src emacs-lisp
   (use-package recentf :bind ("C-c r" . recentf))
@@ -166,7 +167,7 @@ Be sure to back up your current =~/.emacs.d= with something like =mv
   (use-package eglot :hook (prog-mode . eglot-ensure))
 #+end_src
 
-* Org
+* ORG
 
 #+begin_src emacs-lisp
   (use-package org
@@ -179,25 +180,26 @@ Be sure to back up your current =~/.emacs.d= with something like =mv
     :config
     (add-to-list 'org-modules 'org-tempo)
     (setq org-structure-template-alist
-	  (append org-structure-template-alist
-		  '(("cl" . "src common-lisp")
-		    ("el" . "src emacs-lisp")
-		    ("go" . "src go")
-		    ("ja" . "src java")
-		    ("js" . "src javascript")
-		    ("kr" . "src c")
-		    ("py" . "src python")
-		    ("sh" . "src shell")
-		    ("sq" . "src sql")
-		    ("tx" . "src text"))))
+	      (append org-structure-template-alist
+		      '(("cl" . "src common-lisp")
+			("el" . "src emacs-lisp")
+			("go" . "src go")
+			("ja" . "src java")
+			("js" . "src javascript")
+			("kr" . "src c")
+			("py" . "src python")
+			("sh" . "src shell")
+			("sq" . "src sql")
+			("tx" . "src text"))))
     (defun my/org-babel-tangle-on-save ()
-      (when (string-equal (file-name-nondirectory buffer-file-name) "emacs.org")
-	(org-babel-tangle)))
+      (when (string-equal (file-name-directory buffer-file-name)
+			       (concat (getenv "HOME") "/etc/"))
+	      (org-babel-tangle)))
     (defun my/compile-and-load ()
       (interactive)
       (when (string-match "emacs" (buffer-file-name (current-buffer)))
-	(byte-compile-file (buffer-file-name (current-buffer)))
-	(load (buffer-file-name (current-buffer)))))
+	      (byte-compile-file (buffer-file-name (current-buffer)))
+	      (load (buffer-file-name (current-buffer)))))
     :bind (:map org-mode-map ("C-c i" . org-goto))
     :hook
     (org-mode . auto-fill-mode)
@@ -205,7 +207,7 @@ Be sure to back up your current =~/.emacs.d= with something like =mv
     (org-babel-post-tangle . my/compile-and-load))
 #+end_src
 
-* Outline
+* OUTLINE
 
 #+begin_src emacs-lisp
   (use-package outline
@@ -215,7 +217,15 @@ Be sure to back up your current =~/.emacs.d= with something like =mv
     (emacs-lisp-mode . outline-minor-mode))
 #+end_src
 
-* 3rd Party
+* SHELL SCRIPT
+
+#+begin_src emacs-lisp
+  (use-package sh-script
+    :hook
+    (after-save . executable-make-buffer-file-executable-if-script-p))
+#+end_src
+
+* 3RD PARTY
 
 #+begin_src emacs-lisp
   (use-package ace-window :ensure
@@ -223,21 +233,24 @@ Be sure to back up your current =~/.emacs.d= with something like =mv
     ("M-o" . ace-window)
     :config
     (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
-  (use-package nix-mode :ensure)
-  (use-package vundo :ensure :bind ("C-c u" . vundo))
+  (use-package copilot :ensure)
+  (use-package copilot-chat :ensure :bind ("C-c c" . copilot-chat))
   (use-package corfu :ensure
     :custom
     (corfu-cycle t)
     (corfu-auto t)
     :hook
     (prog-mode . corfu-mode))
-  (use-package magit :ensure :bind* ("C-x g" . magit-status))
+  (use-package default-text-scale :ensure
+    :config
+    (default-text-scale-mode))
   (use-package git-timemachine :ensure)
-  (use-package markdown-mode :ensure)
-  (use-package lua-mode :ensure)
-  (use-package copilot :ensure)
-  (use-package copilot-chat :ensure :bind ("C-c c" . copilot-chat))
-  (use-package kdl-mode :ensure)
-  (use-package vterm :ensure :bind ("C-c t" . vterm))
   (use-package hungry-delete :ensure :config (global-hungry-delete-mode))
+  (use-package kdl-mode :ensure)
+  (use-package lua-mode :ensure)
+  (use-package magit :ensure :bind* ("C-x g" . magit-status))
+  (use-package markdown-mode :ensure)
+  (use-package nix-mode :ensure)
+  (use-package vterm :ensure :bind ("C-c t" . vterm))
+  (use-package vundo :ensure :bind ("C-c u" . vundo))
 #+end_src
