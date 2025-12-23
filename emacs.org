@@ -1,0 +1,213 @@
+#+TITLE: Emacs Configuration
+#+AUTHOR: Toby Slight
+#+EMAIL: tslight@pm.me
+#+PROPERTY: header-args:emacs-lisp :lexical t
+#+PROPERTY: header-args+ :cache yes :comments yes :mkdirp yes :results silent
+#+PROPERTY: header-args+ :tangle (expand-file-name "init.el" user-emacs-directory)
+#+PROPERTY: header-args+ :tangle-mode (identity #o644)
+
+A lightweight, [[https://en.wikipedia.org/wiki/Literate_programming][literate]] *Emacs 29+ ONLY* configuration.
+
+To install, open this file in *Emacs 29+* & evaluate the code block below, by
+placing the cursor in between the =#+begin_src= and =#+end_src= lines and then
+pressing =C-c C-c=.
+
+#+begin_src emacs-lisp :tangle no
+  (org-babel-tangle) (load init-file)
+#+end_src
+
+This will "tangle" all the code blocks below into =~/.emacs.d/init.el= and then
+evaluate it.
+
+Be sure to back up your current =~/.emacs.d= with something like =mv
+~/.emacs.d{,.bak}=.
+
+* Emacs
+
+#+begin_src emacs-lisp
+  (use-package emacs
+    :init
+    (column-number-mode)
+    (load-theme 'modus-vivendi)
+    (set-frame-font "JetBrainsMono Nerd Font 13" nil t)
+    (menu-bar-mode -1)
+    (scroll-bar-mode -1)
+    (tool-bar-mode -1)
+    (tooltip-mode -1)
+    (display-time)
+    (display-battery-mode)
+    (savehist-mode)
+    (save-place-mode)
+    (electric-pair-mode)
+    :config
+    (defun my/last-buffer ()
+      "Switch back and forth between two buffers easily."
+      (interactive)
+      (switch-to-buffer (other-buffer (current-buffer) 1)))
+    (defun my/indent-buffer ()
+      "Indent the contents of a buffer."
+      (interactive)
+      (indent-region (point-min) (point-max)))
+    (defun my/delete-this-file ()
+      "Delete the current file, and kill the buffer."
+      (interactive)
+      (or (buffer-file-name) (error "No file is currently being edited"))
+      (when (yes-or-no-p (format "Really delete '%s'?"
+				 (file-name-nondirectory buffer-file-name)))
+	(delete-file (buffer-file-name) t)
+	(kill-this-buffer)))
+    :custom
+    (backup-directory-alist '(("." . (concat user-emacs-directory "backups"))))
+    (custom-file (expand-file-name "custom.el" user-emacs-directory))
+    (display-time-format "%H:%M %a %d/%m")
+    (display-time-default-load-average 'nil)
+    (inhibit-startup-screen t)
+    (use-short-answers t)
+    (auto-save-visited-mode t)
+    (disabled-command-function nil)
+    (completion-styles '(flex initials partial-completion))
+    (package-archives
+     '(("gnu" . "https://elpa.gnu.org/packages/")
+       ("melpa" . "https://melpa.org/packages/")
+       ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
+    (use-package-enable-imenu-support t)
+    (use-package-always-defer t)
+    :bind*
+    ("C-!" . async-shell-command)
+    ("C-&" . async-shell-command)
+    ("C-<" . beginning-of-buffer)
+    ("C->" . end-of-buffer)
+    ("C-c i" . imenu)
+    ("C-c f r" . rename-visited-file)
+    ("C-c f d" . my/delete-this-file)
+    ("C-c b" . my/last-buffer)
+    ("C-<escape>" . my/last-buffer)
+    ("C-;" . comment-line)
+    ("C-M-;" . comment-box)
+    ("C-z" . zap-up-to-char)
+    ("M-i" . my/indent-buffer)
+    ("M-m". woman))
+#+end_src
+
+* Outline
+
+#+begin_src emacs-lisp
+  (use-package outline
+    :custom
+    (outline-minor-mode-cycle t)
+    :hook
+    (emacs-lisp-mode . outline-minor-mode))
+#+end_src
+
+* Icomplete
+
+#+begin_src emacs-lisp
+  (use-package icomplete
+    :custom
+    (fido-vertical-mode t)
+    (icomplete-compute-delay 0)
+    :bind (:map icomplete-fido-mode-map
+	      ("<tab>" . icomplete-forward-completions)
+	      ("<backtab>" . icomplete-backward-completions)
+	      ("M-j" . exit-minibuffer)))
+#+end_src
+
+* Line Numbers
+
+#+begin_src emacs-lisp
+  (use-package display-line-numbers
+    :init
+    (setq display-line-numbers 'relative)
+    :hook
+    (prog-mode . display-line-numbers-mode)
+    (sh-script-mode . display-line-numbers-mode))
+#+end_src
+
+* Org
+
+#+begin_src emacs-lisp
+  (use-package org
+    :custom
+    (org-goto-interface 'outline-path-completionp)
+    (org-outline-path-complete-in-steps nil)
+    (org-modules (append org-modules '(org-tempo)))
+    (org-use-speed-commands t)
+    (org-structure-template-alist
+     (append org-structure-template-alist
+	   '(("cl" . "src common-lisp")
+	     ("el" . "src emacs-lisp")
+	     ("go" . "src go")
+	     ("ja" . "src java")
+	     ("js" . "src javascript")
+	     ("kr" . "src c")
+	     ("py" . "src python")
+	     ("sh" . "src shell")
+	     ("sq" . "src sql")
+	     ("tx" . "src text"))))
+    :config
+    (defun ts-compile-and-load ()
+      (interactive)
+      (when (string-match "emacs" (buffer-file-name (current-buffer)))
+	(byte-compile-file (buffer-file-name (current-buffer)))
+	(load (buffer-file-name (current-buffer)))))
+    :bind (:map org-mode-map ("C-c i" . org-goto))
+    :hook (org-babel-post-tangle . ts-compile-and-load))
+#+end_src
+
+* Dired
+
+#+begin_src emacs-lisp
+  (use-package dired
+    :custom
+    (delete-by-moving-to-trash t)
+    :config
+    (defun my/dired-up-directory ()
+      (interactive)
+      (find-alternate-file ".."))
+    :bind (:map dired-mode-map
+	      ("b" . my/dired-up-directory)
+	      ("f" . 'dired-find-alternate-file)))
+#+end_src
+
+* Misc
+
+#+begin_src emacs-lisp
+  (use-package recentf :bind ("C-c r" . recentf))
+  (use-package which-key :config (which-key-mode))
+  (use-package whitepace :hook (before-save . whitespace-cleanup))
+  (use-package eglot :hook (prog-mode . eglot-ensure))
+#+end_src
+
+* 3rd Party
+
+#+begin_src emacs-lisp
+  (use-package nix-mode :ensure)
+  (use-package vundo :ensure
+    :bind ("C-c u" . vundo))
+  (use-package corfu :ensure
+    :custom
+    (corfu-cycle t)
+    (corfu-auto t)
+    :hook
+    (prog-mode . corfu-mode))
+  (use-package magit :ensure
+    :bind* ("C-x g" . magit-status))
+  (use-package git-timemachine :ensure)
+  (use-package markdown-mode :ensure)
+  (use-package lua-mode :ensure)
+  (use-package copilot :ensure)
+  (use-package copilot-chat :ensure
+    :bind ("C-c c" . copilot-chat))
+  (use-package kdl-mode :ensure)
+  (use-package vterm :ensure
+    :bind ("C-c t" . vterm))
+  (use-package hungry-delete :ensure
+    :config (global-hungry-delete-mode))
+#+end_src
+
+* COMMENT Local Variables                                  :NOEXPORT:ARCHIVE:
+# Local Variables:
+# eval: (setq org-confirm-babel-evaluate 'nil)
+# eval: (setq init-file (expand-file-name "init.el" user-emacs-directory))
+# eval: (add-hook 'after-save-hook 'org-babel-tangle nil t)
+# End:
