@@ -81,6 +81,7 @@ Be sure to back up your current =~/.emacs.d= with something like =mv
     (interactive)
     (switch-to-buffer (other-buffer (current-buffer) 1)))
   (keymap-global-set "C-c b" 'my/last-buffer)
+  (keymap-global-set "C-<escape>" 'my/last-buffer)
 
   (defun my/indent-buffer ()
     "Indent the contents of a buffer."
@@ -93,10 +94,18 @@ Be sure to back up your current =~/.emacs.d= with something like =mv
     (interactive)
     (or (buffer-file-name) (error "No file is currently being edited"))
     (when (yes-or-no-p (format "Really delete '%s'?"
-			       (file-name-nondirectory buffer-file-name)))
+			         (file-name-nondirectory buffer-file-name)))
       (delete-file (buffer-file-name) t)
       (kill-this-buffer)))
   (keymap-global-set "C-c f d" 'my/delete-this-file)
+
+  (defun my/buffer-kill-ring-save (file)
+    "Copy a file's contents to the clipboard."
+    (interactive "f")
+    (with-current-buffer (find-file-noselect file)
+      (kill-new (buffer-substring-no-properties (point-min) (point-max))))
+    (message "Saved contents of %s to the kill ring" file))
+  (keymap-global-set "C-c f w" 'my/buffer-kill-ring-save)
 #+end_src
 
 * Dired
