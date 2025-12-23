@@ -1,5 +1,5 @@
 #+TITLE: Eight Megabytes And Constantly Swapping
-#+PROPERTY: header-args:emacs-lisp :lexical t
+#+PROPERTY: header-args: emacs-lisp :lexical t
 #+PROPERTY: header-args+ :cache yes :comments yes :mkdirp yes :results silent
 #+PROPERTY: header-args+ :tangle (expand-file-name "init.el" user-emacs-directory)
 #+PROPERTY: header-args+ :tangle-mode (identity #o644)
@@ -11,7 +11,7 @@ below, by placing the cursor in between the =#+begin_src= and
 =#+end_src= lines and pressing =C-c C-c=.
 
 #+begin_src emacs-lisp :tangle no
-  (org-babel-tangle) (load init-file)
+  (org-babel-tangle) (load "~/.emacs.d/init.el")
 #+end_src
 
 This will "tangle" all the code blocks below into =~/.emacs.d/init.el=
@@ -19,6 +19,10 @@ and then compile & evaluate it.
 
 Be sure to back up your current =~/.emacs.d= with something like =mv
 ~/.emacs.d{,.bak}=.
+
+#+begin_src emacs-lisp :comments no
+  ;; -*- lexical-binding: t; -*-
+#+end_src
 
 * Emacs
 
@@ -64,6 +68,7 @@ Be sure to back up your current =~/.emacs.d= with something like =mv
     (auto-save-visited-mode t)
     (disabled-command-function nil)
     (completion-styles '(flex initials partial-completion))
+    (mac-command-modifier 'control)
     (package-archives
      '(("gnu" . "https://elpa.gnu.org/packages/")
        ("melpa" . "https://melpa.org/packages/")
@@ -82,9 +87,18 @@ Be sure to back up your current =~/.emacs.d= with something like =mv
     ("C-<escape>" . my/last-buffer)
     ("C-;" . comment-line)
     ("C-M-;" . comment-box)
+    ("C-c F" . toggle-frame-fullscreen)
     ("C-z" . zap-up-to-char)
     ("M-i" . my/indent-buffer)
     ("M-m". woman))
+#+end_src
+
+* Eww
+
+#+begin_src emacs-lisp
+  (use-package eww
+    :custom (eww-search-prefix "https://lite.duckduckgo.com/lite/?q=")
+    :bind ("C-c w" . eww))
 #+end_src
 
 * Outline
@@ -105,9 +119,9 @@ Be sure to back up your current =~/.emacs.d= with something like =mv
     (fido-vertical-mode t)
     (icomplete-compute-delay 0)
     :bind (:map icomplete-fido-mode-map
-	      ("<tab>" . icomplete-forward-completions)
-	      ("<backtab>" . icomplete-backward-completions)
-	      ("M-j" . exit-minibuffer)))
+		("<tab>" . icomplete-forward-completions)
+		("<backtab>" . icomplete-backward-completions)
+		("M-j" . exit-minibuffer)))
 #+end_src
 
 * Line Numbers
@@ -155,6 +169,7 @@ Be sure to back up your current =~/.emacs.d= with something like =mv
 	(load (buffer-file-name (current-buffer)))))
     :bind (:map org-mode-map ("C-c i" . org-goto))
     :hook
+    (org-mode . auto-fill-mode)
     (after-save . my/org-babel-tangle-on-save)
     (org-babel-post-tangle . my/compile-and-load))
 #+end_src
@@ -170,8 +185,8 @@ Be sure to back up your current =~/.emacs.d= with something like =mv
       (interactive)
       (find-alternate-file ".."))
     :bind (:map dired-mode-map
-	      ("b" . my/dired-up-directory)
-	      ("f" . 'dired-find-alternate-file)))
+		("b" . my/dired-up-directory)
+		("f" . 'dired-find-alternate-file)))
 #+end_src
 
 * Misc
@@ -187,25 +202,20 @@ Be sure to back up your current =~/.emacs.d= with something like =mv
 
 #+begin_src emacs-lisp
   (use-package nix-mode :ensure)
-  (use-package vundo :ensure
-    :bind ("C-c u" . vundo))
+  (use-package vundo :ensure :bind ("C-c u" . vundo))
   (use-package corfu :ensure
     :custom
     (corfu-cycle t)
     (corfu-auto t)
     :hook
     (prog-mode . corfu-mode))
-  (use-package magit :ensure
-    :bind* ("C-x g" . magit-status))
+  (use-package magit :ensure :bind* ("C-x g" . magit-status))
   (use-package git-timemachine :ensure)
   (use-package markdown-mode :ensure)
   (use-package lua-mode :ensure)
   (use-package copilot :ensure)
-  (use-package copilot-chat :ensure
-    :bind ("C-c c" . copilot-chat))
+  (use-package copilot-chat :ensure :bind ("C-c c" . copilot-chat))
   (use-package kdl-mode :ensure)
-  (use-package vterm :ensure
-    :bind ("C-c t" . vterm))
-  (use-package hungry-delete :ensure
-    :config (global-hungry-delete-mode))
+  (use-package vterm :ensure :bind ("C-c t" . vterm))
+  (use-package hungry-delete :ensure :config (global-hungry-delete-mode))
 #+end_src
