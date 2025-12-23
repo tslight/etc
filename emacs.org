@@ -6,19 +6,16 @@
 
 A lightweight, [[https://en.wikipedia.org/wiki/Literate_programming][literate]] *Emacs 29+ ONLY* configuration.
 
-To install, open this file in *Emacs 29+* & evaluate the code block
-below, by placing the cursor in between the =#+begin_src= and
-=#+end_src= lines and pressing =C-c C-c=.
+To install, open this file in *Emacs 29+* & evaluate the code block below by
+placing the cursor in between the =#+begin_src= & =#+end_src= lines and
+pressing =C-c C-c=.
 
 #+begin_src emacs-lisp :tangle no
   (org-babel-tangle) (load "~/.emacs.d/init.el")
 #+end_src
 
-This will "tangle" all the code blocks below into =~/.emacs.d/init.el=
-and then compile & evaluate it.
-
-Be sure to back up your current =~/.emacs.d= with something like =mv
-~/.emacs.d{,.bak}=.
+This will "tangle" all the code blocks below into =~/.emacs.d/init.el= and then
+compile & evaluate it.
 
 #+begin_src emacs-lisp :comments no
   ;; -*- lexical-binding: t; -*-
