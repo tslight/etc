@@ -41,23 +41,7 @@ Be sure to back up your current =~/.emacs.d= with something like =mv
     (savehist-mode)
     (save-place-mode)
     (electric-pair-mode)
-    :config
-    (defun my/last-buffer ()
-      "Switch back and forth between two buffers easily."
-      (interactive)
-      (switch-to-buffer (other-buffer (current-buffer) 1)))
-    (defun my/indent-buffer ()
-      "Indent the contents of a buffer."
-      (interactive)
-      (indent-region (point-min) (point-max)))
-    (defun my/delete-this-file ()
-      "Delete the current file, and kill the buffer."
-      (interactive)
-      (or (buffer-file-name) (error "No file is currently being edited"))
-      (when (yes-or-no-p (format "Really delete '%s'?"
-				 (file-name-nondirectory buffer-file-name)))
-	(delete-file (buffer-file-name) t)
-	(kill-this-buffer)))
+    (global-subword-mode)
     :custom
     (backup-directory-alist '(("." . (concat user-emacs-directory "backups"))))
     (custom-file (expand-file-name "custom.el" user-emacs-directory))
@@ -82,15 +66,52 @@ Be sure to back up your current =~/.emacs.d= with something like =mv
     ("C->" . end-of-buffer)
     ("C-c i" . imenu)
     ("C-c f r" . rename-visited-file)
-    ("C-c f d" . my/delete-this-file)
-    ("C-c b" . my/last-buffer)
-    ("C-<escape>" . my/last-buffer)
     ("C-;" . comment-line)
     ("C-M-;" . comment-box)
     ("C-c F" . toggle-frame-fullscreen)
     ("C-z" . zap-up-to-char)
-    ("M-i" . my/indent-buffer)
     ("M-m". woman))
+#+end_src
+
+* My/Defuns
+
+#+begin_src emacs-lisp
+  (defun my/last-buffer ()
+    "Switch back and forth between two buffers easily."
+    (interactive)
+    (switch-to-buffer (other-buffer (current-buffer) 1)))
+  (keymap-global-set "C-c b" 'my/last-buffer)
+
+  (defun my/indent-buffer ()
+    "Indent the contents of a buffer."
+    (interactive)
+    (indent-region (point-min) (point-max)))
+  (keymap-global-set "M-i" 'my/indent-buffer)
+
+  (defun my/delete-this-file ()
+    "Delete the current file, and kill the buffer."
+    (interactive)
+    (or (buffer-file-name) (error "No file is currently being edited"))
+    (when (yes-or-no-p (format "Really delete '%s'?"
+			       (file-name-nondirectory buffer-file-name)))
+      (delete-file (buffer-file-name) t)
+      (kill-this-buffer)))
+  (keymap-global-set "C-c f d" 'my/delete-this-file)
+#+end_src
+
+* Dired
+
+#+begin_src emacs-lisp
+  (use-package dired
+    :custom
+    (delete-by-moving-to-trash t)
+    :config
+    (defun my/dired-up-directory ()
+      (interactive)
+      (find-alternate-file ".."))
+    :bind (:map dired-mode-map
+		("b" . my/dired-up-directory)
+		("f" . 'dired-find-alternate-file)))
 #+end_src
 
 * Eww
@@ -99,16 +120,6 @@ Be sure to back up your current =~/.emacs.d= with something like =mv
   (use-package eww
     :custom (eww-search-prefix "https://lite.duckduckgo.com/lite/?q=")
     :bind ("C-c w" . eww))
-#+end_src
-
-* Outline
-
-#+begin_src emacs-lisp
-  (use-package outline
-    :custom
-    (outline-minor-mode-cycle t)
-    :hook
-    (emacs-lisp-mode . outline-minor-mode))
 #+end_src
 
 * Icomplete
@@ -133,6 +144,15 @@ Be sure to back up your current =~/.emacs.d= with something like =mv
     :hook
     (prog-mode . display-line-numbers-mode)
     (sh-script-mode . display-line-numbers-mode))
+#+end_src
+
+* Misc
+
+#+begin_src emacs-lisp
+  (use-package recentf :bind ("C-c r" . recentf))
+  (use-package which-key :config (which-key-mode))
+  (use-package whitespace :hook (before-save . whitespace-cleanup))
+  (use-package eglot :hook (prog-mode . eglot-ensure))
 #+end_src
 
 * Org
@@ -174,33 +194,24 @@ Be sure to back up your current =~/.emacs.d= with something like =mv
     (org-babel-post-tangle . my/compile-and-load))
 #+end_src
 
-* Dired
+* Outline
 
 #+begin_src emacs-lisp
-  (use-package dired
+  (use-package outline
     :custom
-    (delete-by-moving-to-trash t)
-    :config
-    (defun my/dired-up-directory ()
-      (interactive)
-      (find-alternate-file ".."))
-    :bind (:map dired-mode-map
-		("b" . my/dired-up-directory)
-		("f" . 'dired-find-alternate-file)))
-#+end_src
-
-* Misc
-
-#+begin_src emacs-lisp
-  (use-package recentf :bind ("C-c r" . recentf))
-  (use-package which-key :config (which-key-mode))
-  (use-package whitespace :hook (before-save . whitespace-cleanup))
-  (use-package eglot :hook (prog-mode . eglot-ensure))
+    (outline-minor-mode-cycle t)
+    :hook
+    (emacs-lisp-mode . outline-minor-mode))
 #+end_src
 
 * 3rd Party
 
 #+begin_src emacs-lisp
+  (use-package ace-window :ensure
+    :bind*
+    ("M-o" . ace-window)
+    :config
+    (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
   (use-package nix-mode :ensure)
   (use-package vundo :ensure :bind ("C-c u" . vundo))
   (use-package corfu :ensure
