@@ -1,6 +1,4 @@
-#+TITLE: Emacs Configuration
-#+AUTHOR: Toby Slight
-#+EMAIL: tslight@pm.me
+#+TITLE: Eight Megabytes And Constantly Swapping
 #+PROPERTY: header-args:emacs-lisp :lexical t
 #+PROPERTY: header-args+ :cache yes :comments yes :mkdirp yes :results silent
 #+PROPERTY: header-args+ :tangle (expand-file-name "init.el" user-emacs-directory)
@@ -8,16 +6,16 @@
 
 A lightweight, [[https://en.wikipedia.org/wiki/Literate_programming][literate]] *Emacs 29+ ONLY* configuration.
 
-To install, open this file in *Emacs 29+* & evaluate the code block below, by
-placing the cursor in between the =#+begin_src= and =#+end_src= lines and then
-pressing =C-c C-c=.
+To install, open this file in *Emacs 29+* & evaluate the code block
+below, by placing the cursor in between the =#+begin_src= and
+=#+end_src= lines and pressing =C-c C-c=.
 
 #+begin_src emacs-lisp :tangle no
   (org-babel-tangle) (load init-file)
 #+end_src
 
-This will "tangle" all the code blocks below into =~/.emacs.d/init.el= and then
-evaluate it.
+This will "tangle" all the code blocks below into =~/.emacs.d/init.el=
+and then compile & evaluate it.
 
 Be sure to back up your current =~/.emacs.d= with something like =mv
 ~/.emacs.d{,.bak}=.
@@ -72,7 +70,7 @@ Be sure to back up your current =~/.emacs.d= with something like =mv
        ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
     (use-package-enable-imenu-support t)
     (use-package-always-defer t)
-    :bind*
+    :bind
     ("C-!" . async-shell-command)
     ("C-&" . async-shell-command)
     ("C-<" . beginning-of-buffer)
@@ -128,30 +126,37 @@ Be sure to back up your current =~/.emacs.d= with something like =mv
 #+begin_src emacs-lisp
   (use-package org
     :custom
+    (org-startup-folded t) ; start in overview mode
     (org-goto-interface 'outline-path-completionp)
     (org-outline-path-complete-in-steps nil)
-    (org-modules (append org-modules '(org-tempo)))
     (org-use-speed-commands t)
-    (org-structure-template-alist
-     (append org-structure-template-alist
-	   '(("cl" . "src common-lisp")
-	     ("el" . "src emacs-lisp")
-	     ("go" . "src go")
-	     ("ja" . "src java")
-	     ("js" . "src javascript")
-	     ("kr" . "src c")
-	     ("py" . "src python")
-	     ("sh" . "src shell")
-	     ("sq" . "src sql")
-	     ("tx" . "src text"))))
+    (org-babel-confirm-evaluate nil)
     :config
-    (defun ts-compile-and-load ()
+    (add-to-list 'org-modules 'org-tempo)
+    (setq org-structure-template-alist
+	  (append org-structure-template-alist
+		  '(("cl" . "src common-lisp")
+		    ("el" . "src emacs-lisp")
+		    ("go" . "src go")
+		    ("ja" . "src java")
+		    ("js" . "src javascript")
+		    ("kr" . "src c")
+		    ("py" . "src python")
+		    ("sh" . "src shell")
+		    ("sq" . "src sql")
+		    ("tx" . "src text"))))
+    (defun my/org-babel-tangle-on-save ()
+      (when (string-equal (file-name-nondirectory buffer-file-name) "emacs.org")
+	(org-babel-tangle)))
+    (defun my/compile-and-load ()
       (interactive)
       (when (string-match "emacs" (buffer-file-name (current-buffer)))
 	(byte-compile-file (buffer-file-name (current-buffer)))
 	(load (buffer-file-name (current-buffer)))))
     :bind (:map org-mode-map ("C-c i" . org-goto))
-    :hook (org-babel-post-tangle . ts-compile-and-load))
+    :hook
+    (after-save . my/org-babel-tangle-on-save)
+    (org-babel-post-tangle . my/compile-and-load))
 #+end_src
 
 * Dired
@@ -174,7 +179,7 @@ Be sure to back up your current =~/.emacs.d= with something like =mv
 #+begin_src emacs-lisp
   (use-package recentf :bind ("C-c r" . recentf))
   (use-package which-key :config (which-key-mode))
-  (use-package whitepace :hook (before-save . whitespace-cleanup))
+  (use-package whitespace :hook (before-save . whitespace-cleanup))
   (use-package eglot :hook (prog-mode . eglot-ensure))
 #+end_src
 
@@ -204,10 +209,3 @@ Be sure to back up your current =~/.emacs.d= with something like =mv
   (use-package hungry-delete :ensure
     :config (global-hungry-delete-mode))
 #+end_src
-
-* COMMENT Local Variables                                  :NOEXPORT:ARCHIVE:
-# Local Variables:
-# eval: (setq org-confirm-babel-evaluate 'nil)
-# eval: (setq init-file (expand-file-name "init.el" user-emacs-directory))
-# eval: (add-hook 'after-save-hook 'org-babel-tangle nil t)
-# End:
