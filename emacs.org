@@ -50,6 +50,7 @@ Be sure to back up your current =~/.emacs.d= with something like =mv
     (disabled-command-function nil)
     (display-time-default-load-average 'nil)
     (display-time-format "%H:%M %a %d/%m")
+    (fill-column 79)
     (inhibit-startup-screen t)
     (mac-command-modifier 'control)
     (mac-control-modifier 'super)
@@ -109,6 +110,17 @@ Be sure to back up your current =~/.emacs.d= with something like =mv
       (kill-new (buffer-substring-no-properties (point-min) (point-max))))
     (message "Saved contents of %s to the kill ring" file))
   (keymap-global-set "C-c M-w" 'my/buffer-kill-ring-save)
+
+  (defun my/fill-or-unfill ()
+    "Like `fill-paragraph', but unfill if used twice."
+    (interactive)
+    (let ((fill-column
+	 (if (eq last-command 'ts-fill-or-unfill)
+	     (progn (setq this-command nil)
+		    (point-max))
+	   fill-column)))
+      (call-interactively #'fill-paragraph)))
+  (keymap-global-set "M-q" 'my/fill-or-unfill)
 #+end_src
 
 * DIRED
@@ -178,28 +190,32 @@ Be sure to back up your current =~/.emacs.d= with something like =mv
     (org-use-speed-commands t)
     (org-babel-confirm-evaluate nil)
     :config
+    ;; stops electric pair from closing > when trying to spawn a src
+    ;; block
+    (modify-syntax-entry ?< "." org-mode-syntax-table)
     (add-to-list 'org-modules 'org-tempo)
     (setq org-structure-template-alist
-	      (append org-structure-template-alist
-		      '(("cl" . "src common-lisp")
-			("el" . "src emacs-lisp")
-			("go" . "src go")
-			("ja" . "src java")
-			("js" . "src javascript")
-			("kr" . "src c")
-			("py" . "src python")
-			("sh" . "src shell")
-			("sq" . "src sql")
-			("tx" . "src text"))))
+	(append org-structure-template-alist
+		'(("cl" . "src common-lisp")
+		  ("el" . "src emacs-lisp")
+		  ("go" . "src go")
+		  ("ja" . "src java")
+		  ("js" . "src javascript")
+		  ("kr" . "src c")
+		  ("nx" . "src nix")
+		  ("py" . "src python")
+		  ("sh" . "src shell")
+		  ("sq" . "src sql")
+		  ("tx" . "src text"))))
     (defun my/org-babel-tangle-on-save ()
       (when (string-equal (file-name-directory buffer-file-name)
-			       (concat (getenv "HOME") "/etc/"))
-	      (org-babel-tangle)))
+			(concat (getenv "HOME") "/etc/"))
+	(org-babel-tangle)))
     (defun my/compile-and-load ()
       (interactive)
       (when (string-match "emacs" (buffer-file-name (current-buffer)))
-	      (byte-compile-file (buffer-file-name (current-buffer)))
-	      (load (buffer-file-name (current-buffer)))))
+	(byte-compile-file (buffer-file-name (current-buffer)))
+	(load (buffer-file-name (current-buffer)))))
     :bind (:map org-mode-map ("C-c i" . org-goto))
     :hook
     (org-mode . auto-fill-mode)
@@ -230,7 +246,8 @@ Be sure to back up your current =~/.emacs.d= with something like =mv
 #+begin_src emacs-lisp
   (use-package ace-window :ensure
     :bind*
-    ("M-o" . ace-window)
+    ("C-x o" . ace-window)
+    ("C-c o" . ace-delete-window)
     :config
     (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
   (use-package copilot :ensure)
@@ -247,10 +264,9 @@ Be sure to back up your current =~/.emacs.d= with something like =mv
   (use-package git-timemachine :ensure)
   (use-package hungry-delete :ensure :config (global-hungry-delete-mode))
   (use-package kdl-mode :ensure)
-  (use-package lua-mode :ensure)
   (use-package magit :ensure :bind* ("C-x g" . magit-status))
   (use-package markdown-mode :ensure)
   (use-package nix-mode :ensure)
-  (use-package vterm :ensure :bind ("C-c t" . vterm))
-  (use-package vundo :ensure :bind ("C-c u" . vundo))
+  (use-package vterm :ensure :bind* ("C-c t" . vterm))
+  (use-package vundo :ensure :bind* ("C-c u" . vundo))
 #+end_src
