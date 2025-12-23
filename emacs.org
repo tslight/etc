@@ -303,20 +303,11 @@ Bulk install all the grammars as a one of task, so don't tangle!
     (default-text-scale-mode))
   (use-package git-timemachine :ensure)
   (use-package hungry-delete :ensure :config (global-hungry-delete-mode))
-  (use-package kdl-mode :ensure)
+  (use-package kdl-mode :ensure) ; for niri config
   (use-package magit :ensure :bind* ("C-x g" . magit-status))
   (use-package magit-repos
     :bind* ("C-c g" . magit-list-repositories)
-    :custom
-    (magit-repository-directories `(("~" . 2)))
-    (magit-repolist-columns
-     '(("Flag" 5 magit-repolist-column-flags ((:right-align t) nil))
-       ("Name" 20 magit-repolist-column-ident nil)
-       ("Branch" 10 magit-repolist-column-branch nil)
-       ("Pull" 5 magit-repolist-column-unpulled-from-upstream ((:right-align t) nil))
-       ("Push" 5 magit-repolist-column-unpushed-to-upstream ((:right-align t) nil))
-       ("Path" 99 magit-repolist-column-path nil)))
-    (magit-repolist-sort-key '("Flag" . t)))
+    :custom (magit-repository-directories `(("~" . 2))))
   (use-package markdown-ts-mode :ensure)
   (use-package nix-ts-mode :ensure)
   (use-package vterm :ensure :bind* ("C-c t" . vterm))
