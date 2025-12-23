@@ -288,19 +288,15 @@ Bulk install all the grammars as a one of task, so don't tangle!
     :bind*
     ("C-x o" . ace-window)
     ("C-c o" . ace-delete-window)
-    :config
-    (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
+    :config (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
   (use-package copilot :ensure)
   (use-package copilot-chat :ensure :bind ("C-c c" . copilot-chat))
   (use-package corfu :ensure
     :custom
     (corfu-cycle t)
     (corfu-auto t)
-    :hook
-    (prog-mode . corfu-mode))
-  (use-package default-text-scale :ensure
-    :config
-    (default-text-scale-mode))
+    :hook (prog-mode . corfu-mode))
+  (use-package default-text-scale :ensure :config (default-text-scale-mode))
   (use-package git-timemachine :ensure)
   (use-package hungry-delete :ensure :config (global-hungry-delete-mode))
   (use-package kdl-mode :ensure) ; for niri config
