@@ -64,6 +64,8 @@ Be sure to back up your current =~/.emacs.d= with something like =mv
     ("C-&" . async-shell-command)
     ("C-<" . beginning-of-buffer)
     ("C->" . end-of-buffer)
+    ("C-}" . forward-paragraph)
+    ("C-{" . backward-paragraph)
     ("C-c i" . imenu)
     ("C-c f r" . rename-visited-file)
     ("C-;" . comment-line)
@@ -94,7 +96,7 @@ Be sure to back up your current =~/.emacs.d= with something like =mv
     (interactive)
     (or (buffer-file-name) (error "No file is currently being edited"))
     (when (yes-or-no-p (format "Really delete '%s'?"
-			         (file-name-nondirectory buffer-file-name)))
+				 (file-name-nondirectory buffer-file-name)))
       (delete-file (buffer-file-name) t)
       (kill-this-buffer)))
   (keymap-global-set "C-c f d" 'my/delete-this-file)
