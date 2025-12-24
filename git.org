@@ -4,8 +4,7 @@
 #+PROPERTY: header-args+ :padline no
 #+PROPERTY: header-args+ :results silent
 #+PROPERTY: header-args+ :tangle-mode (identity #o644)
-* GIT
-** CONFIG
+* CONFIG
 #+BEGIN_SRC conf :tangle ~/.config/git/config
   [color]
   ui = true
@@ -36,7 +35,7 @@
   name = tslight
   email = tslight@pm.com
 #+END_SRC
-** IGNORE
+* IGNORE
 #+BEGIN_SRC conf :tangle ~/.config/git/ignore
   .DS_Store
   .localized
