@@ -135,8 +135,8 @@ compile & evaluate it.
       (interactive)
       (find-alternate-file ".."))
     :bind (:map dired-mode-map
-	      ("b" . my/dired-up-directory)
-	      ("f" . 'dired-find-alternate-file)))
+	        ("b" . my/dired-up-directory)
+	        ("f" . 'dired-find-alternate-file)))
 #+end_src
 
 * EWW
@@ -312,11 +312,11 @@ Bulk install all the grammars as a one of task, so don't tangle!
     (magit-repository-directories `(("~" . 2)))
     (magit-repolist-columns
      '(("Flag" 5 magit-repolist-column-flags ((:right-align t) nil))
-       ("Name" 20 magit-repolist-column-ident nil)
-       ("Branch" 10 magit-repolist-column-branch nil)
-       ("Pull" 5 magit-repolist-column-unpulled-from-upstream ((:right-align t) nil))
-       ("Push" 5 magit-repolist-column-unpushed-to-upstream ((:right-align t) nil))
-       ("Path" 99 magit-repolist-column-path nil))))
+	   ("Name" 20 magit-repolist-column-ident nil)
+	   ("Branch" 10 magit-repolist-column-branch nil)
+	   ("Pull" 5 magit-repolist-column-unpulled-from-upstream ((:right-align t) nil))
+	   ("Push" 5 magit-repolist-column-unpushed-to-upstream ((:right-align t) nil))
+	   ("Path" 99 magit-repolist-column-path nil))))
   (use-package marginalia :ensure :init (marginalia-mode))
   (use-package markdown-ts-mode :ensure)
   (use-package nix-ts-mode :ensure)

@@ -17,16 +17,8 @@
   alias h='history'
   alias j='jobs -l'
   alias k='kubectl'
-  alias lc='tokei' # line count ignoring empty lines
-  if command -v lsd &> /dev/null; then
-      alias ls="lsd"
-  else
-      alias ls="ls --color=always"
-  fi
-  alias l='ls'
-  alias la='ls -a'
-  alias ll='ls -l'
-  alias lla='ls -la'
+  alias lc='tokei'
+  alias l='ls -la --color=always'
   alias m="make"
   alias mkdir='mkdir -p'
   alias mv='mv -i'
@@ -37,7 +29,6 @@
   alias rm='rm -i'
   alias se='sudoedit'
   alias t='tmux attach'
-  alias tree='lsd --tree'
   alias up='uptime'
 #+end_src
 * AUTOLOAD
