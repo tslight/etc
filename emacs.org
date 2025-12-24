@@ -11,7 +11,7 @@ placing the cursor in between the =#+begin_src= & =#+end_src= lines and
 pressing =C-c C-c=.
 
 #+begin_src emacs-lisp :tangle no
-  (org-babel-tangle) (load "~/.emacs.d/init.el")
+  (org-babel-tangle) (load user-init-file)
 #+end_src
 
 This will "tangle" all the code blocks below into =~/.emacs.d/init.el= and then
@@ -305,6 +305,7 @@ Bulk install all the grammars as a one of task, so don't tangle!
   (use-package magit-repos
     :bind* ("C-c g" . magit-list-repositories)
     :custom (magit-repository-directories `(("~" . 2))))
+  (use-package marginalia :ensure :init (marginalia-mode))
   (use-package markdown-ts-mode :ensure)
   (use-package nix-ts-mode :ensure)
   (use-package vterm :ensure :bind* ("C-c t" . vterm))
