@@ -255,8 +255,13 @@ https://www.masteringemacs.org/article/how-to-get-started-tree-sitter
        (typescript-mode . typescript-ts-mode)
        (json-mode . json-ts-mode)
        (css-mode . css-ts-mode)
-       (python-mode . python-ts-mode)))
-    (treesit-language-source-alist
+       (python-mode . python-ts-mode))))
+#+end_src
+
+Bulk install all the grammars as a one of task, so don't tangle!
+
+#+begin_src emacs-lisp :tangle no
+  (treesit-language-source-alist
      '((bash "https://github.com/tree-sitter/tree-sitter-bash")
        (cmake "https://github.com/uyha/tree-sitter-cmake")
        (css "https://github.com/tree-sitter/tree-sitter-css")
@@ -272,14 +277,9 @@ https://www.masteringemacs.org/article/how-to-get-started-tree-sitter
        (toml "https://github.com/tree-sitter/tree-sitter-toml")
        (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
        (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
-       (yaml "https://github.com/ikatyang/tree-sitter-yaml"))))
-#+end_src
-
-Bulk install all the grammars as a one of task, so don't tangle!
-
-#+begin_src emacs-lisp :tangle no
+       (yaml "https://github.com/ikatyang/tree-sitter-yaml")))
   (mapc #'treesit-install-language-grammar
-	(mapcar #'car treesit-language-source-alist))
+	  (mapcar #'car treesit-language-source-alist))
 #+end_src
 
 * 3RD PARTY
