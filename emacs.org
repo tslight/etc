@@ -42,7 +42,7 @@ compile & evaluate it.
     :custom
     (auto-save-visited-mode t)
     (backup-directory-alist '(("." . (concat user-emacs-directory "backups"))))
-    (completion-styles '(flex initials partial-completion))
+    (completion-styles '(basic substring initials flex))
     (custom-file (expand-file-name "custom.el" user-emacs-directory))
     (disabled-command-function nil)
     (display-time-default-load-average 'nil)
@@ -245,7 +245,7 @@ compile & evaluate it.
 https://www.masteringemacs.org/article/how-to-get-started-tree-sitter
 
 #+begin_src emacs-lisp
-  (use-package treesitter
+  (use-package treesit
     :custom
     (major-mode-remap-alist
      '((yaml-mode . yaml-ts-mode)
