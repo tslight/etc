@@ -109,6 +109,9 @@
   set keyseq-timeout 1200
   set show-all-if-ambiguous on
   set show-all-if-unmodified on
+  set menu-complete-display-prefix on
+  TAB: menu-complete
+  "\e[Z": menu-complete-backward
   "\en": history-search-forward
   "\ep": history-search-backward
 #+END_SRC
