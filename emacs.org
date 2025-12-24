@@ -11,7 +11,7 @@ placing the cursor in between the =#+begin_src= & =#+end_src= lines and
 pressing =C-c C-c=.
 
 #+begin_src emacs-lisp :tangle no
-  (org-babel-tangle) (load user-init-file)
+  (org-babel-tangle) (load (expand-file-name "init.el" user-emacs-directory))
 #+end_src
 
 This will "tangle" all the code blocks below into =~/.emacs.d/init.el= and then
