@@ -55,6 +55,7 @@ compile & evaluate it.
      '(("gnu" . "https://elpa.gnu.org/packages/")
        ("melpa" . "https://melpa.org/packages/")
        ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
+    (savehist-additional-variables '(compile-command kill-ring register-alist))
     (use-package-always-defer t)
     (use-package-enable-imenu-support t)
     (use-short-answers t)
