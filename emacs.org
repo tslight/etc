@@ -135,8 +135,8 @@ compile & evaluate it.
       (interactive)
       (find-alternate-file ".."))
     :bind (:map dired-mode-map
-	        ("b" . my/dired-up-directory)
-	        ("f" . 'dired-find-alternate-file)))
+		("b" . my/dired-up-directory)
+		("f" . 'dired-find-alternate-file)))
 #+end_src
 
 * EWW
@@ -242,7 +242,7 @@ compile & evaluate it.
     (after-save . executable-make-buffer-file-executable-if-script-p))
 #+end_src
 
-* TREESITTER
+* TREESIT
 
 https://www.masteringemacs.org/article/how-to-get-started-tree-sitter
 
