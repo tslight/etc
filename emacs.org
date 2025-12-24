@@ -308,6 +308,15 @@ Bulk install all the grammars as a one of task, so don't tangle!
   (use-package marginalia :ensure :init (marginalia-mode))
   (use-package markdown-ts-mode :ensure)
   (use-package nix-ts-mode :ensure)
-  (use-package vterm :ensure :bind* ("C-c t" . vterm))
+  (use-package multi-vterm :ensure
+    :bind*
+    ("C-c M-t" . multi-vterm)
+    ("C-c t o" . multi-vterm-dedicated-open)
+    ("C-c t c" . multi-vterm-dedicated-close)
+    ("C-c t t" . multi-vterm-dedicated-toggle)
+    ("C-c t s" . multi-vterm-dedicated-select)
+    ("C-c t n" . multi-vterm-next)
+    ("C-c t p" . multi-vterm-prev))
   (use-package vundo :ensure :bind* ("C-c u" . vundo))
+  (use-package which-key :ensure t)
 #+end_src
