@@ -32,7 +32,7 @@ compile & evaluate it.
     (electric-pair-mode)
     (global-subword-mode)
     (load-theme 'modus-vivendi)
-    (menu-bar-mode -1)
+    (when (not (eq system-type 'darwin)) (menu-bar-mode -1))
     (save-place-mode)
     (savehist-mode)
     (scroll-bar-mode -1)
