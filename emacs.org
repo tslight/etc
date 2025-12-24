@@ -1,7 +1,7 @@
 #+TITLE: Eight Megabytes And Constantly Swapping
 #+PROPERTY: header-args: emacs-lisp :lexical t
 #+PROPERTY: header-args+ :cache yes :comments yes :mkdirp yes :results silent
-#+PROPERTY: header-args+ :tangle (expand-file-name "init.el" user-emacs-directory)
+#+PROPERTY: header-args+ :tangle user-init-file
 #+PROPERTY: header-args+ :tangle-mode (identity #o644)
 
 A lightweight, [[https://en.wikipedia.org/wiki/Literate_programming][literate]] *Emacs 29+ ONLY* configuration.
