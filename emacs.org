@@ -31,6 +31,7 @@ compile & evaluate it.
     (display-time)
     (electric-pair-mode)
     (global-subword-mode)
+    (hl-line-mode)
     (load-theme 'modus-vivendi)
     (when (not (eq system-type 'darwin)) (menu-bar-mode -1))
     (save-place-mode)
@@ -62,10 +63,12 @@ compile & evaluate it.
     (use-package-enable-imenu-support t)
     (use-short-answers t)
     :bind
+    ("C-x C-b" . ibuffer)
     ("C-!" . async-shell-command)
     ("C-&" . async-shell-command)
     ("C-<" . beginning-of-buffer)
     ("C->" . end-of-buffer)
+    ("C-%" . query-replace-regexp)
     ("C-}" . forward-paragraph)
     ("C-{" . backward-paragraph)
     ("C-c i" . imenu)
@@ -98,19 +101,17 @@ compile & evaluate it.
     "Delete the current file, and kill the buffer."
     (interactive)
     (or (buffer-file-name) (error "No file is currently being edited"))
-    (when (yes-or-no-p (format "Really delete '%s'?"
-			     (file-name-nondirectory buffer-file-name)))
+    (when (yes-or-no-p (format "Really delete '%s'?" (file-name-nondirectory buffer-file-name)))
       (delete-file (buffer-file-name) t)
       (kill-this-buffer)))
   (keymap-global-set "C-c f d" 'my/delete-this-file)
 
-  (defun my/buffer-kill-ring-save (file)
-    "Copy a file's contents to the clipboard."
-    (interactive "f")
-    (with-current-buffer (find-file-noselect file)
-      (kill-new (buffer-substring-no-properties (point-min) (point-max))))
-    (message "Saved contents of %s to the kill ring" file))
-  (keymap-global-set "C-c M-w" 'my/buffer-kill-ring-save)
+  (defun ts-kill-ring-save-whole-buffer ()
+    "Save the entire contents of the buffer to the kill ring."
+    (interactive)
+    (kill-ring-save (point-min) (point-max))
+    (message "Saved whole buffer to kill ring :-)"))
+  (keymap-global-set "C-c h" 'ts-kill-ring-save-whole-buffer)
 
   (defun my/fill-or-unfill ()
     "Like `fill-paragraph', but unfill if used twice."
@@ -122,6 +123,30 @@ compile & evaluate it.
 	   fill-column)))
       (call-interactively #'fill-paragraph)))
   (keymap-global-set "M-q" 'my/fill-or-unfill)
+
+  (defun my/move-beginning-of-line ()
+    "Move point back to indentation. If there is any non blank characters to
+      the left of the cursor. Otherwise point moves to beginning of line."
+    (interactive)
+    (if (= (point) (save-excursion (back-to-indentation) (point)))
+	(beginning-of-line)
+      (back-to-indentation)))
+  (global-set-key [remap move-beginning-of-line] 'my/move-beginning-of-line)
+
+  (defun my/delete-inside-delimiters (arg)
+    "Deletes the text within parentheses, brackets or quotes. With prefix
+      ARG, delete delimiters too."
+    (interactive "P")
+    ;; Search for a match on the same line, don't delete across lines
+    (search-backward-regexp "[[{(<\"\']" (line-beginning-position))
+    (forward-char)
+    (let ((lstart (point)))
+      (search-forward-regexp "[]})>\"\']" (line-end-position))
+      (backward-char)
+      (if arg
+	(kill-region (- lstart 1) (+ (point) 1))
+	(kill-region lstart (point)))))
+  (keymap-global-set "C-c d" 'my/delete-inside-delimiters)
 #+end_src
 
 * DIRED
@@ -130,11 +155,50 @@ compile & evaluate it.
   (use-package dired
     :custom
     (delete-by-moving-to-trash t)
+    (dired-dwim-target t) ; copy or move into other window
+    ;; omit all dotfiles instead of just . & ..
+    (dired-omit-files "\\`[.]?#\\|\\`[.][.]?\\'\\|^\\..+$")
+    (dired-recursive-copies 'always)
+    (dired-recursive-deletes 'always)
     :config
     (defun my/dired-up-directory ()
       (interactive)
       (find-alternate-file ".."))
+
+    (defun my/dired-do-delete-skip-trash (&optional arg)
+      (interactive "P")
+      (let ((delete-by-moving-to-trash nil))
+	(dired-do-delete arg)))
+
+    (defun my/dired-get-size ()
+      "Get cumlative size of marked or current item."
+      (interactive)
+      (let ((files (dired-get-marked-files)))
+	(with-temp-buffer
+	  (apply 'call-process "du" nil t nil "-sch" files)
+	  (message "Size of all marked files: %s"
+		   (progn
+		     (re-search-backward "\\(^[0-9.,]+[A-Za-z]+\\).*total$")
+		     (match-string 1))))))
+
+    (defun my/dired-beginning-of-buffer ()
+      "Go to first file in directory."
+      (interactive)
+      (goto-char (point-min))
+      (dired-next-line 1))
+
+    (defun my/dired-end-of-buffer ()
+      "Go to last file in directory."
+      (interactive)
+      (goto-char (point-max))
+      (dired-next-line -1))
+
     :bind (:map dired-mode-map
+		(")" . dired-omit-mode)
+		("<" . my/dired-beginning-of-buffer)
+		(">" . my/dired-end-of-buffer)
+		("?" . my/dired-get-size)
+		("C-d" . my/dired-do-delete-skip-trash)
 		("b" . my/dired-up-directory)
 		("f" . 'dired-find-alternate-file)))
 #+end_src
@@ -145,6 +209,15 @@ compile & evaluate it.
   (use-package eww
     :custom (eww-search-prefix "https://lite.duckduckgo.com/lite/?q=")
     :bind ("C-c w" . eww))
+#+end_src
+
+* FLYMAKE
+
+#+begin_src emacs-lisp
+(use-package flymake-mode
+  :hook
+  (prog-mode . flymake-mode)
+  (shell-script-mode . flymake-mode))
 #+end_src
 
 * ICOMPLETE
@@ -264,22 +337,22 @@ Bulk install all the grammars as a one of task, so don't tangle!
 
 #+begin_src emacs-lisp :tangle no
   (setq treesit-language-source-alist
-   '((bash "https://github.com/tree-sitter/tree-sitter-bash")
-     (cmake "https://github.com/uyha/tree-sitter-cmake")
-     (css "https://github.com/tree-sitter/tree-sitter-css")
-     (elisp "https://github.com/Wilfred/tree-sitter-elisp")
-     (go "https://github.com/tree-sitter/tree-sitter-go")
-     (html "https://github.com/tree-sitter/tree-sitter-html")
-     (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
-     (json "https://github.com/tree-sitter/tree-sitter-json")
-     (make "https://github.com/alemuller/tree-sitter-make")
-     (markdown "https://github.com/ikatyang/tree-sitter-markdown")
-     (nix "https://github.com/nix-community/tree-sitter-nix")
-     (python "https://github.com/tree-sitter/tree-sitter-python")
-     (toml "https://github.com/tree-sitter/tree-sitter-toml")
-     (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
-     (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
-     (yaml "https://github.com/ikatyang/tree-sitter-yaml")))
+	'((bash "https://github.com/tree-sitter/tree-sitter-bash")
+	(cmake "https://github.com/uyha/tree-sitter-cmake")
+	(css "https://github.com/tree-sitter/tree-sitter-css")
+	(elisp "https://github.com/Wilfred/tree-sitter-elisp")
+	(go "https://github.com/tree-sitter/tree-sitter-go")
+	(html "https://github.com/tree-sitter/tree-sitter-html")
+	(javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
+	(json "https://github.com/tree-sitter/tree-sitter-json")
+	(make "https://github.com/alemuller/tree-sitter-make")
+	(markdown "https://github.com/ikatyang/tree-sitter-markdown")
+	(nix "https://github.com/nix-community/tree-sitter-nix")
+	(python "https://github.com/tree-sitter/tree-sitter-python")
+	(toml "https://github.com/tree-sitter/tree-sitter-toml")
+	(tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
+	(typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
+	(yaml "https://github.com/ikatyang/tree-sitter-yaml")))
   (mapc #'treesit-install-language-grammar (mapcar #'car treesit-language-source-alist))
 #+end_src
 
@@ -311,11 +384,11 @@ Bulk install all the grammars as a one of task, so don't tangle!
     (magit-repository-directories `(("~" . 2)))
     (magit-repolist-columns
      '(("Flag" 5 magit-repolist-column-flags ((:right-align t) nil))
-	   ("Name" 20 magit-repolist-column-ident nil)
-	   ("Branch" 10 magit-repolist-column-branch nil)
-	   ("Pull" 5 magit-repolist-column-unpulled-from-upstream ((:right-align t) nil))
-	   ("Push" 5 magit-repolist-column-unpushed-to-upstream ((:right-align t) nil))
-	   ("Path" 99 magit-repolist-column-path nil))))
+       ("Name" 20 magit-repolist-column-ident nil)
+       ("Branch" 10 magit-repolist-column-branch nil)
+       ("Pull" 5 magit-repolist-column-unpulled-from-upstream ((:right-align t) nil))
+       ("Push" 5 magit-repolist-column-unpushed-to-upstream ((:right-align t) nil))
+       ("Path" 99 magit-repolist-column-path nil))))
   (use-package marginalia :ensure :init (marginalia-mode))
   (use-package markdown-ts-mode :ensure)
   (use-package nix-ts-mode :ensure)
