@@ -47,10 +47,6 @@ read & understood all the documentation here and linked to!/
 4) Wait for all the appropriate org files to [[https://www.gnu.org/software/emacs/manual/html_node/org/Extracting-source-code.html][tangle]]...
 5) ...Profit!
 
-** But I only came here for an Emacs config!
-
-I have moved my Emacs config to it's own dedicated repo [[https://github.com/tslight/emacs][here]].
-
 * How does all this work?
 
 I'm using Emacs' amazing [[https://orgmode.org/][org-mode]] as a basic cross platform configuration
