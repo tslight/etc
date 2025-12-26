@@ -391,7 +391,7 @@ Bulk install all the grammars as a one of task, so don't tangle!
        ("Path" 99 magit-repolist-column-path nil))))
   (use-package marginalia :ensure :init (marginalia-mode))
   (use-package markdown-ts-mode :ensure)
-  (use-package nix-ts-mode :ensure)
+  (use-package nix-ts-mode :ensure :mode ("\\.nix\\'" . nix-ts-mode))
   (use-package vterm :ensure :bind* ("C-c t" . vterm))
   (use-package vundo :ensure :bind* ("C-c u" . vundo))
 #+end_src
