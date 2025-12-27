@@ -247,10 +247,11 @@ compile & evaluate it.
 * MISC
 
 #+begin_src emacs-lisp
-  (use-package recentf :bind ("C-c r" . recentf))
-  (use-package which-key :config (which-key-mode))
-  (use-package whitespace :hook (before-save . whitespace-cleanup))
   (use-package eglot :hook (prog-mode . eglot-ensure))
+  (use-package prettify-symbols :hook (after-init . global-prettify-symbols-mode))
+  (use-package recentf :bind ("C-c r" . recentf))
+  (use-package which-key :hook (after-init . which-key-mode))
+  (use-package whitespace :hook (before-save . whitespace-cleanup))
 #+end_src
 
 * ORG
