@@ -34,8 +34,6 @@ compile & evaluate it.
     (hl-line-mode)
     (load-theme 'modus-vivendi)
     (when (not (eq system-type 'darwin)) (menu-bar-mode -1))
-    (save-place-mode)
-    (savehist-mode)
     (scroll-bar-mode -1)
     (set-frame-font "JetBrainsMono Nerd Font 13" nil t)
     (tool-bar-mode -1)
@@ -250,6 +248,8 @@ compile & evaluate it.
   (use-package eglot :hook (prog-mode . eglot-ensure))
   (use-package prettify-symbols :hook (after-init . global-prettify-symbols-mode))
   (use-package recentf :bind ("C-c r" . recentf))
+  (use-package savehist :hook (after-init . savehist-mode))
+  (use-package save-place :hook (after-init . save-place-mode))
   (use-package which-key :hook (after-init . which-key-mode))
   (use-package whitespace :hook (before-save . whitespace-cleanup))
 #+end_src
