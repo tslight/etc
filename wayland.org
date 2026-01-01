@@ -6,10 +6,13 @@
 #+PROPERTY: header-args+ :tangle-mode (identity #o644)
 * FUZZEL
 #+begin_src conf :tangle ~/.config/fuzzel/fuzzel.ini
-  lines=10
+  lines=20
   width=20
   horizontal-pad=8
   vertical-pad=8
+  icons-enabled=false
+  use-bold=true
+  font=JetBrainsMono Nerd Font:size=13
   [colors]
   background=000000ff
   text=ffffffff
