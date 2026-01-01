@@ -1,0 +1,61 @@
+#+TITLE: Terminal Tools
+#+PROPERTY: header-args :cache yes
+#+PROPERTY: header-args :comments no
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :padline no
+#+PROPERTY: header-args+ :results silent
+#+PROPERTY: header-args+ :tangle-mode (identity #o644)
+* TMUX
+#+BEGIN_SRC conf :tangle ~/.tmux.conf
+  ## MISC
+  set -g base-index 1
+  set -g pane-base-index 1
+  set -g history-limit 42420
+  set -g renumber-windows on
+  set -g set-titles on
+  set -g set-titles-string "#T: [#S] #I: #W: #P"
+  set -g display-panes-time 4000 # I'm slow and indecisive!
+  set -g escape-time 0 # default is 500ms which feels like forever..
+
+  # For images in Yazi
+  set -g allow-passthrough on
+  set -ga update-environment TERM
+  set -ga update-environment TERM_PROGRAM
+
+  ## STATUS BAR
+  set-option -g status-interval 5
+  set-option -g automatic-rename on
+  set-option -g automatic-rename-format '#{b:pane_current_path}'
+
+  ## COLORS
+  set -g message-style bg=default,fg=brightgreen
+  set -g mode-style bg=default,fg=brightgreen
+  set -g status-style bg=default,fg=brightgreen
+  set -g window-status-style bold
+  set -g window-status-current-style underscore,fg=brightyellow
+
+  ## STATUS
+  set -g status-interval 60
+  set -g status-left "[#S] "
+  set -g status-left-length 50
+  set -g status-right "%H:%M %a %d/%m"
+  set -g status-right-length 50
+  set -g window-status-current-format "#I: #W.#P*"
+
+  ## MOUSE
+  set -g mouse on
+  bind -n MouseDown2Status copy-mode
+
+  ## KEYS
+  bind C-r source-file ~/.tmux.conf \; display-message "~/.tmux.conf reloaded"
+#+END_SRC
+* YAZI
+#+begin_src toml :tangle ~/.config/yazi/yazi.toml
+  # A TOML linter such as https://taplo.tamasfe.dev/ can use this schema to validate your config.
+  # If you encounter any issues, please make an issue at https://github.com/yazi-rs/schemas.
+  "$schema" = "https://yazi-rs.github.io/schemas/yazi.json"
+
+  [mgr]
+  show_hidden = true
+  ratio = [ 1, 2, 5 ]
+#+end_src
