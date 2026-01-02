@@ -3,7 +3,6 @@
 #+PROPERTY: header-args+ :mkdirp yes
 #+PROPERTY: header-args+ :padline no
 #+PROPERTY: header-args+ :results silent
-#+PROPERTY: header-args+ :tangle-mode (identity #o644)
 * FUZZEL
 #+begin_src conf :tangle ~/.config/fuzzel/fuzzel.ini
   lines=20
@@ -28,46 +27,46 @@
 * NIRI
 #+begin_src kdl :tangle ~/.config/niri/config.kdl
   input {
-    keyboard {
-      xkb {
-	    layout "us"
-      }
-      numlock
-    }
-    touchpad {
-      tap
-      natural-scroll
-    }
+	  keyboard {
+		  xkb {
+			  layout "us"
+		  }
+		  numlock
+	  }
+	  touchpad {
+		  tap
+		  natural-scroll
+	  }
   }
 
   output "eDP-1" {
-    background-color "#000"
-    backdrop-color "#203"
+	  background-color "#000"
+	  backdrop-color "#203"
   }
   output "DP-1" {
-    focus-at-startup
-    background-color "#000"
-    backdrop-color "#203"
+	  focus-at-startup
+	  background-color "#000"
+	  backdrop-color "#203"
   }
 
   layout {
-    gaps 0
-    background-color "#000"
-    center-focused-column "never"
-    preset-column-widths {
-      proportion 0.33333
-      proportion 0.5
-      proportion 0.66667
-      proportion 0.99999
-    }
-    default-column-width { proportion 0.99999; }
-    focus-ring {
-      width 2
-      active-color "#B28"
-      inactive-color "#627"
-    }
-    border { off; }
-    shadow { off; }
+	  gaps 0
+	  background-color "#000"
+	  center-focused-column "never"
+	  preset-column-widths {
+		  proportion 0.33333
+		  proportion 0.5
+		  proportion 0.66667
+		  proportion 0.99999
+	  }
+	  default-column-width { proportion 0.99999; }
+	  focus-ring {
+		  width 2
+		  active-color "#B28"
+		  inactive-color "#627"
+	  }
+	  border { off; }
+	  shadow { off; }
   }
 
   spawn-at-startup "waybar"
@@ -80,143 +79,151 @@
   animations { off; }
 
   window-rule {
-    match app-id=r#"firefox$"# title="^Picture-in-Picture$"
-    open-floating true
+	  match app-id=r#"firefox$"# title="^Picture-in-Picture$"
+	  open-floating true
   }
 
   binds {
-    Mod+Slash { show-hotkey-overlay; }
-    Mod+E      hotkey-overlay-title="Open Editor" { spawn "nirirun" "emacs"; }
-    Mod+T      hotkey-overlay-title="Open Terminal" { spawn "nirirun" "foot" "-e" "tmux" "attach"; }
-    Mod+W      hotkey-overlay-title="Open Web Browser" { spawn "nirirun" "librewolf"; }
-    Mod+Space  hotkey-overlay-title="Launch Programs" { spawn "fuzzel"; }
-    Mod+Ctrl+Q hotkey-overlay-title="Lock Screen" { spawn "swaylock" "-c" "000000"; }
-    XF86AudioMute         allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"; }
-    XF86AudioLowerVolume  allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1-"; }
-    XF86AudioRaiseVolume  allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+"; }
-    XF86AudioMicMute      allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"; }
-    XF86AudioPlay         allow-when-locked=true { spawn-sh "playerctl play-pause"; }
-    XF86AudioStop         allow-when-locked=true { spawn-sh "playerctl stop"; }
-    XF86AudioPrev         allow-when-locked=true { spawn-sh "playerctl previous"; }
-    XF86AudioNext         allow-when-locked=true { spawn-sh "playerctl next"; }
-    XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "10%-"; }
-    XF86MonBrightnessUp   allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "+10%"; }
+	  Mod+Slash { show-hotkey-overlay; }
+	  Mod+E      hotkey-overlay-title="Open Editor" { spawn "nirirun" "emacs"; }
+	  Mod+T      hotkey-overlay-title="Open Terminal" { spawn "nirirun" "foot" "-e" "tmux" "attach"; }
+	  Mod+W      hotkey-overlay-title="Open Web Browser" { spawn "nirirun" "librewolf"; }
+	  Mod+Space  hotkey-overlay-title="Launch Programs" { spawn "fuzzel"; }
+	  Mod+Ctrl+Q hotkey-overlay-title="Lock Screen" { spawn "swaylock" "-c" "000000"; }
+	  XF86AudioMute         allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"; }
+	  XF86AudioLowerVolume  allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1-"; }
+	  XF86AudioRaiseVolume  allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+"; }
+	  XF86AudioMicMute      allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"; }
+	  XF86AudioPlay         allow-when-locked=true { spawn-sh "playerctl play-pause"; }
+	  XF86AudioStop         allow-when-locked=true { spawn-sh "playerctl stop"; }
+	  XF86AudioPrev         allow-when-locked=true { spawn-sh "playerctl previous"; }
+	  XF86AudioNext         allow-when-locked=true { spawn-sh "playerctl next"; }
+	  XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "10%-"; }
+	  XF86MonBrightnessUp   allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "+10%"; }
 
-    Mod+O repeat=false { toggle-overview; }
-    Mod+Q repeat=false { close-window; }
+	  Mod+O repeat=false { toggle-overview; }
+	  Mod+Q repeat=false { close-window; }
 
-    Mod+H     { focus-column-left; }
-    Mod+J     { focus-window-down; }
-    Mod+K     { focus-window-up; }
-    Mod+L     { focus-column-right; }
+	  Mod+H     { focus-column-left; }
+	  Mod+J     { focus-window-down; }
+	  Mod+K     { focus-window-up; }
+	  Mod+L     { focus-column-right; }
 
-    Mod+Ctrl+H     { move-column-left; }
-    Mod+Ctrl+J     { move-window-down; }
-    Mod+Ctrl+K     { move-window-up; }
-    Mod+Ctrl+L     { move-column-right; }
+	  Mod+Ctrl+H     { move-column-left; }
+	  Mod+Ctrl+J     { move-window-down; }
+	  Mod+Ctrl+K     { move-window-up; }
+	  Mod+Ctrl+L     { move-column-right; }
 
-    Mod+Home { focus-column-first; }
-    Mod+End  { focus-column-last; }
-    Mod+Ctrl+Home { move-column-to-first; }
-    Mod+Ctrl+End  { move-column-to-last; }
+	  Mod+Home { focus-column-first; }
+	  Mod+End  { focus-column-last; }
+	  Mod+Ctrl+Home { move-column-to-first; }
+	  Mod+Ctrl+End  { move-column-to-last; }
 
-    Mod+Shift+H     { focus-monitor-left; }
-    Mod+Shift+J     { focus-monitor-down; }
-    Mod+Shift+K     { focus-monitor-up; }
-    Mod+Shift+L     { focus-monitor-right; }
+	  Mod+Shift+H     { focus-monitor-left; }
+	  Mod+Shift+J     { focus-monitor-down; }
+	  Mod+Shift+K     { focus-monitor-up; }
+	  Mod+Shift+L     { focus-monitor-right; }
 
-    Mod+Alt+Ctrl+H     { move-column-to-monitor-left; }
-    Mod+Alt+Ctrl+J     { move-column-to-monitor-down; }
-    Mod+Alt+Ctrl+K     { move-column-to-monitor-up; }
-    Mod+Alt+Ctrl+L     { move-column-to-monitor-right; }
+	  Mod+Alt+Ctrl+H     { move-column-to-monitor-left; }
+	  Mod+Alt+Ctrl+J     { move-column-to-monitor-down; }
+	  Mod+Alt+Ctrl+K     { move-column-to-monitor-up; }
+	  Mod+Alt+Ctrl+L     { move-column-to-monitor-right; }
 
-    Mod+U              { focus-workspace-down; }
-    Mod+I              { focus-workspace-up; }
-    Mod+Ctrl+U         { move-column-to-workspace-down; }
-    Mod+Ctrl+I         { move-column-to-workspace-up; }
+	  Mod+U              { focus-workspace-down; }
+	  Mod+I              { focus-workspace-up; }
+	  Mod+Ctrl+U         { move-column-to-workspace-down; }
+	  Mod+Ctrl+I         { move-column-to-workspace-up; }
 
-    Mod+Shift+U         { move-workspace-down; }
-    Mod+Shift+I         { move-workspace-up; }
+	  Mod+Shift+U         { move-workspace-down; }
+	  Mod+Shift+I         { move-workspace-up; }
 
-    Mod+1 { focus-workspace 1; }
-    Mod+2 { focus-workspace 2; }
-    Mod+3 { focus-workspace 3; }
-    Mod+4 { focus-workspace 4; }
-    Mod+5 { focus-workspace 5; }
-    Mod+6 { focus-workspace 6; }
-    Mod+7 { focus-workspace 7; }
-    Mod+8 { focus-workspace 8; }
-    Mod+9 { focus-workspace 9; }
-    Mod+Ctrl+1 { move-column-to-workspace 1; }
-    Mod+Ctrl+2 { move-column-to-workspace 2; }
-    Mod+Ctrl+3 { move-column-to-workspace 3; }
-    Mod+Ctrl+4 { move-column-to-workspace 4; }
-    Mod+Ctrl+5 { move-column-to-workspace 5; }
-    Mod+Ctrl+6 { move-column-to-workspace 6; }
-    Mod+Ctrl+7 { move-column-to-workspace 7; }
-    Mod+Ctrl+8 { move-column-to-workspace 8; }
-    Mod+Ctrl+9 { move-column-to-workspace 9; }
+	  Mod+1 { focus-workspace 1; }
+	  Mod+2 { focus-workspace 2; }
+	  Mod+3 { focus-workspace 3; }
+	  Mod+4 { focus-workspace 4; }
+	  Mod+5 { focus-workspace 5; }
+	  Mod+6 { focus-workspace 6; }
+	  Mod+7 { focus-workspace 7; }
+	  Mod+8 { focus-workspace 8; }
+	  Mod+9 { focus-workspace 9; }
+	  Mod+Ctrl+1 { move-column-to-workspace 1; }
+	  Mod+Ctrl+2 { move-column-to-workspace 2; }
+	  Mod+Ctrl+3 { move-column-to-workspace 3; }
+	  Mod+Ctrl+4 { move-column-to-workspace 4; }
+	  Mod+Ctrl+5 { move-column-to-workspace 5; }
+	  Mod+Ctrl+6 { move-column-to-workspace 6; }
+	  Mod+Ctrl+7 { move-column-to-workspace 7; }
+	  Mod+Ctrl+8 { move-column-to-workspace 8; }
+	  Mod+Ctrl+9 { move-column-to-workspace 9; }
 
-    Mod+Tab { focus-workspace-previous; }
+	  Mod+Tab { focus-workspace-previous; }
 
-    Mod+BracketLeft  { consume-or-expel-window-left; }
-    Mod+BracketRight { consume-or-expel-window-right; }
+	  Mod+BracketLeft  { consume-or-expel-window-left; }
+	  Mod+BracketRight { consume-or-expel-window-right; }
 
-    Mod+Comma  { consume-window-into-column; }
-    Mod+Period { expel-window-from-column; }
+	  Mod+Comma  { consume-window-into-column; }
+	  Mod+Period { expel-window-from-column; }
 
-    Mod+R { switch-preset-column-width; }
-    Mod+Shift+R { switch-preset-window-height; }
-    Mod+Ctrl+R { reset-window-height; }
-    Mod+M { maximize-column; }
-    Mod+F { fullscreen-window; }
+	  Mod+R { switch-preset-column-width; }
+	  Mod+Shift+R { switch-preset-window-height; }
+	  Mod+Ctrl+R { reset-window-height; }
+	  Mod+M { maximize-column; }
+	  Mod+F { fullscreen-window; }
 
-    Mod+Ctrl+F { expand-column-to-available-width; }
-    Mod+C { center-column; }
-    Mod+Ctrl+C { center-visible-columns; }
+	  Mod+Ctrl+F { expand-column-to-available-width; }
+	  Mod+C { center-column; }
+	  Mod+Ctrl+C { center-visible-columns; }
 
-    Mod+Minus { set-column-width "-10%"; }
-    Mod+Equal { set-column-width "+10%"; }
-    Mod+Shift+Minus { set-window-height "-10%"; }
-    Mod+Shift+Equal { set-window-height "+10%"; }
+	  Mod+Minus { set-column-width "-10%"; }
+	  Mod+Equal { set-column-width "+10%"; }
+	  Mod+Shift+Minus { set-window-height "-10%"; }
+	  Mod+Shift+Equal { set-window-height "+10%"; }
 
-    Mod+V       { toggle-window-floating; }
-    Mod+Shift+V { switch-focus-between-floating-and-tiling; }
+	  Mod+V       { toggle-window-floating; }
+	  Mod+Shift+V { switch-focus-between-floating-and-tiling; }
 
-    Mod+Ctrl+t { toggle-column-tabbed-display; }
+	  Mod+Ctrl+t { toggle-column-tabbed-display; }
 
-    Mod+P { screenshot; }
-    Mod+Ctrl+P { screenshot-screen; }
-    Mod+Alt+P { screenshot-window; }
+	  Mod+P { screenshot; }
+	  Mod+Ctrl+P { screenshot-screen; }
+	  Mod+Alt+P { screenshot-window; }
 
-    XF86Display { power-off-monitors; }
-    F7 { power-off-monitors; }
-    Mod+Ctrl+BackSpace { quit; }
+	  XF86Display { power-off-monitors; }
+	  F7 { power-off-monitors; }
+	  Mod+Ctrl+BackSpace { quit; }
   }
 #+end_src
 
 * WAYBAR
 ** CONFIG
-#+begin_src json :tangle ~/.config/waybar/config.jsonc
+#+begin_src json-ts :tangle ~/.config/waybar/config.jsonc
   {
     "layer": "top",
     "position": "left",
     "spacing": 12,
-    "modules-center": [
+    "modules-left": [
+      "custom/sensors",
       "cpu",
       "memory",
       "disk",
-      "systemd-failed-units",
       "network",
+      "systemd-failed-units",
+    ],
+    "modules-right": [
       "backlight",
       "pulseaudio",
       "battery",
-      "temperature",
       "idle_inhibitor",
       "tray",
       "clock",
       "custom/power"
     ],
+    "custom/sensors": {
+      "exec": "~/.config/waybar/scripts/sensors.sh",
+      "interval": 10,
+      "return-type": "json",
+      "tooltip": true
+    },
     "cpu": {
       "format": "{usage}%",
     },
@@ -240,14 +247,6 @@
       "format-disabled": "⚠️",
       "format-disconnected": "💥️",
       "tooltip-format": "{ifname}\n{essid}\n{ipaddr}/{cidr}\nVia: {gwaddr}\nUpload: {bandwidthUpBytes}\nDownload: {bandwidthDownBytes}",
-    },
-    "temperature": {
-      "critical-threshold": 75,
-      "warning-threshold": 60,
-      "format-critical": "{temperatureC}°C 🔥",
-      "format-warning": "🥵",
-      "format": "🌡️",
-      "tooltip-format": "{temperatureC}°C",
     },
     "backlight": {
       "format": "🔆",
@@ -303,21 +302,61 @@
     }
   }
 #+end_src
+** POWER
+#+begin_src xml :tangle ~/.config/waybar/power_menu.xml
+  <?xml version="1.0" encoding="UTF-8"?>
+  <interface>
+    <object class="GtkMenu" id="menu">
+      <child>
+	<object class="GtkMenuItem" id="suspend">
+	<property name="label">Suspend</property>
+	</object>
+      </child>
+      <child>
+	<object class="GtkMenuItem" id="hibernate">
+	<property name="label">Hibernate</property>
+	</object>
+      </child>
+      <child>
+	<object class="GtkMenuItem" id="shutdown">
+	<property name="label">Shutdown</property>
+	</object>
+      </child>
+      <child>
+	<object class="GtkSeparatorMenuItem" id="delimiter1"/>
+      </child>
+      <child>
+	<object class="GtkMenuItem" id="reboot">
+	<property name="label">Reboot</property>
+	</object>
+      </child>
+    </object>
+  </interface>
+#+end_src
+** SCRIPTS
+#+begin_src sh :tangle ~/.config/waybar/scripts/sensors.sh :tangle-mode o755
+  #!/usr/bin/env bash
+  output=$(sensors 2>/dev/null)
+  temp=$(echo "$output" | awk '/Package id 0:/ {print $4; exit}')
+  temp=${temp//+}
+  temp=${temp%%.*}
+  printf '{"text": "%s°C", "tooltip": "%s"}\n' "$temp" "$(echo "$output" | sed ':a;N;$!ba;s/\n/\\n/g')"
+#+end_src
 ** STYLE
 #+begin_src css :tangle ~/.config/waybar/style.css
   ,* {
-    font-family: FontAwesome, Roboto, Helvetica, Arial, sans-serif;
-    font-size: 15px;
-    font-weight: bold;
+      font-family: FontAwesome, Roboto, Helvetica, Arial, sans-serif;
+      font-size: 15px;
+      font-weight: bold;
   }
 
   window#waybar {
-    background-color: #000;
-    color: #ffffff;
+      background-color: #000;
+      color: #ffffff;
   }
 
   window#waybar.hidden {
-    opacity: 1;
+      opacity: 1;
   }
 
   #network,
@@ -331,138 +370,102 @@
   #idle_inhibitor,
   #tray,
   #clock {
-    padding: 0 2px;
-    color: #fff;
+      padding: 0 2px;
+      color: #fff;
   }
 
   #network {
-    background-color: #627;
-    color: #FFF
+      background-color: #627;
+      color: #FFF
   }
 
   #network.ethernet {
-    background-color: #000;
-    color: #FFF
+      background-color: #000;
+      color: #FFF
   }
 
   #network.disconnected {
-    background-color: #900;
+      background-color: #900;
   }
 
   #cpu {
-    background-color: #B28;
-    color: #FFF;
+      background-color: #B28;
+      color: #FFF;
   }
 
   #memory {
-    background-color: #627;
-    color: #FFF;
+      background-color: #627;
+      color: #FFF;
   }
 
   #disk {
-    background-color: #B28;
-    color: #FFF;
+      background-color: #B28;
+      color: #FFF;
   }
 
-  #temperature {
-    background-color: #000;
-    color: #FFF;
-  }
-
-  #temperature.critical {
-    background-color: #800;
-    color: #FFF;
+  #custom-sensors {
+      background-color: #627;
+      color: #FFF;
   }
 
   #backlight {
-    background-color: #000;
+      background-color: #000;
   }
 
   #pulseaudio {
-    background-color: #000;
+      background-color: #000;
   }
 
   #battery {
-    background-color: #000;
-    color: #FFF;
+      background-color: #000;
+      color: #FFF;
   }
 
   #battery.charging, #battery.plugged {
-    background-color: #000;
-    color: #FFF;
+      background-color: #000;
+      color: #FFF;
   }
 
   @keyframes blink {
-    to {
-      background-color: #FF0;
-      color: #000;
-    }
+      to {
+	    background-color: #FF0;
+	    color: #000;
+      }
   }
 
   /* Using steps() instead of linear as a timing function to limit cpu usage */
   #battery.critical:not(.charging) {
-    background-color: #900;
-    color: #FFF;
-    animation-name: blink;
-    animation-duration: 0.5s;
-    animation-timing-function: steps(12);
-    animation-iteration-count: infinite;
-    animation-direction: alternate;
+      background-color: #900;
+      color: #FFF;
+      animation-name: blink;
+      animation-duration: 0.5s;
+      animation-timing-function: steps(12);
+      animation-iteration-count: infinite;
+      animation-direction: alternate;
   }
 
   #idle_inhibitor {
-    background-color: #000;
+      background-color: #000;
   }
 
   #idle_inhibitor.activated {
-    background-color: #000;
+      background-color: #000;
   }
 
   #tray {
-    background-color: #000;
+      background-color: #000;
   }
 
   #tray > .passive {
-    -gtk-icon-effect: dim;
+      -gtk-icon-effect: dim;
   }
 
   #tray > .needs-attention {
-    -gtk-icon-effect: highlight;
-    background-color: #800;
+      -gtk-icon-effect: highlight;
+      background-color: #800;
   }
 
   #clock {
-    background-color: #000000;
+      background-color: #000000;
   }
-#+end_src
-** POWER
-#+begin_src xml :tangle ~/.config/waybar/power_menu.xml
-  <?xml version="1.0" encoding="UTF-8"?>
-  <interface>
-    <object class="GtkMenu" id="menu">
-      <child>
-	<object class="GtkMenuItem" id="suspend">
-	  <property name="label">Suspend</property>
-	</object>
-      </child>
-      <child>
-	<object class="GtkMenuItem" id="hibernate">
-	  <property name="label">Hibernate</property>
-	</object>
-      </child>
-      <child>
-	<object class="GtkMenuItem" id="shutdown">
-	  <property name="label">Shutdown</property>
-	</object>
-      </child>
-      <child>
-	<object class="GtkSeparatorMenuItem" id="delimiter1"/>
-      </child>
-      <child>
-	<object class="GtkMenuItem" id="reboot">
-	  <property name="label">Reboot</property>
-	</object>
-      </child>
-    </object>
-  </interface>
 #+end_src
