@@ -17,11 +17,12 @@
   vim.keymap.set("n", "<leader>l", ':bl<cr>', { desc = "Buffer Last" })
   vim.keymap.set("n", "<leader>d", ':bd<r>', { desc = "Buffer Delete" })
 
-  vim.keymap.set("n", "<leader>i", function()
+  vim.keymap.set("n", "<leader>i",
+	         function()
 		    local pos = vim.api.nvim_win_get_cursor(0)
 		    vim.cmd('normal! ggVG=')
 		    vim.api.nvim_win_set_cursor(0, pos)
-  end, { desc = "Buffer Indent" })
+	         end, { desc = "Buffer Indent" })
 
   vim.keymap.set("n", "<leader>t", ':terminal<cr>', { desc = "Terminal" })
 
