@@ -4,7 +4,35 @@
 #+PROPERTY: header-args+ :mkdirp yes
 #+PROPERTY: header-args+ :padline no
 #+PROPERTY: header-args+ :results silent
-#+PROPERTY: header-args+ :tangle-mode (identity #o644)
+* NEOVIM
+#+begin_src lua :tangle ~/.config/nvim/init.lua
+  vim.cmd.colorscheme("wildcharm")
+  vim.g.mapleader = " "
+  vim.keymap.set("n", "<leader>w", vim.cmd.write, { desc = "Write" })
+  vim.keymap.set("n", "<leader>W", vim.cmd('wall'), { desc = "Write" })
+  vim.keymap.set("n", "<leader>q", vim.cmd.quit, { desc = "Quit" })
+
+  vim.keymap.set("n", "<leader>j", ':bn<cr>', { desc = "Buffer Next" })
+  vim.keymap.set("n", "<leader>k", ':bpcr>', { desc = "Buffer Prev" })
+  vim.keymap.set("n", "<leader>l", ':bl<cr>', { desc = "Buffer Last" })
+  vim.keymap.set("n", "<leader>d", ':bd<r>', { desc = "Buffer Delete" })
+
+  vim.keymap.set("n", "<leader>i", function()
+		    local pos = vim.api.nvim_win_get_cursor(0)
+		    vim.cmd('normal! ggVG=')
+		    vim.api.nvim_win_set_cursor(0, pos)
+  end, { desc = "Buffer Indent" })
+
+  vim.keymap.set("n", "<leader>t", ':terminal<cr>', { desc = "Terminal" })
+
+  vim.opt.wrap = false
+  vim.opt.termguicolors = true
+  vim.opt.cursorline = true
+  vim.opt.number = true
+  vim.opt.relativenumber = true
+  vim.opt.shiftwidth = 2
+  vim.opt.undofile = true
+#+end_src
 * TMUX
 #+BEGIN_SRC conf :tangle ~/.tmux.conf
   ## MISC
