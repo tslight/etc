@@ -18,18 +18,10 @@ ask() {
     while :; do
 	read -rep "$question " ans
 	case $ans in
-	    [Yy])
-		return 0
-		;;
-	    [Nn])
-		return 1
-		;;
-	    [Qq])
-		exit 0
-		;;
-	    *)
-		echo "$ans is invalid. Enter (y)es, (n)o or (q)uit."
-		;;
+	    [Yy]) return 0 ;;
+	    [Nn]) return 1 ;;
+	    [Qq]) exit 0 ;;
+	    *) echo "$ans is invalid. Enter (y)es, (n)o or (q)uit." ;;
 	esac
     done
 }
