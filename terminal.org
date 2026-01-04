@@ -18,11 +18,11 @@
   vim.keymap.set("n", "<leader>d", ':bd<r>', { desc = "Buffer Delete" })
 
   vim.keymap.set("n", "<leader>i",
-	         function()
+		 function()
 		    local pos = vim.api.nvim_win_get_cursor(0)
 		    vim.cmd('normal! ggVG=')
 		    vim.api.nvim_win_set_cursor(0, pos)
-	         end, { desc = "Buffer Indent" })
+		 end, { desc = "Buffer Indent" })
 
   vim.keymap.set("n", "<leader>t", ':terminal<cr>', { desc = "Terminal" })
 
@@ -77,6 +77,9 @@
 
   ## KEYS
   bind C-r source-file ~/.tmux.conf \; display-message "~/.tmux.conf reloaded"
+  bind e neww -n emacs 'emacsclient -nw -c -a ""'
+  bind r neww -n fm yazi
+  bind t neww -n top btm
 #+END_SRC
 * YAZI
 #+begin_src toml :tangle ~/.config/yazi/yazi.toml
