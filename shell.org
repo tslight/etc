@@ -35,6 +35,7 @@
   alias t='tmux attach'
   alias tree='lsd --tree'
   alias up='uptime'
+  alias vi='nvim'
 #+end_src
 #+begin_src conf :noweb yes :tangle ~/.zshrc
   <<aliases>>
