@@ -13,6 +13,27 @@ With no [FILE/s] argument given - tangle all *.org files in the CWD.
 "
 }
 
+ask() {
+    local question="$1"
+    while :; do
+	read -rep "$question " ans
+	case $ans in
+	    [Yy])
+		return 0
+		;;
+	    [Nn])
+		return 1
+		;;
+	    [Qq])
+		exit 0
+		;;
+	    *)
+		echo "$ans is invalid. Enter (y)es, (n)o or (q)uit."
+		;;
+	esac
+    done
+}
+
 tangle_file () {
     local file="$1"
     [[ -f "$file" ]] || { echo "Invalid file"; exit 1; }
@@ -24,9 +45,12 @@ tangle_file () {
 }
 
 if [[ -z "$1" ]]; then
-    echo "${YEL}No argument given tangling all *.org mode files...${OFF}"
     for f in *.org; do
-	tangle_file "$f"
+	if ask "${GRN}Tangle $f?${OFF}"; then
+	    tangle_file "$f"
+	else
+	    echo "${YEL}Skipping $f${OFF}"
+	fi
     done
 else
     case "$1" in

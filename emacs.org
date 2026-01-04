@@ -209,15 +209,6 @@ compile & evaluate it.
     :bind ("C-c w" . eww))
 #+end_src
 
-* FLYMAKE
-
-#+begin_src emacs-lisp
-(use-package flymake-mode
-  :hook
-  (prog-mode . flymake-mode)
-  (shell-script-mode . flymake-mode))
-#+end_src
-
 * ICOMPLETE
 
 #+begin_src emacs-lisp
