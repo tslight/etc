@@ -44,7 +44,7 @@
 #+BEGIN_SRC sh :tangle ~/.bash_profile
   export ALTERNATE_EDITOR=""
   export BLOCK_SIZE=human-readable
-  export EDITOR="emacsclient -c -nw"
+  export EDITOR="nvim"
   export HISTCONTROL=ignoreboth:erasedups
   export HISTFILESIZE=999999
   export HISTIGNORE="h:history:[bf]g:exit:^ll$:^lla$:^ls$"
@@ -153,10 +153,8 @@
   export HISTFILE=$HOME/.zsh_history
   export HISTSIZE=100000
   export SAVEHIST=$HISTSIZE
-  export EDITOR="emacsclient -nw -c"
-  export ALTERNATE_EDITOR=""
+  export EDITOR="nvim"
   export PAGER=less
-  export GTK_THEME=Emacs
   export BLOCK_SIZE=human-readable
   export DIRSTACKSIZE=12
   export KEYTIMEOUT=1
