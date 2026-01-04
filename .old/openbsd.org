@@ -6,8 +6,8 @@
 * APM
 ** SUSPEND
 #+BEGIN_SRC sh :tangle /sudo::/etc/apm/suspend :tangle-mode (identity #o755)
-#!/bin/sh
-pkill -USR1 xidle
+  #!/bin/sh
+  pkill -USR1 xidle
 #+END_SRC
 ** CHARGING
 #+BEGIN_SRC sh :tangle /sudo::/etc/sensorsd/charging :tangle-mode (identity #o755)
@@ -37,7 +37,7 @@ pkill -USR1 xidle
 
       if [ "$watthours" ]; then
 
-          /etc/apm/discharging "acpibat0" "watthour" "3" "$watthours" "Wh" "$lowlim_watthr" "Wh"
+	  /etc/apm/discharging "acpibat0" "watthour" "3" "$watthours" "Wh" "$lowlim_watthr" "Wh"
 
       fi
 
@@ -94,22 +94,22 @@ pkill -USR1 xidle
 
       if [ "$charging_stat" = "1" ]; then
 
-          message="Low battery on $device $devtype $sensornum. Shutting down."
-          echo $message >> $dbglog
-          $logger "$message"
-          $shutdown -p +5 "$message"
+	  message="Low battery on $device $devtype $sensornum. Shutting down."
+	  echo $message >> $dbglog
+	  $logger "$message"
+	  $shutdown -p +5 "$message"
 
       elif [ "$charging_stat" = "2" ]; then
 
-          message="Low battery on $device $devtype $sensornum. Battery is charging."
-          echo "$message" >> $dbglog
-          $logger "$message"
+	  message="Low battery on $device $devtype $sensornum. Battery is charging."
+	  echo "$message" >> $dbglog
+	  $logger "$message"
 
       else
 
-          message="Low battery on $device $devtype $sensornum. Unknown code $charging_stat."
-          echo "$message" >> $dbglog
-          $logger "$message"
+	  message="Low battery on $device $devtype $sensornum. Unknown code $charging_stat."
+	  echo "$message" >> $dbglog
+	  $logger "$message"
 
       fi
 
@@ -539,20 +539,20 @@ pkill -USR1 xidle
 #+END_SRC
 * MG
 #+BEGIN_SRC conf :tangle ~/.mg
-c-mode
-set-default-mode fill
-set-default-mode indent
+  c-mode
+  set-default-mode fill
+  set-default-mode indent
 #+END_SRC
 * VI
 #+BEGIN_SRC conf :tangle ~/.nexrc
-set autoindent
-set autowrite
-set beautify
-set ruler
-set shiftwidth=4
-set showmatch
-set showmode
-set tabstop=4
+  set autoindent
+  set autowrite
+  set beautify
+  set ruler
+  set shiftwidth=4
+  set showmatch
+  set showmode
+  set tabstop=4
 #+END_SRC
 * WSCONS
 #+BEGIN_SRC conf :tangle /sudo::/etc/wsconsctl.conf
@@ -636,7 +636,7 @@ set tabstop=4
   XTerm*ttyModes: erase^? kill ^U
 #+END_SRC
 #+BEGIN_SRC conf :noweb yes :tangle ~/.Xresources
-<<Xdefaults>>
+  <<Xdefaults>>
 #+END_SRC
 ** XENODM
 #+BEGIN_SRC conf :tangle /sudo::/etc/X11/xenodm/xenodm-config :tangle-mode (identity #o644)

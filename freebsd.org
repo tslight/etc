@@ -13,10 +13,10 @@ it in =/usr/share/vt/keymaps= and run =sysrc keymap=foo.kbd= or add
 =keymap=foo.kbd= to =/etc/rc.conf=.
 
 Once everything is working as expected and you've tested with a reboot, add an
-entry below.
+entry below, and optionally add =:tangle /sudo::/usr/share/vt/keymaps/foo.kbd=.
 
 ** US Macbook Space Cadet
-#+begin_src conf :tangle /sudo::/usr/share/vt/keymaps/us.macbook.spcdt.kbd
+#+begin_src conf
   #                                                         alt
   # scan                       cntrl          alt    alt   cntrl lock
   # code  base   shift  cntrl  shift  alt    shift  cntrl  shift state
@@ -149,7 +149,7 @@ entry below.
     dced  184  ( 'c' 231 ) ( 'C' 199 )
 #+end_src
 ** UK ThinkPad Space Cadet
-#+BEGIN_SRC conf :tangle /sudo::/usr/share/vt/keymaps/uk.thinkpad.spcdt.kbd
+#+BEGIN_SRC conf
 # $FreeBSD$
 #                                                         alt
 # scan                       cntrl          alt    alt   cntrl lock
@@ -271,24 +271,24 @@ entry below.
 On FreeBSD Xorg configuration lives in =/usr/local/etc/X11/xorg.conf.d/= so
 add: =:tangle /sudo::/usr/local/etc/X11/xorg.conf.d/20-foo.conf= to the block
 declarations if you so wish. However, for now I'm setting all of these to
-=:tangle no= whilst I figure things out...
+== whilst I figure things out...
 
 ** INTEL
-#+begin_src conf :tangle no
+#+begin_src conf
 Section "Device"
 	Identifier "Card0"
 	Driver     "intel"
 EndSection
 #+end_src
 ** RADEON
-#+begin_src conf :tangle no
+#+begin_src conf
 Section "Device"
 	Identifier "Card0"
 	Driver     "radeon"
 EndSection
 #+end_src
 ** MULTIPLE GPU
-#+begin_src conf :tangle no
+#+begin_src conf
 Section "Device"
 	Identifier "Card0"
 	Driver     "intel"
@@ -302,11 +302,308 @@ Section "Device"
 EndSection
 #+end_src
 ** KEYBOARD
-#+begin_src conf :tangle no
+#+begin_src conf
 Section "InputClass"
 	Identifier "Keyboard1"
 	MatchIsKeyboard "on"
 	Option "XkbLayout" "us"
 	Option "XkbOptions" "caps:swapescape,ctrl:swap_lwin_lctl,ctrl:swap_rwin_rctl"
 EndSection
+#+end_src
+** XSESSION
+#+NAME: xsession
+#+BEGIN_SRC conf :tangle ~/.xsession
+  setxkbmap -option "caps:swapescape,ctrl:swap_lwin_lctl,ctrl:swap_rwin_rctl"
+  xscreensaver --no-splash &
+  xbattbar right &
+  exec wmaker
+#+END_SRC
+#+BEGIN_SRC conf :noweb yes :tangle ~/.xinitrc
+  <<xsession>>
+#+END_SRC
+** WINDOWMAKER
+#+begin_src conf :tangle ~/GNUstep/Defaults/WindowMaker
+{
+  FTitleColor = white;
+  FrameBorderColor = black;
+  WorkspaceMapBack = (solid, black);
+  CycleIgnoreMinimized = NO;
+  BRCMaximizeKey = None;
+  TopLeftResizeCursor = (builtin, top_left_corner);
+  MoveToPrevWorkspaceLayerKey = None;
+  ClipTitleFont = "helvetica:bold:pixelsize=10";
+  MiniwindowPreviewBalloons = NO;
+  MouseForwardButtonAction = None;
+  MoveToWorkspace7Key = "Mod4+Control+7";
+  KeepDockOnPrimaryHead = NO;
+  ResizeCursor = (builtin, sizing);
+  MoveDisplay = None;
+  WindowShortcut10Key = None;
+  IconTitleColor = white;
+  NoWindowUnderDock = No;
+  MoveToWorkspace2Key = "Mod4+Control+2";
+  ScrollableMenus = YES;
+  BLCMaximizeKey = None;
+  MouseWheelTiltAction = None;
+  MenuTitleFont = "helvetica:bold:pixelsize=12";
+  StrictWindozeCycle = YES;
+  SelectKey = None;
+  WindowShortcut4Key = None;
+  TLCMaximizeKey = None;
+  IconPosition = blv;
+  ShadeSpeed = Fast;
+  SnapEdgeDetect = 1;
+  ClipRaiseLowerKey = None;
+  MenuScrollSpeed = fast;
+  HelpBalloons = NO;
+  WindowSnapping = YES;
+  MoveResizeKey = "Mod4+r";
+  AppIconBalloons = NO;
+  IgnoreFocusClick = NO;
+  WaitCursor = (builtin, watch);
+  FrameFocusedBorderColor = black;
+  BottomRightResizeCursor = (builtin, bottom_right_corner);
+  MoveToWorkspace8Key = "Mod4+Control+8";
+  WrapAppiconsInDock = YES;
+  LHMaximizeKey = None;
+  RootMenuKey = F12;
+  DisableWSMouseActions = NO;
+  MoveToPrevWorkspaceKey = "Mod4+Control+p";
+  ResizebarBack = (solid, "rgb:90/90/90");
+  MiniPreviewSize = 128;
+  DisplayFont = "-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-*-*";
+  MouseBackwardButtonAction = None;
+  BHMaximizeKey = None;
+  WorkspaceBorderSize = 0;
+  CycleActiveHeadOnly = NO;
+  OpenTransientOnOwnerWorkspace = NO;
+  IgnoreGtkHints = NO;
+  WindowShortcut1Key = None;
+  RHMaximizeKey = None;
+  FrameSelectedBorderColor = white;
+  THMaximizeKey = None;
+  AlternativeHalfMaximized = NO;
+  QuestionCursor = (builtin, question_arrow);
+  MiniaturizeKey = "Mod4+Control+M";
+  MoveToNextWorkspaceLayerKey = None;
+  WorkspaceMapKey = None;
+  FocusNextKey = "Mod1+Tab";
+  DragMaximizedWindow = Move;
+  MiniwindowTitleBalloons = NO;
+  ShadeKey = None;
+  WindowShortcut7Key = None;
+  MouseLeftButtonAction = OpenApplicationsMenu;
+  AutoFocus = YES;
+  DisableAnimations = Yes;
+  TextCursor = (builtin, xterm);
+  MoveToLastWorkspaceKey = "Mod4+Control+Tab";
+  GroupNextKey = None;
+  SingleClickLaunch = NO;
+  Attraction = NO;
+  DisableBlinking = Yes;
+  MoveToWorkspace5Key = "Mod4+Control+5";
+  FocusPrevKey = "Mod1+Shift+Tab";
+  NewStyle = new;
+  WindowListKey = F11;
+  WorkspaceNameDisplayPosition = center;
+  IconSize = 64;
+  MenuTextFont = "helvetica:pixelsize=12";
+  ScreenSwitchKey = None;
+  AdvanceToNewWorkspace = No;
+  MenuTitleBack = (
+    mdgradient,
+    "rgb:20/20/70",
+    "rgb:20/20/70",
+    "rgb:05/05/60",
+    "rgb:05/05/40",
+    "rgb:05/05/25"
+  );
+  DisableMiniwindows = NO;
+  WindowTitleMinHeight = 0;
+  MoveToNextWorkspaceKey = "Mod4+Control+n";
+  MouseWheelAction = None;
+  MouseRightButtonAction = OpenApplicationsMenu;
+  ClipMergedInDock = YES;
+  SwitchPanelOnlyOpen = NO;
+  HighlightColor = "rgb:81/85/91";
+  FocusMode = manual;
+  NextWorkspaceKey = "Mod4+n";
+  GroupPrevKey = None;
+  PointerWithHalfMaxWindows = NO;
+  MinimizeAllKey = None;
+  MoveToWorkspace3Key = "Mod4+Control+3";
+  CClipTitleColor = "rgb:61/61/61";
+  MenuStyle = normal;
+  HideOthersKey = None;
+  IconPath = (
+    "/home/anon/GNUstep/Library/Icons",
+    "/home/anon/GNUstep/Library/WindowMaker/Pixmaps",
+    "/home/anon/GNUstep/Library/WindowMaker/CachedPixmaps",
+    "~/pixmaps",
+    "/usr/local/share/WindowMaker/Icons",
+    "/usr/local/share/WindowMaker/Pixmaps",
+    "/usr/local/include/X11/pixmaps",
+    "/usr/local/share/icons"
+  );
+  HorizontalResizeCursor = (builtin, sb_h_double_arrow);
+  PTitleBack = (mdgradient, "rgb:80/80/80", "rgb:50/50/50", "rgb:40/40/40");
+  MenuTextExtendSpace = 0;
+  WindowShortcut6Key = None;
+  UTitleBack = (
+    mdgradient,
+    "rgb:90/90/90",
+    "rgb:a7/a7/b7",
+    "rgb:90/90/99",
+    "rgb:51/55/61"
+  );
+  CirculateRaise = NO;
+  HighlightActiveApp = YES;
+  DontLinkWorkspaces = No;
+  ScreenCaptureKey = Print;
+  SelectCursor = (builtin, cross);
+  WindowTitleBalloons = YES;
+  MenuDisabledColor = gray40;
+  LastWorkspaceKey = "Mod4+Tab";
+  IconTitleBack = "rgb:20/20/55";
+  PixmapPath = (
+    "/home/anon/GNUstep/Library/WindowMaker/Pixmaps",
+    "/home/anon/GNUstep/Library/WindowMaker/Backgrounds",
+    "/home/anon/GNUstep/Library/WindowMaker/CachedPixmaps",
+    "~/pixmaps",
+    "/usr/local/share/WindowMaker/Pixmaps",
+    "/usr/local/share/WindowMaker/Backgrounds",
+    "/usr/local/include/X11/pixmaps"
+  );
+  MoveToWorkspace9Key = "Mod4+Control+9";
+  FTitleBack = (
+    mdgradient,
+    "rgb:20/20/70",
+    "rgb:20/20/70",
+    "rgb:05/05/60",
+    "rgb:05/05/40",
+    "rgb:05/05/25"
+  );
+  RaiseDelay = 0;
+  MaximizeKey = "Mod4+m";
+  HideKey = "Mod4+h";
+  IconTitleFont = "helvetica:pixelsize=8";
+  DialogHistoryLines = 500;
+  WorkspaceSpecificBack = ();
+  LargeDisplayFont = "Trebuchet MS,sans serif:pixelsize=24";
+  PartialCaptureKey = None;
+  DisableClip = NO;
+  IconificationStyle = None;
+  MenuTitleColor = white;
+  WindowShortcut3Key = None;
+  ClipAutolowerDelay = 1000;
+  MenuTitleMaxHeight = 0x7fffffff;
+  DoubleClickTime = 250;
+  SmoothWorkspaceBack = NO;
+  EnableWorkspacePager = NO;
+  WindowRelaunchKey = None;
+  ArrowCursor = (builtin, top_left_arrow);
+  AlignSubmenus = NO;
+  NoWindowOverDock = YES;
+  WorkspaceBack = (
+    tpixmap,
+    "/usr/local/share/WindowMaker/Themes/STEP2000.themed/BlueImage2.jpeg",
+    "rgb:51/55/61"
+  );
+  OmnipresentKey = None;
+  HighlightTextColor = black;
+  EdgeResistance = 30;
+  ClipAutoexpandDelay = 600;
+  WindowShortcut9Key = None;
+  KeepAtBottomKey = None;
+  PrevWorkspaceKey = "Mod4+p";
+  KeepOnTopKey = None;
+  AutoArrangeIcons = YES;
+  ClipTitleColor = black;
+  MoveHalfMaximizedWindowsBetweenScreens = NO;
+  WorkspaceBorder = None;
+  WindowTitleFont = "helvetica:bold:pixelsize=12";
+  SwitchPanelImages = (swtile.png, swback.png, 30, 40);
+  WidgetColor = (solid, gray);
+  Workspace8Key = "Mod4+8";
+  WindowPlaceOrigin = (64, 0);
+  RunKey = "Mod4+space";
+  Workspace9Key = "Mod4+9";
+  UseSaveUnders = NO;
+  MoveToWorkspace6Key = "Mod4+Control+6";
+  Workspace4Key = "Mod4+4";
+  MoveToWorkspace10Key = "Mod4+Control+0";
+  Workspace5Key = "Mod4+5";
+  Workspace6Key = "Mod4+6";
+  Workspace7Key = "Mod4+7";
+  PrevWorkspaceLayerKey = None;
+  Workspace1Key = "Mod4+1";
+  Workspace2Key = "Mod4+2";
+  MenuTitleExtendSpace = 0;
+  Workspace3Key = "Mod4+3";
+  DockRaiseLowerKey = None;
+  ColormapMode = auto;
+  MoveToWorkspace1Key = "Mod4+Control+1";
+  ShowClipTitle = YES;
+  ClipAutocollapseDelay = 1000;
+  DisableDock = NO;
+  MouseMiddleButtonAction = OpenWindowListMenu;
+  Superfluous = No;
+  WindowShortcut2Key = None;
+  BottomLeftResizeCursor = (builtin, bottom_left_corner);
+  WindowMenuKey = "Control+Escape";
+  DoNotMakeAppIconsBounce = NO;
+  OpaqueMove = No;
+  MaximusKey = None;
+  OpaqueResize = NO;
+  MenuTextBack = (hgradient, "rgb:a9/a9/b9", "rgb:61/65/71");
+  ColormapSize = 4;
+  WindowPlacement = auto;
+  RaiseAppIconsWhenBouncing = NO;
+  ResizeIncrement = 0;
+  CycleWorkspaces = Yes;
+  WindowShortcut8Key = None;
+  OpaqueMoveResizeKeyboard = NO;
+  DisableDithering = NO;
+  TitleJustify = left;
+  ExitKey = "Mod4+Control+BackSpace";
+  MenuTextColor = black;
+  IconBack = (dgradient, "rgb:a7/a7/b7", "rgb:51/55/61");
+  DontConfirmKill = NO;
+  LowerKey = "Mod4+Down";
+  WindowTitleExtendSpace = 0;
+  NormalCursor = (builtin, left_ptr);
+  ModifierKeyLabels = ("Shift+", "Control+", "Mod1+", "Mod2+", "Mod3+", "Mod4+", "Mod5+");
+  NoWindowOverIcons = No;
+  VerticalResizeCursor = (builtin, sb_v_double_arrow);
+  SnapCornerDetect = 10;
+  HMaximizeKey = None;
+  SnapToTopMaximizesFullscreen = NO;
+  TopRightResizeCursor = (builtin, top_right_corner);
+  CloseKey = "Mod4+q";
+  WindowCaptureKey = None;
+  WrapMenus = No;
+  Workspace10Key = "Mod4+0";
+  DisableDrawers = NO;
+  VMaximizeKey = "Mod4+v";
+  MoveCursor = (builtin, fleur);
+  IconSlideSpeed = fast;
+  WindowShortcut5Key = None;
+  WindowTitleMaxHeight = 0x7fffffff;
+  RaiseKey = "Mod4+Up";
+  ModifierKey = Mod4;
+  NextWorkspaceLayerKey = None;
+  ClipAutoraiseDelay = 600;
+  FrameBorderWidth = 1;
+  SaveSessionOnExit = NO;
+  UTitleColor = gray20;
+  ViKeyMenus = YES;
+  BounceAppIconsWhenUrgent = YES;
+  TRCMaximizeKey = None;
+  PTitleColor = white;
+  ResizeDisplay = center;
+  StickyIcons = NO;
+  RaiseLowerKey = None;
+  MenuTitleMinHeight = 0;
+  MoveToWorkspace4Key = "Mod4+Control+4";
+}
 #+end_src
