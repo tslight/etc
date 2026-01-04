@@ -32,7 +32,6 @@ compile & evaluate it.
     (electric-pair-mode)
     (global-subword-mode)
     (global-prettify-symbols-mode)
-    (hl-line-mode)
     (if window-system (load-theme 'modus-vivendi))
     ;; prevent backspace being hijacked by ^H on a tty
     (when (not window-system) (normal-erase-is-backspace-mode))
@@ -79,9 +78,11 @@ compile & evaluate it.
     ("C-M-;" . comment-box)
     ("C-s-f" . toggle-frame-fullscreen)
     ("C-z" . zap-up-to-char)
-    ("C-c k" . (lambda () (interactive) (kill-buffer (current-buffer))))
+    ("C-x k" . (lambda () (interactive) (kill-buffer (current-buffer))))
     ("C-c m" . compile)
-    ("M-m". woman))
+    ("M-m". woman)
+    :hook
+    ((prog-mode shell-script-mode) . hl-line-mode))
 #+end_src
 
 * MY/DEFUNS
