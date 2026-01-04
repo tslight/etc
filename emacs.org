@@ -31,9 +31,13 @@ compile & evaluate it.
     (display-time)
     (electric-pair-mode)
     (global-subword-mode)
+    (global-prettify-symbols-mode)
     (hl-line-mode)
-    (load-theme 'modus-vivendi)
+    (if window-system (load-theme 'modus-vivendi))
+    ;; prevent backspace being hijacked by ^H on a tty
+    (when (not window-system) (normal-erase-is-backspace-mode))
     (when (not (eq system-type 'darwin)) (menu-bar-mode -1))
+    (save-place-mode 1)
     (scroll-bar-mode -1)
     (set-frame-font "JetBrainsMono Nerd Font 13" nil t)
     (tool-bar-mode -1)
@@ -237,10 +241,8 @@ compile & evaluate it.
 
 #+begin_src emacs-lisp
   (use-package eglot :hook (prog-mode . eglot-ensure))
-  (use-package prettify-symbols :hook (after-init . global-prettify-symbols-mode))
   (use-package recentf :bind ("C-c r" . recentf))
   (use-package savehist :hook (after-init . savehist-mode))
-  (use-package save-place :hook (after-init . save-place-mode))
   (use-package which-key :hook (after-init . which-key-mode))
   (use-package whitespace :hook (before-save . whitespace-cleanup))
 #+end_src
@@ -273,10 +275,6 @@ compile & evaluate it.
 		    ("sh" . "src shell")
 		    ("sq" . "src sql")
 		    ("tx" . "src text"))))
-    (defun my/org-babel-tangle-on-save ()
-      (when (string-equal (file-name-directory buffer-file-name)
-			  (concat (getenv "HOME") "/etc/"))
-	(org-babel-tangle)))
     (defun my/compile-and-load ()
       (interactive)
       (when (string-match "emacs" (buffer-file-name (current-buffer)))
@@ -285,7 +283,6 @@ compile & evaluate it.
     :bind (:map org-mode-map ("C-c i" . org-goto))
     :hook
     (org-mode . auto-fill-mode)
-    ;; (after-save . my/org-babel-tangle-on-save)
     (org-babel-post-tangle . my/compile-and-load))
 #+end_src
 
