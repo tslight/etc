@@ -274,7 +274,7 @@ declarations if you so wish. However, for now I'm setting all of these to
 == whilst I figure things out...
 
 ** INTEL
-#+begin_src conf
+#+begin_src conf :tangle /sudo::/usr/local/etc/X11/xorg.conf.d/20-intel.conf
 Section "Device"
 	Identifier "Card0"
 	Driver     "intel"
@@ -302,7 +302,7 @@ Section "Device"
 EndSection
 #+end_src
 ** KEYBOARD
-#+begin_src conf
+#+begin_src conf /sudo::/usr/local/etc/X11/xorg.conf.d/00-keyboard.conf
 Section "InputClass"
 	Identifier "Keyboard1"
 	MatchIsKeyboard "on"
