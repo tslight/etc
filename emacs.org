@@ -63,13 +63,6 @@ compile & evaluate it.
     (use-short-answers t)
     :bind
     ("C-x C-b" . ibuffer)
-    ("C-!" . async-shell-command)
-    ("C-&" . async-shell-command)
-    ("C-<" . beginning-of-buffer)
-    ("C->" . end-of-buffer)
-    ("C-%" . query-replace-regexp)
-    ("C-}" . forward-paragraph)
-    ("C-{" . backward-paragraph)
     ("C-c i" . imenu)
     ("C-c f r" . rename-visited-file)
     ("C-;" . comment-line)
@@ -77,8 +70,6 @@ compile & evaluate it.
     ("C-s-f" . toggle-frame-fullscreen)
     ("C-z" . zap-up-to-char)
     ("C-x k" . (lambda () (interactive) (kill-buffer (current-buffer))))
-    ("C-c m" . compile)
-    ("M-m". woman)
     :hook
     ((prog-mode shell-script-mode) . hl-line-mode))
 #+end_src
