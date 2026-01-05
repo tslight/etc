@@ -302,20 +302,38 @@ Section "Device"
 EndSection
 #+end_src
 ** KEYBOARD
-#+begin_src conf /sudo::/usr/local/etc/X11/xorg.conf.d/00-keyboard.conf
-Section "InputClass"
-	Identifier "Keyboard1"
-	MatchIsKeyboard "on"
-	Option "XkbLayout" "us"
-	Option "XkbOptions" "caps:swapescape,ctrl:swap_lwin_lctl,ctrl:swap_rwin_rctl"
-EndSection
+
+This code might need to go in =/usr/local/share/X11/xorg.conf.d= instead of
+=/usr/local/etc/X11/xorg.conf.d/= for the settings to persist across
+suspend/resume...
+
+#+begin_src conf
+  Section "InputClass"
+	  Identifier "libinput keyboard catchall"
+	  MatchIsKeyboard "on"
+	  MatchDevicePath "/dev/input/event*"
+	  Driver "libinput"
+	  Option "XkbLayout" "us"
+	  Option "XkbOptions" "caps:swapescape,ctrl:swap_lwin_lctl,ctrl:swap_rwin_rctl,terminate:ctrl_alt_bksp"
+  EndSection
+#+end_src
+#+begin_src conf
+  Section "InputClass"
+	    Identifier "Evdev Keyboard"
+	    MatchIsKeyboard "on"
+	    MatchDevicePath "/dev/input/event*"
+	    Option "XkbRules" "evdev"
+	    Option "XkbLayout" "us"
+	    Option "XkbOptions" "caps:swapescape,ctrl:swap_lwin_lctl,ctrl:swap_rwin_rctl,terminate:ctrl_alt_bksp"
+
+  EndSection
 #+end_src
 ** XSESSION
 #+NAME: xsession
 #+BEGIN_SRC conf :tangle ~/.xsession
-  setxkbmap -option "caps:swapescape,ctrl:swap_lwin_lctl,ctrl:swap_rwin_rctl"
-  xscreensaver --no-splash &
-  xbattbar right &
+  # setxkbmap -option "caps:swapescape,ctrl:swap_lwin_lctl,ctrl:swap_rwin_rctl"
+  # xscreensaver --no-splash &
+  # xbattbar right &
   exec wmaker
 #+END_SRC
 #+BEGIN_SRC conf :noweb yes :tangle ~/.xinitrc
