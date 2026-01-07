@@ -349,16 +349,15 @@ suspend/resume...
   MenuStyle * Font "xft:Sans:Bold:size=12:antialias=True"
 
   DestroyMenu MenuFvwmRoot
-  AddToMenu   MenuFvwmRoot "Fvwm" Title
-  + "$[gt.XDG &Menu]%icons/apps.png%" Popup XDGMenu
-  + "&Terminal%icons/terminal.png%" Exec exec $[infostore.editor]
+  AddToMenu   MenuFvwmRoot "Deeply Feeble" Title
   + "&Emacs%icons/terminal.png%" Exec exec $[infostore.editor]
   + "&Browser%icons/terminal.png%" Exec exec $[infostore.browser]
+  + "&Terminal%icons/terminal.png%" Exec exec $[infostore.editor]
   + "&Run Command%icons/run_arrow.png%" Exec exec $[infostore.runcmd] $[infostore.runcmdopt]
-  + "&FvwmPrompt%icons/terminal.png%" Exec exec $[infostore.terminal] -e FvwmPrompt
+  + "&Fvwm Prompt%icons/terminal.png%" Exec exec $[infostore.terminal] -e FvwmPrompt
+  + "&Applications%icons/apps.png%" Popup XDGMenu
   + "&Wallpapers%icons/wallpaper.png%" Popup BGMenu
   + "&Man Pages%icons/help.png%" Popup MenuFvwmManPages
-  + "&Copy Config%icons/conf.png%" FvwmScript FvwmScript-ConfirmCopyConfig
   + "Re&fresh%icons/refresh.png%" Refresh
   + "&Restart%icons/restart.png%" Restart
   + "&Quit%icons/quit.png%" Module FvwmScript FvwmScript-ConfirmQuit
