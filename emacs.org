@@ -345,7 +345,21 @@ Bulk install all the grammars as a one of task, so don't tangle!
     ("C-c o" . ace-delete-window)
     :config (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
   (use-package copilot :ensure)
-  (use-package copilot-chat :ensure :bind ("C-c c" . copilot-chat))
+  (use-package copilot-chat :ensure
+    :config
+    (defun my/copilot-save ()
+      "Save a Copilot chat buffer to ~/chats/%Y%m%d-%H%M%S.org"
+      (interactive)
+      (if (string-search "Copilot Chat" (buffer-name))
+	  (let* ((chat-dir (expand-file-name "~/chats/"))
+		 (timestamp (format-time-string "%Y%m%d-%H%M"))
+		 (filename (concat chat-dir timestamp ".org")))
+	    (unless (file-directory-p chat-dir)
+	      (make-directory chat-dir t))
+	    (write-region (point-min) (point-max) filename)
+	    (message "Copilot chat saved to %s" filename))
+	(message "This is not a *Copilot Chat buffer.")))
+    :bind ("C-c c" . copilot-chat))
   (use-package corfu :ensure
     :custom
     (corfu-cycle t)
