@@ -50,6 +50,7 @@ compile & evaluate it.
     (fill-column 79)
     (find-program "fd")
     (grep-program "rg")
+    (frame-resize-pixelwise t) ; proper maximize in some wm
     (inhibit-startup-screen t)
     (mac-command-modifier 'control)
     (mac-control-modifier 'super)

@@ -274,7 +274,7 @@ declarations if you so wish. However, for now I'm setting all of these to
 == whilst I figure things out...
 
 ** INTEL
-#+begin_src conf :tangle /sudo::/usr/local/etc/X11/xorg.conf.d/20-intel.conf
+#+begin_src conf
 Section "Device"
 	Identifier "Card0"
 	Driver     "intel"
@@ -332,13 +332,54 @@ suspend/resume...
 #+NAME: xsession
 #+BEGIN_SRC conf :tangle ~/.xsession
   # setxkbmap -option "caps:swapescape,ctrl:swap_lwin_lctl,ctrl:swap_rwin_rctl"
-  # xscreensaver --no-splash &
-  # xbattbar right &
-  exec wmaker
+  xscreensaver --no-splash &
+  xbattbar right &
+  exec fvwm3
 #+END_SRC
 #+BEGIN_SRC conf :noweb yes :tangle ~/.xinitrc
   <<xsession>>
 #+END_SRC
+** FVWM3
+#+begin_src conf :tangle ~/.fvwm/local.config
+  InfoStoreAdd runcmd "dmenu_run -fn 'JetBrainsMono Nerd Font:Bold:size=13' -nb '#2b4e5e' -sb '#000000'"
+  InfoStoreAdd editor "emacsclient -c -a ''"
+
+  DefaultFont "xft:Sans:Bold:size=12:antialias=True"
+  MenuStyle * Font "xft:Sans:Bold:size=12:antialias=True"
+
+  DestroyMenu MenuFvwmRoot
+  AddToMenu   MenuFvwmRoot "Fvwm" Title
+  + "$[gt.XDG &Menu]%icons/apps.png%" Popup XDGMenu
+  + "&Terminal%icons/terminal.png%" Exec exec xterm
+  + "&Emacs%icons/terminal.png%" Exec exec $[infostore.editor]
+  + "&Browser%icons/terminal.png%" Exec exec librewolf
+  + "&Run Command%icons/run_arrow.png%" Exec exec $[infostore.runcmd] $[infostore.runcmdopt]
+  + "&FvwmPrompt%icons/terminal.png%" Exec exec $[infostore.terminal] -e FvwmPrompt
+  + "&Wallpapers%icons/wallpaper.png%" Popup BGMenu
+  + "&Man Pages%icons/help.png%" Popup MenuFvwmManPages
+  + "&Copy Config%icons/conf.png%" FvwmScript FvwmScript-ConfirmCopyConfig
+  + "Re&fresh%icons/refresh.png%" Refresh
+  + "&Restart%icons/restart.png%" Restart
+  + "&Quit%icons/quit.png%" Module FvwmScript FvwmScript-ConfirmQuit
+
+  Key Tab A M WindowList Root c c NoDeskSort, NoGeometry, SelectOnRelease Meta_R, CurrentAtEnd
+  Key Return  A 4  Exec exec $[infostore.editor]
+  Key Return  A 4C Exec exec emacs
+  Key Space   A 4  Exec exec $[infostore.runcmd]
+  Key Space   A M  # Keep for Emacs' space cycling
+  Key Super_R A A  # Don't steal right Super key please
+  Key F10     A C  Maximize
+  Key m       A 4  Menu MenuFvwmRoot
+  Key m       A 4C Menu MenuWindowOpsLong
+
+  Mouse 1 S A RaiseMove Move
+  Mouse 3 FS A Menu MenuWindowOpsLong
+
+  OpaqueMoveSize 0
+  Style * !ResizeOpaque, !Title, Icon, HandleWidth 8
+
+  PipeRead "xdgmenumaker -f fvwm"
+#+end_src
 ** WINDOWMAKER
 #+begin_src conf :tangle ~/GNUstep/Defaults/WindowMaker
 {
