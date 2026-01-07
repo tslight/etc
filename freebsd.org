@@ -334,6 +334,7 @@ suspend/resume...
   # setxkbmap -option "caps:swapescape,ctrl:swap_lwin_lctl,ctrl:swap_rwin_rctl"
   xscreensaver --no-splash &
   xbattbar right &
+  sct 4000 &
   exec fvwm3
 #+END_SRC
 #+BEGIN_SRC conf :noweb yes :tangle ~/.xinitrc
@@ -345,7 +346,6 @@ suspend/resume...
   InfoStoreAdd editor emacs
   InfoStoreAdd browser librewolf
 
-  DefaultFont "xft:Sans:Bold:size=12:antialias=True"
   MenuStyle * Font "xft:Sans:Bold:size=12:antialias=True"
 
   DestroyMenu MenuFvwmRoot
@@ -366,18 +366,18 @@ suspend/resume...
   Key Tab A M WindowList Root c c NoDeskSort, NoGeometry, SelectOnRelease Meta_R, CurrentAtEnd
   Key Return  A 4  Exec exec $[infostore.editor]
   Key Return  A 4C Exec exec $[infostore.browser]
+  Key Return  A 4M Exec exec $[infostore.terminal]
   Key Space   A 4  Exec exec $[infostore.runcmd]
   Key Space   A M  # Keep for Emacs' space cycling
   Key Super_R A A  # Don't steal right Super key please
   Key F10     A C  Maximize
+  Key F11     A C  Maximize Fullscreen
   Key m       A 4  Menu MenuFvwmRoot
   Key m       A 4C Menu MenuWindowOpsLong
 
-  Mouse 1 S A RaiseMove Move
-  Mouse 3 FS A Menu MenuWindowOpsLong
-
   OpaqueMoveSize 0
-  Style * !ResizeOpaque, !Title, Icon, HandleWidth 8
+  Style * !ResizeOpaque
+  Style * ClickToFocus
 
   PipeRead "xdgmenumaker -f fvwm"
 #+end_src
