@@ -342,7 +342,8 @@ suspend/resume...
 ** FVWM3
 #+begin_src conf :tangle ~/.fvwm/local.config
   InfoStoreAdd runcmd "dmenu_run -fn 'JetBrainsMono Nerd Font:Bold:size=13' -nb '#2b4e5e' -sb '#000000'"
-  InfoStoreAdd editor "emacsclient -c -a ''"
+  InfoStoreAdd editor emacs
+  InfoStoreAdd browser librewolf
 
   DefaultFont "xft:Sans:Bold:size=12:antialias=True"
   MenuStyle * Font "xft:Sans:Bold:size=12:antialias=True"
@@ -350,9 +351,9 @@ suspend/resume...
   DestroyMenu MenuFvwmRoot
   AddToMenu   MenuFvwmRoot "Fvwm" Title
   + "$[gt.XDG &Menu]%icons/apps.png%" Popup XDGMenu
-  + "&Terminal%icons/terminal.png%" Exec exec xterm
+  + "&Terminal%icons/terminal.png%" Exec exec $[infostore.editor]
   + "&Emacs%icons/terminal.png%" Exec exec $[infostore.editor]
-  + "&Browser%icons/terminal.png%" Exec exec librewolf
+  + "&Browser%icons/terminal.png%" Exec exec $[infostore.browser]
   + "&Run Command%icons/run_arrow.png%" Exec exec $[infostore.runcmd] $[infostore.runcmdopt]
   + "&FvwmPrompt%icons/terminal.png%" Exec exec $[infostore.terminal] -e FvwmPrompt
   + "&Wallpapers%icons/wallpaper.png%" Popup BGMenu
@@ -364,7 +365,7 @@ suspend/resume...
 
   Key Tab A M WindowList Root c c NoDeskSort, NoGeometry, SelectOnRelease Meta_R, CurrentAtEnd
   Key Return  A 4  Exec exec $[infostore.editor]
-  Key Return  A 4C Exec exec emacs
+  Key Return  A 4C Exec exec $[infostore.browser]
   Key Space   A 4  Exec exec $[infostore.runcmd]
   Key Space   A M  # Keep for Emacs' space cycling
   Key Super_R A A  # Don't steal right Super key please
