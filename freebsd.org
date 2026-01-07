@@ -369,6 +369,7 @@ suspend/resume...
   Key Space   A 4  Exec exec $[infostore.runcmd]
   Key Space   A M  # Keep for Emacs' space cycling
   Key Super_R A A  # Don't steal right Super key please
+  Key F4      A M  Close
   Key F10     A C  Maximize
   Key F11     A C  Maximize Fullscreen
   Key m       A 4  Menu MenuFvwmRoot

@@ -42,6 +42,8 @@ compile & evaluate it.
     (tool-bar-mode -1)
     (tooltip-mode -1)
     :custom
+    (auto-save-visited-mode t)
+    (backup-directory-alist '(("." . (concat user-emacs-directory "backups"))))
     (completion-styles '(basic substring initials flex))
     (custom-file (expand-file-name "custom.el" user-emacs-directory))
     (disabled-command-function nil)
