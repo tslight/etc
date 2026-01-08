@@ -341,329 +341,302 @@ suspend/resume...
   <<xsession>>
 #+END_SRC
 ** FVWM3
-#+begin_src conf :tangle ~/.fvwm/local.config
-  InfoStoreAdd runcmd "dmenu_run -fn 'JetBrainsMono Nerd Font:Bold:size=13' -nb '#2b4e5e' -sb '#000000'"
-  InfoStoreAdd editor emacs
-  InfoStoreAdd browser librewolf
+#+begin_src fvwm :tangle ~/.fvwm/local.config
+InfoStoreAdd runcmd "dmenu_run -fn 'JetBrainsMono Nerd Font:Bold:size=13' -nb '#2b4e5e' -sb '#000000'"
+InfoStoreAdd editor emacs
+InfoStoreAdd browser librewolf
+InfoStoreAdd volup "mixer vol.volume=+5%"
+InfoStoreAdd voldn "mixer vol.volume=-5%"
+InfoStoreAdd mute "mixer vol.mute=toggle"
 
-  MenuStyle * Font "xft:Sans:Bold:size=12:antialias=True"
+MenuStyle * Font "xft:Sans:Bold:size=12:antialias=True"
 
-  DestroyMenu MenuFvwmRoot
-  AddToMenu   MenuFvwmRoot "Deeply Feeble" Title
-  + "&Emacs%icons/terminal.png%" Exec exec $[infostore.editor]
-  + "&Browser%icons/terminal.png%" Exec exec $[infostore.browser]
-  + "&Terminal%icons/terminal.png%" Exec exec $[infostore.editor]
-  + "&Run Command%icons/run_arrow.png%" Exec exec $[infostore.runcmd] $[infostore.runcmdopt]
-  + "&Fvwm Prompt%icons/terminal.png%" Exec exec $[infostore.terminal] -e FvwmPrompt
-  + "&Applications%icons/apps.png%" Popup XDGMenu
-  + "&Wallpapers%icons/wallpaper.png%" Popup BGMenu
-  + "&Man Pages%icons/help.png%" Popup MenuFvwmManPages
-  + "Re&fresh%icons/refresh.png%" Refresh
-  + "&Restart%icons/restart.png%" Restart
-  + "&Quit%icons/quit.png%" Module FvwmScript FvwmScript-ConfirmQuit
+DestroyMenu MenuFvwmRoot
+AddToMenu   MenuFvwmRoot "Deeply Feeble" Title
++ "&Emacs%icons/terminal.png%" Exec exec $[infostore.editor]
++ "&Browser%icons/terminal.png%" Exec exec $[infostore.browser]
++ "&Terminal%icons/terminal.png%" Exec exec $[infostore.editor]
++ "&Run Command%icons/run_arrow.png%" Exec exec $[infostore.runcmd] $[infostore.runcmdopt]
++ "&Fvwm Prompt%icons/terminal.png%" Exec exec $[infostore.terminal] -e FvwmPrompt
++ "&Applications%icons/apps.png%" Popup XDGMenu
++ "&Wallpapers%icons/wallpaper.png%" Popup BGMenu
++ "&Man Pages%icons/help.png%" Popup MenuFvwmManPages
++ "Re&fresh%icons/refresh.png%" Refresh
++ "&Restart%icons/restart.png%" Restart
++ "&Quit%icons/quit.png%" Module FvwmScript FvwmScript-ConfirmQuit
 
-  Key Tab A M WindowList Root c c NoDeskSort, NoGeometry, SelectOnRelease Meta_R, CurrentAtEnd
-  Key Return  A 4  Exec exec $[infostore.editor]
-  Key Return  A 4C Exec exec $[infostore.browser]
-  Key Return  A 4M Exec exec $[infostore.terminal]
-  Key Space   A 4  Exec exec $[infostore.runcmd]
-  Key Space   A M  # Keep for Emacs' space cycling
-  Key Super_R A A  # Don't steal right Super key please
-  Key F4      A M  Close
-  Key F10     A C  Maximize
-  Key F11     A C  Maximize Fullscreen
-  Key m       A 4  Menu MenuFvwmRoot
-  Key m       A 4C Menu MenuWindowOpsLong
+DestroyMenu MenuWindowOpsLong
+AddToMenu   MenuWindowOpsLong "$[gt.Window Ops]" Title
++ "$[gt.&Move]%icons/win/move.png%" Move
++ "$[gt.&Resize]%icons/win/resize.png%" Resize
++ "$[gt.(De)&Iconify]%icons/win/iconify.png%" Iconify
++ "$[gt.(Un)Maximize]%icons/win/max.png%" Maximize
++ "$[gt.(Un)Shade]%icons/win/shade.png%" WindowShade
++ "$[gt.(Un)Sticky]%icons/win/sticky.png%" Stick
++ "$[gt.(No)&Title Bar]%icons/win/title.png%" Pick (CirculateHit) ToggleTitle
++ "$[gt.&Send To]%icons/win/sendto.png%" Popup MenuSendTo
++ "$[gt.&Close]%icons/win/close.png%" Close
++ "$[gt.&Destroy]%icons/win/destroy.png%" Destroy
++ "$[gt.Raise]%icons/win/raise.png%" Raise
++ "$[gt.Lower]%icons/win/lower.png%" Lower
++ "$[gt.Stays On Top]%icons/win/top.png%" Pick (CirculateHit) Layer 0 6
++ "$[gt.Stays Put]%icons/win/stays.png%" Pick (CirculateHit) Layer 0 4
++ "$[gt.Stays On Bottom]%icons/win/bottom.png%" Pick (CirculateHit) Layer 0 2
++ "$[gt.Identify]%icons/info.png%" Module FvwmIdent
 
-  OpaqueMoveSize 0
-  Style * !ResizeOpaque
-  Style * ClickToFocus
+DestroyMenu MenuSendTo
+AddToMenu MenuSendTo
++ "$[gt.&Current]" MoveToCurrent
++ "$[gt.&Page]" PopUp MenuSendToPage
++ "$[gt.&Desk]" PopUp MenuSendToDesk
 
-  PipeRead "xdgmenumaker -f fvwm"
+DestroyMenu MenuSendToDesk
+AddToMenu   MenuSendToDesk
++ "$[gt.Desk] &0" MoveToDesk 0 0
++ "$[gt.Desk] &1" MoveToDesk 0 1
++ "$[gt.Desk] &2" MoveToDesk 0 2
++ "$[gt.Desk] &3" MoveToDesk 0 3
+
+DestroyModuleConfig RightPanel:*
+*RightPanel: Geometry 120x$[monitor.$[monitor.primary].height]-0+0@p
+*RightPanel: Colorset 10
+*RightPanel: Rows $[monitor.$[monitor.primary].height]
+*RightPanel: Columns 120
+*RightPanel: Frame 0
+*RightPanel: Font "xft:Sans:Bold:size=10:antialias=True"
+*RightPanel: (120x20, Icon "fvwm-logo-small.png", Action (Mouse 1) Menu MenuFvwmRoot, Frame 0)
+*RightPanel: (30x10, Id desk0, Title "0", Action (Mouse 1) GotoDesk 0 0, Colorset 11, ActiveColorset 12, Frame 0)
+*RightPanel: (30x10, Id desk1, Title "1", Action (Mouse 1) GotoDesk 0 1, ActiveColorset 12, Frame 0)
+*RightPanel: (30x10, Id desk2, Title "2", Action (Mouse 1) GotoDesk 0 2, ActiveColorset 12, Frame 0)
+*RightPanel: (30x10, Id desk3, Title "3", Action (Mouse 1) GotoDesk 0 3, ActiveColorset 12, Frame 0)
+*RightPanel: (120x25, Swallow FvwmPager 'Module FvwmPager *', Frame 0)
+*RightPanel: (120x300, Top, Swallow FvwmIconMan 'Module FvwmIconMan', Frame 0)
+*RightPanel: (120x45, Swallow DateTime 'Module FvwmScript FvwmScript-MyDateTime', Frame 0)
+
+DestroyModuleConfig FvwmIconMan:*
+*FvwmIconMan: UseWinList true
+*FvwmIconMan: ButtonGeometry 120x20
+*FvwmIconMan: ManagerGeometry 1x1
+*FvwmIconMan: Colorset 10
+*FvwmIconMan: FocusColorset 11
+*FvwmIconMan: IconColorset 14
+*FvwmIconMan: FocusAndSelectColorset 12
+*FvwmIconMan: SelectColorset 12
+*FvwmIconMan: IconAndSelectColorset 12
+*FvwmIconMan: DrawIcons always
+*FvwmIconMan: ReliefThickness 0
+*FvwmIconMan: Format "%t"
+*FvwmIconMan: Font "xft:Sans:Bold:size=10:antialias=True"
+*FvwmIconMan: Action Mouse 0 A ret
+*FvwmIconMan: Action Mouse 1 A sendcommand Raise
+*FvwmIconMan: Action Mouse 3 A sendcommand "Menu MenuIconOps"
+*FvwmIconMan: Resolution global
+*FvwmIconMan: Tips needed
+*FvwmIconMan: Sort id
+
+Key Tab A M WindowList Root c c NoDeskSort, NoGeometry, SelectOnRelease Meta_R, CurrentAtEnd
+Key Return  A 4  Exec exec $[infostore.editor]
+Key Return  A 4C Exec exec $[infostore.browser]
+Key Return  A 4M Exec exec $[infostore.terminal]
+Key Space   A 4  Exec exec $[infostore.runcmd]
+Key Space   A M
+Key Super_R A A
+Key F4      A M  Close
+Key F10     A C  Maximize
+Key F11     A C  Maximize Fullscreen
+Key F10     A 4  Exec exec $[infostore.mute]
+Key F11     A 4  Exec exec $[infostore.voldn]
+Key F12     A 4  Exec exec $[infostore.volup]
+Key m       A 4  Menu MenuFvwmRoot
+Key m       A 4C Menu MenuWindowOpsLong
+
+OpaqueMoveSize 0
+Style * !ResizeOpaque
+Style * ClickToFocus
+
+PipeRead "xdgmenumaker -f fvwm"
+InfoStoreAdd runcmd "dmenu_run -fn 'JetBrainsMono Nerd Font:Bold:size=13' -nb '#2b4e5e' -sb '#000000'"
+InfoStoreAdd editor emacs
+InfoStoreAdd browser librewolf
+InfoStoreAdd volup "mixer vol.volume=+5%"
+InfoStoreAdd voldn "mixer vol.volume=-5%"
+InfoStoreAdd mute "mixer vol.mute=toggle"
+
+MenuStyle * Font "xft:Sans:Bold:size=12:antialias=True"
+
+DestroyMenu MenuFvwmRoot
+AddToMenu   MenuFvwmRoot "Deeply Feeble" Title
++ "&Emacs%icons/terminal.png%" Exec exec $[infostore.editor]
++ "&Browser%icons/terminal.png%" Exec exec $[infostore.browser]
++ "&Terminal%icons/terminal.png%" Exec exec $[infostore.editor]
++ "&Run Command%icons/run_arrow.png%" Exec exec $[infostore.runcmd] $[infostore.runcmdopt]
++ "&Fvwm Prompt%icons/terminal.png%" Exec exec $[infostore.terminal] -e FvwmPrompt
++ "&Applications%icons/apps.png%" Popup XDGMenu
++ "&Wallpapers%icons/wallpaper.png%" Popup BGMenu
++ "&Man Pages%icons/help.png%" Popup MenuFvwmManPages
++ "Re&fresh%icons/refresh.png%" Refresh
++ "&Restart%icons/restart.png%" Restart
++ "&Quit%icons/quit.png%" Module FvwmScript FvwmScript-ConfirmQuit
+
+DestroyMenu MenuWindowOpsLong
+AddToMenu   MenuWindowOpsLong "$[gt.Window Ops]" Title
++ "$[gt.&Move]%icons/win/move.png%" Move
++ "$[gt.&Resize]%icons/win/resize.png%" Resize
++ "$[gt.(De)&Iconify]%icons/win/iconify.png%" Iconify
++ "$[gt.(Un)Maximize]%icons/win/max.png%" Maximize
++ "$[gt.(Un)Shade]%icons/win/shade.png%" WindowShade
++ "$[gt.(Un)Sticky]%icons/win/sticky.png%" Stick
++ "$[gt.(No)&Title Bar]%icons/win/title.png%" Pick (CirculateHit) ToggleTitle
++ "$[gt.&Send To]%icons/win/sendto.png%" Popup MenuSendTo
++ "$[gt.&Close]%icons/win/close.png%" Close
++ "$[gt.&Destroy]%icons/win/destroy.png%" Destroy
++ "$[gt.Raise]%icons/win/raise.png%" Raise
++ "$[gt.Lower]%icons/win/lower.png%" Lower
++ "$[gt.Stays On Top]%icons/win/top.png%" Pick (CirculateHit) Layer 0 6
++ "$[gt.Stays Put]%icons/win/stays.png%" Pick (CirculateHit) Layer 0 4
++ "$[gt.Stays On Bottom]%icons/win/bottom.png%" Pick (CirculateHit) Layer 0 2
++ "$[gt.Identify]%icons/info.png%" Module FvwmIdent
+
+DestroyMenu MenuSendTo
+AddToMenu MenuSendTo
++ "$[gt.&Current]" MoveToCurrent
++ "$[gt.&Page]" PopUp MenuSendToPage
++ "$[gt.&Desk]" PopUp MenuSendToDesk
+
+DestroyMenu MenuSendToDesk
+AddToMenu   MenuSendToDesk
++ "$[gt.Desk] &0" MoveToDesk 0 0
++ "$[gt.Desk] &1" MoveToDesk 0 1
++ "$[gt.Desk] &2" MoveToDesk 0 2
++ "$[gt.Desk] &3" MoveToDesk 0 3
+
+DestroyModuleConfig RightPanel:*
+*RightPanel: Geometry 120x$[monitor.$[monitor.primary].height]-0+0@p
+*RightPanel: Colorset 10
+*RightPanel: Rows $[monitor.$[monitor.primary].height]
+*RightPanel: Columns 120
+*RightPanel: Frame 0
+*RightPanel: Font "xft:Sans:Bold:size=10:antialias=True"
+*RightPanel: (120x20, Icon "fvwm-logo-small.png", Action (Mouse 1) Menu MenuFvwmRoot, Frame 0)
+*RightPanel: (30x10, Id desk0, Title "0", Action (Mouse 1) GotoDesk 0 0, Colorset 11, ActiveColorset 12, Frame 0)
+*RightPanel: (30x10, Id desk1, Title "1", Action (Mouse 1) GotoDesk 0 1, ActiveColorset 12, Frame 0)
+*RightPanel: (30x10, Id desk2, Title "2", Action (Mouse 1) GotoDesk 0 2, ActiveColorset 12, Frame 0)
+*RightPanel: (30x10, Id desk3, Title "3", Action (Mouse 1) GotoDesk 0 3, ActiveColorset 12, Frame 0)
+*RightPanel: (120x25, Swallow FvwmPager 'Module FvwmPager *', Frame 0)
+*RightPanel: (120x300, Top, Swallow FvwmIconMan 'Module FvwmIconMan', Frame 0)
+*RightPanel: (120x45, Swallow DateTime 'Module FvwmScript FvwmScript-MyDateTime', Frame 0)
+
+DestroyModuleConfig FvwmIconMan:*
+*FvwmIconMan: UseWinList true
+*FvwmIconMan: ButtonGeometry 120x20
+*FvwmIconMan: ManagerGeometry 1x1
+*FvwmIconMan: Colorset 10
+*FvwmIconMan: FocusColorset 11
+*FvwmIconMan: IconColorset 14
+*FvwmIconMan: FocusAndSelectColorset 12
+*FvwmIconMan: SelectColorset 12
+*FvwmIconMan: IconAndSelectColorset 12
+*FvwmIconMan: DrawIcons always
+*FvwmIconMan: ReliefThickness 0
+*FvwmIconMan: Format "%t"
+*FvwmIconMan: Font "xft:Sans:Bold:size=10:antialias=True"
+*FvwmIconMan: Action Mouse 0 A ret
+*FvwmIconMan: Action Mouse 1 A sendcommand Raise
+*FvwmIconMan: Action Mouse 3 A sendcommand "Menu MenuIconOps"
+*FvwmIconMan: Resolution global
+*FvwmIconMan: Tips needed
+*FvwmIconMan: Sort id
+
+Key Tab A M WindowList Root c c NoDeskSort, NoGeometry, SelectOnRelease Meta_R, CurrentAtEnd
+Key Return  A 4  Exec exec $[infostore.editor]
+Key Return  A 4C Exec exec $[infostore.browser]
+Key Return  A 4M Exec exec $[infostore.terminal]
+Key Space   A 4  Exec exec $[infostore.runcmd]
+Key Space   A M
+Key Super_R A A
+Key F4      A M  Close
+Key F10     A C  Maximize
+Key F11     A C  Maximize Fullscreen
+Key F10     A 4  Exec exec $[infostore.mute]
+Key F11     A 4  Exec exec $[infostore.voldn]
+Key F12     A 4  Exec exec $[infostore.volup]
+Key m       A 4  Menu MenuFvwmRoot
+Key m       A 4C Menu MenuWindowOpsLong
+
+OpaqueMoveSize 0
+Style * !ResizeOpaque
+Style * ClickToFocus
+
+PipeRead "xdgmenumaker -f fvwm"
 #+end_src
-** WINDOWMAKER
-#+begin_src conf :tangle ~/GNUstep/Defaults/WindowMaker
-{
-  FTitleColor = white;
-  FrameBorderColor = black;
-  WorkspaceMapBack = (solid, black);
-  CycleIgnoreMinimized = NO;
-  BRCMaximizeKey = None;
-  TopLeftResizeCursor = (builtin, top_left_corner);
-  MoveToPrevWorkspaceLayerKey = None;
-  ClipTitleFont = "helvetica:bold:pixelsize=10";
-  MiniwindowPreviewBalloons = NO;
-  MouseForwardButtonAction = None;
-  MoveToWorkspace7Key = "Mod4+Control+7";
-  KeepDockOnPrimaryHead = NO;
-  ResizeCursor = (builtin, sizing);
-  MoveDisplay = None;
-  WindowShortcut10Key = None;
-  IconTitleColor = white;
-  NoWindowUnderDock = No;
-  MoveToWorkspace2Key = "Mod4+Control+2";
-  ScrollableMenus = YES;
-  BLCMaximizeKey = None;
-  MouseWheelTiltAction = None;
-  MenuTitleFont = "helvetica:bold:pixelsize=12";
-  StrictWindozeCycle = YES;
-  SelectKey = None;
-  WindowShortcut4Key = None;
-  TLCMaximizeKey = None;
-  IconPosition = blv;
-  ShadeSpeed = Fast;
-  SnapEdgeDetect = 1;
-  ClipRaiseLowerKey = None;
-  MenuScrollSpeed = fast;
-  HelpBalloons = NO;
-  WindowSnapping = YES;
-  MoveResizeKey = "Mod4+r";
-  AppIconBalloons = NO;
-  IgnoreFocusClick = NO;
-  WaitCursor = (builtin, watch);
-  FrameFocusedBorderColor = black;
-  BottomRightResizeCursor = (builtin, bottom_right_corner);
-  MoveToWorkspace8Key = "Mod4+Control+8";
-  WrapAppiconsInDock = YES;
-  LHMaximizeKey = None;
-  RootMenuKey = F12;
-  DisableWSMouseActions = NO;
-  MoveToPrevWorkspaceKey = "Mod4+Control+p";
-  ResizebarBack = (solid, "rgb:90/90/90");
-  MiniPreviewSize = 128;
-  DisplayFont = "-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-*-*";
-  MouseBackwardButtonAction = None;
-  BHMaximizeKey = None;
-  WorkspaceBorderSize = 0;
-  CycleActiveHeadOnly = NO;
-  OpenTransientOnOwnerWorkspace = NO;
-  IgnoreGtkHints = NO;
-  WindowShortcut1Key = None;
-  RHMaximizeKey = None;
-  FrameSelectedBorderColor = white;
-  THMaximizeKey = None;
-  AlternativeHalfMaximized = NO;
-  QuestionCursor = (builtin, question_arrow);
-  MiniaturizeKey = "Mod4+Control+M";
-  MoveToNextWorkspaceLayerKey = None;
-  WorkspaceMapKey = None;
-  FocusNextKey = "Mod1+Tab";
-  DragMaximizedWindow = Move;
-  MiniwindowTitleBalloons = NO;
-  ShadeKey = None;
-  WindowShortcut7Key = None;
-  MouseLeftButtonAction = OpenApplicationsMenu;
-  AutoFocus = YES;
-  DisableAnimations = Yes;
-  TextCursor = (builtin, xterm);
-  MoveToLastWorkspaceKey = "Mod4+Control+Tab";
-  GroupNextKey = None;
-  SingleClickLaunch = NO;
-  Attraction = NO;
-  DisableBlinking = Yes;
-  MoveToWorkspace5Key = "Mod4+Control+5";
-  FocusPrevKey = "Mod1+Shift+Tab";
-  NewStyle = new;
-  WindowListKey = F11;
-  WorkspaceNameDisplayPosition = center;
-  IconSize = 64;
-  MenuTextFont = "helvetica:pixelsize=12";
-  ScreenSwitchKey = None;
-  AdvanceToNewWorkspace = No;
-  MenuTitleBack = (
-    mdgradient,
-    "rgb:20/20/70",
-    "rgb:20/20/70",
-    "rgb:05/05/60",
-    "rgb:05/05/40",
-    "rgb:05/05/25"
-  );
-  DisableMiniwindows = NO;
-  WindowTitleMinHeight = 0;
-  MoveToNextWorkspaceKey = "Mod4+Control+n";
-  MouseWheelAction = None;
-  MouseRightButtonAction = OpenApplicationsMenu;
-  ClipMergedInDock = YES;
-  SwitchPanelOnlyOpen = NO;
-  HighlightColor = "rgb:81/85/91";
-  FocusMode = manual;
-  NextWorkspaceKey = "Mod4+n";
-  GroupPrevKey = None;
-  PointerWithHalfMaxWindows = NO;
-  MinimizeAllKey = None;
-  MoveToWorkspace3Key = "Mod4+Control+3";
-  CClipTitleColor = "rgb:61/61/61";
-  MenuStyle = normal;
-  HideOthersKey = None;
-  IconPath = (
-    "/home/anon/GNUstep/Library/Icons",
-    "/home/anon/GNUstep/Library/WindowMaker/Pixmaps",
-    "/home/anon/GNUstep/Library/WindowMaker/CachedPixmaps",
-    "~/pixmaps",
-    "/usr/local/share/WindowMaker/Icons",
-    "/usr/local/share/WindowMaker/Pixmaps",
-    "/usr/local/include/X11/pixmaps",
-    "/usr/local/share/icons"
-  );
-  HorizontalResizeCursor = (builtin, sb_h_double_arrow);
-  PTitleBack = (mdgradient, "rgb:80/80/80", "rgb:50/50/50", "rgb:40/40/40");
-  MenuTextExtendSpace = 0;
-  WindowShortcut6Key = None;
-  UTitleBack = (
-    mdgradient,
-    "rgb:90/90/90",
-    "rgb:a7/a7/b7",
-    "rgb:90/90/99",
-    "rgb:51/55/61"
-  );
-  CirculateRaise = NO;
-  HighlightActiveApp = YES;
-  DontLinkWorkspaces = No;
-  ScreenCaptureKey = Print;
-  SelectCursor = (builtin, cross);
-  WindowTitleBalloons = YES;
-  MenuDisabledColor = gray40;
-  LastWorkspaceKey = "Mod4+Tab";
-  IconTitleBack = "rgb:20/20/55";
-  PixmapPath = (
-    "/home/anon/GNUstep/Library/WindowMaker/Pixmaps",
-    "/home/anon/GNUstep/Library/WindowMaker/Backgrounds",
-    "/home/anon/GNUstep/Library/WindowMaker/CachedPixmaps",
-    "~/pixmaps",
-    "/usr/local/share/WindowMaker/Pixmaps",
-    "/usr/local/share/WindowMaker/Backgrounds",
-    "/usr/local/include/X11/pixmaps"
-  );
-  MoveToWorkspace9Key = "Mod4+Control+9";
-  FTitleBack = (
-    mdgradient,
-    "rgb:20/20/70",
-    "rgb:20/20/70",
-    "rgb:05/05/60",
-    "rgb:05/05/40",
-    "rgb:05/05/25"
-  );
-  RaiseDelay = 0;
-  MaximizeKey = "Mod4+m";
-  HideKey = "Mod4+h";
-  IconTitleFont = "helvetica:pixelsize=8";
-  DialogHistoryLines = 500;
-  WorkspaceSpecificBack = ();
-  LargeDisplayFont = "Trebuchet MS,sans serif:pixelsize=24";
-  PartialCaptureKey = None;
-  DisableClip = NO;
-  IconificationStyle = None;
-  MenuTitleColor = white;
-  WindowShortcut3Key = None;
-  ClipAutolowerDelay = 1000;
-  MenuTitleMaxHeight = 0x7fffffff;
-  DoubleClickTime = 250;
-  SmoothWorkspaceBack = NO;
-  EnableWorkspacePager = NO;
-  WindowRelaunchKey = None;
-  ArrowCursor = (builtin, top_left_arrow);
-  AlignSubmenus = NO;
-  NoWindowOverDock = YES;
-  WorkspaceBack = (
-    tpixmap,
-    "/usr/local/share/WindowMaker/Themes/STEP2000.themed/BlueImage2.jpeg",
-    "rgb:51/55/61"
-  );
-  OmnipresentKey = None;
-  HighlightTextColor = black;
-  EdgeResistance = 30;
-  ClipAutoexpandDelay = 600;
-  WindowShortcut9Key = None;
-  KeepAtBottomKey = None;
-  PrevWorkspaceKey = "Mod4+p";
-  KeepOnTopKey = None;
-  AutoArrangeIcons = YES;
-  ClipTitleColor = black;
-  MoveHalfMaximizedWindowsBetweenScreens = NO;
-  WorkspaceBorder = None;
-  WindowTitleFont = "helvetica:bold:pixelsize=12";
-  SwitchPanelImages = (swtile.png, swback.png, 30, 40);
-  WidgetColor = (solid, gray);
-  Workspace8Key = "Mod4+8";
-  WindowPlaceOrigin = (64, 0);
-  RunKey = "Mod4+space";
-  Workspace9Key = "Mod4+9";
-  UseSaveUnders = NO;
-  MoveToWorkspace6Key = "Mod4+Control+6";
-  Workspace4Key = "Mod4+4";
-  MoveToWorkspace10Key = "Mod4+Control+0";
-  Workspace5Key = "Mod4+5";
-  Workspace6Key = "Mod4+6";
-  Workspace7Key = "Mod4+7";
-  PrevWorkspaceLayerKey = None;
-  Workspace1Key = "Mod4+1";
-  Workspace2Key = "Mod4+2";
-  MenuTitleExtendSpace = 0;
-  Workspace3Key = "Mod4+3";
-  DockRaiseLowerKey = None;
-  ColormapMode = auto;
-  MoveToWorkspace1Key = "Mod4+Control+1";
-  ShowClipTitle = YES;
-  ClipAutocollapseDelay = 1000;
-  DisableDock = NO;
-  MouseMiddleButtonAction = OpenWindowListMenu;
-  Superfluous = No;
-  WindowShortcut2Key = None;
-  BottomLeftResizeCursor = (builtin, bottom_left_corner);
-  WindowMenuKey = "Control+Escape";
-  DoNotMakeAppIconsBounce = NO;
-  OpaqueMove = No;
-  MaximusKey = None;
-  OpaqueResize = NO;
-  MenuTextBack = (hgradient, "rgb:a9/a9/b9", "rgb:61/65/71");
-  ColormapSize = 4;
-  WindowPlacement = auto;
-  RaiseAppIconsWhenBouncing = NO;
-  ResizeIncrement = 0;
-  CycleWorkspaces = Yes;
-  WindowShortcut8Key = None;
-  OpaqueMoveResizeKeyboard = NO;
-  DisableDithering = NO;
-  TitleJustify = left;
-  ExitKey = "Mod4+Control+BackSpace";
-  MenuTextColor = black;
-  IconBack = (dgradient, "rgb:a7/a7/b7", "rgb:51/55/61");
-  DontConfirmKill = NO;
-  LowerKey = "Mod4+Down";
-  WindowTitleExtendSpace = 0;
-  NormalCursor = (builtin, left_ptr);
-  ModifierKeyLabels = ("Shift+", "Control+", "Mod1+", "Mod2+", "Mod3+", "Mod4+", "Mod5+");
-  NoWindowOverIcons = No;
-  VerticalResizeCursor = (builtin, sb_v_double_arrow);
-  SnapCornerDetect = 10;
-  HMaximizeKey = None;
-  SnapToTopMaximizesFullscreen = NO;
-  TopRightResizeCursor = (builtin, top_right_corner);
-  CloseKey = "Mod4+q";
-  WindowCaptureKey = None;
-  WrapMenus = No;
-  Workspace10Key = "Mod4+0";
-  DisableDrawers = NO;
-  VMaximizeKey = "Mod4+v";
-  MoveCursor = (builtin, fleur);
-  IconSlideSpeed = fast;
-  WindowShortcut5Key = None;
-  WindowTitleMaxHeight = 0x7fffffff;
-  RaiseKey = "Mod4+Up";
-  ModifierKey = Mod4;
-  NextWorkspaceLayerKey = None;
-  ClipAutoraiseDelay = 600;
-  FrameBorderWidth = 1;
-  SaveSessionOnExit = NO;
-  UTitleColor = gray20;
-  ViKeyMenus = YES;
-  BounceAppIconsWhenUrgent = YES;
-  TRCMaximizeKey = None;
-  PTitleColor = white;
-  ResizeDisplay = center;
-  StickyIcons = NO;
-  RaiseLowerKey = None;
-  MenuTitleMinHeight = 0;
-  MoveToWorkspace4Key = "Mod4+Control+4";
-}
+#+begin_src fvwm :tangle ~/.fvwm/FvwmScript-MyDateTime
+WindowTitle {DateTime}
+WindowSize  120 100
+Font "xft:Sans:style=Bold:size=20"
+
+Init
+ Begin
+  Set $Time = (GetOutput {exec date "+%H:%M"} 1 -1)
+  Set $Date = (GetOutput {exec date "+%d/%m"} 1 -1)
+  Set $Battery = (GetOutput {exec sysctl -n hw.acpi.battery.life} 1 -1)%
+  ChangeTitle 1 $Time
+  ChangeTitle 2 $Date
+  ChangeTitle 3 $Battery
+End
+
+PeriodicTasks
+ Begin
+  If (RemainderOfDiv (GetTime) 15)==0 Then
+  Begin
+   Set $Time = (GetOutput {exec date "+%H:%M"} 1 -1)
+   Set $Date = (GetOutput {exec date "+%d/%m"} 1 -1)
+   Set $Battery = (GetOutput {exec sysctl -n hw.acpi.battery.life} 1 -1)%
+   ChangeTitle 1 $Time
+   ChangeTitle 2 $Date
+   ChangeTitle 3 $Battery
+  End
+End
+
+Widget 1
+Property
+ Position 0 0
+ Size 120 33
+ Type ItemDraw
+ Flags NoReliefString
+ Title {}
+Main
+ Case message of
+  SingleClic :
+  Begin
+  End
+End
+
+Widget 2
+Property
+ Position 0 30
+ Size 120 33
+ Type ItemDraw
+ Flags NoReliefString
+ Title {}
+Main
+ Case message of
+  SingleClic :
+  Begin
+  End
+End
+
+Widget 3
+Property
+ Position 0 60
+ Size 120 33
+ Font "xft:Sans:style=Bold:size=20"
+ Type ItemDraw
+ Flags NoReliefString
+ Title {}
+Main
+ Case message of
+  SingleClic :
+  Begin
+  End
+End
 #+end_src
