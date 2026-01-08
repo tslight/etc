@@ -4,8 +4,6 @@
 #+PROPERTY: header-args+ :tangle (expand-file-name "init.el" user-emacs-directory)
 #+PROPERTY: header-args+ :tangle-mode (identity #o644)
 
-A lightweight, [[https://en.wikipedia.org/wiki/Literate_programming][literate]] *Emacs 29+ ONLY* configuration.
-
 To install, open this file in *Emacs 29+* & evaluate the code block below by
 placing the cursor in between the =#+begin_src= & =#+end_src= lines and
 pressing =C-c C-c=.
@@ -33,8 +31,6 @@ compile & evaluate it.
     (global-subword-mode)
     (global-prettify-symbols-mode)
     (if window-system (load-theme 'modus-vivendi))
-    ;; prevent backspace being hijacked by ^H on a tty
-    (when (not window-system) (normal-erase-is-backspace-mode))
     (when (not (eq system-type 'darwin)) (menu-bar-mode -1))
     (save-place-mode 1)
     (scroll-bar-mode -1)
@@ -50,8 +46,8 @@ compile & evaluate it.
     (display-time-default-load-average 'nil)
     (display-time-format "%H:%M %a %d/%m")
     (fill-column 79)
-    (find-program "fd")
-    (grep-program "rg")
+    (when (executable-find "fd") find-program "fd")
+    (when (executable-find "rg") grep-program "rg")
     (frame-resize-pixelwise t) ; proper maximize in some wm
     (inhibit-startup-screen t)
     (mac-command-modifier 'control)
@@ -72,9 +68,7 @@ compile & evaluate it.
     ("C-M-;" . comment-box)
     ("C-s-f" . toggle-frame-fullscreen)
     ("C-z" . zap-up-to-char)
-    ("C-x k" . (lambda () (interactive) (kill-buffer (current-buffer))))
-    :hook
-    ((prog-mode shell-script-mode) . hl-line-mode))
+    ("C-x k" . (lambda () (interactive) (kill-buffer (current-buffer)))))
 #+end_src
 
 * MY/DEFUNS
@@ -206,34 +200,17 @@ compile & evaluate it.
     :bind ("C-c w" . eww))
 #+end_src
 
-* ICOMPLETE
-
-#+begin_src emacs-lisp
-  (use-package icomplete
-    :custom
-    (fido-vertical-mode t)
-    (icomplete-compute-delay 0)
-    :bind (:map icomplete-fido-mode-map
-	      ("<tab>" . icomplete-forward-completions)
-	      ("<backtab>" . icomplete-backward-completions)
-	      ("M-j" . exit-minibuffer)))
-#+end_src
-
 * LINE NUMBERS
 
 #+begin_src emacs-lisp
   (use-package display-line-numbers
-    :custom
-    (display-line-numbers-type 'relative)
-    :hook
-    (prog-mode . display-line-numbers-mode)
-    (sh-script-mode . display-line-numbers-mode))
+    :custom (display-line-numbers-type 'relative)
+    :hook (prog-mode . display-line-numbers-mode))
 #+end_src
 
 * MISC
 
 #+begin_src emacs-lisp
-  (use-package eglot :hook (prog-mode . eglot-ensure))
   (use-package recentf :bind ("C-c r" . recentf))
   (use-package savehist :hook (after-init . savehist-mode))
   (use-package which-key :hook (after-init . which-key-mode))
@@ -260,8 +237,6 @@ compile & evaluate it.
 		  '(("cl" . "src common-lisp")
 		    ("el" . "src emacs-lisp")
 		    ("go" . "src go")
-		    ("ja" . "src java")
-		    ("js" . "src javascript")
 		    ("kr" . "src c")
 		    ("nx" . "src nix")
 		    ("py" . "src python")
@@ -297,47 +272,6 @@ compile & evaluate it.
     (after-save . executable-make-buffer-file-executable-if-script-p))
 #+end_src
 
-* TREESIT
-
-https://www.masteringemacs.org/article/how-to-get-started-tree-sitter
-
-Bulk install all the grammars as a one of task, so don't tangle!
-
-#+begin_src emacs-lisp :tangle no
-  (setq treesit-language-source-alist
-	'((bash "https://github.com/tree-sitter/tree-sitter-bash")
-	(cmake "https://github.com/uyha/tree-sitter-cmake")
-	(css "https://github.com/tree-sitter/tree-sitter-css")
-	(elisp "https://github.com/Wilfred/tree-sitter-elisp")
-	(go "https://github.com/tree-sitter/tree-sitter-go")
-	(html "https://github.com/tree-sitter/tree-sitter-html")
-	(javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
-	(json "https://github.com/tree-sitter/tree-sitter-json")
-	(make "https://github.com/alemuller/tree-sitter-make")
-	(markdown "https://github.com/ikatyang/tree-sitter-markdown")
-	(nix "https://github.com/nix-community/tree-sitter-nix")
-	(python "https://github.com/tree-sitter/tree-sitter-python")
-	(toml "https://github.com/tree-sitter/tree-sitter-toml")
-	(tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
-	(typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
-	(yaml "https://github.com/ikatyang/tree-sitter-yaml")))
-  (mapc #'treesit-install-language-grammar (mapcar #'car treesit-language-source-alist))
-#+end_src
-
-#+begin_src emacs-lisp
-  (use-package treesit
-    :custom
-    (major-mode-remap-alist
-     '((yaml-mode . yaml-ts-mode)
-       (bash-mode . bash-ts-mode)
-       (js2-mode . js-ts-mode)
-       (go-mode . go-ts-mode)
-       (typescript-mode . typescript-ts-mode)
-       (json-mode . json-ts-mode)
-       (css-mode . css-ts-mode)
-       (python-mode . python-ts-mode))))
-#+end_src
-
 * 3RD PARTY
 
 #+begin_src emacs-lisp
@@ -362,17 +296,10 @@ Bulk install all the grammars as a one of task, so don't tangle!
 	    (message "Copilot chat saved to %s" filename))
 	(message "This is not a *Copilot Chat buffer.")))
     :bind ("C-c c" . copilot-chat))
-  (use-package corfu :ensure
-    :custom
-    (corfu-cycle t)
-    (corfu-auto t)
-    :hook (prog-mode . corfu-mode))
   (use-package default-text-scale :ensure :config (default-text-scale-mode))
-  (use-package exec-path-from-shell :ensure
-    :hook (after-init . exec-path-from-shell-initialize))
+  (use-package exec-path-from-shell :ensure :hook (after-init . exec-path-from-shell-initialize))
   (use-package git-timemachine :ensure)
   (use-package hungry-delete :ensure :config (global-hungry-delete-mode))
-  (use-package kdl-mode :ensure) ; for niri config
   (use-package magit :ensure :bind* ("C-x g" . magit-status))
   (use-package magit-repos
     :bind* ("C-c g" . magit-list-repositories)
@@ -385,9 +312,6 @@ Bulk install all the grammars as a one of task, so don't tangle!
        ("Pull" 5 magit-repolist-column-unpulled-from-upstream ((:right-align t) nil))
        ("Push" 5 magit-repolist-column-unpushed-to-upstream ((:right-align t) nil))
        ("Path" 99 magit-repolist-column-path nil))))
-  (use-package marginalia :ensure :init (marginalia-mode))
-  (use-package markdown-ts-mode :ensure)
-  (use-package nix-ts-mode :ensure :mode ("\\.nix\\'" . nix-ts-mode))
   (use-package vterm :ensure :bind* ("C-c t" . vterm))
   (use-package vundo :ensure :bind* ("C-c u" . vundo))
 #+end_src
