@@ -45,7 +45,7 @@
 #+BEGIN_SRC sh :tangle ~/.bash_profile
   export ALTERNATE_EDITOR=""
   export BLOCK_SIZE=human-readable
-  export EDITOR="nvim"
+  export EDITOR=vi
   export HISTCONTROL=ignoreboth:erasedups
   export HISTFILESIZE=999999
   export HISTIGNORE="h:history:[bf]g:exit:^ll$:^lla$:^ls$"
@@ -135,6 +135,7 @@
 #+begin_src shell :tangle ~/.zshrc
   bindkey '^[[Z' reverse-menu-complete # shift-tab cycles backwards
   bindkey \^U backward-kill-line # ctrl-u (whole-line by default)
+  bindkey -e # ensure we use emacs bindings even though EDITOR=vi
 #+end_src
 ** COMPLETION
 #+begin_src shell :tangle ~/.zshrc
@@ -154,7 +155,7 @@
   export HISTFILE=$HOME/.zsh_history
   export HISTSIZE=100000
   export SAVEHIST=$HISTSIZE
-  export EDITOR="nvim"
+  export EDITOR=vi
   export PAGER=less
   export BLOCK_SIZE=human-readable
   export DIRSTACKSIZE=12
