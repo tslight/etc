@@ -534,14 +534,19 @@ End
   set fgcolor purple
   set font monospace:bold:size=13
 
-  bind w exec x-www-browser
-  bind C-w exec x-www-browser
+  bind w exec librewolf
+  bind C-w exec librewolf
   bind e exec xterm -e emacsclient -nw -c -a ""
   bind C-e exec xterm -e emacsclient -c -a ""
   bind v hsplit
   bind C-v hsplit
   bind C-q only
+  bind space exec
+  bind C-space colon
   bind q only
   bind M-q quit
   bind M-r exec restart
+  bind F10 exec mixer vol.mute=toggle
+  bind F11 exec mixer vol.volume=-5%
+  bind F12 exec mixer vol.volume=+5%
 #+end_src
