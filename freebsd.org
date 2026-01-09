@@ -328,6 +328,17 @@ suspend/resume...
 
   EndSection
 #+end_src
+** TOUCHPAD
+#+begin_src conf
+Section "InputClass"
+    Identifier "libinput touchpad catchall"
+    MatchIsTouchpad "on"
+    MatchDevicePath "/dev/input/event*"
+    Driver "libinput"
+    Option "Tapping" "True"
+    Option "DisableWhileTyping" "True"
+EndSection
+#+end_src
 ** XSESSION
 #+NAME: xsession
 #+BEGIN_SRC conf :tangle ~/.xsession
