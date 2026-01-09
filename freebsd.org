@@ -344,220 +344,47 @@ EndSection
 #+BEGIN_SRC conf :tangle ~/.xsession
   # setxkbmap -option "caps:swapescape,ctrl:swap_lwin_lctl,ctrl:swap_rwin_rctl"
   xscreensaver --no-splash &
+  xbattbar right &
   sct 4000 &
   exec ratpoison
 #+END_SRC
 #+BEGIN_SRC conf :noweb yes :tangle ~/.xinitrc
   <<xsession>>
 #+END_SRC
-** FVWM3
-#+begin_src conf :tangle ~/.fvwm/local.config
-InfoStoreAdd runcmd "dmenu_run -fn 'JetBrainsMono Nerd Font:Bold:size=13' -nb '#2b4e5e' -sb '#000000'"
-InfoStoreAdd editor "emacsclient -nw -c -a ''"
-InfoStoreAdd browser librewolf
-InfoStoreAdd volup "mixer vol.volume=+5%"
-InfoStoreAdd voldn "mixer vol.volume=-5%"
-InfoStoreAdd mute "mixer vol.mute=toggle"
-
-MenuStyle * Font "xft:Sans:Bold:size=12:antialias=True"
-
-DestroyMenu MenuFvwmRoot
-AddToMenu   MenuFvwmRoot "Deeply Feeble" Title
-+ "&Emacs%icons/terminal.png%" Exec exec $[infostore.terminal] -e $[infostore.editor]
-+ "&Browser%icons/terminal.png%" Exec exec $[infostore.browser]
-+ "&Terminal%icons/terminal.png%" Exec exec $[infostore.terminal] -e tmux
-+ "&Run Command%icons/run_arrow.png%" Exec exec $[infostore.runcmd]
-+ "&Fvwm Prompt%icons/terminal.png%" Exec exec $[infostore.terminal] -e FvwmPrompt
-+ "&Applications%icons/apps.png%" Popup XDGMenu
-+ "&Wallpapers%icons/wallpaper.png%" Popup BGMenu
-+ "&Man Pages%icons/help.png%" Popup MenuFvwmManPages
-+ "Re&fresh%icons/refresh.png%" Refresh
-+ "&Restart%icons/restart.png%" Restart
-+ "&Quit%icons/quit.png%" Module FvwmScript FvwmScript-ConfirmQuit
-
-DestroyMenu MenuWindowOpsLong
-AddToMenu   MenuWindowOpsLong "$[gt.Window Ops]" Title
-+ "$[gt.&Move]%icons/win/move.png%" Move
-+ "$[gt.&Resize]%icons/win/resize.png%" Resize
-+ "$[gt.(De)&Iconify]%icons/win/iconify.png%" Iconify
-+ "$[gt.(Un)Maximize]%icons/win/max.png%" Maximize
-+ "$[gt.(Un)Shade]%icons/win/shade.png%" WindowShade
-+ "$[gt.(Un)Sticky]%icons/win/sticky.png%" Stick
-+ "$[gt.(No)&Title Bar]%icons/win/title.png%" Pick (CirculateHit) ToggleTitle
-+ "$[gt.&Send To]%icons/win/sendto.png%" Popup MenuSendTo
-+ "$[gt.&Close]%icons/win/close.png%" Close
-+ "$[gt.&Destroy]%icons/win/destroy.png%" Destroy
-+ "$[gt.Raise]%icons/win/raise.png%" Raise
-+ "$[gt.Lower]%icons/win/lower.png%" Lower
-+ "$[gt.Stays On Top]%icons/win/top.png%" Pick (CirculateHit) Layer 0 6
-+ "$[gt.Stays Put]%icons/win/stays.png%" Pick (CirculateHit) Layer 0 4
-+ "$[gt.Stays On Bottom]%icons/win/bottom.png%" Pick (CirculateHit) Layer 0 2
-+ "$[gt.Identify]%icons/info.png%" Module FvwmIdent
-
-DestroyMenu MenuSendTo
-AddToMenu MenuSendTo
-+ "$[gt.&Current]" MoveToCurrent
-+ "$[gt.&Page]" PopUp MenuSendToPage
-+ "$[gt.&Desk]" PopUp MenuSendToDesk
-
-DestroyMenu MenuSendToDesk
-AddToMenu   MenuSendToDesk
-+ "$[gt.Desk] &0" MoveToDesk 0 0
-+ "$[gt.Desk] &1" MoveToDesk 0 1
-+ "$[gt.Desk] &2" MoveToDesk 0 2
-+ "$[gt.Desk] &3" MoveToDesk 0 3
-
-DestroyModuleConfig RightPanel:*
-*RightPanel: Geometry 120x$[monitor.$[monitor.primary].height]-0+0@p
-*RightPanel: Colorset 10
-*RightPanel: Rows $[monitor.$[monitor.primary].height]
-*RightPanel: Columns 120
-*RightPanel: Frame 0
-*RightPanel: Font "xft:Sans:Bold:size=10:antialias=True"
-*RightPanel: (120x20, Icon "fvwm-logo-small.png", Action (Mouse 1) Menu MenuFvwmRoot, Frame 0)
-*RightPanel: (30x10, Id desk0, Title "0", Action (Mouse 1) GotoDesk 0 0, Colorset 11, ActiveColorset 12, Frame 0)
-*RightPanel: (30x10, Id desk1, Title "1", Action (Mouse 1) GotoDesk 0 1, ActiveColorset 12, Frame 0)
-*RightPanel: (30x10, Id desk2, Title "2", Action (Mouse 1) GotoDesk 0 2, ActiveColorset 12, Frame 0)
-*RightPanel: (30x10, Id desk3, Title "3", Action (Mouse 1) GotoDesk 0 3, ActiveColorset 12, Frame 0)
-*RightPanel: (120x25, Swallow FvwmPager 'Module FvwmPager *', Frame 0)
-*RightPanel: (120x300, Top, Swallow FvwmIconMan 'Module FvwmIconMan', Frame 0)
-*RightPanel: (120x45, Swallow DateTime 'Module FvwmScript FvwmScript-MyDateTime', Frame 0)
-
-DestroyModuleConfig FvwmIconMan:*
-*FvwmIconMan: UseWinList true
-*FvwmIconMan: ButtonGeometry 120x20
-*FvwmIconMan: ManagerGeometry 1x1
-*FvwmIconMan: Colorset 10
-*FvwmIconMan: FocusColorset 11
-*FvwmIconMan: IconColorset 14
-*FvwmIconMan: FocusAndSelectColorset 12
-*FvwmIconMan: SelectColorset 12
-*FvwmIconMan: IconAndSelectColorset 12
-*FvwmIconMan: DrawIcons always
-*FvwmIconMan: ReliefThickness 0
-*FvwmIconMan: Format "%t"
-*FvwmIconMan: Font "xft:Sans:Bold:size=10:antialias=True"
-*FvwmIconMan: Action Mouse 0 A ret
-*FvwmIconMan: Action Mouse 1 A sendcommand Raise
-*FvwmIconMan: Action Mouse 3 A sendcommand "Menu MenuIconOps"
-*FvwmIconMan: Resolution global
-*FvwmIconMan: Tips needed
-*FvwmIconMan: Sort id
-
-Key Tab A M WindowList Root c c NoDeskSort, NoGeometry, SelectOnRelease Meta_R, CurrentAtEnd
-Key Return  A 4  Exec exec $[infostore.terminal] -e $[infostore.editor]
-Key Return  A 4C Exec exec $[infostore.browser]
-Key Return  A 4M Exec exec $[infostore.terminal] -e tmux
-Key Space   A 4  Exec exec $[infostore.runcmd]
-Key Space   A M
-Key Super_R A A
-Key F4      A M  Close
-Key F10     A C  Maximize
-Key F11     A C  Maximize Fullscreen
-Key F10     A 4  Exec exec $[infostore.mute]
-Key F11     A 4  Exec exec $[infostore.voldn]
-Key F12     A 4  Exec exec $[infostore.volup]
-Key m       A 4  Menu MenuFvwmRoot
-Key m       A 4C Menu MenuWindowOpsLong
-
-OpaqueMoveSize 0
-Style * !ResizeOpaque
-Style * ClickToFocus
-
-PipeRead "xdgmenumaker -f fvwm"
-#+end_src
-#+begin_src conf :tangle ~/.fvwm/FvwmScript-MyDateTime
-WindowTitle {DateTime}
-WindowSize  120 100
-Font "xft:Sans:style=Bold:size=20"
-
-Init
- Begin
-  Set $Time = (GetOutput {exec date "+%H:%M"} 1 -1)
-  Set $Date = (GetOutput {exec date "+%d/%m"} 1 -1)
-  Set $Battery = (GetOutput {exec sysctl -n hw.acpi.battery.life} 1 -1)%
-  ChangeTitle 1 $Time
-  ChangeTitle 2 $Date
-  ChangeTitle 3 $Battery
-End
-
-PeriodicTasks
- Begin
-  If (RemainderOfDiv (GetTime) 15)==0 Then
-  Begin
-   Set $Time = (GetOutput {exec date "+%H:%M"} 1 -1)
-   Set $Date = (GetOutput {exec date "+%d/%m"} 1 -1)
-   Set $Battery = (GetOutput {exec sysctl -n hw.acpi.battery.life} 1 -1)%
-   ChangeTitle 1 $Time
-   ChangeTitle 2 $Date
-   ChangeTitle 3 $Battery
-  End
-End
-
-Widget 1
-Property
- Position 0 0
- Size 120 33
- Type ItemDraw
- Flags NoReliefString
- Title {}
-Main
- Case message of
-  SingleClic :
-  Begin
-  End
-End
-
-Widget 2
-Property
- Position 0 30
- Size 120 33
- Type ItemDraw
- Flags NoReliefString
- Title {}
-Main
- Case message of
-  SingleClic :
-  Begin
-  End
-End
-
-Widget 3
-Property
- Position 0 60
- Size 120 33
- Font "xft:Sans:style=Bold:size=20"
- Type ItemDraw
- Flags NoReliefString
- Title {}
-Main
- Case message of
-  SingleClic :
-  Begin
-  End
-End
+** XDEFAULTS
+#+begin_src conf :tangle ~/.Xdefaults
+  XTerm*faceName: JetBrainsMono Nerd Font: size=13
+  XTerm*metaSendsEscape: true
+  XTerm*reverseVideo: true
+  XTerm*selectToClipboard: true
 #+end_src
 ** RATPOISON
 #+begin_src conf :tangle ~/.ratpoisonrc
-  set border 0
-  set padding 0 0 0 0
+  set barpadding 5 0
   set bgcolor black
   set fgcolor purple
-  set font monospace:bold:size=13
+  set font "JetBrainsMono Nerd Font:bold:size=13"
+  set framesels "asdfjkl;"
+  set fwcolor green
+  set bwcolor purple
+  set historysize 42
+  set msgwait 0
+  set padding 0 0 2 0
 
-  bind w exec librewolf
-  bind C-w exec librewolf
   bind e exec xterm -e emacsclient -nw -c -a ""
-  bind C-e exec xterm -e emacsclient -c -a ""
-  bind v hsplit
-  bind C-v hsplit
+  bind C-e exec emacsclient -c -a ""
+  bind E exec xterm -e emacs
+  bind C-E emacs
   bind C-q only
-  bind space exec
-  bind C-space colon
   bind q only
-  bind M-q quit
-  bind M-r exec restart
+  bind C-space colon
+  bind space exec
+  bind C-v hsplit
+  bind v hsplit
+  bind w exec librewolf
   bind F10 exec mixer vol.mute=toggle
   bind F11 exec mixer vol.volume=-5%
   bind F12 exec mixer vol.volume=+5%
+  bind M-q quit
+  bind M-r exec restart
 #+end_src
