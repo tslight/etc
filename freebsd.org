@@ -355,6 +355,7 @@ EndSection
   XTerm*metaSendsEscape: true
   XTerm*reverseVideo: true
   XTerm*selectToClipboard: true
+  XTerm*internalBorder: 11
 #+end_src
 #+BEGIN_SRC conf :noweb yes :tangle ~/.Xresources
   <<xdefaults>>
@@ -362,11 +363,11 @@ EndSection
 ** RATPOISON
 #+begin_src conf :tangle ~/.ratpoisonrc
   exec xscreensaver --no-splash
-  exec xbattbar right
+  exec xbattbar left
   exec sleep 1 && sct 4000
   exec sleep 2 && alttab -mk Alt_R -frame green -inact purple
 
-  set barpadding 5 0
+  set barpadding 0 0
   set bgcolor black
   set fgcolor purple
   set font "JetBrainsMono Nerd Font:bold:size=13"
@@ -375,7 +376,7 @@ EndSection
   set bwcolor purple
   set historysize 42
   set msgwait 0
-  set padding 0 0 2 0
+  set padding 2 0 0 0
 
   bind e exec xterm -e emacsclient -nw -c -a ""
   bind C-e exec emacsclient -c -a ""
