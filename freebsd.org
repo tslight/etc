@@ -381,7 +381,7 @@ EndSection
   bind e exec xterm -e emacsclient -nw -c -a ""
   bind C-e exec emacsclient -c -a ""
   bind E exec xterm -e emacs
-  bind C-E emacs
+  bind C-E exec emacs
   bind C-q only
   bind q only
   bind C-space colon
