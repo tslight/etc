@@ -330,14 +330,14 @@ suspend/resume...
 #+end_src
 ** TOUCHPAD
 #+begin_src conf
-Section "InputClass"
-    Identifier "libinput touchpad catchall"
-    MatchIsTouchpad "on"
-    MatchDevicePath "/dev/input/event*"
-    Driver "libinput"
-    Option "Tapping" "True"
-    Option "DisableWhileTyping" "True"
-EndSection
+  Section "InputClass"
+	  Identifier "libinput touchpad catchall"
+	  MatchIsTouchpad "on"
+	  MatchDevicePath "/dev/input/event*"
+	  Driver "libinput"
+	  Option "Tapping" "True"
+	  Option "DisableWhileTyping" "True"
+  EndSection
 #+end_src
 ** XSESSION
 #+NAME: xsession
@@ -365,7 +365,7 @@ EndSection
   exec xscreensaver --no-splash
   exec xbattbar left
   exec sleep 1 && sct 4000
-  exec sleep 2 && alttab -mk Alt_R -frame green -inact purple
+  exec sleep 4 && alttab -mk Alt_R -frame green -inact purple
 
   set barpadding 0 0
   set bgcolor black
@@ -375,7 +375,6 @@ EndSection
   set fwcolor green
   set bwcolor purple
   set historysize 42
-  set msgwait 0
   set padding 2 0 0 0
 
   bind e exec xterm -e emacsclient -nw -c -a ""
@@ -389,13 +388,36 @@ EndSection
   bind C-v hsplit
   bind v hsplit
   bind w exec librewolf
-  bind F10 exec mixer vol.mute=toggle
-  bind F11 exec mixer vol.volume=-5%
-  bind F12 exec mixer vol.volume=+5%
+  bind Tab select
+  bind Return focuslast
   bind M-q quit
   bind M-r exec restart
 
+  definekey top s-j focusdown
+  definekey top s-k focusup
+  definekey top s-h focusleft
+  definekey top s-l focusright
+  definekey top s-Return focuslast
+  definekey top C-s-j exchangedown
+  definekey top C-s-k exchangeup
+  definekey top C-s-h exchangeleft
+  definekey top C-s-l exchangeright
   definekey top F10 exec mixer vol.mute=toggle
   definekey top F11 exec mixer vol.volume=-5%
   definekey top F12 exec mixer vol.volume=+5%
 #+end_src
+** GTK
+#+NAME: gtk2
+#+BEGIN_SRC conf :tangle ~/.gtkrc-2.0.mine
+  gtk-key-theme-name = "Emacs"
+#+END_SRC
+
+#+BEGIN_SRC conf :noweb yes :tangle ~/.gtkrc-2.0
+  <<gtk2>>
+#+END_SRC
+
+#+NAME: gtk3
+#+BEGIN_SRC conf :tangle ~/.config/gtk-3.0/settings.ini
+  [Settings]
+  gtk-key-theme-name = Emacs
+#+END_SRC
