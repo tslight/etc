@@ -343,23 +343,29 @@ EndSection
 #+NAME: xsession
 #+BEGIN_SRC conf :tangle ~/.xsession
   # setxkbmap -option "caps:swapescape,ctrl:swap_lwin_lctl,ctrl:swap_rwin_rctl"
-  xscreensaver --no-splash &
-  xbattbar right &
-  sct 4000 &
   exec ratpoison
 #+END_SRC
 #+BEGIN_SRC conf :noweb yes :tangle ~/.xinitrc
   <<xsession>>
 #+END_SRC
 ** XDEFAULTS
+#+NAME: xdefaults
 #+begin_src conf :tangle ~/.Xdefaults
   XTerm*faceName: JetBrainsMono Nerd Font: size=13
   XTerm*metaSendsEscape: true
   XTerm*reverseVideo: true
   XTerm*selectToClipboard: true
 #+end_src
+#+BEGIN_SRC conf :noweb yes :tangle ~/.Xresources
+  <<xdefaults>>
+#+END_SRC
 ** RATPOISON
 #+begin_src conf :tangle ~/.ratpoisonrc
+  exec xscreensaver --no-splash
+  exec xbattbar right
+  exec sleep 1 && sct 4000
+  exec sleep 2 && alttab -mk Alt_R -frame green -inact purple
+
   set barpadding 5 0
   set bgcolor black
   set fgcolor purple
@@ -387,4 +393,8 @@ EndSection
   bind F12 exec mixer vol.volume=+5%
   bind M-q quit
   bind M-r exec restart
+
+  definekey top F10 exec mixer vol.mute=toggle
+  definekey top F11 exec mixer vol.volume=-5%
+  definekey top F12 exec mixer vol.volume=+5%
 #+end_src
