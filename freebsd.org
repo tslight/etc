@@ -334,7 +334,7 @@ suspend/resume...
   # setxkbmap -option "caps:swapescape,ctrl:swap_lwin_lctl,ctrl:swap_rwin_rctl"
   xscreensaver --no-splash &
   sct 4000 &
-  exec fvwm3
+  exec ratpoison
 #+END_SRC
 #+BEGIN_SRC conf :noweb yes :tangle ~/.xinitrc
   <<xsession>>
@@ -525,4 +525,23 @@ Main
   Begin
   End
 End
+#+end_src
+** RATPOISON
+#+begin_src conf :tangle ~/.ratpoisonrc
+  set border 0
+  set padding 0 0 0 0
+  set bgcolor black
+  set fgcolor purple
+  set font monospace:bold:size=13
+
+  bind w exec x-www-browser
+  bind C-w exec x-www-browser
+  bind e exec xterm -e emacsclient -nw -c -a ""
+  bind C-e exec xterm -e emacsclient -c -a ""
+  bind v hsplit
+  bind C-v hsplit
+  bind C-q only
+  bind q only
+  bind M-q quit
+  bind M-r exec restart
 #+end_src

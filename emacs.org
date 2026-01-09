@@ -42,6 +42,7 @@ compile & evaluate it.
     (backup-directory-alist '(("." . (concat user-emacs-directory "backups"))))
     (completion-styles '(basic substring initials flex))
     (custom-file (expand-file-name "custom.el" user-emacs-directory))
+    (default-frame-alist '((fullscreen . fullscreen)))
     (disabled-command-function nil)
     (display-time-default-load-average 'nil)
     (display-time-format "%H:%M %a %d/%m")
@@ -60,6 +61,7 @@ compile & evaluate it.
     (use-package-always-defer t)
     (use-package-enable-imenu-support t)
     (use-short-answers t)
+    :config
     :bind
     ("C-x C-b" . ibuffer)
     ("C-c i" . imenu)
@@ -68,14 +70,21 @@ compile & evaluate it.
     ("C-M-;" . comment-box)
     ("C-s-f" . toggle-frame-fullscreen)
     ("C-z" . zap-up-to-char)
-    ("C-x k" . (lambda () (interactive) (kill-buffer (current-buffer))))
-    :hook
-    (after-init . (lambda () (when (not window-system) (normal-erase-is-backspace-mode)))))
+    ("C-x k" . (lambda () (interactive) (kill-buffer (current-buffer)))))
 #+end_src
 
 * MY/DEFUNS
 
 #+begin_src emacs-lisp
+  (defun my/after-make-frame (frame)
+    "Add custom settings after making the FRAME."
+    (select-frame frame)
+    ;; without this backspace sends ctrl-h in certain terminals
+    (normal-erase-is-backspace-mode))
+  (when (daemonp) (add-hook
+		   'after-make-frame-functions
+		   #'my/after-make-frame (selected-frame)))
+
   (defun my/last-buffer ()
     "Switch back and forth between two buffers easily."
     (interactive)
@@ -97,27 +106,27 @@ compile & evaluate it.
       (kill-this-buffer)))
   (keymap-global-set "C-c f d" 'my/delete-this-file)
 
-  (defun ts-kill-ring-save-whole-buffer ()
+  (defun my/kill-ring-save-whole-buffer ()
     "Save the entire contents of the buffer to the kill ring."
     (interactive)
     (kill-ring-save (point-min) (point-max))
     (message "Saved whole buffer to kill ring :-)"))
-  (keymap-global-set "C-c h" 'ts-kill-ring-save-whole-buffer)
+  (keymap-global-set "C-c h" 'my/kill-ring-save-whole-buffer)
 
   (defun my/fill-or-unfill ()
     "Like `fill-paragraph', but unfill if used twice."
     (interactive)
     (let ((fill-column
-	 (if (eq last-command 'ts-fill-or-unfill)
-	     (progn (setq this-command nil)
-		    (point-max))
-	   fill-column)))
+	   (if (eq last-command 'my/fill-or-unfill)
+	       (progn (setq this-command nil)
+		      (point-max))
+	     fill-column)))
       (call-interactively #'fill-paragraph)))
   (keymap-global-set "M-q" 'my/fill-or-unfill)
 
   (defun my/move-beginning-of-line ()
     "Move point back to indentation. If there is any non blank characters to
-      the left of the cursor. Otherwise point moves to beginning of line."
+	      the left of the cursor. Otherwise point moves to beginning of line."
     (interactive)
     (if (= (point) (save-excursion (back-to-indentation) (point)))
 	(beginning-of-line)
@@ -126,7 +135,7 @@ compile & evaluate it.
 
   (defun my/delete-inside-delimiters (arg)
     "Deletes the text within parentheses, brackets or quotes. With prefix
-      ARG, delete delimiters too."
+	      ARG, delete delimiters too."
     (interactive "P")
     ;; Search for a match on the same line, don't delete across lines
     (search-backward-regexp "[[{(<\"\']" (line-beginning-position))
@@ -135,7 +144,7 @@ compile & evaluate it.
       (search-forward-regexp "[]})>\"\']" (line-end-position))
       (backward-char)
       (if arg
-	(kill-region (- lstart 1) (+ (point) 1))
+	  (kill-region (- lstart 1) (+ (point) 1))
 	(kill-region lstart (point)))))
   (keymap-global-set "C-c d" 'my/delete-inside-delimiters)
 #+end_src
