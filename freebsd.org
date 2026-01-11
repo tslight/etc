@@ -506,6 +506,9 @@ EndSection
 ** XSESSION
 #+NAME: xsession
 #+BEGIN_SRC conf :tangle ~/.xsession
+  xset dpms 60 90 120
+  xbattbar left &
+  sct 4000 &
   exec cwm
 #+END_SRC
 #+BEGIN_SRC conf :noweb yes :tangle ~/.xinitrc
