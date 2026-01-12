@@ -507,6 +507,7 @@ EndSection
 #+NAME: xsession
 #+BEGIN_SRC conf :tangle ~/.xsession
   xset dpms 60 90 120
+  pixelclock 3:00 6:00 9:00 12:00 15:00 18:00 21:00 &
   xbattbar left &
   sct 4000 &
   exec cwm
