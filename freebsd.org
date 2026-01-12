@@ -573,8 +573,8 @@ EndSection
 #+end_src
 ** CWM
 #+BEGIN_SRC conf :tangle ~/.cwmrc
-  borderwidth 1
-  gap 0 0 3 0
+  borderwidth 0
+  gap 0 0 3 3
   sticky yes
   snapdist 5
   moveamount 5
@@ -613,9 +613,7 @@ EndSection
   bind-key 4C-h window-resize-left-big
 
   unbind-mouse all
-  bind-mouse 1 window-raise
   bind-mouse R-1 menu-window
-  bind-mouse R-3 menu-exec
   bind-mouse C-1 window-move
   bind-mouse M-1 window-resize
 #+END_SRC
