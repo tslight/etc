@@ -2,6 +2,47 @@
 #+PROPERTY: header-args+ :mkdirp yes
 #+PROPERTY: header-args+ :results silent
 #+PROPERTY: header-args+ :padline no
+* REFS
+
+https://joshua.hu/FreeBSD-on-MacbookPro-114-A1398
+https://freebsd.uw.cz/2025/05/freebsd-and-edimax-n150-wi-fi-usb.html
+
+* ASMCFAN
+#+begin_src shell
+  #!/bin/sh
+  if ! kldstat | grep -q asmc.ko; then
+      kldload asmc
+  fi
+
+  TEMP=$(sysctl -n dev.cpu.0.temperature | cut -c 1-2)
+  CUR_SPEED=$(sysctl -n dev.asmc.0.fan.0.targetspeed)
+  SET_SPEED=0
+
+  if [ "$TEMP" -le 50 ]; then
+      SET_SPEED=2500
+  elif [ "$TEMP" -le 55 ]; then
+      SET_SPEED=3000
+  elif [ "$TEMP" -le 60 ]; then
+      SET_SPEED=3500
+  elif [ "$TEMP" -le 65 ]; then
+      SET_SPEED=4000
+  elif [ "$TEMP" -le 70 ]; then
+      SET_SPEED=4500
+  elif [ "$TEMP" -le 75 ]; then
+      SET_SPEED=5000
+  elif [ "$TEMP" -le 80 ]; then
+      SET_SPEED=5500
+  elif [ "$TEMP" -le 85 ]; then
+      SET_SPEED=6000
+  else
+      SET_SPEED=6500
+  fi
+
+  if [ "$SET_SPEED" -ne "$CUR_SPEED" ]; then
+      logger -t asmcfan "Fan speed set to ${SET_SPEED}RPM (temp: ${TEMP}°C)"
+      sysctl dev.asmc.0.fan.0.maxspeed="$SET_SPEED" dev.asmc.0.fan.1.maxspeed="$SET_SPEED"
+  fi
+#+end_src
 * VT
 
 Either copy an existing keymap file from =/usr/share/vt/keymaps= or use
@@ -507,8 +548,8 @@ EndSection
 #+NAME: xsession
 #+BEGIN_SRC conf :tangle ~/.xsession
   xset dpms 60 90 120
-  pixelclock 3:00 6:00 9:00 12:00 15:00 18:00 21:00 &
   xbattbar left &
+  pixelclock &
   sct 4000 &
   exec cwm
 #+END_SRC
@@ -518,7 +559,7 @@ EndSection
 ** XDEFAULTS
 #+NAME: xdefaults
 #+begin_src conf :tangle ~/.Xdefaults
-  XTerm*faceName: monospace:size=12
+  XTerm*faceName: monospace:size=14
   XTerm*metaSendsEscape: true
   XTerm*reverseVideo: true
   XTerm*selectToClipboard: true
@@ -575,7 +616,7 @@ EndSection
 ** CWM
 #+BEGIN_SRC conf :tangle ~/.cwmrc
   borderwidth 0
-  gap 0 0 3 3
+  gap 0 0 3 4
   sticky yes
   snapdist 5
   moveamount 5
@@ -592,7 +633,7 @@ EndSection
   unbind-key all
   bind-key 4-BackSpace restart
   bind-key 4C-BackSpace quit
-  bind-key 4-Return 'xterm -e emacsclient -nw -c -a ""'
+  bind-key 4-Return 'xterm -maximized -e emacsclient -nw -c -a ""'
   bind-key 4M-Return 'xterm'
   bind-key 4C-Return 'librewolf'
   bind-key 4-space menu-exec
