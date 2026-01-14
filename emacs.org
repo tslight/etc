@@ -12,8 +12,11 @@ pressing =C-c C-c=.
   (org-babel-tangle) (load (expand-file-name "init.el" user-emacs-directory))
 #+end_src
 
-This will "tangle" all the code blocks below into =~/.emacs.d/init.el= and then
-compile & evaluate it.
+This will "tangle" all the code blocks below /(that don't live under a heading
+that starts with =COMMENT=)/ into =~/.emacs.d/init.el= and then compile &
+evaluate it.
+
+To un/comment a heading - move the point to the heading and press =C-c ;=.
 
 #+begin_src emacs-lisp :comments no
   ;; -*- lexical-binding: t; -*-
@@ -38,6 +41,7 @@ compile & evaluate it.
     (when (not (eq system-type 'darwin)) (menu-bar-mode -1))
     :custom
     (auto-save-visited-mode t)
+    (auto-save-file-name-transforms nil) ; https://emacs.stackexchange.com/a/79031
     (backup-directory-alist '(("." . (concat user-emacs-directory "backups"))))
     (completion-styles '(basic substring initials flex))
     (custom-file (expand-file-name "custom.el" user-emacs-directory))
@@ -57,6 +61,8 @@ compile & evaluate it.
        ("melpa" . "https://melpa.org/packages/")
        ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
     (savehist-additional-variables '(compile-command kill-ring register-alist))
+    ;; https://emacs.stackexchange.com/a/78660
+    (tramp-allow-unsafe-temporary-files t)
     (use-package-always-defer t)
     (use-package-enable-imenu-support t)
     (use-short-answers t)
@@ -73,9 +79,10 @@ compile & evaluate it.
 #+end_src
 
 * MY/DEFUNS
+** my/after-make-frame
 
 #+begin_src emacs-lisp
-  (defun my/after-make-frame (frame)
+(defun my/after-make-frame (frame)
     "Add custom settings after making the FRAME."
     (select-frame frame)
     ;; without this backspace sends ctrl-h in certain terminals
@@ -83,19 +90,26 @@ compile & evaluate it.
   (when (daemonp) (add-hook
 		   'after-make-frame-functions
 		   #'my/after-make-frame (selected-frame)))
-
-  (defun my/last-buffer ()
-    "Switch back and forth between two buffers easily."
-    (interactive)
-    (switch-to-buffer (other-buffer (current-buffer) 1)))
-  (keymap-global-set "C-c b" 'my/last-buffer)
-
-  (defun my/indent-buffer ()
-    "Indent the contents of a buffer."
-    (interactive)
-    (indent-region (point-min) (point-max)))
-  (keymap-global-set "M-i" 'my/indent-buffer)
-
+#+end_src
+** my/delete-inside-delimiters
+#+begin_src emacs-lisp
+  (defun my/delete-inside-delimiters (arg)
+    "Deletes the text within parentheses, brackets or quotes. With prefix
+		ARG, delete delimiters too."
+    (interactive "P")
+    ;; Search for a match on the same line, don't delete across lines
+    (search-backward-regexp "[[{(<\"\']" (line-beginning-position))
+    (forward-char)
+    (let ((lstart (point)))
+      (search-forward-regexp "[]})>\"\']" (line-end-position))
+      (backward-char)
+      (if arg
+	    (kill-region (- lstart 1) (+ (point) 1))
+	  (kill-region lstart (point)))))
+  (keymap-global-set "C-c d" 'my/delete-inside-delimiters)
+#+end_src
+** my/delete-this-file
+#+begin_src emacs-lisp
   (defun my/delete-this-file ()
     "Delete the current file, and kill the buffer."
     (interactive)
@@ -104,14 +118,9 @@ compile & evaluate it.
       (delete-file (buffer-file-name) t)
       (kill-this-buffer)))
   (keymap-global-set "C-c f d" 'my/delete-this-file)
-
-  (defun my/kill-ring-save-whole-buffer ()
-    "Save the entire contents of the buffer to the kill ring."
-    (interactive)
-    (kill-ring-save (point-min) (point-max))
-    (message "Saved whole buffer to kill ring :-)"))
-  (keymap-global-set "C-c h" 'my/kill-ring-save-whole-buffer)
-
+#+end_src
+** my/fill-or-unfill
+#+begin_src emacs-lisp
   (defun my/fill-or-unfill ()
     "Like `fill-paragraph', but unfill if used twice."
     (interactive)
@@ -122,32 +131,73 @@ compile & evaluate it.
 	     fill-column)))
       (call-interactively #'fill-paragraph)))
   (keymap-global-set "M-q" 'my/fill-or-unfill)
-
+#+end_src
+** my/indent-buffer
+#+begin_src emacs-lisp
+  (defun my/indent-buffer ()
+    "Indent the contents of a buffer."
+    (interactive)
+    (indent-region (point-min) (point-max)))
+  (keymap-global-set "M-i" 'my/indent-buffer)
+#+end_src
+** my/kill-ring-save-whole-buffer
+#+begin_src emacs-lisp
+  (defun my/kill-ring-save-whole-buffer ()
+    "Save the entire contents of the buffer to the kill ring."
+    (interactive)
+    (kill-ring-save (point-min) (point-max))
+    (message "Saved whole buffer to kill ring :-)"))
+  (keymap-global-set "C-c h" 'my/kill-ring-save-whole-buffer)
+#+end_src
+** my/last-buffer
+#+begin_src emacs-lisp
+  (defun my/last-buffer ()
+    "Switch back and forth between two buffers easily."
+    (interactive)
+    (switch-to-buffer (other-buffer (current-buffer) 1)))
+  (keymap-global-set "C-c b" 'my/last-buffer)
+#+end_src
+** my/move-beginning-of-line
+#+begin_src emacs-lisp
   (defun my/move-beginning-of-line ()
     "Move point back to indentation. If there is any non blank characters to
-	      the left of the cursor. Otherwise point moves to beginning of line."
+		the left of the cursor. Otherwise point moves to beginning of line."
     (interactive)
     (if (= (point) (save-excursion (back-to-indentation) (point)))
-	(beginning-of-line)
+	  (beginning-of-line)
       (back-to-indentation)))
   (global-set-key [remap move-beginning-of-line] 'my/move-beginning-of-line)
-
-  (defun my/delete-inside-delimiters (arg)
-    "Deletes the text within parentheses, brackets or quotes. With prefix
-	      ARG, delete delimiters too."
-    (interactive "P")
-    ;; Search for a match on the same line, don't delete across lines
-    (search-backward-regexp "[[{(<\"\']" (line-beginning-position))
-    (forward-char)
-    (let ((lstart (point)))
-      (search-forward-regexp "[]})>\"\']" (line-end-position))
-      (backward-char)
-      (if arg
-	  (kill-region (- lstart 1) (+ (point) 1))
-	(kill-region lstart (point)))))
-  (keymap-global-set "C-c d" 'my/delete-inside-delimiters)
 #+end_src
-
+** my/sudoedit
+#+begin_src emacs-lisp
+  (defun my/sudoedit (&optional arg)
+    "Open current or ARG file as root."
+    (interactive "P")
+    (if (or arg (not buffer-file-name))
+	(find-file (concat "/sudo:root@localhost:"
+			   (read-file-name "Find file (as root): ")))
+      (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
+  (keymap-global-set "C-c f s" 'my/sudoedit)
+#+end_src
+** my/yank-filename
+#+begin_src emacs-lisp
+  (defun my/yank-filename (arg)
+    "Yank current buffer filename. With prefix ARG, omit path."
+    (interactive "P")
+    (let ((filename (if (equal major-mode 'dired-mode)
+		        (if arg
+			    (file-name-nondirectory
+			     (directory-file-name
+			      (file-name-directory default-directory)))
+			  default-directory)
+		      (if arg
+			  (file-name-nondirectory buffer-file-name)
+		        (buffer-file-name)))))
+      (when filename
+	(kill-new filename)
+	(message "Yanked '%s'!" filename))))
+  (keymap-global-set "C-c f w" 'my/yank-filename)
+#+end_src
 * DIRED
 
 #+begin_src emacs-lisp
@@ -210,12 +260,36 @@ compile & evaluate it.
     :bind ("C-c w" . eww))
 #+end_src
 
+* COMMENT ICOMPLETE
+
+#+begin_src emacs-lisp
+  (use-package icomplete
+    :custom
+    (fido-vertical-mode t)
+    (icomplete-compute-delay 0)
+    :bind (:map icomplete-fido-mode-map
+	      ("<tab>" . icomplete-forward-completions)
+	      ("<backtab>" . icomplete-backward-completions)
+	      ("M-j" . exit-minibuffer)))
+#+end_src
+
 * LINE NUMBERS
 
 #+begin_src emacs-lisp
   (use-package display-line-numbers
     :custom (display-line-numbers-type 'relative)
     :hook (prog-mode . display-line-numbers-mode))
+#+end_src
+
+* COMMENT LSP
+
+#+begin_src emacs-lisp
+  (use-package eglot :hook (prog-mode . eglot-ensure))
+  (use-package corfu :ensure
+    :custom
+    (corfu-cycle t)
+    (corfu-auto t)
+    :hook (prog-mode . corfu-mode))
 #+end_src
 
 * MISC
@@ -277,6 +351,47 @@ compile & evaluate it.
 #+begin_src emacs-lisp
   (use-package sh-script
     :hook (after-save . executable-make-buffer-file-executable-if-script-p))
+#+end_src
+
+* COMMENT TREESIT
+
+https://www.masteringemacs.org/article/how-to-get-started-tree-sitter
+
+Bulk install all the grammars as a one of task, so don't tangle!
+
+#+begin_src emacs-lisp :tangle no
+  (setq treesit-language-source-alist
+	'((bash "https://github.com/tree-sitter/tree-sitter-bash")
+	(cmake "https://github.com/uyha/tree-sitter-cmake")
+	(css "https://github.com/tree-sitter/tree-sitter-css")
+	(elisp "https://github.com/Wilfred/tree-sitter-elisp")
+	(go "https://github.com/tree-sitter/tree-sitter-go")
+	(html "https://github.com/tree-sitter/tree-sitter-html")
+	(javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
+	(json "https://github.com/tree-sitter/tree-sitter-json")
+	(make "https://github.com/alemuller/tree-sitter-make")
+	(markdown "https://github.com/ikatyang/tree-sitter-markdown")
+	(nix "https://github.com/nix-community/tree-sitter-nix")
+	(python "https://github.com/tree-sitter/tree-sitter-python")
+	(toml "https://github.com/tree-sitter/tree-sitter-toml")
+	(tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
+	(typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
+	(yaml "https://github.com/ikatyang/tree-sitter-yaml")))
+  (mapc #'treesit-install-language-grammar (mapcar #'car treesit-language-source-alist))
+#+end_src
+
+#+begin_src emacs-lisp
+  (use-package treesit
+    :custom
+    (major-mode-remap-alist
+     '((yaml-mode . yaml-ts-mode)
+       (bash-mode . bash-ts-mode)
+       (js2-mode . js-ts-mode)
+       (go-mode . go-ts-mode)
+       (typescript-mode . typescript-ts-mode)
+       (json-mode . json-ts-mode)
+       (css-mode . css-ts-mode)
+       (python-mode . python-ts-mode))))
 #+end_src
 
 * 3RD PARTY

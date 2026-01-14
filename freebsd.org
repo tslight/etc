@@ -13,10 +13,22 @@ On Macbook Pro 8,3 - disable AMD GPU from OSX recovery with:
 nvram gpu-power-prefs=%01%00%00%00
 nvram fa4ce28d-b62f-4c99-9cc3-6815686e30f9:gpu-power-prefs=%01%00%00%00
 #+end_src
+* CRON
 
-* ASMCFAN
-#+begin_src shell
+#+begin_src cron
+SHELL=/bin/sh
+PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin
+*       *       *       *       *       /usr/local/bin/asmcfan
+*       *       *       *       *       /usr/local/bin/fscksaver
+#+end_src
+
+** ASMCFAN
+
+Control the fans depending on temperature, in a Macbook that supports ASMC.
+
+#+begin_src shell :tangle /sudo::/usr/local/bin/asmcfan :tangle-mode o755
   #!/bin/sh
+
   if ! kldstat | grep -q asmc.ko; then
       kldload asmc
   fi
@@ -49,6 +61,29 @@ nvram fa4ce28d-b62f-4c99-9cc3-6815686e30f9:gpu-power-prefs=%01%00%00%00
       logger -t asmcfan "Fan speed set to ${SET_SPEED}RPM (temp: ${TEMP}°C)"
       sysctl dev.asmc.0.fan.0.maxspeed="$SET_SPEED" dev.asmc.0.fan.1.maxspeed="$SET_SPEED"
   fi
+
+  exit 0
+#+end_src
+** FSCKSAVER
+
+Shutdown when battery is lower than 10% and we're not charging.
+
+#+begin_src shell :tangle /sudo::/usr/local/bin/fscksaver :tangle-mode o755
+  #!/bin/sh
+
+  # Get battery life percentage
+  battery_life=$(sysctl -n hw.acpi.battery.life)
+
+  # Get AC line status (1 = plugged in, 0 = on battery)
+  ac_status=$(sysctl -n hw.acpi.acline)
+
+  # Check if battery is below 10% and not plugged in
+  if [ "$battery_life" -lt 10 ] && [ "$ac_status" -eq 0 ]; then
+      logger "Battery low ($battery_life%) and not on AC power. Shutting down..."
+      shutdown -p now
+  fi
+
+  exit 0
 #+end_src
 * VT
 
