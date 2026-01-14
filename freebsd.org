@@ -18,8 +18,8 @@ nvram fa4ce28d-b62f-4c99-9cc3-6815686e30f9:gpu-power-prefs=%01%00%00%00
 #+begin_src cron
 SHELL=/bin/sh
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin
-*       *       *       *       *       /usr/local/bin/asmcfan
-*       *       *       *       *       /usr/local/bin/fscksaver
+\*       *       *       *       *       /usr/local/bin/asmcfan
+\*       *       *       *       *       /usr/local/bin/fscksaver
 #+end_src
 
 ** ASMCFAN
@@ -79,11 +79,9 @@ Shutdown when battery is lower than 10% and we're not charging.
 
   # Check if battery is below 10% and not plugged in
   if [ "$battery_life" -lt 10 ] && [ "$ac_status" -eq 0 ]; then
-      logger "Battery low ($battery_life%) and not on AC power. Shutting down..."
+      logger -t fscksaver "$battery_life% & not charging. Shutting down..."
       shutdown -p now
   fi
-
-  exit 0
 #+end_src
 * VT
 
@@ -677,7 +675,7 @@ EndSection
   unbind-key all
   bind-key 4-BackSpace restart
   bind-key 4C-BackSpace quit
-  bind-key 4-Return 'xterm -maximized -e emacsclient -nw -c -a ""'
+  bind-key 4-Return 'emacsclient -c -a ""'
   bind-key 4M-Return 'xterm'
   bind-key 4C-Return 'librewolf'
   bind-key 4-space menu-exec
