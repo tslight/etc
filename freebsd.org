@@ -628,6 +628,7 @@ EndSection
   snapdist 5
   moveamount 5
   ignore xclock
+  fontname "monospace:bold:size=18"
 
   color activeborder '#B28'
   color inactiveborder '#627'
@@ -636,6 +637,7 @@ EndSection
   color menufg '#627'
   color font '#DDD'
   color selfont '#FFF'
+  color font '#B28'
 
   unbind-key all
   bind-key 4-BackSpace restart
