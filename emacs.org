@@ -60,10 +60,9 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
     (use-package-enable-imenu-support t)
     (use-short-answers t)
     :config
-    (defun my/align-regexp-with-spaces ()
-      "Force alignment commands to use spaces, not tabs."
-      (let ((indent-tabs-mode nil))))
-    (advice-add 'align-regexp :around #'my/align-regexp-with-spaces)
+    (if (eq system-type 'darwin)
+	(setq default-frame-alist '((fullscreen . fullscreen)))
+      (setq default-frame-alist '((fullscreen . maximized))))
     :bind
     ("C-&" . async-shell-command)
     ("C-!" . async-shell-command)
@@ -149,10 +148,6 @@ Otherwise emacsclient doesn't initialise UI settings.
     (if (fboundp 'tooltip-mode) (tooltip-mode -1))
 
     (when (not (eq system-type 'darwin)) (menu-bar-mode -1))
-
-    (if (eq system-type 'darwin)
-	(setq default-frame-alist '((fullscreen . fullscreen)))
-      (setq default-frame-alist '((fullscreen . maximized))))
 
     (if (not (eq system-type 'darwin))
 	(setq frame-resize-pixelwise t)) ; proper maximize in some wm
