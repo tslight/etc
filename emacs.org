@@ -60,22 +60,29 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
     (use-package-enable-imenu-support t)
     (use-short-answers t)
     :config
+    (defun my/align-regexp-with-spaces ()
+      "Force alignment commands to use spaces, not tabs."
+      (let ((indent-tabs-mode nil))))
+    (advice-add 'align-regexp :around #'my/align-regexp-with-spaces)
     :bind
-    ("C-<" . beginning-of-buffer)
-    ("C->" . end-of-buffer)
-    ("C-%" . query-replace-regexp)
     ("C-&" . async-shell-command)
     ("C-!" . async-shell-command)
-    ("C-x C-b" . ibuffer)
-    ("C-c i" . imenu)
-    ("C-c f r" . rename-visited-file)
+    ("C-%" . query-replace-regexp)
     ("C-;" . comment-line)
     ("C-M-;" . comment-box)
+    ("C-<" . beginning-of-buffer)
+    ("C->" . end-of-buffer)
+    ("C-c f r" . rename-visited-file)
+    ("C-c a" . align-regexp)
+    ("C-c i" . imenu)
+    ("C-c m" . compile)
     ("C-s-f" . toggle-frame-fullscreen)
+    ("C-x C-b" . ibuffer)
+    ("C-x m" . man)
+    ("C-x x s" . sort-lines)
     ("C-z" . zap-up-to-char)
-    ("C-x k" . (lambda () (interactive) (kill-buffer (current-buffer))))
     ("C-x M-k" . kill-buffer)
-    ("C-x x s" . sort-lines))
+    ("C-x k" . (lambda () (interactive) (kill-buffer (current-buffer)))))
 #+end_src
 
 * MY/DEFUNS
@@ -207,7 +214,7 @@ Otherwise emacsclient doesn't initialise UI settings.
     (switch-to-buffer (other-buffer (current-buffer) 1)))
 
   (keymap-global-set "C-c b" 'my/last-buffer)
-  (keymap-global-set "C-<escape>" 'ts-last-buffer)
+  (keymap-global-set "C-<escape>" 'my/last-buffer)
 #+end_src
 
 ** my/move-beginning-of-line
@@ -372,7 +379,7 @@ Otherwise emacsclient doesn't initialise UI settings.
     :hook (prog-mode . display-line-numbers-mode))
 #+end_src
 
-* COMMENT LSP
+* LSP
 
 #+begin_src emacs-lisp
   (use-package eglot :hook (prog-mode . eglot-ensure))
