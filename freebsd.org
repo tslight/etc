@@ -7,6 +7,13 @@
 https://joshua.hu/FreeBSD-on-MacbookPro-114-A1398
 https://freebsd.uw.cz/2025/05/freebsd-and-edimax-n150-wi-fi-usb.html
 
+On Macbook Pro 8,3 - disable AMD GPU from OSX recovery with:
+
+#+begin_src shell
+nvram gpu-power-prefs=%01%00%00%00
+nvram fa4ce28d-b62f-4c99-9cc3-6815686e30f9:gpu-power-prefs=%01%00%00%00
+#+end_src
+
 * ASMCFAN
 #+begin_src shell
   #!/bin/sh
