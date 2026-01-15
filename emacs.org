@@ -81,7 +81,12 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
     ("C-x x s" . sort-lines)
     ("C-z" . zap-up-to-char)
     ("C-x M-k" . kill-buffer)
-    ("C-x k" . (lambda () (interactive) (kill-buffer (current-buffer)))))
+    ("C-x k" . (lambda () (interactive) (kill-buffer (current-buffer))))
+    (:map minibuffer-local-must-match-map
+	("C-s" . minibuffer-next-completion)
+	("C-r" . minibuffer-previous-completion)
+	("C-n" . minibuffer-next-completion)
+	("C-p" . minibuffer-previous-completion)))
 #+end_src
 
 * DEFUNS
@@ -486,6 +491,7 @@ Bulk install all the grammars as a one of task, so don't tangle!
      '((c-mode . c-ts-mode)
        (c++-mode . c++-ts-mode)
        (css-mode . css-ts-mode)
+       (html-mode . html-ts-mode)
        (js-mode . js-ts-mode)
        (python-mode . python-ts-mode)
        (ruby-mode . ruby-ts-mode)

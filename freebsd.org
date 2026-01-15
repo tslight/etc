@@ -77,8 +77,8 @@ Shutdown when battery is lower than 10% and we're not charging.
   # Get AC line status (1 = plugged in, 0 = on battery)
   ac_status=$(sysctl -n hw.acpi.acline)
 
-  # Check if battery is below 10% and not plugged in
-  if [ "$battery_life" -lt 10 ] && [ "$ac_status" -eq 0 ]; then
+  # Check if battery is below 5% and not plugged in
+  if [ "$battery_life" -lt 5 ] && [ "$ac_status" -eq 0 ]; then
       logger -t fscksaver "$battery_life% & not charging. Shutting down..."
       shutdown -p now
   fi
