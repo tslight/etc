@@ -84,8 +84,11 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
     ("C-x k" . (lambda () (interactive) (kill-buffer (current-buffer)))))
 #+end_src
 
-* MY/DEFUNS
-** my/delete-inside-delimiters
+* DEFUNS
+
+All of my custom functions live under the =my/= prefix/namespace.
+
+** delete-inside-delimiters
 
 #+begin_src emacs-lisp
   (defun my/delete-inside-delimiters (arg)
@@ -105,7 +108,7 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
   (keymap-global-set "C-c d" 'my/delete-inside-delimiters)
 #+end_src
 
-** my/delete-this-file
+** delete-this-file
 
 #+begin_src emacs-lisp
   (defun my/delete-this-file ()
@@ -120,7 +123,7 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
   (keymap-global-set "C-c f d" 'my/delete-this-file)
 #+end_src
 
-** my/indent-buffer
+** indent-buffer
 
 #+begin_src emacs-lisp
   (defun my/indent-buffer ()
@@ -131,7 +134,7 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
   (keymap-global-set "M-i" 'my/indent-buffer)
 #+end_src
 
-** my/init-frame
+** init-frame
 
 Otherwise emacsclient doesn't initialise UI settings.
 
@@ -165,7 +168,7 @@ Otherwise emacsclient doesn't initialise UI settings.
     (my/init-frame (selected-frame)))
 #+end_src
 
-** my/kill-region
+** kill-region
 
 #+begin_src emacs-lisp
   (defun ts-kill-region (arg)
@@ -182,7 +185,7 @@ Otherwise emacsclient doesn't initialise UI settings.
   (global-set-key [remap kill-region] 'ts-kill-region)
 #+end_src
 
-** my/kill-ring-save
+** kill-ring-save
 
 #+begin_src emacs-lisp
   (defun ts-kill-ring-save (arg)
@@ -200,7 +203,7 @@ Otherwise emacsclient doesn't initialise UI settings.
   (global-set-key [remap kill-ring-save] 'ts-kill-ring-save)
 #+end_src
 
-** my/last-buffer
+** last-buffer
 
 #+begin_src emacs-lisp
   (defun my/last-buffer ()
@@ -212,7 +215,7 @@ Otherwise emacsclient doesn't initialise UI settings.
   (keymap-global-set "C-<escape>" 'my/last-buffer)
 #+end_src
 
-** my/move-beginning-of-line
+** move-beginning-of-line
 
 #+begin_src emacs-lisp
   (defun my/move-beginning-of-line ()
@@ -226,7 +229,7 @@ Otherwise emacsclient doesn't initialise UI settings.
   (global-set-key [remap move-beginning-of-line] 'my/move-beginning-of-line)
 #+end_src
 
-** my/save-filename
+** save-filename
 
 #+begin_src emacs-lisp
   (defun my/save-filename (arg)
@@ -249,7 +252,7 @@ Otherwise emacsclient doesn't initialise UI settings.
   (keymap-global-set "C-c f w" 'my/save-filename)
 #+end_src
 
-** my/save-whole-buffer
+** save-whole-buffer
 
 #+begin_src emacs-lisp
   (defun my/save-whole-buffer ()
@@ -261,7 +264,7 @@ Otherwise emacsclient doesn't initialise UI settings.
   (keymap-global-set "C-c h" 'my/save-whole-buffer)
 #+end_src
 
-** my/sudoedit
+** sudoedit
 
 #+begin_src emacs-lisp
   (defun my/sudoedit (&optional arg)
@@ -275,7 +278,7 @@ Otherwise emacsclient doesn't initialise UI settings.
   (keymap-global-set "C-c f s" 'my/sudoedit)
 #+end_src
 
-** my/toggle-fill
+** toggle-fill
 
 #+begin_src emacs-lisp
   (defun my/toggle-fill ()
