@@ -282,7 +282,7 @@ Otherwise emacsclient doesn't initialise UI settings.
     "Like `fill-paragraph', but unfill if used twice."
     (interactive)
     (let ((fill-column
-	   (if (eq last-command 'my/fill-or-unfill)
+	   (if (eq last-command 'my/toggle-fill)
 	       (progn (setq this-command nil)
 		      (point-max))
 	     fill-column)))
@@ -480,18 +480,16 @@ Bulk install all the grammars as a one of task, so don't tangle!
   (use-package treesit
     :custom
     (major-mode-remap-alist
-     '((bash-mode . bash-ts-mode)
+     '((c-mode . c-ts-mode)
        (c++-mode . c++-ts-mode)
-       (c-mode . c-ts-mode)
        (css-mode . css-ts-mode)
-       (go-mode . go-ts-mode)
-       (js2-mode . js-ts-mode)
-       (json-mode . json-ts-mode)
+       (js-mode . js-ts-mode)
        (python-mode . python-ts-mode)
        (ruby-mode . ruby-ts-mode)
-       (typescript-mode . typescript-ts-mode)
-       (yaml-mode . yaml-ts-mode)))
+       (sh-mode . bash-ts-mode)
+       (typescript-mode . typescript-ts-mode)))
     :mode
+    ("\\.go\\'" . go-ts-mode)
     ("\\.json\\'" . json-ts-mode)
     ("\\.yaml\\'" . yaml-ts-mode))
 #+end_src
