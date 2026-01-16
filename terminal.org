@@ -6,6 +6,7 @@
 #+PROPERTY: header-args+ :results silent
 * GIT
 ** CONFIG
+
 #+BEGIN_SRC conf :tangle ~/.config/git/config
   [color]
   ui = true
@@ -36,7 +37,9 @@
   name = tslight
   email = tslight@pm.com
 #+END_SRC
+
 ** IGNORE
+
 #+BEGIN_SRC conf :tangle ~/.config/git/ignore
   .DS_Store
   .localized

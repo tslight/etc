@@ -35,6 +35,9 @@ https://bugs.freebsd.org/bugzilla//show_bug.cgi?id=272787
 Despite the fact that we can load =acpi_video= kmod and get some promising new
 sysctls, nothing actually changes the backlight, even though they profess to...
 
+On Macbooks with dual GPUs of this vintage, the GMUX chip controls switching
+between Integrated/Discrete GPUs and backlight.
+
 For proper backlight on MBP 8,3, someone would need to port the Linux
 ~apple-gmux~ driver to FreeBSD. The GMUX chip sits at IO port ~0x700~ and
 controls backlight via specific register writes.
