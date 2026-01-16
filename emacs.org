@@ -67,6 +67,7 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
     ("C-&" . async-shell-command)
     ("C-!" . async-shell-command)
     ("C-%" . query-replace-regexp)
+    ("C-$" . aspell-word)
     ("C-;" . comment-line)
     ("C-M-;" . comment-box)
     ("C-<" . beginning-of-buffer)
@@ -83,10 +84,10 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
     ("C-x M-k" . kill-buffer)
     ("C-x k" . (lambda () (interactive) (kill-buffer (current-buffer))))
     (:map minibuffer-local-must-match-map
-	("C-s" . minibuffer-next-completion)
-	("C-r" . minibuffer-previous-completion)
-	("C-n" . next-history-element)
-	("C-p" . previous-history-element)))
+	  ("C-s" . minibuffer-next-completion)
+	  ("C-r" . minibuffer-previous-completion)
+	  ("C-n" . next-history-element)
+	  ("C-p" . previous-history-element)))
 #+end_src
 
 * DEFUNS
