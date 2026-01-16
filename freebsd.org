@@ -3,13 +3,11 @@
 #+PROPERTY: header-args+ :results silent
 #+PROPERTY: header-args+ :padline no
 * REFS
-
 ** MACBOOK
 https://joshua.hu/FreeBSD-on-MacbookPro-114-A1398
 https://freebsd.uw.cz/2025/05/freebsd-and-edimax-n150-wi-fi-usb.html
 
 *** PRO 8,3
-
 **** Suspend
 
 https://bugs.freebsd.org/bugzilla//show_bug.cgi?id=252241
@@ -31,6 +29,59 @@ Add the machine to =/usr/src/sys/dev/asmc/asmc.c= as mentioned in the link
 below:
 
 https://bugs.freebsd.org/bugzilla//show_bug.cgi?id=272787
+
+**** BACKLIGHT
+
+Despite the fact that we can load =acpi_video= kmod and get some promising new
+sysctls, nothing actually changes the backlight, even though they profess to...
+
+For proper backlight on MBP 8,3, someone would need to port the Linux
+~apple-gmux~ driver to FreeBSD. The GMUX chip sits at IO port ~0x700~ and
+controls backlight via specific register writes.
+
+For the time being, here's some hack C code to achieve what I want:
+
+#+begin_src c
+#include <stdio.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <machine/cpufunc.h>
+
+#define GMUX_PORT_BRIGHTNESS 0x774
+
+int main(int argc, char *argv[]) {
+    int fd;
+    uint32_t val;
+
+    fd = open("/dev/io", O_RDWR);
+    if (fd < 0) {
+	perror("open /dev/io");
+	return 1;
+    }
+
+    if (argc == 1) {
+	/* Read current brightness */
+	val = inl(GMUX_PORT_BRIGHTNESS);
+	printf("Current brightness: 0x%x (%d%%)\n", val, val * 100 / 0xFFFF);
+    } else {
+	/* Set brightness (0-100) */
+	int pct = atoi(argv[1]);
+	if (pct < 0 || pct > 100) {
+	    fprintf(stderr, "Value must be 0-100\n");
+	    close(fd);
+	    return 1;
+	}
+	val = pct * 0xFFFF / 100;
+	outl(GMUX_PORT_BRIGHTNESS, val);
+	printf("Set brightness to %d%% (0x%x)\n", pct, val);
+    }
+
+    close(fd);
+    return 0;
+}
+#+end_src
 
 * CRON
 
