@@ -4,6 +4,7 @@
 #+PROPERTY: header-args+ :padline no
 * REFS
 ** MACBOOK
+
 https://joshua.hu/FreeBSD-on-MacbookPro-114-A1398
 https://freebsd.uw.cz/2025/05/freebsd-and-edimax-n150-wi-fi-usb.html
 
@@ -85,6 +86,8 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 #+end_src
+
+For more GMUX HAX take a look at: https://github.com/tslight/gmuxctl
 
 * CRON
 
