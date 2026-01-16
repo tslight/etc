@@ -4,8 +4,16 @@
 #+PROPERTY: header-args+ :padline no
 * REFS
 
+** MACBOOK
 https://joshua.hu/FreeBSD-on-MacbookPro-114-A1398
 https://freebsd.uw.cz/2025/05/freebsd-and-edimax-n150-wi-fi-usb.html
+
+*** PRO 8,3
+
+**** Suspend
+
+https://bugs.freebsd.org/bugzilla//show_bug.cgi?id=252241
+https://forums.macrumors.com/threads/force-2011-macbook-pro-8-2-with-failed-amd-gpu-to-always-use-intel-integrated-gpu-efi-variable-fix.2037591/
 
 On Macbook Pro 8,3 - disable AMD GPU from OSX recovery with:
 
@@ -13,6 +21,17 @@ On Macbook Pro 8,3 - disable AMD GPU from OSX recovery with:
 nvram gpu-power-prefs=%01%00%00%00
 nvram fa4ce28d-b62f-4c99-9cc3-6815686e30f9:gpu-power-prefs=%01%00%00%00
 #+end_src
+
+After that we should be able to load and use i915kms, prior to that the system
+will become unresponsive when i915kms is loaded.
+
+**** ASMC
+
+Add the machine to =/usr/src/sys/dev/asmc/asmc.c= as mentioned in the link
+below:
+
+https://bugs.freebsd.org/bugzilla//show_bug.cgi?id=272787
+
 * CRON
 
 #+begin_src cron
