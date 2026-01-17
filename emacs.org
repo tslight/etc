@@ -362,6 +362,15 @@ Otherwise emacsclient doesn't initialise UI settings.
     :bind ("C-c w" . eww))
 #+end_src
 
+* FLYSPELL
+
+#+begin_src emacs-lisp
+  (use-package flyspell
+    :hook
+    ((text-mode org-mode) . flyspell-mode)
+    (prog-mode . flyspell-prog-mode))
+#+end_src
+
 * COMMENT ICOMPLETE
 
 #+begin_src emacs-lisp
