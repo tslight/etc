@@ -3,15 +3,26 @@
 #+PROPERTY: header-args+ :results silent
 #+PROPERTY: header-args+ :padline no
 * REFS
+
+https://docs.freebsd.org/en/books/handbook/x11/
+https://docs.freebsd.org/en/books/handbook/kernelconfig/
+https://www.duskopijetlovic.com/boot/dotfiles/howto/freebsd/config/sysadmin/2025/03/02/new-freebsd-system-setup.html
+
 ** MACBOOK
 
 https://joshua.hu/FreeBSD-on-MacbookPro-114-A1398
 https://freebsd.uw.cz/2025/05/freebsd-and-edimax-n150-wi-fi-usb.html
+https://duriansoftware.com/joe/freebsd-installation-notes-for-a-2011-macbook-air
 
 *** PRO 8,3
+
+https://wiki.freebsd.org/Graphics/AMD-GPU-Matrix
+https://www.reddit.com/r/freebsd/comments/1jhx9y5/kld_list_entries_for_an_apple_macbookpro83_with/
+
 **** Suspend
 
 https://bugs.freebsd.org/bugzilla//show_bug.cgi?id=252241
+https://forums.freebsd.org/threads/will-we-have-drm-kmod-driver-i915kms-ko-for-14-3-release-i386.100943/
 https://forums.macrumors.com/threads/force-2011-macbook-pro-8-2-with-failed-amd-gpu-to-always-use-intel-integrated-gpu-efi-variable-fix.2037591/
 
 On Macbook Pro 8,3 - disable AMD GPU from OSX recovery with:
@@ -30,8 +41,11 @@ Add the machine to =/usr/src/sys/dev/asmc/asmc.c= as mentioned in the link
 below:
 
 https://bugs.freebsd.org/bugzilla//show_bug.cgi?id=272787
+https://cgit.freebsd.org/src/tree/sys/dev/asmc/asmc.c?h=main
 
 **** BACKLIGHT
+
+https://github.com/tslight/gmuxctl/tree/main/gmux_backlight
 
 Despite the fact that we can load =acpi_video= kmod and get some promising new
 sysctls, nothing actually changes the backlight, even though they profess to...
