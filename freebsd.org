@@ -785,6 +785,8 @@ EndSection
   bind-key 4C-j window-resize-down-big
   bind-key 4C-l window-resize-right-big
   bind-key 4C-h window-resize-left-big
+  bind-key F1 'sudo gmux_backlight -10'
+  bind-key F2 'sudo gmux_backlight +10'
   bind-key F10 'mixer vol.mute=toggle'
   bind-key F11 'mixer vol.volume=-5%'
   bind-key F12 'mixer vol.volume=+5%'

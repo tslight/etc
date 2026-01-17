@@ -64,6 +64,15 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
 	(setq default-frame-alist '((fullscreen . fullscreen)))
       (setq default-frame-alist '((fullscreen . maximized))))
     :bind
+    ("<tab>" . (lambda () (interactive) ;; USE CTRL-I FFS or the sake of your pinkies!
+	         (message "YOU HAVE FORGOTTEN THE FACE OF YOUR FATHER")))
+    ("<return>" . (lambda () (interactive) ;; USE CTRL-J FFS or the sake of your pinkies!
+		    (message "YOU HAVE FORGOTTEN THE FACE OF YOUR FATHER")))
+    ("<backspace>" . (lambda () (interactive) ;; USE CTRL-H FFS or the sake of your pinkies!
+		       (message "YOU HAVE FORGOTTEN THE FACE OF YOUR FATHER")))
+    ("C-h" . backward-delete-char-untabify) ;; act the same as terminal
+    ("C-M-h" . backward-kill-word) ;; ditto! Also M-h seems to do the same
+    ("C-c h" . 'help-command) ;; We don't always have F1 as a fallback...
     ("C-&" . async-shell-command)
     ("C-!" . async-shell-command)
     ("C-%" . query-replace-regexp)
@@ -82,6 +91,7 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
     ("C-x x s" . sort-lines)
     ("C-z" . zap-up-to-char)
     ("C-x M-k" . kill-buffer)
+    ("C-x M-c" . kill-emacs) ;; for killing the daemon
     ("C-x k" . (lambda () (interactive) (kill-buffer (current-buffer))))
     (:map minibuffer-local-must-match-map
 	  ("C-s" . minibuffer-next-completion)
