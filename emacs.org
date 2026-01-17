@@ -533,7 +533,7 @@ Bulk install all the grammars as a one of task, so don't tangle!
 #+begin_src emacs-lisp
   (use-package copilot :ensure)
   (use-package copilot-chat :ensure
-    :custom (copilot-chat-default-model 'claude-opus-4.5)
+    :custom (copilot-chat-default-model "claude-opus-4.5")
     :bind ("C-c c" . copilot-chat))
 #+end_src
 ** GIT
