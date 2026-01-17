@@ -552,9 +552,16 @@ Bulk install all the grammars as a one of task, so don't tangle!
        ("Push" 5 magit-repolist-column-unpushed-to-upstream ((:right-align t) nil))
        ("Path" 99 magit-repolist-column-path nil))))
 #+end_src
-** MISC
+** PATH FROM SHELL
 #+begin_src emacs-lisp
-  (use-package exec-path-from-shell :ensure :hook (after-init . exec-path-from-shell-initialize))
+  (use-package exec-path-from-shell :ensure
+    :hook (after-init . exec-path-from-shell-initialize))
+#+end_src
+** VTERM
+#+begin_src emacs-lisp
   (use-package vterm :ensure :bind* ("C-c t" . vterm))
+#+end_src
+** VUNDO
+#+begin_src emacs-lisp
   (use-package vundo :ensure :bind* ("C-c u" . vundo))
 #+end_src
