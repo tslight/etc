@@ -502,15 +502,23 @@ Bulk install all the grammars as a one of task, so don't tangle!
        (c++-mode . c++-ts-mode)
        (css-mode . css-ts-mode)
        (html-mode . html-ts-mode)
+       (java-mode . java-ts-mode)
        (js-mode . js-ts-mode)
        (python-mode . python-ts-mode)
        (ruby-mode . ruby-ts-mode)
        (sh-mode . bash-ts-mode)
        (typescript-mode . typescript-ts-mode)))
     :mode
+    ("\\Dockerfile\\'" . dockerfile-ts-mode)
     ("\\.go\\'" . go-ts-mode)
     ("\\.json\\'" . json-ts-mode)
-    ("\\.yaml\\'" . yaml-ts-mode))
+    ("\\.lua\\'" . lua-ts-mode)
+    ("\\Makefile\\'" . cmake-ts-mode)
+    ("\\.nix\\'" . nix-ts-mode)
+    ("\\.php\\'" . php-ts-mode)
+    ("\\.rs\\'" . rust-ts-mode)
+    ("\\.yaml\\'" . yaml-ts-mode)
+    ("\\.yml\\'" . yaml-ts-mode))
 #+end_src
 
 * 3RD PARTY
