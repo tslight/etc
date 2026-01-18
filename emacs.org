@@ -65,7 +65,7 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
       (setq default-frame-alist '((fullscreen . maximized))))
     :bind
     ("<tab>" . (lambda () (interactive) ;; USE CTRL-I FFS or the sake of your pinkies!
-	         (message "YOU HAVE FORGOTTEN THE FACE OF YOUR FATHER")))
+		 (message "YOU HAVE FORGOTTEN THE FACE OF YOUR FATHER")))
     ("<return>" . (lambda () (interactive) ;; USE CTRL-J FFS or the sake of your pinkies!
 		    (message "YOU HAVE FORGOTTEN THE FACE OF YOUR FATHER")))
     ("<backspace>" . (lambda () (interactive) ;; USE CTRL-H FFS or the sake of your pinkies!
@@ -277,7 +277,7 @@ Otherwise emacsclient doesn't initialise UI settings.
     (kill-ring-save (point-min) (point-max))
     (message "Saved whole buffer to kill ring :-)"))
 
-  (keymap-global-set "C-c h" 'my/save-whole-buffer)
+  (keymap-global-set "C-x h" 'my/save-whole-buffer)
 #+end_src
 
 ** sudoedit
@@ -569,7 +569,12 @@ Bulk install all the grammars as a one of task, so don't tangle!
 #+end_src
 ** VTERM
 #+begin_src emacs-lisp
-  (use-package vterm :ensure :bind* ("C-c t" . vterm))
+  (use-package vterm :ensure
+    :bind* ("C-c t" . vterm)
+    :bind (:map vterm-mode-map
+	   ("C-h" . (lambda () (interactive) (vterm-send-key "<backspace>")))
+	   ("C-M-h" . (lambda () (interactive) (vterm-send-key "w" nil nil t)))
+	   ("C-u" . (lambda () (interactive) (vterm-send-key "u" nil nil t)))))
 #+end_src
 ** VUNDO
 #+begin_src emacs-lisp
