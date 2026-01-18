@@ -63,7 +63,7 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
     (if (eq system-type 'darwin)
 	(setq default-frame-alist '((fullscreen . fullscreen)))
       (setq default-frame-alist '((fullscreen . maximized))))
-    (defvar roland "YOU HAVE FORGOTTEN THE FACE OF YOUR FATHER")
+    (setq roland "YOU HAVE FORGOTTEN THE FACE OF YOUR FATHER")
     :bind
     ;; USE CTRL-I FFS or the sake of your pinkies!
     ("<tab>" . (lambda () (interactive) (message roland)))
@@ -573,15 +573,15 @@ Bulk install all the grammars as a one of task, so don't tangle!
   (use-package vterm :ensure
     :bind* ("C-c t" . vterm)
     :bind (:map vterm-mode-map
-	        ;; USE CTRL-I FFS or the sake of your pinkies!
-	        ("<tab>" . (lambda () (interactive) (message roland)))
-	        ;; USE CTRL-J/M FFS or the sake of your pinkies!
-	        ("<return>" . (lambda () (interactive) (message roland)))
-	        ;; USE CTRL-H FFS or the sake of your pinkies!
-	        ("<backspace>" . (lambda () (interactive) (message roland)))
-	        ("C-h" . (lambda () (interactive) (vterm-send-key "<backspace>")))
-	        ("C-M-h" . (lambda () (interactive) (vterm-send-key "w" nil nil t)))
-	        ("C-u" . (lambda () (interactive) (vterm-send-key "u" nil nil t)))))
+		;; USE CTRL-I FFS or the sake of your pinkies!
+		("<tab>" . (lambda () (interactive) (message roland)))
+		;; USE CTRL-J/M FFS or the sake of your pinkies!
+		("<return>" . (lambda () (interactive) (message roland)))
+		;; USE CTRL-H FFS or the sake of your pinkies!
+		("<backspace>" . (lambda () (interactive) (message roland)))
+		("C-h" . (lambda () (interactive) (vterm-send-key "<backspace>")))
+		("C-M-h" . (lambda () (interactive) (vterm-send-key "w" nil nil t)))
+		("C-u" . (lambda () (interactive) (vterm-send-key "u" nil nil t)))))
 #+end_src
 ** VUNDO
 #+begin_src emacs-lisp
