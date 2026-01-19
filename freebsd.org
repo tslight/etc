@@ -116,7 +116,7 @@ PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin
 
 Control the fans depending on temperature, in a Macbook that supports ASMC.
 
-#+begin_src shell :tangle /sudo::/usr/local/bin/asmcfan :tangle-mode o755
+#+begin_src shell
   #!/bin/sh
 
   if ! kldstat | grep -q asmc.ko; then
@@ -149,7 +149,8 @@ Control the fans depending on temperature, in a Macbook that supports ASMC.
 
   if [ "$SET_SPEED" -ne "$CUR_SPEED" ]; then
       logger -t asmcfan "Fan speed set to ${SET_SPEED}RPM (temp: ${TEMP}°C)"
-      sysctl dev.asmc.0.fan.0.maxspeed="$SET_SPEED" dev.asmc.0.fan.1.maxspeed="$SET_SPEED"
+      sysctl dev.asmc.0.fan.0.maxspeed="$SET_SPEED" # dev.asmc.0.fan.1.maxspeed="$SET_SPEED"
+      sysctl dev.asmc.0.fan.0.minspeed="$SET_SPEED" # dev.asmc.0.fan.1.minspeed="$SET_SPEED"
   fi
 
   exit 0
