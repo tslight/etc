@@ -1,6 +1,5 @@
 #+PROPERTY: header-args :cache yes
 #+PROPERTY: header-args+ :mkdirp yes
-#+PROPERTY: header-args+ :tangle-mode (identity #o600)
 #+PROPERTY: header-args+ :results silent
 #+PROPERTY: header-args+ :padline no
 * APM
