@@ -13,6 +13,7 @@ https://www.duskopijetlovic.com/boot/dotfiles/howto/freebsd/config/sysadmin/2025
 https://joshua.hu/FreeBSD-on-MacbookPro-114-A1398
 https://freebsd.uw.cz/2025/05/freebsd-and-edimax-n150-wi-fi-usb.html
 https://duriansoftware.com/joe/freebsd-installation-notes-for-a-2011-macbook-air
+https://itsfoss.gitlab.io/post/configuring-bcm4360-macbook-air-on-freebsd-to-connect-to-wifi/
 
 *** PRO 8,3
 
