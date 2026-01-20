@@ -46,7 +46,6 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
     (fill-column 79)
     (when (executable-find "fd") find-program "fd")
     (when (executable-find "rg") grep-program "rg")
-    (inhibit-startup-screen t)
     (mac-command-modifier 'control)
     (mac-control-modifier 'super)
     (package-archives
