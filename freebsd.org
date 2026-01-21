@@ -2,18 +2,40 @@
 #+PROPERTY: header-args+ :mkdirp yes
 #+PROPERTY: header-args+ :results silent
 #+PROPERTY: header-args+ :padline no
-* REFS
+* GENERAL
 
 https://docs.freebsd.org/en/books/handbook/x11/
 https://docs.freebsd.org/en/books/handbook/kernelconfig/
 https://www.duskopijetlovic.com/boot/dotfiles/howto/freebsd/config/sysadmin/2025/03/02/new-freebsd-system-setup.html
 
+* BUGS/QUIRKS
+** INTEL SOUND WEIRDNESS
+
+https://bugs.freebsd.org/bugzilla/show_bug.cgi?id=229190
+
+If seeing a lot of this in the =dmesg=:
+
+#+begin_src
+hdac0: Unexpected unsolicited response from address 0: 00000000
+#+end_src
+
+Try :
+
+#+begin_src
+compat.linuxkpi.i915_disable_power_well="0"
+#+end_src
+
+In =/boot/loader.conf=
+
+* HARDWARE
 ** MACBOOK
 
 https://joshua.hu/FreeBSD-on-MacbookPro-114-A1398
 https://freebsd.uw.cz/2025/05/freebsd-and-edimax-n150-wi-fi-usb.html
 https://duriansoftware.com/joe/freebsd-installation-notes-for-a-2011-macbook-air
 https://itsfoss.gitlab.io/post/configuring-bcm4360-macbook-air-on-freebsd-to-connect-to-wifi/
+
+*** AIR 7,2
 
 *** PRO 8,3
 
