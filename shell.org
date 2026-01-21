@@ -10,8 +10,8 @@
 #+begin_src shell :tangle ~/.bashrc
   alias cp='cp -i'
   alias d='docker'
-  command -v dysk &> /dev/null && alias df='dysk' || alias df='df -h'
-  command -v dust &> /dev/null && alias du='dust' || alias du='du -h'
+  alias df='df -h'
+  alias du='du -h'
   alias e='emacs -nw'
   alias ec='emacsclient -c -a "" -nw'
   alias g='git'
@@ -20,7 +20,7 @@
   alias j='jobs -l'
   alias k='kubectl'
   alias lc='tokei'
-  command -v lsd &> /dev/null && alias ls='lsd' || alias ls='ls --color=always'
+  alias ls='ls --color=always'
   alias l='ls -a'
   alias ll='ls -la'
   alias m="make"
@@ -30,12 +30,15 @@
   alias pg='pgrep -ail'
   alias ping4='ping -c 4'
   alias pingg='ping -c 4 google.com'
+  # freebsd operator can use shutdown, but not reboot or poweroff
+  alias poweroff='shutdown -p now'
+  alias reboot='shutdown -r now'
   alias rm='rm -i'
   alias se='sudoedit'
   alias t='tmux attach'
-  alias tree='lsd --tree'
   alias up='uptime'
   alias vi='nvim'
+  alias x='startx'
 #+end_src
 #+begin_src conf :noweb yes :tangle ~/.zshrc
   <<aliases>>
