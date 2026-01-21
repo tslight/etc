@@ -323,6 +323,8 @@ Otherwise emacsclient doesn't initialise UI settings.
     (dired-recursive-copies 'always)
     (dired-recursive-deletes 'always)
     :config
+    (when (not (eq system-type 'linux)) (setq dired-use-ls-dired 'nil))
+
     (defun my/dired-up-directory ()
       (interactive)
       (find-alternate-file ".."))
@@ -330,18 +332,18 @@ Otherwise emacsclient doesn't initialise UI settings.
     (defun my/dired-do-delete-skip-trash (&optional arg)
       (interactive "P")
       (let ((delete-by-moving-to-trash nil))
-	(dired-do-delete arg)))
+	  (dired-do-delete arg)))
 
     (defun my/dired-get-size ()
       "Get cumlative size of marked or current item."
       (interactive)
       (let ((files (dired-get-marked-files)))
-	(with-temp-buffer
-	  (apply 'call-process "du" nil t nil "-sch" files)
-	  (message "Size of all marked files: %s"
-		   (progn
-		     (re-search-backward "\\(^[0-9.,]+[A-Za-z]+\\).*total$")
-		     (match-string 1))))))
+	  (with-temp-buffer
+	    (apply 'call-process "du" nil t nil "-sch" files)
+	    (message "Size of all marked files: %s"
+		     (progn
+		       (re-search-backward "\\(^[0-9.,]+[A-Za-z]+\\).*total$")
+		       (match-string 1))))))
 
     (defun my/dired-beginning-of-buffer ()
       "Go to first file in directory."
@@ -356,13 +358,13 @@ Otherwise emacsclient doesn't initialise UI settings.
       (dired-next-line -1))
 
     :bind (:map dired-mode-map
-		(")" . dired-omit-mode)
-		("<" . my/dired-beginning-of-buffer)
-		(">" . my/dired-end-of-buffer)
-		("?" . my/dired-get-size)
-		("C-d" . my/dired-do-delete-skip-trash)
-		("b" . my/dired-up-directory)
-		("f" . 'dired-find-alternate-file)))
+		  (")" . dired-omit-mode)
+		  ("<" . my/dired-beginning-of-buffer)
+		  (">" . my/dired-end-of-buffer)
+		  ("?" . my/dired-get-size)
+		  ("C-d" . my/dired-do-delete-skip-trash)
+		  ("b" . my/dired-up-directory)
+		  ("f" . 'dired-find-alternate-file)))
 #+end_src
 
 * EWW
