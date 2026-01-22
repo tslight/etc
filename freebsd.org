@@ -1,3 +1,4 @@
+#+TITLE: BEASTIE BITS
 #+PROPERTY: header-args :cache yes
 #+PROPERTY: header-args+ :mkdirp yes
 #+PROPERTY: header-args+ :results silent
@@ -146,11 +147,11 @@ For more GMUX HAX take a look at: https://github.com/tslight/gmuxctl
 
 * PACKAGES
 
-#+begin_src sh :results output replace
+#+begin_src sh :results output replace :cache no
   pkg query -e '%a = 0' %o
 #+end_src
 
-#+RESULTS[b7a15afc014b456009d295e379a31a94848ef463]:
+#+RESULTS:
 #+begin_example
 base/FreeBSD-kernel-generic
 base/FreeBSD-kernel-generic-dbg
@@ -165,7 +166,6 @@ graphics/drm-kmod
 editors/emacs
 textproc/en-aspell
 misc/freebsd-doc-en
-www/firefox
 devel/git
 textproc/jq
 misc/kbdscan
