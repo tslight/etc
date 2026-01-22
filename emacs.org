@@ -440,25 +440,34 @@ Otherwise emacsclient doesn't initialise UI settings.
     (modify-syntax-entry ?< "." org-mode-syntax-table)
     (add-to-list 'org-modules 'org-tempo)
     (setq org-structure-template-alist
-	  (append org-structure-template-alist
-		  '(("cl" . "src common-lisp")
-		    ("el" . "src emacs-lisp")
-		    ("go" . "src go")
-		    ("kr" . "src c")
-		    ("nx" . "src nix")
-		    ("py" . "src python")
-		    ("sh" . "src shell")
-		    ("sq" . "src sql")
-		    ("tx" . "src text"))))
-    (defun my/compile-and-load ()
+	    (append org-structure-template-alist
+		    '(("cl" . "src common-lisp")
+		      ("el" . "src emacs-lisp")
+		      ("go" . "src go")
+		      ("kr" . "src c")
+		      ("nx" . "src nix")
+		      ("py" . "src python")
+		      ("sh" . "src shell")
+		      ("sq" . "src sql")
+		      ("tx" . "src text"))))
+    (defun my/tangle-emacs-org-on-save ()
       (interactive)
-      (when (string-match "emacs" (buffer-file-name (current-buffer)))
-	(byte-compile-file (buffer-file-name (current-buffer)))
-	(load (buffer-file-name (current-buffer)))))
+      (when (string-equal "emacs.org"
+			    (file-name-nondirectory
+			     (buffer-file-name (current-buffer))))
+	  (org-babel-tangle)))
+    (defun my/compile-and-load-init ()
+      (interactive)
+      (when (string-equal "init.el"
+			    (file-name-nondirectory
+			     (buffer-file-name (current-buffer))))
+	  (byte-compile-file (buffer-file-name (current-buffer)))
+	  (load (buffer-file-name (current-buffer)))))
     :bind (:map org-mode-map ("C-c i" . org-goto))
     :hook
     (org-mode . auto-fill-mode)
-    (org-babel-post-tangle . my/compile-and-load))
+    (after-save . my/tangle-emacs-org-on-save)
+    (org-babel-post-tangle . my/compile-and-load-init))
 #+end_src
 
 * OUTLINE

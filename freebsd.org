@@ -244,7 +244,7 @@ it in =/usr/share/vt/keymaps= and run =sysrc keymap=foo.kbd= or add
 Once everything is working as expected and you've tested with a reboot, add an
 entry below, and optionally add =:tangle /sudo::/usr/share/vt/keymaps/foo.kbd=.
 
-** JAPANESE EMACS MACBOOK
+** JP EMACS MACBOOK
 
 Make the most of the extra modifier keys on a Korean/Japanese layout
 
