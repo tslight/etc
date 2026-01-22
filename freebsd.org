@@ -269,6 +269,16 @@ Shutdown when battery is lower than 10% and we're not charging.
       shutdown -p now
   fi
 #+end_src
+
+* SUDOERS
+
+#+begin_src con
+Defaults insults
+Defaults timestamp_timeout = 30
+%wheel ALL=(ALL:ALL) ALL
+%operator ALL=(ALL) NOPASSWD: /usr/bin/backlight
+#+end_src
+
 * VT
 
 Either copy an existing keymap file from =/usr/share/vt/keymaps= or use

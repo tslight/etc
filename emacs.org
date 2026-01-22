@@ -557,18 +557,21 @@ Bulk install all the grammars as a one of task, so don't tangle!
 
 * 3RD PARTY
 ** ACE WINDOW
+
 #+begin_src emacs-lisp
   (use-package ace-window :ensure
     :bind*
-    ("C-x o" . ace-window)
-    ("C-x 0" . ace-delete-window)
+    ("M-o" . ace-window)
+    ("M-0" . ace-delete-window)
+    ("M-1" . ace-delete-other-windows)
     :config (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
 #+end_src
+
 ** COPILOT
 #+begin_src emacs-lisp
   (use-package copilot :ensure)
   (use-package copilot-chat :ensure
-    :custom (copilot-chat-default-model "claude-opus-4.5")
+    :custom (copilot-chat-default-model "oswe-vscode-prime")
     :bind ("C-c c" . copilot-chat))
 #+end_src
 ** GIT
