@@ -85,6 +85,7 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
     ("C-c a" . align-regexp)
     ("C-c i" . imenu)
     ("C-c m" . compile)
+    ("C-c b" . browse-url-at-point)
     ("C-s-f" . toggle-frame-fullscreen)
     ("C-x C-b" . ibuffer)
     ("C-x m" . man)
@@ -227,7 +228,7 @@ Otherwise emacsclient doesn't initialise UI settings.
     (interactive)
     (switch-to-buffer (other-buffer (current-buffer) 1)))
 
-  (keymap-global-set "C-c b" 'my/last-buffer)
+  (keymap-global-set "C-c l" 'my/last-buffer)
   (keymap-global-set "C-<escape>" 'my/last-buffer)
 #+end_src
 
@@ -277,7 +278,7 @@ Otherwise emacsclient doesn't initialise UI settings.
     (kill-ring-save (point-min) (point-max))
     (message "Saved whole buffer to kill ring :-)"))
 
-  (keymap-global-set "C-x h" 'my/save-whole-buffer)
+  (keymap-global-set "C-x M-w" 'my/save-whole-buffer)
 #+end_src
 
 ** sudoedit
