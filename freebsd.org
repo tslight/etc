@@ -144,6 +144,44 @@ int main(int argc, char *argv[]) {
 
 For more GMUX HAX take a look at: https://github.com/tslight/gmuxctl
 
+* PACKAGES
+
+#+begin_src sh :results output replace
+  pkg query -e '%a = 0' %o
+#+end_src
+
+#+RESULTS[b7a15afc014b456009d295e379a31a94848ef463]:
+#+begin_example
+base/FreeBSD-kernel-generic
+base/FreeBSD-kernel-generic-dbg
+base/FreeBSD-set-base
+base/FreeBSD-set-lib32
+base/FreeBSD-set-minimal
+www/chromium
+devel/cmake
+ftp/curl
+x11-wm/cwm
+graphics/drm-kmod
+editors/emacs
+textproc/en-aspell
+misc/freebsd-doc-en
+www/firefox
+devel/git
+textproc/jq
+misc/kbdscan
+www/librewolf
+devel/libtool
+devel/libvterm
+ports-mgmt/pkg
+sysutils/sensors
+sysutils/smartmontools
+security/sudo
+sysutils/tmux
+x11/xlibre
+x11-drivers/xlibre-xf86-video-intel
+shells/zsh
+#+end_example
+
 * CRON
 
 #+begin_src cron

@@ -437,32 +437,39 @@ Otherwise emacsclient doesn't initialise UI settings.
     :config
     ;; stops electric pair from closing > when trying to spawn a src
     ;; block
-    (modify-syntax-entry ?< "." org-mode-syntax-table)
     (add-to-list 'org-modules 'org-tempo)
+    (modify-syntax-entry ?< "." org-mode-syntax-table)
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     '(
+       (shell . t)
+       ;; Other languages...
+       )
+     )
     (setq org-structure-template-alist
-	    (append org-structure-template-alist
-		    '(("cl" . "src common-lisp")
-		      ("el" . "src emacs-lisp")
-		      ("go" . "src go")
-		      ("kr" . "src c")
-		      ("nx" . "src nix")
-		      ("py" . "src python")
-		      ("sh" . "src shell")
-		      ("sq" . "src sql")
-		      ("tx" . "src text"))))
+	  (append org-structure-template-alist
+		  '(("cl" . "src common-lisp")
+		    ("el" . "src emacs-lisp")
+		    ("go" . "src go")
+		    ("kr" . "src c")
+		    ("nx" . "src nix")
+		    ("py" . "src python")
+		    ("sh" . "src shell")
+		    ("sq" . "src sql")
+		    ("tx" . "src text"))))
     (defun my/tangle-emacs-org-on-save ()
       (interactive)
       (when (string-equal "emacs.org"
-			    (file-name-nondirectory
-			     (buffer-file-name (current-buffer))))
-	  (org-babel-tangle)))
+			  (file-name-nondirectory
+			   (buffer-file-name (current-buffer))))
+	(org-babel-tangle)))
     (defun my/compile-and-load-init ()
       (interactive)
       (when (string-equal "init.el"
-			    (file-name-nondirectory
-			     (buffer-file-name (current-buffer))))
-	  (byte-compile-file (buffer-file-name (current-buffer)))
-	  (load (buffer-file-name (current-buffer)))))
+			  (file-name-nondirectory
+			   (buffer-file-name (current-buffer))))
+	(byte-compile-file (buffer-file-name (current-buffer)))
+	(load (buffer-file-name (current-buffer)))))
     :bind (:map org-mode-map ("C-c i" . org-goto))
     :hook
     (org-mode . auto-fill-mode)
