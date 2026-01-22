@@ -158,7 +158,6 @@ base/FreeBSD-kernel-generic-dbg
 base/FreeBSD-set-base
 base/FreeBSD-set-lib32
 base/FreeBSD-set-minimal
-www/chromium
 devel/cmake
 ftp/curl
 x11-wm/cwm
@@ -167,6 +166,7 @@ editors/emacs
 textproc/en-aspell
 misc/freebsd-doc-en
 devel/git
+graphics/gpu-firmware-intel-kmod
 textproc/jq
 misc/kbdscan
 www/librewolf
