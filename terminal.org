@@ -131,6 +131,19 @@
   bind r neww -n fm yazi
   bind t neww -n top btm
 #+END_SRC
+* XDG
+
+#+begin_src conf :tangle ~/.config/user-dirs.dirs
+XDG_DESKTOP_DIR="$HOME/desk"
+XDG_DOCUMENTS_DIR="$HOME/doc"
+XDG_DOWNLOAD_DIR="$HOME/tmp"
+XDG_MUSIC_DIR="$HOME/audio"
+XDG_PICTURES_DIR="$HOME/img"
+XDG_PUBLICSHARE_DIR="$HOME/pub"
+XDG_TEMPLATES_DIR="$HOME/templates"
+XDG_VIDEOS_DIR="$HOME/video"
+#+end_src
+
 * YAZI
 #+begin_src toml :tangle ~/.config/yazi/yazi.toml
   # A TOML linter such as https://taplo.tamasfe.dev/ can use this schema to validate your config.

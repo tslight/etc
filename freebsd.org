@@ -37,6 +37,23 @@ https://itsfoss.gitlab.io/post/configuring-bcm4360-macbook-air-on-freebsd-to-con
 
 *** AIR 7,2
 
+After much faffing and too-ing and fro-ing to the installer (where bizarrely
+the sound pins were configured correctly) - I came up with these hints to make
+my sound work.
+
+Stick 'em in =/boot/device.hints= if you want to hear anything...
+
+#+begin_src conf
+hint.hdac.1.cad0.nid16.config="as=2 seq=0 device=Headphones conn=Jack ctype=Combo"
+hint.hdac.1.cad0.nid17.config="as=15 seq=0 device=Line-out conn=None ctype=Unknown misc=0"
+hint.hdac.1.cad0.nid18.config="as=1 seq=0 device=Speaker conn=Fixed loc=Internal misc=1"
+hint.hdac.1.cad0.nid19.config="as=15 seq=0 device=Line-out conn=None ctype=Unknown misc=0"
+hint.hdac.1.cad0.nid20.config="as=15 seq=0 device=Line-out conn=None ctype=Unknown misc=0"
+hint.hdac.1.cad0.nid24.config="as=3 seq=0 device=Mic conn=Jack ctype=Combo"
+hint.hdac.1.cad0.nid28.config="as=0 seq=0 device=Mic conn=Fixed ctype=Digital loc=internal misc=1"
+hint.hdaa.1.gpio_config="0=set"
+#+end_src
+
 *** PRO 8,3
 
 https://wiki.freebsd.org/Graphics/AMD-GPU-Matrix
@@ -139,18 +156,28 @@ PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin
 
 Control the fans depending on temperature, in a Macbook that supports ASMC.
 
-#+begin_src shell
+#+begin_src shell :tangle /sudo::/usr/local/bin/asmcfan :tangle-mode o755
   #!/bin/sh
-
   if ! kldstat | grep -q asmc.ko; then
-      kldload asmc
+      if ! kldload asmc; then
+	  logger -t asmcfan "ERROR: Failed to load ASMC module."
+	  exit 1
+      fi
   fi
 
   TEMP=$(sysctl -n dev.cpu.0.temperature | cut -c 1-2)
   CUR_SPEED=$(sysctl -n dev.asmc.0.fan.0.targetspeed)
   SET_SPEED=0
 
-  if [ "$TEMP" -le 50 ]; then
+  if [ "$TEMP" -le 30 ]; then
+      SET_SPEED=1000
+      logger -t asmcfan "${TEMP}°C: ${SET_SPEED}RPM: BRRRRRRR!!!"
+  elif [ "$TEMP" -le 35 ]; then
+      SET_SPEED=1500
+      logger -t asmcfan "${TEMP}°C: ${SET_SPEED}RPM: Getting a tad bit nippy..."
+  elif [ "$TEMP" -le 40 ]; then
+      SET_SPEED=2000
+  elif [ "$TEMP" -le 45 ]; then
       SET_SPEED=2500
   elif [ "$TEMP" -le 55 ]; then
       SET_SPEED=3000
@@ -164,16 +191,22 @@ Control the fans depending on temperature, in a Macbook that supports ASMC.
       SET_SPEED=5000
   elif [ "$TEMP" -le 80 ]; then
       SET_SPEED=5500
+      logger -t asmcfan "${TEMP}°C: ${SET_SPEED}RPM: It's getting HOT in here..."
   elif [ "$TEMP" -le 85 ]; then
       SET_SPEED=6000
+      logger -t asmcfan "${TEMP}°C: ${SET_SPEED}RPM: I'm melting..."
   else
       SET_SPEED=6500
+      logger -t asmcfan "${TEMP}°C: ${SET_SPEED}RPM: SCORCHIO!!!"
   fi
 
   if [ "$SET_SPEED" -ne "$CUR_SPEED" ]; then
-      logger -t asmcfan "Fan speed set to ${SET_SPEED}RPM (temp: ${TEMP}°C)"
-      sysctl dev.asmc.0.fan.0.maxspeed="$SET_SPEED" # dev.asmc.0.fan.1.maxspeed="$SET_SPEED"
-      sysctl dev.asmc.0.fan.0.minspeed="$SET_SPEED" # dev.asmc.0.fan.1.minspeed="$SET_SPEED"
+      sysctl dev.asmc.0.fan.0.maxspeed="$SET_SPEED" > /dev/null
+      sysctl dev.asmc.0.fan.0.minspeed="$SET_SPEED" > /dev/null
+      if sysctl dev.asmc.0.fan.1 2> /dev/null; then
+	  sysctl dev.asmc.0.fan.1.maxspeed="$SET_SPEED" > /dev/null
+	  sysctl dev.asmc.0.fan.1.minspeed="$SET_SPEED" > /dev/null
+      fi
   fi
 
   exit 0
