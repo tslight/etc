@@ -725,8 +725,7 @@ suspend/resume...
 #+end_src
 *** MACBOOK KOREAN/JAPANESE
 **** EXTRA XKB OPTIONS
-#+name: /usr/local/share/X11/xkb/symbols/hangul
-#+begin_src conf
+#+begin_src conf :tangle /sudo::/usr/local/share/X11/xkb/symbols/hangul
 // Make better use of a Korean keyboard with a non-Korean layout
 
 // Hangul and Hangul_Hanja keys -> Control
@@ -745,8 +744,7 @@ xkb_symbols "deadkeys" {
    key <AE13> { [ BackSpace, Delete ] };
 };
 #+end_src
-#+name: /usr/local/share/X11/xkb/symbols/leftmods
-#+begin_src conf
+#+begin_src conf :tangle /sudo::/usr/local/share/X11/xkb/symbols/leftmods
 // Japanese/Korean MacBook (Non-Standard?) Far Left Modifier Options
 partial modifier_keys
 xkb_symbols "caps_esc_altgr" {
