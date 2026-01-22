@@ -296,13 +296,13 @@ entry below, and optionally add =:tangle /sudo::/usr/share/vt/keymaps/foo.kbd=.
 
 Make the most of the extra modifier keys on a Korean/Japanese layout
 
-#+begin_src conf
+#+begin_src conf :tangle /sudo::/usr/share/vt/keymaps/jp.emacs.macbook.kbd :tangle-mode o444
 #                                                         alt
 # scan                       cntrl          alt    alt   cntrl lock
 # code  base   shift  cntrl  shift  alt    shift  cntrl  shift state
 # ------------------------------------------------------------------
   000   nop    nop    nop    nop    nop    nop    nop    nop     O
-  001   clock  clock  clock  clock  clock  clock  debug  clock   O
+  001   clock  clock  clock  clock  clock  clock  susp   clock   O
   002   '1'    '!'    nop    nop    '1'    '!'    nop    nop     O
   003   '2'    '@'    nul    nul    '2'    '@'    nul    nul     O
   004   '3'    '#'    nop    nop    '3'    '#'    nop    nop     O
@@ -358,18 +358,18 @@ Make the most of the extra modifier keys on a Korean/Japanese layout
   054   rshift rshift rshift rshift rshift rshift rshift rshift  O
   055   '*'    '*'    '*'    '*'    '*'    '*'    '*'    '*'     O
   056   lalt   lalt   lalt   lalt   lalt   lalt   lalt   lalt    O
-  057   ' '    ' '    nul    ' '    ' '    ' '    susp   ' '     O
+  057   ' '    ' '    ' '    ' '    ' '    ' '    ' '    ' '     O
   058   esc    esc    esc    esc    esc    esc    esc    esc     O
-  059   fkey01 fkey13 fkey25 fkey37 scr01  scr11  scr01  scr11   O
-  060   fkey02 fkey14 fkey26 fkey38 scr02  scr12  scr02  scr12   O
-  061   fkey03 fkey15 fkey27 fkey39 scr03  scr13  scr03  scr13   O
-  062   fkey04 fkey16 fkey28 fkey40 scr04  scr14  scr04  scr14   O
-  063   fkey05 fkey17 fkey29 fkey41 scr05  scr15  scr05  scr15   O
-  064   fkey06 fkey18 fkey30 fkey42 scr06  scr16  scr06  scr16   O
-  065   fkey07 fkey19 fkey31 fkey43 scr07  scr07  scr07  scr07   O
-  066   fkey08 fkey20 fkey32 fkey44 scr08  scr08  scr08  scr08   O
-  067   fkey09 fkey21 fkey33 fkey45 scr09  scr09  scr09  scr09   O
-  068   fkey10 fkey22 fkey34 fkey46 scr10  scr10  scr10  scr10   O
+  059   fkey01 fkey13 scr01  fkey37 scr01  scr11  scr01  scr11   O
+  060   fkey02 fkey14 scr02  fkey38 scr02  scr12  scr02  scr12   O
+  061   fkey03 fkey15 scr03  fkey39 scr03  scr13  scr03  scr13   O
+  062   fkey04 fkey16 scr04  fkey40 scr04  scr14  scr04  scr14   O
+  063   fkey05 fkey17 scr05  fkey41 scr05  scr15  scr05  scr15   O
+  064   fkey06 fkey18 scr06  fkey42 scr06  scr16  scr06  scr16   O
+  065   fkey07 fkey19 scr07  fkey43 scr07  scr07  scr07  scr07   O
+  066   fkey08 fkey20 scr08  fkey44 scr08  scr08  scr08  scr08   O
+  067   fkey09 fkey21 scr09  fkey45 scr09  scr09  scr09  scr09   O
+  068   fkey10 fkey22 scr10  fkey46 scr10  scr10  scr10  scr10   O
   069   nlock  nlock  nlock  nlock  nlock  nlock  nlock  nlock   O
   070   slock  slock  slock  slock  slock  slock  slock  slock   O
   071   fkey49 '7'    '7'    '7'    '7'    '7'    '7'    '7'     N
@@ -388,20 +388,20 @@ Make the most of the extra modifier keys on a Korean/Japanese layout
   084   nop    nop    nop    nop    nop    nop    nop    nop     O
   085   nop    nop    nop    nop    nop    nop    nop    nop     O
   086   nop    nop    nop    nop    nop    nop    nop    nop     O
-  087   fkey11 fkey23 fkey35 fkey47 scr11  scr11  scr11  scr11   O
-  088   fkey12 fkey24 fkey36 fkey48 scr12  scr12  scr12  scr12   O
+  087   fkey11 fkey23 scr11  fkey47 scr11  scr11  scr11  scr11   O
+  088   fkey12 fkey24 scr12  fkey48 scr12  scr12  scr12  scr12   O
   089   cr     cr     nl     nl     cr     cr     nl     nl      O
   090   rctrl  rctrl  rctrl  rctrl  rctrl  rctrl  rctrl  rctrl   O
   091   '/'    '/'    '/'    '/'    '/'    '/'    '/'    '/'     N
   092   nscr   pscr   debug  debug  nop    nop    nop    nop     O
   093   ralt   ralt   ralt   ralt   ralt   ralt   ralt   ralt    O
   094   fkey49 fkey49 fkey49 fkey49 fkey49 fkey49 fkey49 fkey49  O
-  095   fkey50 fkey50 fkey50 fkey50 fkey50 fkey50 fkey50 fkey50  O
+  095   fkey50 fkey50 slock  fkey50 slock  fkey50 fkey50 fkey50  O
   096   fkey51 fkey51 fkey51 fkey51 fkey51 fkey51 fkey51 fkey51  O
-  097   fkey53 fkey53 fkey53 fkey53 fkey53 fkey53 fkey53 fkey53  O
-  098   fkey55 fkey55 fkey55 fkey55 fkey55 fkey55 fkey55 fkey55  O
+  097   fkey53 fkey53 pscr   fkey53 pscr   fkey53 fkey53 fkey53  O
+  098   fkey55 fkey55 nscr   fkey55 nscr   fkey55 fkey55 fkey55  O
   099   fkey57 fkey57 fkey57 fkey57 fkey57 fkey57 fkey57 fkey57  O
-  100   fkey58 fkey58 fkey58 fkey58 fkey58 fkey58 fkey58 fkey58  O
+  100   fkey58 fkey58 slock  fkey58 slock  fkey58 fkey58 fkey58  O
   101   fkey59 fkey59 fkey59 fkey59 fkey59 fkey59 fkey59 fkey59  O
   102   fkey60 paste  fkey60 fkey60 fkey60 fkey60 fkey60 fkey60  O
   103   fkey61 fkey61 fkey61 fkey61 fkey61 fkey61 boot   fkey61  O
