@@ -158,6 +158,8 @@ base/FreeBSD-kernel-generic-dbg
 base/FreeBSD-set-base
 base/FreeBSD-set-lib32
 base/FreeBSD-set-minimal
+base/FreeBSD-set-src
+devel/ccls
 devel/cmake
 ftp/curl
 x11-wm/cwm
@@ -794,8 +796,8 @@ EndSection
 #+NAME: xsession
 #+BEGIN_SRC conf :tangle ~/.xsession
   xset dpms 120 180 300
-  xbattbar left &
   pixelclock &
+  pixelbatt &
   sct 4000 &
   exec cwm
 #+END_SRC
@@ -862,7 +864,7 @@ EndSection
 ** CWM
 #+BEGIN_SRC conf :tangle ~/.cwmrc
   borderwidth 0
-  gap 0 0 3 4
+  gap 0 0 0 0
   sticky yes
   snapdist 5
   moveamount 5
