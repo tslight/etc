@@ -168,13 +168,13 @@ editors/emacs
 textproc/en-aspell
 misc/freebsd-doc-en
 devel/git
-graphics/gpu-firmware-intel-kmod
 textproc/jq
 misc/kbdscan
 www/librewolf
 devel/libtool
 devel/libvterm
 ports-mgmt/pkg
+accessibility/sct
 sysutils/sensors
 sysutils/smartmontools
 security/sudo
@@ -807,7 +807,7 @@ EndSection
 ** XDEFAULTS
 #+NAME: xdefaults
 #+begin_src conf :tangle ~/.Xdefaults
-  XTerm*faceName: monospace:size=14
+  XTerm*faceName: monospace:size=13
   XTerm*metaSendsEscape: true
   XTerm*reverseVideo: true
   XTerm*selectToClipboard: true
