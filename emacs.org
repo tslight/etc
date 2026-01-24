@@ -71,6 +71,7 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
     ("C-h" . backward-delete-char-untabify) ;; act the same as terminal
     ("C-M-h" . backward-kill-word) ;; ditto! Also M-h seems to do the same
     ("C-c h" . 'help-command) ;; We don't always have F1 as a fallback...
+    ("C-=" . global-text-scale-adjust)
     ("C-&" . async-shell-command)
     ("C-!" . async-shell-command)
     ("C-%" . query-replace-regexp)
@@ -94,10 +95,10 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
     ("C-x M-c" . kill-emacs) ;; for killing the daemon
     ("C-x k" . (lambda () (interactive) (kill-buffer (current-buffer))))
     (:map minibuffer-local-must-match-map
-	("C-s" . minibuffer-next-completion)
-	("C-r" . minibuffer-previous-completion)
-	("C-n" . next-history-element)
-	("C-p" . previous-history-element)))
+	  ("C-s" . minibuffer-next-completion)
+	  ("C-r" . minibuffer-previous-completion)
+	  ("C-n" . next-history-element)
+	  ("C-p" . previous-history-element)))
 #+end_src
 
 * DEFUNS
@@ -118,7 +119,7 @@ All of my custom functions live under the =my/= prefix/namespace.
       (search-forward-regexp "[]})>\"\']" (line-end-position))
       (backward-char)
       (if arg
-	(kill-region (- lstart 1) (+ (point) 1))
+	  (kill-region (- lstart 1) (+ (point) 1))
 	(kill-region lstart (point)))))
 
   (keymap-global-set "C-c d" 'my/delete-inside-delimiters)
@@ -132,7 +133,7 @@ All of my custom functions live under the =my/= prefix/namespace.
     (interactive)
     (or (buffer-file-name) (error "No file is currently being edited"))
     (when (yes-or-no-p (format "Really delete '%s'?"
-			     (file-name-nondirectory buffer-file-name)))
+			       (file-name-nondirectory buffer-file-name)))
       (delete-file (buffer-file-name) t)
       (kill-this-buffer)))
 
@@ -209,10 +210,10 @@ Otherwise emacsclient doesn't initialise UI settings.
     (interactive "p")
     (let (p1 p2)
       (if (use-region-p)
-	  (progn (setq p1 (region-beginning))
-		 (setq p2 (region-end)))
+	(progn (setq p1 (region-beginning))
+	       (setq p2 (region-end)))
 	(progn (setq p1 (line-beginning-position))
-	       (setq p2 (line-beginning-position (+ arg 1)))))
+	     (setq p2 (line-beginning-position (+ arg 1)))))
       (kill-ring-save p1 p2)
       (goto-char p2)))
 
@@ -253,14 +254,14 @@ Otherwise emacsclient doesn't initialise UI settings.
   With prefix ARG, omit path."
     (interactive "P")
     (let ((filename (if (equal major-mode 'dired-mode)
-			(if arg
-			    (file-name-nondirectory
-			     (directory-file-name
-			      (file-name-directory default-directory)))
-			  default-directory)
 		      (if arg
-			  (file-name-nondirectory buffer-file-name)
-			(buffer-file-name)))))
+			  (file-name-nondirectory
+			   (directory-file-name
+			    (file-name-directory default-directory)))
+			default-directory)
+		    (if arg
+			(file-name-nondirectory buffer-file-name)
+		      (buffer-file-name)))))
       (when filename
 	(kill-new filename)
 	(message "Saved '%s' to kill-ring!" filename))))
@@ -288,7 +289,7 @@ Otherwise emacsclient doesn't initialise UI settings.
     (interactive "P")
     (if (or arg (not buffer-file-name))
 	(find-file (concat "/sudo:root@localhost:"
-			   (read-file-name "Find file (as root): ")))
+			 (read-file-name "Find file (as root): ")))
       (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
 
   (keymap-global-set "C-c f s" 'my/sudoedit)
@@ -301,10 +302,10 @@ Otherwise emacsclient doesn't initialise UI settings.
     "Like `fill-paragraph', but unfill if used twice."
     (interactive)
     (let ((fill-column
-	   (if (eq last-command 'my/toggle-fill)
-	       (progn (setq this-command nil)
-		      (point-max))
-	     fill-column)))
+	 (if (eq last-command 'my/toggle-fill)
+	     (progn (setq this-command nil)
+		    (point-max))
+	   fill-column)))
       (call-interactively #'fill-paragraph)))
 
   (keymap-global-set "M-q" 'my/toggle-fill)
@@ -338,11 +339,11 @@ Otherwise emacsclient doesn't initialise UI settings.
       (interactive)
       (let ((files (dired-get-marked-files)))
 	(with-temp-buffer
-	(apply 'call-process "du" nil t nil "-sch" files)
-	(message "Size of all marked files: %s"
-		 (progn
-		   (re-search-backward "\\(^[0-9.,]+[A-Za-z]+\\).*total$")
-		   (match-string 1))))))
+	  (apply 'call-process "du" nil t nil "-sch" files)
+	  (message "Size of all marked files: %s"
+		   (progn
+		     (re-search-backward "\\(^[0-9.,]+[A-Za-z]+\\).*total$")
+		     (match-string 1))))))
 
     (defun my/dired-beginning-of-buffer ()
       "Go to first file in directory."
@@ -357,12 +358,12 @@ Otherwise emacsclient doesn't initialise UI settings.
       (dired-next-line -1))
 
     :bind (:map dired-mode-map
-	      ("<" . my/dired-beginning-of-buffer)
-	      (">" . my/dired-end-of-buffer)
-	      ("?" . my/dired-get-size)
-	      ("C-d" . my/dired-do-delete-skip-trash)
-	      ("b" . my/dired-up-directory)
-	      ("f" . 'dired-find-alternate-file)))
+		("<" . my/dired-beginning-of-buffer)
+		(">" . my/dired-end-of-buffer)
+		("?" . my/dired-get-size)
+		("C-d" . my/dired-do-delete-skip-trash)
+		("b" . my/dired-up-directory)
+		("f" . 'dired-find-alternate-file)))
 #+end_src
 
 * EWW
@@ -587,6 +588,10 @@ Bulk install all the grammars as a one of task, so don't tangle!
        ("Pull" 5 magit-repolist-column-unpulled-from-upstream ((:right-align t) nil))
        ("Push" 5 magit-repolist-column-unpushed-to-upstream ((:right-align t) nil))
        ("Path" 99 magit-repolist-column-path nil))))
+#+end_src
+** HUNGRY DELETE
+#+begin_src emacs-lisp
+  (use-package hungry-delete :ensure :demand)
 #+end_src
 ** PATH FROM SHELL
 #+begin_src emacs-lisp
