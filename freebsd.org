@@ -210,12 +210,14 @@ Control the fans depending on temperature, in a Macbook that supports ASMC.
   CUR_SPEED=$(sysctl -n dev.asmc.0.fan.0.targetspeed)
   SET_SPEED=0
 
-  if [ "$TEMP" -le 30 ]; then
-      SET_SPEED=1000
+  if [ "$TEMP" -le 25 ]; then
+      SET_SPEED=0
       logger -t asmcfan "${TEMP}°C: ${SET_SPEED}RPM: BRRRRRRR!!!"
+  elif [ "$TEMP" -le 30 ]; then
+      SET_SPEED=1000
+      logger -t asmcfan "${TEMP}°C: ${SET_SPEED}RPM: Getting a tad bit nippy..."
   elif [ "$TEMP" -le 35 ]; then
       SET_SPEED=1500
-      logger -t asmcfan "${TEMP}°C: ${SET_SPEED}RPM: Getting a tad bit nippy..."
   elif [ "$TEMP" -le 40 ]; then
       SET_SPEED=2000
   elif [ "$TEMP" -le 45 ]; then
