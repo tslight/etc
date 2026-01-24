@@ -36,8 +36,6 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
     (save-place-mode 1)
     :custom
     (auto-save-visited-mode t)
-    (auto-save-file-name-transforms nil) ; https://emacs.stackexchange.com/a/79031
-    (backup-directory-alist '(("." . (concat user-emacs-directory "backups"))))
     (completion-styles '(basic substring initials flex))
     (custom-file (expand-file-name "custom.el" user-emacs-directory))
     (disabled-command-function nil)
@@ -86,6 +84,7 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
     ("C-c i" . imenu)
     ("C-c m" . compile)
     ("C-c b" . browse-url-at-point)
+    ("C-c p" . proced)
     ("C-s-f" . toggle-frame-fullscreen)
     ("C-x C-b" . ibuffer)
     ("C-x m" . man)
@@ -95,10 +94,10 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
     ("C-x M-c" . kill-emacs) ;; for killing the daemon
     ("C-x k" . (lambda () (interactive) (kill-buffer (current-buffer))))
     (:map minibuffer-local-must-match-map
-	  ("C-s" . minibuffer-next-completion)
-	  ("C-r" . minibuffer-previous-completion)
-	  ("C-n" . next-history-element)
-	  ("C-p" . previous-history-element)))
+	("C-s" . minibuffer-next-completion)
+	("C-r" . minibuffer-previous-completion)
+	("C-n" . next-history-element)
+	("C-p" . previous-history-element)))
 #+end_src
 
 * DEFUNS
@@ -119,7 +118,7 @@ All of my custom functions live under the =my/= prefix/namespace.
       (search-forward-regexp "[]})>\"\']" (line-end-position))
       (backward-char)
       (if arg
-	  (kill-region (- lstart 1) (+ (point) 1))
+	(kill-region (- lstart 1) (+ (point) 1))
 	(kill-region lstart (point)))))
 
   (keymap-global-set "C-c d" 'my/delete-inside-delimiters)
@@ -133,7 +132,7 @@ All of my custom functions live under the =my/= prefix/namespace.
     (interactive)
     (or (buffer-file-name) (error "No file is currently being edited"))
     (when (yes-or-no-p (format "Really delete '%s'?"
-			       (file-name-nondirectory buffer-file-name)))
+			     (file-name-nondirectory buffer-file-name)))
       (delete-file (buffer-file-name) t)
       (kill-this-buffer)))
 
@@ -174,8 +173,8 @@ Otherwise emacsclient doesn't initialise UI settings.
 
     (if window-system
 	(if (eq system-type 'darwin)
-	    (set-frame-font "Monaco 13" nil t)
-	  (set-frame-font "Monospace 13" nil t)))
+	  (set-frame-font "Monaco 13" nil t)
+	(set-frame-font "Monospace 13" nil t)))
 
     ;; without this backspace sends ctrl-h in certain terminals
     (if (not window-system) (normal-erase-is-backspace-mode)))
@@ -193,10 +192,10 @@ Otherwise emacsclient doesn't initialise UI settings.
     (interactive "p")
     (let (p1 p2)
       (if (use-region-p)
-	  (progn (setq p1 (region-beginning))
-		 (setq p2 (region-end)))
+	(progn (setq p1 (region-beginning))
+	       (setq p2 (region-end)))
 	(progn (setq p1 (line-beginning-position))
-	       (setq p2 (line-beginning-position (+ arg 1)))))
+	     (setq p2 (line-beginning-position (+ arg 1)))))
       (kill-region p1 p2)))
 
   (global-set-key [remap kill-region] 'ts-kill-region)
@@ -316,10 +315,10 @@ Otherwise emacsclient doesn't initialise UI settings.
 #+begin_src emacs-lisp
   (use-package dired
     :custom
+    (dired-omit-mode t)
     (delete-by-moving-to-trash t)
     (dired-dwim-target t) ; copy or move into other window
-    ;; omit all dotfiles instead of just . & ..
-    (dired-omit-files "\\`[.]?#\\|\\`[.][.]?\\'\\|^\\..+$")
+    (dired-listing-switches "-alh --group-directories-first")
     (dired-recursive-copies 'always)
     (dired-recursive-deletes 'always)
     :config
@@ -332,18 +331,18 @@ Otherwise emacsclient doesn't initialise UI settings.
     (defun my/dired-do-delete-skip-trash (&optional arg)
       (interactive "P")
       (let ((delete-by-moving-to-trash nil))
-	  (dired-do-delete arg)))
+	(dired-do-delete arg)))
 
     (defun my/dired-get-size ()
       "Get cumlative size of marked or current item."
       (interactive)
       (let ((files (dired-get-marked-files)))
-	  (with-temp-buffer
-	    (apply 'call-process "du" nil t nil "-sch" files)
-	    (message "Size of all marked files: %s"
-		     (progn
-		       (re-search-backward "\\(^[0-9.,]+[A-Za-z]+\\).*total$")
-		       (match-string 1))))))
+	(with-temp-buffer
+	(apply 'call-process "du" nil t nil "-sch" files)
+	(message "Size of all marked files: %s"
+		 (progn
+		   (re-search-backward "\\(^[0-9.,]+[A-Za-z]+\\).*total$")
+		   (match-string 1))))))
 
     (defun my/dired-beginning-of-buffer ()
       "Go to first file in directory."
@@ -358,13 +357,12 @@ Otherwise emacsclient doesn't initialise UI settings.
       (dired-next-line -1))
 
     :bind (:map dired-mode-map
-		  (")" . dired-omit-mode)
-		  ("<" . my/dired-beginning-of-buffer)
-		  (">" . my/dired-end-of-buffer)
-		  ("?" . my/dired-get-size)
-		  ("C-d" . my/dired-do-delete-skip-trash)
-		  ("b" . my/dired-up-directory)
-		  ("f" . 'dired-find-alternate-file)))
+	      ("<" . my/dired-beginning-of-buffer)
+	      (">" . my/dired-end-of-buffer)
+	      ("?" . my/dired-get-size)
+	      ("C-d" . my/dired-do-delete-skip-trash)
+	      ("b" . my/dired-up-directory)
+	      ("f" . 'dired-find-alternate-file)))
 #+end_src
 
 * EWW
