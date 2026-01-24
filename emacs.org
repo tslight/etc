@@ -415,7 +415,7 @@ Otherwise emacsclient doesn't initialise UI settings.
     :hook (prog-mode . display-line-numbers-mode))
 #+end_src
 
-* LP
+* LSP
 
 #+begin_src emacs-lisp
   (use-package eglot :hook (prog-mode . eglot-ensure))

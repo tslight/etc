@@ -795,9 +795,9 @@ EndSection
 ** XSESSION
 #+NAME: xsession
 #+BEGIN_SRC conf :tangle ~/.xsession
-  xset dpms 120 180 300
-  pixelclock &
-  pixelbatt &
+  xset r rate 200 50 dpms 120 180 300
+  pixelclock -above &
+  pixelbatt -above &
   sct 4000 &
   exec cwm
 #+END_SRC
