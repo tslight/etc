@@ -173,6 +173,7 @@ misc/kbdscan
 www/librewolf
 devel/libtool
 devel/libvterm
+multimedia/mpv
 ports-mgmt/pkg
 accessibility/sct
 sysutils/sensors
@@ -181,6 +182,7 @@ security/sudo
 sysutils/tmux
 x11/xlibre
 x11-drivers/xlibre-xf86-video-intel
+www/yt-dlp
 shells/zsh
 #+end_example
 
