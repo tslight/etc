@@ -168,10 +168,13 @@ editors/emacs
 textproc/en-aspell
 misc/freebsd-doc-en
 devel/git
+graphics/glx-utils
 textproc/jq
 misc/kbdscan
 www/librewolf
 devel/libtool
+multimedia/libva-intel-driver
+multimedia/libva-utils
 devel/libvterm
 multimedia/mpv
 ports-mgmt/pkg
