@@ -316,7 +316,6 @@ Otherwise emacsclient doesn't initialise UI settings.
 #+begin_src emacs-lisp
   (use-package dired
     :custom
-    (dired-omit-mode t)
     (delete-by-moving-to-trash t)
     (dired-dwim-target t) ; copy or move into other window
     (dired-listing-switches "-alh --group-directories-first")
@@ -358,12 +357,14 @@ Otherwise emacsclient doesn't initialise UI settings.
       (dired-next-line -1))
 
     :bind (:map dired-mode-map
-		("<" . my/dired-beginning-of-buffer)
-		(">" . my/dired-end-of-buffer)
-		("?" . my/dired-get-size)
-		("C-d" . my/dired-do-delete-skip-trash)
-		("b" . my/dired-up-directory)
-		("f" . 'dired-find-alternate-file)))
+	        ("<" . my/dired-beginning-of-buffer)
+	        (">" . my/dired-end-of-buffer)
+	        ("?" . my/dired-get-size)
+	        ("C-d" . my/dired-do-delete-skip-trash)
+	        ("b" . my/dired-up-directory)
+	        ("f" . 'dired-find-alternate-file))
+    :hook
+    (dired-mode . dired-omit-mode))
 #+end_src
 
 * EWW
@@ -417,7 +418,10 @@ Otherwise emacsclient doesn't initialise UI settings.
 * LSP
 
 #+begin_src emacs-lisp
-  (use-package eglot :hook (prog-mode . eglot-ensure))
+  (use-package eglot
+    :hook (prog-mode . eglot-ensure)
+    :bind (:map eglot-mode-map
+		("C-c e r" . eglot-rename)))
   (use-package corfu :ensure
     :custom
     (corfu-cycle t)
@@ -543,6 +547,7 @@ Bulk install all the grammars as a one of task, so don't tangle!
        (sh-mode . bash-ts-mode)
        (typescript-mode . typescript-ts-mode)))
     :mode
+    ("\\.h\\'" . c-ts-mode)
     ("\\Dockerfile\\'" . dockerfile-ts-mode)
     ("\\.go\\'" . go-ts-mode)
     ("\\.json\\'" . json-ts-mode)
