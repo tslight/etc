@@ -31,6 +31,7 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
     (display-battery-mode)
     (display-time)
     (electric-pair-mode)
+    (global-hungry-delete-mode)
     (global-subword-mode)
     (global-prettify-symbols-mode)
     (save-place-mode 1)
@@ -58,7 +59,7 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
     (use-short-answers t)
     :config
     (if (eq system-type 'darwin)
-	(setq default-frame-alist '((fullscreen . fullscreen)))
+	  (setq default-frame-alist '((fullscreen . fullscreen)))
       (setq default-frame-alist '((fullscreen . maximized))))
     (setq roland "YOU HAVE FORGOTTEN THE FACE OF YOUR FATHER")
     :bind
@@ -95,10 +96,10 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
     ("C-x M-c" . kill-emacs) ;; for killing the daemon
     ("C-x k" . (lambda () (interactive) (kill-buffer (current-buffer))))
     (:map minibuffer-local-must-match-map
-	  ("C-s" . minibuffer-next-completion)
-	  ("C-r" . minibuffer-previous-completion)
-	  ("C-n" . next-history-element)
-	  ("C-p" . previous-history-element)))
+	    ("C-s" . minibuffer-next-completion)
+	    ("C-r" . minibuffer-previous-completion)
+	    ("C-n" . next-history-element)
+	    ("C-p" . previous-history-element)))
 #+end_src
 
 * DEFUNS
@@ -357,12 +358,12 @@ Otherwise emacsclient doesn't initialise UI settings.
       (dired-next-line -1))
 
     :bind (:map dired-mode-map
-	        ("<" . my/dired-beginning-of-buffer)
-	        (">" . my/dired-end-of-buffer)
-	        ("?" . my/dired-get-size)
-	        ("C-d" . my/dired-do-delete-skip-trash)
-	        ("b" . my/dired-up-directory)
-	        ("f" . 'dired-find-alternate-file))
+		("<" . my/dired-beginning-of-buffer)
+		(">" . my/dired-end-of-buffer)
+		("?" . my/dired-get-size)
+		("C-d" . my/dired-do-delete-skip-trash)
+		("b" . my/dired-up-directory)
+		("f" . 'dired-find-alternate-file))
     :hook
     (dired-mode . dired-omit-mode))
 #+end_src
@@ -593,10 +594,6 @@ Bulk install all the grammars as a one of task, so don't tangle!
        ("Pull" 5 magit-repolist-column-unpulled-from-upstream ((:right-align t) nil))
        ("Push" 5 magit-repolist-column-unpushed-to-upstream ((:right-align t) nil))
        ("Path" 99 magit-repolist-column-path nil))))
-#+end_src
-** HUNGRY DELETE
-#+begin_src emacs-lisp
-  (use-package hungry-delete :ensure :demand)
 #+end_src
 ** PATH FROM SHELL
 #+begin_src emacs-lisp
