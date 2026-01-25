@@ -803,9 +803,9 @@ EndSection
 #+NAME: xsession
 #+BEGIN_SRC conf :tangle ~/.xsession
   xset r rate 200 50 dpms 120 180 300
-  pixelclock -above &
-  pixelbatt -above &
-  sct 4000 &
+  pixelclock &
+  pixelbatt &
+  sct 4000
   exec cwm
 #+END_SRC
 #+BEGIN_SRC conf :noweb yes :tangle ~/.xinitrc
