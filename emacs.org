@@ -59,7 +59,7 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
     (use-short-answers t)
     :config
     (if (eq system-type 'darwin)
-	  (setq default-frame-alist '((fullscreen . fullscreen)))
+	(setq default-frame-alist '((fullscreen . fullscreen)))
       (setq default-frame-alist '((fullscreen . maximized))))
     (setq roland "YOU HAVE FORGOTTEN THE FACE OF YOUR FATHER")
     :bind
@@ -72,15 +72,6 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
     ("C-h" . backward-delete-char-untabify) ;; act the same as terminal
     ("C-M-h" . backward-kill-word) ;; ditto! Also M-h seems to do the same
     ("C-c h" . 'help-command) ;; We don't always have F1 as a fallback...
-    ("C-=" . global-text-scale-adjust)
-    ("C-&" . async-shell-command)
-    ("C-!" . async-shell-command)
-    ("C-%" . query-replace-regexp)
-    ("C-$" . aspell-word)
-    ("C-;" . comment-line)
-    ("C-M-;" . comment-box)
-    ("C-<" . beginning-of-buffer)
-    ("C->" . end-of-buffer)
     ("C-c f r" . rename-visited-file)
     ("C-c a" . align-regexp)
     ("C-c i" . imenu)
@@ -91,15 +82,41 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
     ("C-x C-b" . ibuffer)
     ("C-x m" . man)
     ("C-x x s" . sort-lines)
-    ("C-z" . zap-up-to-char)
     ("C-x M-k" . kill-buffer)
     ("C-x M-c" . kill-emacs) ;; for killing the daemon
     ("C-x k" . (lambda () (interactive) (kill-buffer (current-buffer))))
     (:map minibuffer-local-must-match-map
-	    ("C-s" . minibuffer-next-completion)
-	    ("C-r" . minibuffer-previous-completion)
-	    ("C-n" . next-history-element)
-	    ("C-p" . previous-history-element)))
+	("C-s" . minibuffer-next-completion)
+	("C-r" . minibuffer-previous-completion)
+	("C-n" . next-history-element)
+	("C-p" . previous-history-element)))
+#+end_src
+
+* BINDINGS
+
+Override at a global level some clunky defaults. The =*= used with
+=bind/bindkey= stops minor modes from clobbering.
+
+I have my ctrl keys next to my space bar so it's much more comfortable than
+meta/alt. Also avoid shifting for frequently used shortcuts if it can be
+helped.
+
+*N.B.* =bind*= doesn't work within the =emacs= "package" using =use-package= as
+obviously Emacs is not a package!
+
+#+begin_src emacs-lisp
+  (bind-key* "C-&" 'async-shell-command)
+  (bind-key* "C-!" 'shell-command)
+  (bind-key* "C-$" 'aspell-word)
+  (bind-key* "C-%" 'query-replace-regexp)
+  (bind-key* "C-*" 'duplicate-line)
+  (bind-key* "C-," 'beginning-of-buffer)
+  (bind-key* "C-." 'end-of-buffer)
+  (bind-key* "C-;" 'comment-line)
+  (bind-key* "C-M-;" 'comment-box)
+  (bind-key* "C-=" 'global-text-scale-adjust)
+  (bind-key* "C-^" 'copy-from-above-command)
+  (bind-key* "C-z" 'zap-up-to-char)
 #+end_src
 
 * DEFUNS
@@ -134,7 +151,7 @@ All of my custom functions live under the =my/= prefix/namespace.
     (interactive)
     (or (buffer-file-name) (error "No file is currently being edited"))
     (when (yes-or-no-p (format "Really delete '%s'?"
-			       (file-name-nondirectory buffer-file-name)))
+			     (file-name-nondirectory buffer-file-name)))
       (delete-file (buffer-file-name) t)
       (kill-this-buffer)))
 
@@ -382,7 +399,10 @@ Otherwise emacsclient doesn't initialise UI settings.
   (use-package flyspell
     :hook
     ((text-mode org-mode) . flyspell-mode)
-    (prog-mode . flyspell-prog-mode))
+    (prog-mode . flyspell-prog-mode)
+    :bind (:map flyspell-mode-map
+		("C-c s w" . flyspell-auto-correct-word)
+		("C-c s n" . flyspell-goto-next-error)))
 #+end_src
 
 * COMMENT ICOMPLETE
@@ -512,24 +532,24 @@ Bulk install all the grammars as a one of task, so don't tangle!
 #+begin_src emacs-lisp :tangle no
   (setq treesit-language-source-alist
 	'((c "https://github.com/tree-sitter/tree-sitter-c")
-	  (cpp "https://github.com/tree-sitter/tree-sitter-cpp")
-	  (bash "https://github.com/tree-sitter/tree-sitter-bash")
-	  (cmake "https://github.com/uyha/tree-sitter-cmake")
-	  (css "https://github.com/tree-sitter/tree-sitter-css")
-	  (elisp "https://github.com/Wilfred/tree-sitter-elisp")
-	  (go "https://github.com/tree-sitter/tree-sitter-go")
-	  (html "https://github.com/tree-sitter/tree-sitter-html")
-	  (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
-	  (json "https://github.com/tree-sitter/tree-sitter-json")
-	  (make "https://github.com/alemuller/tree-sitter-make")
-	  (markdown "https://github.com/ikatyang/tree-sitter-markdown")
-	  (nix "https://github.com/nix-community/tree-sitter-nix")
-	  (python "https://github.com/tree-sitter/tree-sitter-python")
-	  (ruby "https://github.com/tree-sitter/tree-sitter-ruby")
-	  (toml "https://github.com/tree-sitter/tree-sitter-toml")
-	  (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
-	  (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
-	  (yaml "https://github.com/ikatyang/tree-sitter-yaml")))
+	(cpp "https://github.com/tree-sitter/tree-sitter-cpp")
+	(bash "https://github.com/tree-sitter/tree-sitter-bash")
+	(cmake "https://github.com/uyha/tree-sitter-cmake")
+	(css "https://github.com/tree-sitter/tree-sitter-css")
+	(elisp "https://github.com/Wilfred/tree-sitter-elisp")
+	(go "https://github.com/tree-sitter/tree-sitter-go")
+	(html "https://github.com/tree-sitter/tree-sitter-html")
+	(javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
+	(json "https://github.com/tree-sitter/tree-sitter-json")
+	(make "https://github.com/alemuller/tree-sitter-make")
+	(markdown "https://github.com/ikatyang/tree-sitter-markdown")
+	(nix "https://github.com/nix-community/tree-sitter-nix")
+	(python "https://github.com/tree-sitter/tree-sitter-python")
+	(ruby "https://github.com/tree-sitter/tree-sitter-ruby")
+	(toml "https://github.com/tree-sitter/tree-sitter-toml")
+	(tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
+	(typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
+	(yaml "https://github.com/ikatyang/tree-sitter-yaml")))
   (mapc #'treesit-install-language-grammar (mapcar #'car treesit-language-source-alist))
 #+end_src
 
@@ -605,15 +625,15 @@ Bulk install all the grammars as a one of task, so don't tangle!
   (use-package vterm :ensure
     :bind* ("C-c t" . vterm)
     :bind (:map vterm-mode-map
-		;; USE CTRL-I FFS or the sake of your pinkies!
-		("<tab>" . (lambda () (interactive) (message roland)))
-		;; USE CTRL-J/M FFS or the sake of your pinkies!
-		("<return>" . (lambda () (interactive) (message roland)))
-		;; USE CTRL-H FFS or the sake of your pinkies!
-		("<backspace>" . (lambda () (interactive) (message roland)))
-		("C-h" . (lambda () (interactive) (vterm-send-key "<backspace>")))
-		("C-M-h" . (lambda () (interactive) (vterm-send-key "w" nil nil t)))
-		("C-u" . (lambda () (interactive) (vterm-send-key "u" nil nil t)))))
+	      ;; USE CTRL-I FFS or the sake of your pinkies!
+	      ("<tab>" . (lambda () (interactive) (message roland)))
+	      ;; USE CTRL-J/M FFS or the sake of your pinkies!
+	      ("<return>" . (lambda () (interactive) (message roland)))
+	      ;; USE CTRL-H FFS or the sake of your pinkies!
+	      ("<backspace>" . (lambda () (interactive) (message roland)))
+	      ("C-h" . (lambda () (interactive) (vterm-send-key "<backspace>")))
+	      ("C-M-h" . (lambda () (interactive) (vterm-send-key "w" nil nil t)))
+	      ("C-u" . (lambda () (interactive) (vterm-send-key "u" nil nil t)))))
 #+end_src
 ** VUNDO
 #+begin_src emacs-lisp
