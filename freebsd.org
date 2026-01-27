@@ -150,7 +150,7 @@ https://cgit.freebsd.org/src/tree/sys/dev/asmc/asmc.c?h=main
 
 **** BACKLIGHT
 
-https://github.com/tslight/gmuxctl/tree/main/gmux_backlight
+https://github.com/tslight/gmuxctl/tree/main/backlight
 
 Despite the fact that we can load =acpi_video= kmod and get some promising new
 sysctls, nothing actually changes the backlight, even though they profess to...
