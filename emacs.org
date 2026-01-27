@@ -31,7 +31,6 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
     (display-battery-mode)
     (display-time)
     (electric-pair-mode)
-    (global-hungry-delete-mode)
     (global-subword-mode)
     (global-prettify-symbols-mode)
     (save-place-mode 1)
@@ -45,8 +44,8 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
     (fill-column 79)
     (when (executable-find "fd") find-program "fd")
     (when (executable-find "rg") grep-program "rg")
-    (mac-command-modifier 'control)
-    (mac-control-modifier 'super)
+    ;; (mac-command-modifier 'control)
+    ;; (mac-control-modifier 'super)
     (package-archives
      '(("gnu" . "https://elpa.gnu.org/packages/")
        ("melpa" . "https://melpa.org/packages/")
@@ -59,7 +58,7 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
     (use-short-answers t)
     :config
     (if (eq system-type 'darwin)
-	(setq default-frame-alist '((fullscreen . fullscreen)))
+	  (setq default-frame-alist '((fullscreen . fullscreen)))
       (setq default-frame-alist '((fullscreen . maximized))))
     (setq roland "YOU HAVE FORGOTTEN THE FACE OF YOUR FATHER")
     :bind
@@ -86,10 +85,10 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
     ("C-x M-c" . kill-emacs) ;; for killing the daemon
     ("C-x k" . (lambda () (interactive) (kill-buffer (current-buffer))))
     (:map minibuffer-local-must-match-map
-	  ("C-s" . minibuffer-next-completion)
-	  ("C-r" . minibuffer-previous-completion)
-	  ("C-n" . next-history-element)
-	  ("C-p" . previous-history-element)))
+	    ("C-s" . minibuffer-next-completion)
+	    ("C-r" . minibuffer-previous-completion)
+	    ("C-n" . next-history-element)
+	    ("C-p" . previous-history-element)))
 #+end_src
 
 * BINDINGS
@@ -375,12 +374,12 @@ Otherwise emacsclient doesn't initialise UI settings.
       (dired-next-line -1))
 
     :bind (:map dired-mode-map
-	        ("," . my/dired-beginning-of-buffer)
-	        ("." . my/dired-end-of-buffer)
-	        ("?" . my/dired-get-size)
-	        ("C-d" . my/dired-do-delete-skip-trash)
-	        ("b" . my/dired-up-directory)
-	        ("f" . 'dired-find-alternate-file))
+		("," . my/dired-beginning-of-buffer)
+		("." . my/dired-end-of-buffer)
+		("?" . my/dired-get-size)
+		("C-d" . my/dired-do-delete-skip-trash)
+		("b" . my/dired-up-directory)
+		("f" . 'dired-find-alternate-file))
     :hook
     (dired-mode . dired-omit-mode))
 #+end_src
@@ -411,8 +410,8 @@ Otherwise emacsclient doesn't initialise UI settings.
     ((text-mode org-mode) . flyspell-mode)
     (prog-mode . flyspell-prog-mode)
     :bind (:map flyspell-mode-map
-	        ("C-c s w" . flyspell-auto-correct-word)
-	        ("C-c s n" . flyspell-goto-next-error)))
+		("C-c s w" . flyspell-auto-correct-word)
+		("C-c s n" . flyspell-goto-next-error)))
 #+end_src
 
 * ISEARCH
@@ -439,7 +438,7 @@ Otherwise emacsclient doesn't initialise UI settings.
   (use-package eglot
     :hook (prog-mode . eglot-ensure)
     :bind (:map eglot-mode-map
-	        ("C-c e r" . eglot-rename)))
+		("C-c e r" . eglot-rename)))
   (use-package corfu :ensure
     :custom
     (corfu-cycle t)
@@ -612,6 +611,12 @@ Bulk install all the grammars as a one of task, so don't tangle!
        ("Push" 5 magit-repolist-column-unpushed-to-upstream ((:right-align t) nil))
        ("Path" 99 magit-repolist-column-path nil))))
 #+end_src
+** HUNGRY DELETE
+#+begin_src emacs-lisp
+  (use-package hungry-delete :ensure :demand
+    :init (global-hungry-delete-mode)
+    :custom (hungry-delete-join-reluctantly t))
+#+end_src
 ** PATH FROM SHELL
 #+begin_src emacs-lisp
   (use-package exec-path-from-shell :ensure
@@ -622,15 +627,15 @@ Bulk install all the grammars as a one of task, so don't tangle!
   (use-package vterm :ensure
     :bind* ("C-c t" . vterm)
     :bind (:map vterm-mode-map
-	        ;; USE CTRL-I FFS or the sake of your pinkies!
-	        ("<tab>" . (lambda () (interactive) (message roland)))
-	        ;; USE CTRL-J/M FFS or the sake of your pinkies!
-	        ("<return>" . (lambda () (interactive) (message roland)))
-	        ;; USE CTRL-H FFS or the sake of your pinkies!
-	        ("<backspace>" . (lambda () (interactive) (message roland)))
-	        ("C-h" . (lambda () (interactive) (vterm-send-key "<backspace>")))
-	        ("C-M-h" . (lambda () (interactive) (vterm-send-key "w" nil nil t)))
-	        ("C-u" . (lambda () (interactive) (vterm-send-key "u" nil nil t)))))
+		;; USE CTRL-I FFS or the sake of your pinkies!
+		("<tab>" . (lambda () (interactive) (message roland)))
+		;; USE CTRL-J/M FFS or the sake of your pinkies!
+		("<return>" . (lambda () (interactive) (message roland)))
+		;; USE CTRL-H FFS or the sake of your pinkies!
+		("<backspace>" . (lambda () (interactive) (message roland)))
+		("C-h" . (lambda () (interactive) (vterm-send-key "<backspace>")))
+		("C-M-h" . (lambda () (interactive) (vterm-send-key "w" nil nil t)))
+		("C-u" . (lambda () (interactive) (vterm-send-key "u" nil nil t)))))
 #+end_src
 ** VUNDO
 #+begin_src emacs-lisp

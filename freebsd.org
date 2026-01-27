@@ -85,8 +85,8 @@ will become unresponsive when i915kms is loaded.
 
 **** ASMC
 
-Add the machine to =/usr/src/sys/dev/asmc/asmc.c= as mentioned in the link
-below:
+https://logi.wiki/index.php/SMC_Sensor_Codes
+https://github.com/freebsd/freebsd-src/pull/1992
 
 https://forums.freebsd.org/threads/macbook7-1-asmc-support.76497/
 https://bugs.freebsd.org/bugzilla//show_bug.cgi?id=272787
