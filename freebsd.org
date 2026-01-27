@@ -13,7 +13,7 @@ https://www.duskopijetlovic.com/boot/dotfiles/howto/freebsd/config/sysadmin/2025
 
 https://www.youtube.com/watch?v=TgeUniPBQjM&list=WL&index=1
 
-Hostnames: freefall, groundrush, skyrush, thud
+Hostnames: freefall, groundrush, skyrush, thud, treefall
 
 * BUGS/QUIRKS
 ** INTEL SOUND WEIRDNESS
@@ -94,14 +94,14 @@ https://cgit.freebsd.org/src/tree/sys/dev/asmc/asmc.c?h=main
 
 #+name: /usr/src/sys/dev/asmc/asmc.c.patch
 #+begin_src diff
---- asmc.c.orig	2026-01-26 20:45:55.675061000 +0000
-+++ asmc.c	2026-01-26 20:49:12.458523000 +0000
+--- ./asmc.c.orig	2026-01-26 20:45:55.675061000 +0000
++++ asmc.c	2026-01-27 14:22:02.389812000 +0000
 @@ -256,6 +256,12 @@
 	},
 
 	{
 +	  "MacBookPro8,3", "Apple SMC MacBook Pro (early 2011, 17-inch)",
-+	  ASMC_SMS_FUNCS, ASMC_FAN_FUNCS, ASMC_LIGHT_FUNCS,
++	  ASMC_SMS_FUNCS, ASMC_FAN_FUNCS2, ASMC_LIGHT_FUNCS,
 +	  ASMC_MBP83_TEMPS, ASMC_MBP83_TEMPNAMES, ASMC_MBP83_TEMPDESCS
 +	},
 +
@@ -109,47 +109,39 @@ https://cgit.freebsd.org/src/tree/sys/dev/asmc/asmc.c?h=main
 	  "MacBookPro9,1", "Apple SMC MacBook Pro (mid 2012, 15-inch)",
 	  ASMC_SMS_FUNCS_DISABLED, ASMC_FAN_FUNCS, ASMC_LIGHT_FUNCS,
 	  ASMC_MBP91_TEMPS, ASMC_MBP91_TEMPNAMES, ASMC_MBP91_TEMPDESCS
-@@ -1429,7 +1435,8 @@
-		 * light sensor for models known to generate this interrupt.
-		 */
-		if (strcmp(sc->sc_model->smc_model, "MacBookPro5,5") == 0 ||
--		    strcmp(sc->sc_model->smc_model, "MacBookPro6,2") == 0)
-+		    strcmp(sc->sc_model->smc_model, "MacBookPro6,2") == 0 ||
-+		    strcmp(sc->sc_model->smc_model, "MacBookPro8,3") == 0)
-			break;
-		/* FALLTHROUGH */
-	default:
 #+end_src
 
 #+name: /usr/src/sys/dev/asmc/asmcvar.h.patch
 #+begin_src diff
---- asmcvar.h.orig	2026-01-26 20:45:55.675873000 +0000
-+++ asmcvar.h	2026-01-26 20:49:21.570820000 +0000
-@@ -326,6 +326,28 @@
+--- ./asmcvar.h.orig	2026-01-26 20:45:55.675873000 +0000
++++ asmcvar.h	2026-01-27 14:26:09.265793000 +0000
+@@ -326,6 +326,30 @@
 				  "TMBS", "TP0P", "TPCD", "TW0P", "Th1H", \
 				  "Th2H", "Tm0P", "Ts0P", "Ts0S" }
 
-+/* TODO: validate temp zone for MBP 8,3 ! */
-+#define ASMC_MBP83_TEMPS	{ "TB0T", "TB1T", "TB2T", "TC0C", "TC0D", \
-+				  "TC0E", "TC0F", "TC0P", "TC1C", "TC2C", \
-+				  "TC3C", "TC4C", "TCFC", "TCGC", "TCSA", \
-+				  "TCTD", "TG0D", "TG0P", "THSP", \
-+				  "TP0P", "TPCD", "TW0P", "Th1H", \
-+				  "Th2H", "Tm0P", "Ts0P", "Ts0S", NULL }
++#define ASMC_MBP83_TEMPS	{ "TC0C", "TC0D", "TC0P", "TPCD", "TP0P", \
++				  "TG0D", "TG0P", "Tm0P", "Th1H", "Th2H", \
++				  "TB0T", "TB1T", "TB2T", "Ts0P", "ALSL", \
++				  "VD0R", "VP0R", "VC0C", "ID0R", "IB0R", \
++				  "IC0R", NULL }
 +
-+#define ASMC_MBP83_TEMPNAMES	{ "enclosure", "TB1T", "TB2T", "TC0C", "TC0D", \
-+				  "TC0E", "TC0F", "TC0P", "TC1C", "TC2C", \
-+				  "TC3C", "TC4C", "TCFC", "TCGC", "TCSA", \
-+				  "TCTD", "graphics", "TG0P", "THSP", \
-+				  "TP0P", "TPCD", "wireless", "Th1H", \
-+				  "Th2H", "memory", "Ts0P", "Ts0S" }
++#define ASMC_MBP83_TEMPNAMES	{ "cpu_die_digital_core_2", "cpu_0_die_analog", \
++				  "cpu_proximity", "pch_die_digital", "pch_proximity", \
++				  "gpu_die", "gpu_0_proximity", "mlb_proximity", \
++				  "right_fin_stack_proximity", "left_fin_stack_proximity", \
++				  "battery_ts_max", "battery_ts_1", "battery_ts_2", \
++				  "palmrest_proximity", "ambient_light_sensor",
++				  "dc_in_voltage", "pbus_voltage", "cpu_vcore_voltage", \
++				  "dc_in_current", "battery_current", "combined_cores" }
 +
-+#define ASMC_MBP83_TEMPDESCS	{ "Enclosure Bottomside", "TB1T", "TB2T", "TC0C", "TC0D", \
-+				  "TC0E", "TC0F", "TC0P", "TC1C", "TC2C", \
-+				  "TC3C", "TC4C", "TCFC", "TCGC", "TCSA", \
-+				  "TCTD", "TG0D", "TG0P", "THSP", \
-+				  "TP0P", "TPCD", "TW0P", "Th1H", \
-+				  "Th2H", "Tm0P", "Ts0P", "Ts0S" }
++#define ASMC_MBP83_TEMPDESCS	{ "CPU Die Digital Core 2", "CPU 0 Die Analog", \
++				  "CPU Proximity", "PCH Die Digital", "PCH Proximity", \
++				  "GPU Die", "GPU 0 Proximity", "MLB Proximity", \
++				  "Right Fin Stack Proximity", "Left Fin Stack Proximity", \
++				  "Battery TS MAX", "Battery TS 1", "Battery TS 2", \
++				  "Palmrest Proximity", "Ambient Light Sensor", \
++				  "DC In (Voltage)", "PBus (Voltage)", "CPU Vcore (Voltage)", \
++				  "DC In (Current)", "Battery (Current)", "Combined Cores" }
 +
  #define ASMC_MBP91_TEMPS	{ "TA0P", "TB0T", "TB1T", "TB2T", "TC0E", \
 				  "TC0F", "TC0P", "TC1C", "TC2C", "TC3C", \
@@ -989,8 +981,8 @@ EndSection
 
   unbind-mouse all
   bind-mouse R-1 menu-window
-  bind-mouse C-1 window-move
-  bind-mouse M-1 window-resize
+  bind-mouse M-1 window-move
+  bind-mouse MS-1 window-resize
 #+END_SRC
 ** GTK
 #+NAME: gtk2
