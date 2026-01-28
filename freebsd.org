@@ -33,7 +33,69 @@ compat.linuxkpi.i915_disable_power_well="0"
 #+end_src
 
 In =/boot/loader.conf=
+** MACBOOK FUNCTION KEY HACKING
 
+#+begin_src diff
+--- /usr/src/sys/dev/hid/hkbd.c.orig    2026-01-28 18:56:26.052780000 +0000
++++ /usr/src/sys/dev/hid/hkbd.c 2026-01-28 22:04:38.998153000 +0000
+@@ -122,6 +122,8 @@
+
+ #define        MOD_EJECT       0x01
+ #define        MOD_FN          0x02
++
++#define APPLE_FN_KEYCODE 0x83
+
+ #define MOD_MIN     0xe0
+ #define MOD_MAX     0xe7
+@@ -276,7 +278,7 @@
+	NN, NN, NN, NN, NN, NN, NN, NN, /* 68 - 6F */
+	NN, NN, NN, NN, 115, 108, 111, 113,     /* 70 - 77 */
+	109, 110, 112, 118, 114, 116, 117, 119, /* 78 - 7F */
+-       121, 120, NN, NN, NN, NN, NN, 123,      /* 80 - 87 */
++       121, 120, NN, 131, NN, NN, NN, 123,     /* 80 - 87 */
+	124, 125, 126, 127, 128, NN, NN, NN,    /* 88 - 8F */
+	129, 130, NN, NN, NN, NN, NN, NN,       /* 90 - 97 */
+	NN, NN, NN, NN, NN, NN, NN, NN, /* 98 - 9F */
+@@ -687,6 +689,30 @@
+			modifiers |= MOD_FN;
+	}
+
++       if (sc->sc_kbd_id != 0 && len >= 9 && id == 1) {
++         if (buf[8] == 0x02) {
++               /* Fn key pressed */
++               DPRINTF("hkbd: Fn key pressed\n");
++               modifiers |= MOD_FN;
++               bit_set(sc->sc_ndata, APPLE_FN_KEYCODE);
++         } else if (buf[8] == 0x00) {
++               /* Fn key released */
++               DPRINTF("hkbd: Fn key released\n");
++               bit_clear(sc->sc_ndata, APPLE_FN_KEYCODE);
++         }
++       }
++       /* /\* Check for Fn key in Consumer Control report (report ID 1, byte 8) *\/ */
++       /* if (sc->sc_kbd_id != 0 && len >= 9 && id == 1) { */
++       /*      /\* Fn key state is in byte 8 (0x02 = pressed, 0x00 = released) *\/ */
++       /*      printf("hkbd: Got Consumer Control report, len=%d id=%d buf[8]=%02x\n", */
++       /*             (int)len, id, buf[8]); */
++       /*      if (buf[8] == 0x02) { */
++       /*              /\* Treat Fn as Right Meta (0xe7 = right GUI/Windows key) *\/ */
++       /*              /\* bit_set(sc->sc_ndata, 0xe7); *\/ */
++       /*              modifiers |= MOD_FN; */
++       /*      } */
++       /* } */
++
+	bit_foreach(sc->sc_loc_key_valid, HKBD_NKEYCODE, i) {
+		if (id != sc->sc_id_loc_key[i]) {
+			continue;       /* invalid HID ID */
+@@ -1921,6 +1947,7 @@
+		0x167,  /* Sun Type 6 Cut */
+		0x125,  /* Sun Type 6 Mute */
+		/* 120 - 130 */
++               0x83,   /* Apple Fn key */
+		0x11f,  /* Sun Type 6 VolumeDown */
+		0x11e,  /* Sun Type 6 VolumeUp */
+		0x120,  /* Sun Type 6 PowerDown */
+#+end_src
 * HARDWARE
 ** MACBOOK
 
@@ -465,7 +527,7 @@ Make the most of the extra modifier keys on a Korean/Japanese layout
   089   cr     cr     nl     nl     cr     cr     nl     nl      O
   090   rctrl  rctrl  rctrl  rctrl  rctrl  rctrl  rctrl  rctrl   O
   091   '/'    '/'    '/'    '/'    '/'    '/'    '/'    '/'     N
-  092   nscr   pscr   debug  debug  nop    nop    nop    nop     O
+  092   rctrl  rctrl  rctrl  rctrl  rctrl  rctrl  rctrl  rctrl   O
   093   ralt   ralt   ralt   ralt   ralt   ralt   ralt   ralt    O
   094   fkey49 fkey49 fkey49 fkey49 fkey49 fkey49 fkey49 fkey49  O
   095   fkey50 fkey50 slock  fkey50 slock  fkey50 fkey50 fkey50  O
@@ -711,7 +773,7 @@ Make the most of the extra modifier keys on a Korean/Japanese layout
     087   fkey11 fkey23 fkey35 fkey47 scr11  scr11  scr11  scr11   O
     088   fkey12 fkey24 fkey36 fkey48 scr12  scr12  scr12  scr12   O
     089   cr     cr     nl     nl     cr     cr     nl     nl      O
-    090   nscr   nscr   nscr   nscr   nscr   nscr   nscr   nscr    O
+    090   nop    nop    nop    nop    nop    nop    nop    nop    O
     091   '/'    '/'    '/'    '/'    '/'    '/'    '/'    '/'     N
     092   lalt   lalt   lalt   lalt   lalt   lalt   lalt   lalt    O
     093   rctrl  rctrl  rctrl  rctrl  rctrl  rctrl  rctrl  rctrl   O
