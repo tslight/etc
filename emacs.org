@@ -395,11 +395,11 @@ Otherwise emacsclient doesn't initialise UI settings.
 * FIDO
 
 #+begin_src emacs-lisp
-  (use-package fido
+  (use-package icomplete
     :custom
     (fido-vertical-mode t)
     (icomplete-compute-delay 0)
-    :init (fido-mode))
+    (completion-auto-help nil))
 #+end_src
 
 * FLYSPELL
