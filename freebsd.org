@@ -37,386 +37,135 @@ In =/boot/loader.conf=
 
 #+begin_src diff
 --- /usr/src/sys/dev/hid/hkbd.c.orig    2026-01-28 18:56:26.052780000 +0000
-+++ /usr/src/sys/dev/hid/hkbd.c 2026-01-28 22:04:38.998153000 +0000
-@@ -122,6 +122,8 @@
++++ /usr/src/sys/dev/hid/hkbd.c 2026-01-29 22:24:32.762481000 +0000
+@@ -1,3 +1,4 @@
++/* -*- tab-width: 8; c-basic-offset: 8; indent-tabs-mode: t -*- */
+ #include <sys/cdefs.h>
+ /*-
+  * SPDX-License-Identifier: BSD-2-Clause
+@@ -122,6 +123,8 @@
 
  #define        MOD_EJECT       0x01
  #define        MOD_FN          0x02
 +
-+#define APPLE_FN_KEYCODE 0x83
++#define APPLE_FN_KEYCODE 0xff
 
  #define MOD_MIN     0xe0
  #define MOD_MAX     0xe7
-@@ -276,7 +278,7 @@
-	NN, NN, NN, NN, NN, NN, NN, NN, /* 68 - 6F */
-	NN, NN, NN, NN, 115, 108, 111, 113,     /* 70 - 77 */
-	109, 110, 112, 118, 114, 116, 117, 119, /* 78 - 7F */
--       121, 120, NN, NN, NN, NN, NN, 123,      /* 80 - 87 */
-+       121, 120, NN, 131, NN, NN, NN, 123,     /* 80 - 87 */
-	124, 125, 126, 127, 128, NN, NN, NN,    /* 88 - 8F */
-	129, 130, NN, NN, NN, NN, NN, NN,       /* 90 - 97 */
-	NN, NN, NN, NN, NN, NN, NN, NN, /* 98 - 9F */
-@@ -687,6 +689,30 @@
+@@ -291,7 +294,7 @@
+	29, 42, 56, 105, 90, 54, 93, 106,       /* E0 - E7 */
+	NN, NN, NN, NN, NN, NN, NN, NN, /* E8 - EF */
+	NN, NN, NN, NN, NN, NN, NN, NN, /* F0 - F7 */
+-       NN, NN, NN, NN, NN, NN, NN, NN, /* F8 - FF */
++       NN, NN, NN, NN, NN, NN, NN, 255,        /* F8 - FF */
+ };
+
+ static const uint8_t hkbd_boot_desc[] = { HID_KBD_BOOTPROTO_DESCR() };
+@@ -619,6 +622,20 @@
+	case 0x4f: return 0x4d; /* RIGHT ARROW -> END */
+	case 0x52: return 0x4b; /* UP ARROW -> PGUP */
+	case 0x51: return 0x4e; /* DOWN ARROW -> PGDN */
++
++       case 0x3a: return 0x68; /* F1 -> F13 Until I can find BRIGHTNESS DOWN */
++       case 0x3b: return 0x69; /* F2 -> F14 Until I can find BRIGHTNESS UP */
++       case 0x3c: return 0x6A; /* F3 -> F15 Until I can find SCALE */
++       case 0x3d: return 0x6B; /* F4 -> F16 Until I can find ALL APPLICATIONS */
++       case 0x3e: return 0x6C; /* F5 -> F17 Until I can find KBD BACKLIGHT DOWN */
++       case 0x3f: return 0x6D; /* F6 -> F18 Until I can find KBD BACKLIGHT UP */
++
++       case 0x40: return 0xEA; /* F7 -> MEDIA PREV */
++       case 0x41: return 0xE8; /* F8 -> PLAY/PAUSE */
++       case 0x42: return 0xEB; /* F9 -> MEDIA NEXT */
++       case 0x43: return 0x7f; /* F10 -> MUTE */
++       case 0x44: return 0x81; /* F11 -> VOLUME DOWN */
++       case 0x45: return 0x80; /* F12 -> VOLUME UP */
+	default: return keycode;
+	}
+ }
+@@ -687,6 +704,20 @@
 			modifiers |= MOD_FN;
 	}
 
++       /* Check for Apple Fn key in Consumer Control (report ID 1, byte 8) */
 +       if (sc->sc_kbd_id != 0 && len >= 9 && id == 1) {
-+         if (buf[8] == 0x02) {
-+               /* Fn key pressed */
-+               DPRINTF("hkbd: Fn key pressed\n");
-+               modifiers |= MOD_FN;
-+               bit_set(sc->sc_ndata, APPLE_FN_KEYCODE);
-+         } else if (buf[8] == 0x00) {
-+               /* Fn key released */
-+               DPRINTF("hkbd: Fn key released\n");
-+               bit_clear(sc->sc_ndata, APPLE_FN_KEYCODE);
-+         }
++               if (buf[8] == 0x02) {
++                       /* Fn key pressed */
++                       DPRINTF("FN key from Consumer Control pressed!\n");
++                       modifiers |= MOD_FN;
++                       bit_set(sc->sc_ndata, APPLE_FN_KEYCODE);
++               } else if (buf[8] == 0x00) {
++                       /* Fn key released */
++                       DPRINTF("FN key from Consumer Control released!\n");
++                       bit_clear(sc->sc_ndata, APPLE_FN_KEYCODE);
++               }
 +       }
-+       /* /\* Check for Fn key in Consumer Control report (report ID 1, byte 8) *\/ */
-+       /* if (sc->sc_kbd_id != 0 && len >= 9 && id == 1) { */
-+       /*      /\* Fn key state is in byte 8 (0x02 = pressed, 0x00 = released) *\/ */
-+       /*      printf("hkbd: Got Consumer Control report, len=%d id=%d buf[8]=%02x\n", */
-+       /*             (int)len, id, buf[8]); */
-+       /*      if (buf[8] == 0x02) { */
-+       /*              /\* Treat Fn as Right Meta (0xe7 = right GUI/Windows key) *\/ */
-+       /*              /\* bit_set(sc->sc_ndata, 0xe7); *\/ */
-+       /*              modifiers |= MOD_FN; */
-+       /*      } */
-+       /* } */
 +
 	bit_foreach(sc->sc_loc_key_valid, HKBD_NKEYCODE, i) {
 		if (id != sc->sc_id_loc_key[i]) {
 			continue;       /* invalid HID ID */
-@@ -1921,6 +1947,7 @@
-		0x167,  /* Sun Type 6 Cut */
-		0x125,  /* Sun Type 6 Mute */
-		/* 120 - 130 */
-+               0x83,   /* Apple Fn key */
-		0x11f,  /* Sun Type 6 VolumeDown */
-		0x11e,  /* Sun Type 6 VolumeUp */
-		0x120,  /* Sun Type 6 PowerDown */
+@@ -736,6 +767,40 @@
+	bit_foreach(sc->sc_ndata, HKBD_NKEYCODE, i)
+		DPRINTF("Key 0x%02x pressed\n", i);
+ #endif
++       /* #ifdef EVDEV_SUPPORT */
++       /*   if (modifiers & MOD_FN) { */
++       /*     if (sc->sc_evdev != NULL) { */
++       /*       int evk = 0; */
++       /*       bit_foreach(sc->sc_ndata, HKBD_NKEYCODE, i) { */
++       /*       switch (i) { */
++       /*       case 0x3a: evk = KEY_BRIGHTNESSDOWN; break; */
++       /*       case 0x3b: evk = KEY_BRIGHTNESSUP;   break; */
++       /*       case 0x3c: evk = KEY_SCALE;          break; /\* Mission Ctrl *\/ */
++       /*       case 0x3d: evk = KEY_DASHBOARD;      break; /\* Launchpad *\/ */
++       /*       case 0x3e: evk = KEY_KBDILLUMDOWN;   break; */
++       /*       case 0x3f: evk = KEY_KBDILLUMUP;     break; */
++       /*       case 0x40: evk = KEY_PREVIOUSSONG;   break; */
++       /*       case 0x41: evk = KEY_PLAYPAUSE;      break; */
++       /*       case 0x42: evk = KEY_NEXTSONG;       break; */
++       /*       case 0x43: evk = KEY_MUTE;           break; */
++       /*       case 0x44: evk = KEY_VOLUMEDOWN;     break; */
++       /*       case 0x45: evk = KEY_VOLUMEUP;       break; */
++       /*       default: evk = 0; break; */
++       /*       } */
++       /*       if (evk) { */
++       /*      DPRINTF("Fn Key 0x%02x -> 0x%02x\n", i, evk); */
++       /*      if (bit_test(sc->sc_ndata, i) && !bit_test(sc->sc_odata, i)) { */
++       /*        evdev_push_event(sc->sc_evdev, EV_KEY, evk, 1); */
++       /*      } else if (!bit_test(sc->sc_ndata, i) && bit_test(sc->sc_odata, i)) { */
++       /*        evdev_push_event(sc->sc_evdev, EV_KEY, evk, 0); */
++       /*      } */
++       /*      bit_clear(sc->sc_ndata, i);  // Suppress F-key */
++       /*       } */
++       /*     } */
++       /*       evdev_sync(sc->sc_evdev); */
++       /*     } */
++       /*   } */
++       /* #endif */
+	hkbd_interrupt(sc);
+ }
+
+@@ -1934,6 +1999,8 @@
+		0x5c,   /* Keyboard Intl' 6 (Keypad ,) (For PC-9821 layout) */
+		0x71,   /* Apple Keyboard JIS (Kana) */
+		0x72,   /* Apple Keyboard JIS (Eisu) */
++               /* Misc 200 - 255 */
++               0xff,   /* Apple Fn key */
+	};
+
+	if ((code >= 89) && (code < (int)(89 + nitems(scan)))) {
 #+end_src
 
 #+begin_src diff
---- /usr/src/sys/dev/evdev/evdev_utils.c        2026-01-28 23:12:08.203119000 +0000
+--- /usr/src/sys/dev/evdev/evdev_utils.c        2026-01-29 09:21:12.143596000 +0000
 +++ /home/anon/src/freebsd-src/sys/dev/evdev/evdev_utils.c      2026-01-28 23:42:32.891340000 +0000
-@@ -74,7 +74,7 @@
-	KEY_STOP,       KEY_AGAIN,      KEY_UNDO,       KEY_CUT,
-	KEY_COPY,       KEY_PASTE,      KEY_FIND,       KEY_MUTE,
-	/* 0x80 - 0x9f */
--       KEY_VOLUMEUP,   KEY_VOLUMEDOWN, NONE,           KEY_RIGHTMETA, // KEY_FN
-+       KEY_VOLUMEUP,   KEY_VOLUMEDOWN, NONE,           NONE,
-	NONE,           KEY_KPCOMMA,    NONE,           KEY_RO,
-	KEY_KATAKANAHIRAGANA,   KEY_YEN,KEY_HENKAN,     KEY_MUHENKAN,
-	KEY_KPJPCOMMA,  NONE,           NONE,           NONE,
-#+end_src
+@@ -108,7 +108,7 @@
+	KEY_WWW,        KEY_BACK,       KEY_FORWARD,    KEY_STOP,
+	KEY_FIND,       KEY_SCROLLUP,   KEY_SCROLLDOWN, KEY_EDIT,
+	KEY_SLEEP,      KEY_COFFEE,     KEY_REFRESH,    KEY_CALC,
+-       NONE,           NONE,           NONE,           KEY_WAKEUP,
++       NONE,           NONE,           NONE,           NONE,
 
-* HARDWARE
-** MACBOOK
-
-https://joshua.hu/FreeBSD-on-MacbookPro-114-A1398
-https://freebsd.uw.cz/2025/05/freebsd-and-edimax-n150-wi-fi-usb.html
-https://duriansoftware.com/joe/freebsd-installation-notes-for-a-2011-macbook-air
-https://itsfoss.gitlab.io/post/configuring-bcm4360-macbook-air-on-freebsd-to-connect-to-wifi/
-
-*** AIR 7,2
-**** BIZARRE SOUND PIN/CODEC ISSUE
-
-After much faffing and too-ing and fro-ing to the installer (where bizarrely
-the sound pins were configured correctly) - I came up with these hints to make
-my sound work.
-
-Stick 'em in =/boot/device.hints= if you want to hear anything...
-
-#+begin_src conf
-hint.hdac.1.cad0.nid16.config="as=2 seq=0 device=Headphones conn=Jack ctype=Combo"
-hint.hdac.1.cad0.nid17.config="as=15 seq=0 device=Line-out conn=None ctype=Unknown misc=0"
-hint.hdac.1.cad0.nid18.config="as=1 seq=0 device=Speaker conn=Fixed loc=Internal misc=1"
-hint.hdac.1.cad0.nid19.config="as=15 seq=0 device=Line-out conn=None ctype=Unknown misc=0"
-hint.hdac.1.cad0.nid20.config="as=15 seq=0 device=Line-out conn=None ctype=Unknown misc=0"
-hint.hdac.1.cad0.nid24.config="as=3 seq=0 device=Mic conn=Jack ctype=Combo"
-hint.hdac.1.cad0.nid28.config="as=0 seq=0 device=Mic conn=Fixed ctype=Digital loc=internal misc=1"
-hint.hdaa.1.gpio_config="0=set"
-#+end_src
-
-*** PRO 8,3
-
-https://wiki.freebsd.org/Graphics/AMD-GPU-Matrix
-https://www.reddit.com/r/freebsd/comments/1jhx9y5/kld_list_entries_for_an_apple_macbookpro83_with/
-
-**** Suspend
-
-https://bugs.freebsd.org/bugzilla//show_bug.cgi?id=252241
-https://forums.freebsd.org/threads/will-we-have-drm-kmod-driver-i915kms-ko-for-14-3-release-i386.100943/
-https://forums.macrumors.com/threads/force-2011-macbook-pro-8-2-with-failed-amd-gpu-to-always-use-intel-integrated-gpu-efi-variable-fix.2037591/
-
-On Macbook Pro 8,3 - disable AMD GPU from OSX recovery with:
-
-#+begin_src shell
-nvram gpu-power-prefs=%01%00%00%00
-nvram fa4ce28d-b62f-4c99-9cc3-6815686e30f9:gpu-power-prefs=%01%00%00%00
-#+end_src
-
-After that we should be able to load and use i915kms, prior to that the system
-will become unresponsive when i915kms is loaded.
-
-**** ASMC
-
-https://logi.wiki/index.php/SMC_Sensor_Codes
-https://github.com/freebsd/freebsd-src/pull/1992
-
-https://forums.freebsd.org/threads/macbook7-1-asmc-support.76497/
-https://bugs.freebsd.org/bugzilla//show_bug.cgi?id=272787
-https://cgit.freebsd.org/src/tree/sys/dev/asmc/asmc.c?h=main
-
-#+name: /usr/src/sys/dev/asmc/asmc.c.patch
-#+begin_src diff
---- ./asmc.c.orig	2026-01-26 20:45:55.675061000 +0000
-+++ asmc.c	2026-01-27 14:22:02.389812000 +0000
-@@ -256,6 +256,12 @@
-	},
-
-	{
-+	  "MacBookPro8,3", "Apple SMC MacBook Pro (early 2011, 17-inch)",
-+	  ASMC_SMS_FUNCS, ASMC_FAN_FUNCS2, ASMC_LIGHT_FUNCS,
-+	  ASMC_MBP83_TEMPS, ASMC_MBP83_TEMPNAMES, ASMC_MBP83_TEMPDESCS
-+	},
-+
-+	{
-	  "MacBookPro9,1", "Apple SMC MacBook Pro (mid 2012, 15-inch)",
-	  ASMC_SMS_FUNCS_DISABLED, ASMC_FAN_FUNCS, ASMC_LIGHT_FUNCS,
-	  ASMC_MBP91_TEMPS, ASMC_MBP91_TEMPNAMES, ASMC_MBP91_TEMPDESCS
-#+end_src
-
-#+name: /usr/src/sys/dev/asmc/asmcvar.h.patch
-#+begin_src diff
---- ./asmcvar.h.orig	2026-01-26 20:45:55.675873000 +0000
-+++ asmcvar.h	2026-01-27 14:26:09.265793000 +0000
-@@ -326,6 +326,30 @@
-				  "TMBS", "TP0P", "TPCD", "TW0P", "Th1H", \
-				  "Th2H", "Tm0P", "Ts0P", "Ts0S" }
-
-+#define ASMC_MBP83_TEMPS	{ "TC0C", "TC0D", "TC0P", "TPCD", "TP0P", \
-+				  "TG0D", "TG0P", "Tm0P", "Th1H", "Th2H", \
-+				  "TB0T", "TB1T", "TB2T", "Ts0P", "ALSL", \
-+				  "VD0R", "VP0R", "VC0C", "ID0R", "IB0R", \
-+				  "IC0R", NULL }
-+
-+#define ASMC_MBP83_TEMPNAMES	{ "cpu_die_digital_core_2", "cpu_0_die_analog", \
-+				  "cpu_proximity", "pch_die_digital", "pch_proximity", \
-+				  "gpu_die", "gpu_0_proximity", "mlb_proximity", \
-+				  "right_fin_stack_proximity", "left_fin_stack_proximity", \
-+				  "battery_ts_max", "battery_ts_1", "battery_ts_2", \
-+				  "palmrest_proximity", "ambient_light_sensor",
-+				  "dc_in_voltage", "pbus_voltage", "cpu_vcore_voltage", \
-+				  "dc_in_current", "battery_current", "combined_cores" }
-+
-+#define ASMC_MBP83_TEMPDESCS	{ "CPU Die Digital Core 2", "CPU 0 Die Analog", \
-+				  "CPU Proximity", "PCH Die Digital", "PCH Proximity", \
-+				  "GPU Die", "GPU 0 Proximity", "MLB Proximity", \
-+				  "Right Fin Stack Proximity", "Left Fin Stack Proximity", \
-+				  "Battery TS MAX", "Battery TS 1", "Battery TS 2", \
-+				  "Palmrest Proximity", "Ambient Light Sensor", \
-+				  "DC In (Voltage)", "PBus (Voltage)", "CPU Vcore (Voltage)", \
-+				  "DC In (Current)", "Battery (Current)", "Combined Cores" }
-+
- #define ASMC_MBP91_TEMPS	{ "TA0P", "TB0T", "TB1T", "TB2T", "TC0E", \
-				  "TC0F", "TC0P", "TC1C", "TC2C", "TC3C", \
-				  "TC4C", "TCGC", "TCSA", "TCXC", "TG0D", \
-#+end_src
-
-**** BACKLIGHT
-
-https://github.com/tslight/gmuxctl/tree/main/backlight
-
-Despite the fact that we can load =acpi_video= kmod and get some promising new
-sysctls, nothing actually changes the backlight, even though they profess to...
-
-On Macbooks with dual GPUs of this vintage, the GMUX chip controls switching
-between Integrated/Discrete GPUs and backlight.
-
-For proper backlight on MBP 8,3, someone would need to port the Linux
-~apple-gmux~ driver to FreeBSD. The GMUX chip sits at IO port ~0x700~ and
-controls backlight via specific register writes.
-
-For the time being, here's some hack C code to achieve what I want:
-
-#+begin_src c
-#include <stdio.h>
-#include <stdlib.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <sys/types.h>
-#include <machine/cpufunc.h>
-
-#define GMUX_PORT_BRIGHTNESS 0x774
-
-int main(int argc, char *argv[]) {
-    int fd;
-    uint32_t val;
-
-    fd = open("/dev/io", O_RDWR);
-    if (fd < 0) {
-	perror("open /dev/io");
-	return 1;
-    }
-
-    if (argc == 1) {
-	/* Read current brightness */
-	val = inl(GMUX_PORT_BRIGHTNESS);
-	printf("Current brightness: 0x%x (%d%%)\n", val, val * 100 / 0xFFFF);
-    } else {
-	/* Set brightness (0-100) */
-	int pct = atoi(argv[1]);
-	if (pct < 0 || pct > 100) {
-	    fprintf(stderr, "Value must be 0-100\n");
-	    close(fd);
-	    return 1;
-	}
-	val = pct * 0xFFFF / 100;
-	outl(GMUX_PORT_BRIGHTNESS, val);
-	printf("Set brightness to %d%% (0x%x)\n", pct, val);
-    }
-
-    close(fd);
-    return 0;
-}
-#+end_src
-
-For more GMUX HAX take a look at: https://github.com/tslight/gmuxctl
-
-* PACKAGES
-
-#+begin_src sh :results output replace :cache no
-  pkg query -e '%a = 0' %o
-#+end_src
-
-#+RESULTS:
-#+begin_example
-base/FreeBSD-kernel-generic
-base/FreeBSD-kernel-generic-dbg
-base/FreeBSD-set-base
-base/FreeBSD-set-lib32
-base/FreeBSD-set-minimal
-base/FreeBSD-set-src
-devel/ccls
-devel/cmake
-ftp/curl
-x11-wm/cwm
-graphics/drm-kmod
-editors/emacs
-textproc/en-aspell
-misc/freebsd-doc-en
-devel/git
-graphics/glx-utils
-textproc/jq
-misc/kbdscan
-www/librewolf
-devel/libtool
-multimedia/libva-intel-driver
-multimedia/libva-utils
-devel/libvterm
-multimedia/mpv
-ports-mgmt/pkg
-accessibility/sct
-sysutils/sensors
-sysutils/smartmontools
-security/sudo
-sysutils/tmux
-x11/xlibre
-x11-drivers/xlibre-xf86-video-intel
-www/yt-dlp
-shells/zsh
-#+end_example
-
-* CRON
-
-#+begin_src cron
-SHELL=/bin/sh
-PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin
-\*       *       *       *       *       /usr/local/bin/asmcfan
-\*       *       *       *       *       /usr/local/bin/fscksaver
-#+end_src
-
-** ASMCFAN
-
-Control the fans depending on temperature, in a Macbook that supports ASMC.
-
-#+begin_src shell :tangle /sudo::/usr/local/bin/asmcfan :tangle-mode o755
-  #!/bin/sh
-  if ! kldstat | grep -q asmc.ko; then
-      if ! kldload asmc; then
-	  logger -t asmcfan "ERROR: Failed to load ASMC module."
-	  exit 1
-      fi
-  fi
-
-  TEMP=$(sysctl -n dev.cpu.0.temperature | cut -c 1-2)
-  CUR_SPEED=$(sysctl -n dev.asmc.0.fan.0.targetspeed)
-  SET_SPEED=0
-
-  if [ "$TEMP" -le 25 ]; then
-      SET_SPEED=0
-      logger -t asmcfan "${TEMP}°C: ${SET_SPEED}RPM: BRRRRRRR!!!"
-  elif [ "$TEMP" -le 30 ]; then
-      SET_SPEED=1000
-      logger -t asmcfan "${TEMP}°C: ${SET_SPEED}RPM: Getting a tad bit nippy..."
-  elif [ "$TEMP" -le 35 ]; then
-      SET_SPEED=1500
-  elif [ "$TEMP" -le 40 ]; then
-      SET_SPEED=2000
-  elif [ "$TEMP" -le 45 ]; then
-      SET_SPEED=2500
-  elif [ "$TEMP" -le 55 ]; then
-      SET_SPEED=3000
-  elif [ "$TEMP" -le 60 ]; then
-      SET_SPEED=3500
-  elif [ "$TEMP" -le 65 ]; then
-      SET_SPEED=4000
-  elif [ "$TEMP" -le 70 ]; then
-      SET_SPEED=4500
-  elif [ "$TEMP" -le 75 ]; then
-      SET_SPEED=5000
-  elif [ "$TEMP" -le 80 ]; then
-      SET_SPEED=5500
-      logger -t asmcfan "${TEMP}°C: ${SET_SPEED}RPM: It's getting HOT in here..."
-  elif [ "$TEMP" -le 85 ]; then
-      SET_SPEED=6000
-      logger -t asmcfan "${TEMP}°C: ${SET_SPEED}RPM: I'm melting..."
-  else
-      SET_SPEED=6500
-      logger -t asmcfan "${TEMP}°C: ${SET_SPEED}RPM: SCORCHIO!!!"
-  fi
-
-  if [ "$SET_SPEED" -ne "$CUR_SPEED" ]; then
-      sysctl dev.asmc.0.fan.0.maxspeed="$SET_SPEED" > /dev/null
-      sysctl dev.asmc.0.fan.0.minspeed="$SET_SPEED" > /dev/null
-      if sysctl dev.asmc.0.fan.1 2> /dev/null; then
-	  sysctl dev.asmc.0.fan.1.maxspeed="$SET_SPEED" > /dev/null
-	  sysctl dev.asmc.0.fan.1.minspeed="$SET_SPEED" > /dev/null
-      fi
-  fi
-
-  exit 0
-#+end_src
-** FSCKSAVER
-
-Shutdown when battery is lower than 10% and we're not charging.
-
-#+begin_src shell :tangle /sudo::/usr/local/bin/fscksaver :tangle-mode o755
-  #!/bin/sh
-
-  # Get battery life percentage
-  battery_life=$(sysctl -n hw.acpi.battery.life)
-
-  # Get AC line status (1 = plugged in, 0 = on battery)
-  ac_status=$(sysctl -n hw.acpi.acline)
-
-  # Check if battery is below 5% and not plugged in
-  if [ "$battery_life" -lt 5 ] && [ "$ac_status" -eq 0 ]; then
-      logger -t fscksaver "$battery_life% & not charging. Shutting down..."
-      shutdown -p now
-  fi
+ };
 #+end_src
 
 * SUDOERS

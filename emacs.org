@@ -35,6 +35,7 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
     (global-prettify-symbols-mode)
     (save-place-mode 1)
     :custom
+    (c-default-style "bsd")
     (auto-save-visited-mode t)
     (completion-styles '(basic substring initials flex))
     (custom-file (expand-file-name "custom.el" user-emacs-directory))
@@ -58,7 +59,7 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
     (use-short-answers t)
     :config
     (if (eq system-type 'darwin)
-	  (setq default-frame-alist '((fullscreen . fullscreen)))
+	    (setq default-frame-alist '((fullscreen . fullscreen)))
       (setq default-frame-alist '((fullscreen . maximized))))
     (setq roland "YOU HAVE FORGOTTEN THE FACE OF YOUR FATHER")
     :bind
@@ -85,10 +86,10 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
     ("C-x M-c" . kill-emacs) ;; for killing the daemon
     ("C-x k" . (lambda () (interactive) (kill-buffer (current-buffer))))
     (:map minibuffer-local-must-match-map
-	    ("C-s" . minibuffer-next-completion)
-	    ("C-r" . minibuffer-previous-completion)
-	    ("C-n" . next-history-element)
-	    ("C-p" . previous-history-element)))
+	      ("C-s" . minibuffer-next-completion)
+	      ("C-r" . minibuffer-previous-completion)
+	      ("C-n" . next-history-element)
+	      ("C-p" . previous-history-element)))
 #+end_src
 
 * BINDINGS
@@ -552,6 +553,7 @@ Bulk install all the grammars as a one of task, so don't tangle!
 #+begin_src emacs-lisp
   (use-package treesit
     :custom
+    (c-ts-mode-indent-style "bsd")
     (major-mode-remap-alist
      '((c-mode . c-ts-mode)
        (c++-mode . c++-ts-mode)
