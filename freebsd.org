@@ -96,6 +96,21 @@ In =/boot/loader.conf=
 		0x11e,  /* Sun Type 6 VolumeUp */
 		0x120,  /* Sun Type 6 PowerDown */
 #+end_src
+
+#+begin_src diff
+--- /usr/src/sys/dev/evdev/evdev_utils.c        2026-01-28 23:12:08.203119000 +0000
++++ /home/anon/src/freebsd-src/sys/dev/evdev/evdev_utils.c      2026-01-28 23:42:32.891340000 +0000
+@@ -74,7 +74,7 @@
+	KEY_STOP,       KEY_AGAIN,      KEY_UNDO,       KEY_CUT,
+	KEY_COPY,       KEY_PASTE,      KEY_FIND,       KEY_MUTE,
+	/* 0x80 - 0x9f */
+-       KEY_VOLUMEUP,   KEY_VOLUMEDOWN, NONE,           KEY_RIGHTMETA, // KEY_FN
++       KEY_VOLUMEUP,   KEY_VOLUMEDOWN, NONE,           NONE,
+	NONE,           KEY_KPCOMMA,    NONE,           KEY_RO,
+	KEY_KATAKANAHIRAGANA,   KEY_YEN,KEY_HENKAN,     KEY_MUHENKAN,
+	KEY_KPJPCOMMA,  NONE,           NONE,           NONE,
+#+end_src
+
 * HARDWARE
 ** MACBOOK
 
