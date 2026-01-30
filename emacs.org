@@ -59,11 +59,10 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
     (use-short-answers t)
     :config
     (if (eq system-type 'darwin)
-	      (setq default-frame-alist '((fullscreen . fullscreen)))
+	(setq default-frame-alist '((fullscreen . fullscreen)))
       (setq default-frame-alist '((fullscreen . maximized))))
     (setq roland "YOU HAVE FORGOTTEN THE FACE OF YOUR FATHER")
     :bind
-    ("<mouse-3>" . nil) ;; trackpad madness!
     ;; USE CTRL-I FFS or the sake of your pinkies!
     ("<tab>" . (lambda () (interactive) (message roland)))
     ;; USE CTRL-J/M FFS or the sake of your pinkies!
@@ -88,10 +87,10 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
     ("C-x M-c" . kill-emacs) ;; for killing the daemon
     ("C-x k" . (lambda () (interactive) (kill-buffer (current-buffer))))
     (:map minibuffer-local-must-match-map
-		("C-s" . minibuffer-next-completion)
-		("C-r" . minibuffer-previous-completion)
-		("C-n" . next-history-element)
-		("C-p" . previous-history-element)))
+	  ("C-s" . minibuffer-next-completion)
+	  ("C-r" . minibuffer-previous-completion)
+	  ("C-n" . next-history-element)
+	  ("C-p" . previous-history-element)))
 #+end_src
 
 * BINDINGS
@@ -107,6 +106,13 @@ helped.
 obviously Emacs is not a package!
 
 #+begin_src emacs-lisp
+  ;; prevent trackpad palm madness!
+  (global-unset-key (kbd "<mouse-1>"))
+  (global-unset-key (kbd "<mouse-2>"))
+  (global-unset-key (kbd "<mouse-3>"))
+  (global-unset-key (kbd "C-<down-mouse-1>"))
+  (global-unset-key (kbd "C-<down-mouse-2>"))
+  (global-unset-key (kbd "C-<down-mouse-3>"))
   (bind-key* "C-&" 'async-shell-command)
   (bind-key* "C-!" 'shell-command)
   (bind-key* "C-$" 'aspell-word)
@@ -142,7 +148,7 @@ All of my custom functions live under the =my/= prefix/namespace.
 	  (kill-region (- lstart 1) (+ (point) 1))
 	(kill-region lstart (point)))))
 
-  (keymap-global-set "C-c d" 'my/delete-inside-delimiters)
+  (bind-key* "C-c d" 'my/delete-inside-delimiters)
 #+end_src
 
 ** delete-this-file
@@ -157,7 +163,7 @@ All of my custom functions live under the =my/= prefix/namespace.
       (delete-file (buffer-file-name) t)
       (kill-this-buffer)))
 
-  (keymap-global-set "C-c f d" 'my/delete-this-file)
+  (bind-key* "C-c f d" 'my/delete-this-file)
 #+end_src
 
 ** indent-buffer
@@ -168,7 +174,7 @@ All of my custom functions live under the =my/= prefix/namespace.
     (interactive)
     (indent-region (point-min) (point-max)))
 
-  (keymap-global-set "M-i" 'my/indent-buffer)
+  (bind-key* "M-i" 'my/indent-buffer)
 #+end_src
 
 ** init-frame
@@ -248,8 +254,8 @@ Otherwise emacsclient doesn't initialise UI settings.
     (interactive)
     (switch-to-buffer (other-buffer (current-buffer) 1)))
 
-  (keymap-global-set "C-c l" 'my/last-buffer)
-  (keymap-global-set "C-<escape>" 'my/last-buffer)
+  (bind-key* "C-c l" 'my/last-buffer)
+  (bind-key* "C-<escape>" 'my/last-buffer)
 #+end_src
 
 ** move-beginning-of-line
@@ -286,7 +292,7 @@ Otherwise emacsclient doesn't initialise UI settings.
 	(kill-new filename)
 	(message "Saved '%s' to kill-ring!" filename))))
 
-  (keymap-global-set "C-c f w" 'my/save-filename)
+  (bind-key* "C-c f w" 'my/save-filename)
 #+end_src
 
 ** save-whole-buffer
@@ -298,7 +304,7 @@ Otherwise emacsclient doesn't initialise UI settings.
     (kill-ring-save (point-min) (point-max))
     (message "Saved whole buffer to kill ring :-)"))
 
-  (keymap-global-set "C-x M-w" 'my/save-whole-buffer)
+  (bind-key* "C-x M-w" 'my/save-whole-buffer)
 #+end_src
 
 ** sudoedit
@@ -312,7 +318,7 @@ Otherwise emacsclient doesn't initialise UI settings.
 			 (read-file-name "Find file (as root): ")))
       (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
 
-  (keymap-global-set "C-c f s" 'my/sudoedit)
+  (bind-key* "C-c f s" 'my/sudoedit)
 #+end_src
 
 ** toggle-fill
@@ -328,7 +334,7 @@ Otherwise emacsclient doesn't initialise UI settings.
 	   fill-column)))
       (call-interactively #'fill-paragraph)))
 
-  (keymap-global-set "M-q" 'my/toggle-fill)
+  (bind-key* "M-q" 'my/toggle-fill)
 #+end_src
 
 * DIRED
@@ -358,11 +364,11 @@ Otherwise emacsclient doesn't initialise UI settings.
       (interactive)
       (let ((files (dired-get-marked-files)))
 	(with-temp-buffer
-	  (apply 'call-process "du" nil t nil "-sch" files)
-	  (message "Size of all marked files: %s"
-		   (progn
-		     (re-search-backward "\\(^[0-9.,]+[A-Za-z]+\\).*total$")
-		     (match-string 1))))))
+	(apply 'call-process "du" nil t nil "-sch" files)
+	(message "Size of all marked files: %s"
+		 (progn
+		   (re-search-backward "\\(^[0-9.,]+[A-Za-z]+\\).*total$")
+		   (match-string 1))))))
 
     (defun my/dired-beginning-of-buffer ()
       "Go to first file in directory."
@@ -377,12 +383,12 @@ Otherwise emacsclient doesn't initialise UI settings.
       (dired-next-line -1))
 
     :bind (:map dired-mode-map
-		("," . my/dired-beginning-of-buffer)
-		("." . my/dired-end-of-buffer)
-		("?" . my/dired-get-size)
-		("C-d" . my/dired-do-delete-skip-trash)
-		("b" . my/dired-up-directory)
-		("f" . 'dired-find-alternate-file))
+	      ("," . my/dired-beginning-of-buffer)
+	      ("." . my/dired-end-of-buffer)
+	      ("?" . my/dired-get-size)
+	      ("C-d" . my/dired-do-delete-skip-trash)
+	      ("b" . my/dired-up-directory)
+	      ("f" . 'dired-find-alternate-file))
     :hook
     (dired-mode . dired-omit-mode))
 #+end_src
@@ -413,8 +419,8 @@ Otherwise emacsclient doesn't initialise UI settings.
     ((text-mode org-mode) . flyspell-mode)
     (prog-mode . flyspell-prog-mode)
     :bind (:map flyspell-mode-map
-		("C-c s w" . flyspell-auto-correct-word)
-		("C-c s n" . flyspell-goto-next-error)))
+	      ("C-c s w" . flyspell-auto-correct-word)
+	      ("C-c s n" . flyspell-goto-next-error)))
 #+end_src
 
 * ISEARCH
@@ -441,7 +447,7 @@ Otherwise emacsclient doesn't initialise UI settings.
   (use-package eglot
     :hook (prog-mode . eglot-ensure)
     :bind (:map eglot-mode-map
-		("C-c e r" . eglot-rename)))
+	      ("C-c e r" . eglot-rename)))
   (use-package corfu :ensure
     :custom
     (corfu-cycle t)
@@ -477,27 +483,27 @@ Otherwise emacsclient doesn't initialise UI settings.
      'org-babel-load-languages
      '((shell . t)))
     (setq org-structure-template-alist
-	  (append org-structure-template-alist
-		  '(("cl" . "src common-lisp")
-		    ("el" . "src emacs-lisp")
-		    ("go" . "src go")
-		    ("kr" . "src c")
-		    ("nx" . "src nix")
-		    ("py" . "src python")
-		    ("sh" . "src shell")
-		    ("sq" . "src sql")
-		    ("tx" . "src text"))))
+	(append org-structure-template-alist
+		'(("cl" . "src common-lisp")
+		  ("el" . "src emacs-lisp")
+		  ("go" . "src go")
+		  ("kr" . "src c")
+		  ("nx" . "src nix")
+		  ("py" . "src python")
+		  ("sh" . "src shell")
+		  ("sq" . "src sql")
+		  ("tx" . "src text"))))
     (defun my/tangle-emacs-org-on-save ()
       (interactive)
       (when (string-equal "emacs.org"
-			  (file-name-nondirectory
-			   (buffer-file-name (current-buffer))))
+			(file-name-nondirectory
+			 (buffer-file-name (current-buffer))))
 	(org-babel-tangle)))
     (defun my/compile-and-load-init ()
       (interactive)
       (when (string-equal "init.el"
-			  (file-name-nondirectory
-			   (buffer-file-name (current-buffer))))
+			(file-name-nondirectory
+			 (buffer-file-name (current-buffer))))
 	(byte-compile-file (buffer-file-name (current-buffer)))
 	(load (buffer-file-name (current-buffer)))))
     :bind (:map org-mode-map ("C-c i" . org-goto))
@@ -531,24 +537,24 @@ Bulk install all the grammars as a one of task, so don't tangle!
 #+begin_src emacs-lisp :tangle no
   (setq treesit-language-source-alist
 	'((c "https://github.com/tree-sitter/tree-sitter-c")
-	  (cpp "https://github.com/tree-sitter/tree-sitter-cpp")
-	  (bash "https://github.com/tree-sitter/tree-sitter-bash")
-	  (cmake "https://github.com/uyha/tree-sitter-cmake")
-	  (css "https://github.com/tree-sitter/tree-sitter-css")
-	  (elisp "https://github.com/Wilfred/tree-sitter-elisp")
-	  (go "https://github.com/tree-sitter/tree-sitter-go")
-	  (html "https://github.com/tree-sitter/tree-sitter-html")
-	  (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
-	  (json "https://github.com/tree-sitter/tree-sitter-json")
-	  (make "https://github.com/alemuller/tree-sitter-make")
-	  (markdown "https://github.com/ikatyang/tree-sitter-markdown")
-	  (nix "https://github.com/nix-community/tree-sitter-nix")
-	  (python "https://github.com/tree-sitter/tree-sitter-python")
-	  (ruby "https://github.com/tree-sitter/tree-sitter-ruby")
-	  (toml "https://github.com/tree-sitter/tree-sitter-toml")
-	  (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
-	  (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
-	  (yaml "https://github.com/ikatyang/tree-sitter-yaml")))
+	(cpp "https://github.com/tree-sitter/tree-sitter-cpp")
+	(bash "https://github.com/tree-sitter/tree-sitter-bash")
+	(cmake "https://github.com/uyha/tree-sitter-cmake")
+	(css "https://github.com/tree-sitter/tree-sitter-css")
+	(elisp "https://github.com/Wilfred/tree-sitter-elisp")
+	(go "https://github.com/tree-sitter/tree-sitter-go")
+	(html "https://github.com/tree-sitter/tree-sitter-html")
+	(javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
+	(json "https://github.com/tree-sitter/tree-sitter-json")
+	(make "https://github.com/alemuller/tree-sitter-make")
+	(markdown "https://github.com/ikatyang/tree-sitter-markdown")
+	(nix "https://github.com/nix-community/tree-sitter-nix")
+	(python "https://github.com/tree-sitter/tree-sitter-python")
+	(ruby "https://github.com/tree-sitter/tree-sitter-ruby")
+	(toml "https://github.com/tree-sitter/tree-sitter-toml")
+	(tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
+	(typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
+	(yaml "https://github.com/ikatyang/tree-sitter-yaml")))
   (mapc #'treesit-install-language-grammar (mapcar #'car treesit-language-source-alist))
 #+end_src
 
@@ -602,7 +608,10 @@ Bulk install all the grammars as a one of task, so don't tangle!
 ** GIT
 #+begin_src emacs-lisp
   (use-package git-timemachine :ensure)
-  (use-package magit :ensure :bind* ("C-x g" . magit-status))
+  (use-package magit :ensure
+    :bind*
+    ("C-x g" . magit-status)
+    ("C-x C-g" . magit-status))
   (use-package magit-repos
     :bind* ("C-c g" . magit-list-repositories)
     :custom
@@ -631,15 +640,15 @@ Bulk install all the grammars as a one of task, so don't tangle!
   (use-package vterm :ensure
     :bind* ("C-c t" . vterm)
     :bind (:map vterm-mode-map
-		;; USE CTRL-I FFS or the sake of your pinkies!
-		("<tab>" . (lambda () (interactive) (message roland)))
-		;; USE CTRL-J/M FFS or the sake of your pinkies!
-		("<return>" . (lambda () (interactive) (message roland)))
-		;; USE CTRL-H FFS or the sake of your pinkies!
-		("<backspace>" . (lambda () (interactive) (message roland)))
-		("C-h" . (lambda () (interactive) (vterm-send-key "<backspace>")))
-		("C-M-h" . (lambda () (interactive) (vterm-send-key "w" nil nil t)))
-		("C-u" . (lambda () (interactive) (vterm-send-key "u" nil nil t)))))
+	      ;; USE CTRL-I FFS or the sake of your pinkies!
+	      ("<tab>" . (lambda () (interactive) (message roland)))
+	      ;; USE CTRL-J/M FFS or the sake of your pinkies!
+	      ("<return>" . (lambda () (interactive) (message roland)))
+	      ;; USE CTRL-H FFS or the sake of your pinkies!
+	      ("<backspace>" . (lambda () (interactive) (message roland)))
+	      ("C-h" . (lambda () (interactive) (vterm-send-key "<backspace>")))
+	      ("C-M-h" . (lambda () (interactive) (vterm-send-key "w" nil nil t)))
+	      ("C-u" . (lambda () (interactive) (vterm-send-key "u" nil nil t)))))
 #+end_src
 ** VUNDO
 #+begin_src emacs-lisp
