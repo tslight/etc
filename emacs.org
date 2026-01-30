@@ -79,7 +79,8 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
     ("C-c b" . browse-url-at-point)
     ("C-c p" . proced)
     ("C-s-f" . toggle-frame-fullscreen)
-    ("C-x C-b" . ibuffer)
+    ("C-x C-b" . switch-to-buffer) ;; DWIW!
+    ("C-x M-b" . ibuffer)
     ("C-x m" . man)
     ("C-x x s" . sort-lines)
     ("C-x M-k" . kill-buffer)
