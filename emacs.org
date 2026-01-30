@@ -59,10 +59,11 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
     (use-short-answers t)
     :config
     (if (eq system-type 'darwin)
-	    (setq default-frame-alist '((fullscreen . fullscreen)))
+	      (setq default-frame-alist '((fullscreen . fullscreen)))
       (setq default-frame-alist '((fullscreen . maximized))))
     (setq roland "YOU HAVE FORGOTTEN THE FACE OF YOUR FATHER")
     :bind
+    ("<mouse-3>" . nil) ;; trackpad madness!
     ;; USE CTRL-I FFS or the sake of your pinkies!
     ("<tab>" . (lambda () (interactive) (message roland)))
     ;; USE CTRL-J/M FFS or the sake of your pinkies!
@@ -87,10 +88,10 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
     ("C-x M-c" . kill-emacs) ;; for killing the daemon
     ("C-x k" . (lambda () (interactive) (kill-buffer (current-buffer))))
     (:map minibuffer-local-must-match-map
-	      ("C-s" . minibuffer-next-completion)
-	      ("C-r" . minibuffer-previous-completion)
-	      ("C-n" . next-history-element)
-	      ("C-p" . previous-history-element)))
+		("C-s" . minibuffer-next-completion)
+		("C-r" . minibuffer-previous-completion)
+		("C-n" . next-history-element)
+		("C-p" . previous-history-element)))
 #+end_src
 
 * BINDINGS
