@@ -642,6 +642,14 @@ Section "Device"
 	Driver     "radeon"
 EndSection
 #+end_src
+** DPMS
+#+begin_src conf
+Section "ServerFlags"
+    Option "StandbyTime" "5"
+    Option "SuspendTime" "10"
+    Option "OffTime"     "15"
+EndSection
+#+end_src
 ** MULTIPLE GPU
 #+begin_src conf
 Section "Device"
@@ -665,12 +673,13 @@ suspend/resume...
 *** MACBOOK STANDARD
 #+begin_src conf
   Section "InputClass"
-	  Identifier "libinput keyboard catchall"
-	  MatchIsKeyboard "on"
-	  MatchDevicePath "/dev/input/event*"
-	  Driver "libinput"
-	  Option "XkbLayout" "us"
-	  Option "XkbOptions" "caps:swapescape,ctrl:swap_lwin_lctl,ctrl:swap_rwin_rctl,terminate:ctrl_alt_bksp"
+  	  Identifier "libinput keyboard catchall"
+  	  MatchIsKeyboard "on"
+  	  MatchDevicePath "/dev/input/event*"
+  	  Driver "libinput"
+  	  Option "XkbLayout" "us"
+  	  Option "XkbOptions" "caps:swapescape,ctrl:swap_lwin_lctl,ctrl:swap_rwin_rctl"
+  	  Option "AutoRepeat" "200 50"
   EndSection
 #+end_src
 #+begin_src conf
@@ -680,8 +689,8 @@ suspend/resume...
 	    MatchDevicePath "/dev/input/event*"
 	    Option "XkbRules" "evdev"
 	    Option "XkbLayout" "us"
-	    Option "XkbOptions" "caps:swapescape,ctrl:swap_lwin_lctl,ctrl:swap_rwin_rctl,terminate:ctrl_alt_bksp"
-
+	    Option "XkbOptions" "caps:swapescape,ctrl:swap_lwin_lctl,ctrl:swap_rwin_rctl"
+  	  Option "AutoRepeat" "200 50"
   EndSection
 #+end_src
 *** MACBOOK KOREAN/JAPANESE
@@ -738,6 +747,7 @@ Section "InputClass"
 	Option			"XkbRules" "evdev"
 	Option			"XkbLayout" "us+hangul(ctrl)+hangul(deadkeys)+leftmods(caps_esc_hyper)"
 	Option			"XkbOptions" "altwin:swap_alt_win,terminate:ctrl_alt_bksp"
+        Option "AutoRepeat" "200 50"
 EndSection
 #+end_src
 ** TOUCHPAD
