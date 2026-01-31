@@ -3,6 +3,18 @@
 #+PROPERTY: header-args+ :mkdirp yes
 #+PROPERTY: header-args+ :results silent
 #+PROPERTY: header-args+ :padline no
+* BOOT/LOADER
+#+begin_src conf
+efi_max_resolution="1366x768"
+loader_gfx="NO" # prevent fancy box rendering
+loader_logo="beastie" # prevent fancy logo
+aesni_load="YES"
+geom_eli_load="YES"
+kern.geom.label.disk_ident.enable="0"
+kern.geom.label.gptid.enable="0"
+zfs_load="YES"
+compat.linuxkpi.i915_disable_power_well="0"
+#+end_src
 * GENERAL
 
 https://docs.freebsd.org/en/books/handbook/x11/
@@ -170,6 +182,100 @@ In =/boot/loader.conf=
 	};
 
 	if ((code >= 89) && (code < (int)(89 + nitems(scan)))) {
+#+end_src
+
+#+begin_src diff
+--- /home/anon/src/freebsd-src/sys/dev/evdev/evdev_utils.c      2026-01-28 23:42:32.891340000 +0000
++++ /usr/src/sys/dev/evdev/evdev_utils.c        2026-01-30 07:57:30.845772000 +0000
+@@ -92,8 +92,8 @@
+	NONE,           NONE,           NONE,           NONE,
+	NONE,           NONE,           NONE,           NONE,
+	/* 0xc0 - 0xdf */
+-       NONE,           NONE,           NONE,           NONE,
+-       NONE,           NONE,           NONE,           NONE,
++       KEY_BRIGHTNESSDOWN, KEY_BRIGHTNESSUP, KEY_SCALE, KEY_DASHBOARD,
++       KEY_KBDILLUMDOWN, KEY_KBDILLUMUP, NONE,         NONE,
+	NONE,           NONE,           NONE,           NONE,
+	NONE,           NONE,           NONE,           NONE,
+	NONE,           NONE,           NONE,           NONE,
+@@ -108,7 +108,7 @@
+	KEY_WWW,        KEY_BACK,       KEY_FORWARD,    KEY_STOP,
+	KEY_FIND,       KEY_SCROLLUP,   KEY_SCROLLDOWN, KEY_EDIT,
+	KEY_SLEEP,      KEY_COFFEE,     KEY_REFRESH,    KEY_CALC,
+-       NONE,           NONE,           NONE,           NONE,
++       NONE,           NONE,           NONE,           KEY_WAKEUP,
+
+ };
+#+end_src
+*** Final Fn key fixes
+#+begin_src diff
+--- /usr/src/sys/dev/hid/hkbd.c.orig    2026-01-28 18:56:26.052780000 +0000
++++ /usr/src/sys/dev/hid/hkbd.c 2026-01-31 00:19:40.206941000 +0000
+@@ -291,7 +291,7 @@
+	29, 42, 56, 105, 90, 54, 93, 106,       /* E0 - E7 */
+	NN, NN, NN, NN, NN, NN, NN, NN, /* E8 - EF */
+	NN, NN, NN, NN, NN, NN, NN, NN, /* F0 - F7 */
+-       NN, NN, NN, NN, NN, NN, NN, NN, /* F8 - FF */
++       NN, NN, NN, NN, NN, NN, NN, 255, /* F8 - FF */
+ };
+
+ static const uint8_t hkbd_boot_desc[] = { HID_KBD_BOOTPROTO_DESCR() };
+@@ -619,6 +619,18 @@
+	case 0x4f: return 0x4d; /* RIGHT ARROW -> END */
+	case 0x52: return 0x4b; /* UP ARROW -> PGUP */
+	case 0x51: return 0x4e; /* DOWN ARROW -> PGDN */
++       case 0x3a: return 0xc0; /* F1 -> BRIGHTNESS DOWN */
++       case 0x3b: return 0xc1; /* F2 -> BRIGHTNESS UP */
++       case 0x3c: return 0xc2; /* F3 -> SCALE (MISSION CTRL)*/
++       case 0x3d: return 0xc3; /* F4 -> DASHBOARD (LAUNCHPAD) */
++       case 0x3e: return 0xc4; /* F5 -> KBD BACKLIGHT DOWN */
++       case 0x3f: return 0xc5; /* F6 -> KBD BACKLIGHT UP */
++       case 0x40: return 0xEA; /* F7 -> MEDIA PREV */
++       case 0x41: return 0xE8; /* F8 -> PLAY/PAUSE */
++       case 0x42: return 0xEB; /* F9 -> MEDIA NEXT */
++       case 0x43: return 0xEF; /* F10 -> MUTE */
++       case 0x44: return 0xEE; /* F11 -> VOLUME DOWN */
++       case 0x45: return 0xED; /* F12 -> VOLUME UP */
+	default: return keycode;
+	}
+ }
+@@ -683,9 +695,17 @@
+	}
+	if ((sc->sc_flags & HKBD_FLAG_APPLE_FN) &&
+	    (id == sc->sc_id_apple_fn)) {
+-               if (hid_get_data(buf, len, &sc->sc_loc_apple_fn))
++               if (hid_get_data(buf, len, &sc->sc_loc_apple_fn)) {
++                       /* Will show up as whatever is set to the last item in
++                        * evdev_usb_scancodes[] from evdev-utils.c. Since
++                        * KEY_FN doesn't make it through to xkb, KEY_WAKEUP is
++                        * a good alternative. */
++                       bit_set(sc->sc_ndata, 0xff);
+			modifiers |= MOD_FN;
++               } else {
++                       bit_clear(sc->sc_ndata, 0xff);
+	}
++       }
+
+	bit_foreach(sc->sc_loc_key_valid, HKBD_NKEYCODE, i) {
+		if (id != sc->sc_id_loc_key[i]) {
+@@ -793,10 +813,15 @@
+			    HKBD_FLAG_APPLE_SWAP;
+		DPRINTFN(1, "Found Apple eject-key\n");
+	}
+-       if (hidbus_locate(ptr, len,
++
++       if ((hidbus_locate(ptr, len,
++                          HID_USAGE2(0x00FF, 0x0003),
++                          hid_input, tlc_index, 0, &sc->sc_loc_apple_fn, &flags,
++                          &sc->sc_id_apple_fn, NULL)) ||
++           (hidbus_locate(ptr, len,
+	    HID_USAGE2(0xFFFF, 0x0003),
+	    hid_input, tlc_index, 0, &sc->sc_loc_apple_fn, &flags,
+-           &sc->sc_id_apple_fn, NULL)) {
++                          &sc->sc_id_apple_fn, NULL))) {
+		if (flags & HIO_VARIABLE)
+			sc->sc_flags |= HKBD_FLAG_APPLE_FN;
+		DPRINTFN(1, "Found Apple FN-key\n");
 #+end_src
 
 #+begin_src diff
