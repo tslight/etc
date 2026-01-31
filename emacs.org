@@ -113,6 +113,7 @@ obviously Emacs is not a package!
   (global-unset-key (kbd "C-<down-mouse-1>"))
   (global-unset-key (kbd "C-<down-mouse-2>"))
   (global-unset-key (kbd "C-<down-mouse-3>"))
+  (bind-key* "C-M-h" 'backward-kill-word)
   (bind-key* "C-&" 'async-shell-command)
   (bind-key* "C-!" 'shell-command)
   (bind-key* "C-$" 'aspell-word)
