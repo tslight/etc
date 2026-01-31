@@ -629,41 +629,49 @@ declarations if you so wish. However, for now I'm setting all of these to
 == whilst I figure things out...
 
 ** INTEL
-#+begin_src conf
-Section "Device"
-	Identifier "Card0"
-	Driver     "intel"
-EndSection
-#+end_src
-** RADEON
-#+begin_src conf
-Section "Device"
-	Identifier "Card0"
-	Driver     "radeon"
-EndSection
-#+end_src
-** DPMS
-#+begin_src conf
-Section "ServerFlags"
-    Option "StandbyTime" "5"
-    Option "SuspendTime" "10"
-    Option "OffTime"     "15"
-EndSection
-#+end_src
-** MULTIPLE GPU
-#+begin_src conf
-Section "Device"
-	Identifier "Card0"
-	Driver     "intel"
-	BusID      "pci0:0:2:0"
-EndSection
 
-Section "Device"
-	Identifier "Card1"
-	Driver     "radeon"
-	BusID      "pci0:1:0:0"
-EndSection
+#+begin_src conf :tangle /sudo::/usr/local/share/X11/xorg.conf.d/20-intel.conf
+  Section "Device"
+  	Identifier "Card0"
+  	Driver     "intel"
+  EndSection
 #+end_src
+
+** RADEON
+
+#+begin_src conf
+  Section "Device"
+  	Identifier "Card0"
+  	Driver     "radeon"
+  EndSection
+#+end_src
+
+** DPMS
+
+#+begin_src conf :tangle /sudo::/usr/local/share/X11/xorg.conf.d/10-serverflags.conf
+  Section "ServerFlags"
+  	Option "StandbyTime" "5"
+  	Option "SuspendTime" "10"
+  	Option "OffTime"     "15"
+  EndSection
+#+end_src
+
+** MULTIPLE GPU
+
+#+begin_src conf
+  Section "Device"
+  	Identifier "Card0"
+  	Driver     "intel"
+  	BusID      "pci0:0:2:0"
+  EndSection
+
+  Section "Device"
+  	Identifier "Card1"
+  	Driver     "radeon"
+  	BusID      "pci0:1:0:0"
+  EndSection
+#+end_src
+
 ** KEYBOARD
 
 This code might need to go in =/usr/local/share/X11/xorg.conf.d= instead of
@@ -671,6 +679,7 @@ This code might need to go in =/usr/local/share/X11/xorg.conf.d= instead of
 suspend/resume...
 
 *** MACBOOK STANDARD
+
 #+begin_src conf
   Section "InputClass"
   	  Identifier "libinput keyboard catchall"
@@ -682,17 +691,7 @@ suspend/resume...
   	  Option "AutoRepeat" "200 50"
   EndSection
 #+end_src
-#+begin_src conf
-  Section "InputClass"
-	    Identifier "Evdev Keyboard"
-	    MatchIsKeyboard "on"
-	    MatchDevicePath "/dev/input/event*"
-	    Option "XkbRules" "evdev"
-	    Option "XkbLayout" "us"
-	    Option "XkbOptions" "caps:swapescape,ctrl:swap_lwin_lctl,ctrl:swap_rwin_rctl"
-  	  Option "AutoRepeat" "200 50"
-  EndSection
-#+end_src
+
 *** MACBOOK KOREAN/JAPANESE
 **** EXTRA XKB OPTIONS
 #+begin_src conf :tangle /sudo::/usr/local/share/X11/xkb/symbols/hangul
@@ -751,6 +750,7 @@ Section "InputClass"
 EndSection
 #+end_src
 ** TOUCHPAD
+
 #+begin_src conf
   Section "InputClass"
 	  Identifier "libinput touchpad catchall"
@@ -761,10 +761,10 @@ EndSection
 	  Option "DisableWhileTyping" "True"
   EndSection
 #+end_src
+
 ** XSESSION
 #+NAME: xsession
 #+BEGIN_SRC conf :tangle ~/.xsession
-  xset r rate 200 50 dpms 120 180 300
   pixelclock &
   pixelbatt &
   sct 4000
