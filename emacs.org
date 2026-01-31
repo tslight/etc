@@ -35,7 +35,6 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
     (global-prettify-symbols-mode)
     (save-place-mode 1)
     :custom
-    (c-default-style "bsd")
     (auto-save-visited-mode t)
     (completion-styles '(basic substring initials flex))
     (custom-file (expand-file-name "custom.el" user-emacs-directory))
@@ -59,7 +58,7 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
     (use-short-answers t)
     :config
     (if (eq system-type 'darwin)
-	(setq default-frame-alist '((fullscreen . fullscreen)))
+        (setq default-frame-alist '((fullscreen . fullscreen)))
       (setq default-frame-alist '((fullscreen . maximized))))
     (setq roland "YOU HAVE FORGOTTEN THE FACE OF YOUR FATHER")
     :bind
@@ -87,10 +86,10 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
     ("C-x M-c" . kill-emacs) ;; for killing the daemon
     ("C-x k" . (lambda () (interactive) (kill-buffer (current-buffer))))
     (:map minibuffer-local-must-match-map
-	  ("C-s" . minibuffer-next-completion)
-	  ("C-r" . minibuffer-previous-completion)
-	  ("C-n" . next-history-element)
-	  ("C-p" . previous-history-element)))
+          ("C-s" . minibuffer-next-completion)
+          ("C-r" . minibuffer-previous-completion)
+          ("C-n" . next-history-element)
+          ("C-p" . previous-history-element)))
 #+end_src
 
 * BINDINGS
@@ -146,8 +145,8 @@ All of my custom functions live under the =my/= prefix/namespace.
       (search-forward-regexp "[]})>\"\']" (line-end-position))
       (backward-char)
       (if arg
-	  (kill-region (- lstart 1) (+ (point) 1))
-	(kill-region lstart (point)))))
+          (kill-region (- lstart 1) (+ (point) 1))
+        (kill-region lstart (point)))))
 
   (bind-key* "C-c d" 'my/delete-inside-delimiters)
 #+end_src
@@ -160,7 +159,7 @@ All of my custom functions live under the =my/= prefix/namespace.
     (interactive)
     (or (buffer-file-name) (error "No file is currently being edited"))
     (when (yes-or-no-p (format "Really delete '%s'?"
-			       (file-name-nondirectory buffer-file-name)))
+                               (file-name-nondirectory buffer-file-name)))
       (delete-file (buffer-file-name) t)
       (kill-this-buffer)))
 
@@ -197,12 +196,12 @@ Otherwise emacsclient doesn't initialise UI settings.
     (when (not (eq system-type 'darwin)) (menu-bar-mode -1))
 
     (if (not (eq system-type 'darwin))
-	(setq frame-resize-pixelwise t)) ; proper maximize in some wm
+        (setq frame-resize-pixelwise t)) ; proper maximize in some wm
 
     (if window-system
-	(if (eq system-type 'darwin)
-	  (set-frame-font "Monaco 13" nil t)
-	(set-frame-font "Monospace 13" nil t)))
+        (if (eq system-type 'darwin)
+          (set-frame-font "Monaco 13" nil t)
+        (set-frame-font "Monospace 13" nil t)))
 
     ;; without this backspace sends ctrl-h in certain terminals
     (if (not window-system) (normal-erase-is-backspace-mode)))
@@ -220,10 +219,10 @@ Otherwise emacsclient doesn't initialise UI settings.
     (interactive "p")
     (let (p1 p2)
       (if (use-region-p)
-	(progn (setq p1 (region-beginning))
-	       (setq p2 (region-end)))
-	(progn (setq p1 (line-beginning-position))
-	     (setq p2 (line-beginning-position (+ arg 1)))))
+        (progn (setq p1 (region-beginning))
+               (setq p2 (region-end)))
+        (progn (setq p1 (line-beginning-position))
+             (setq p2 (line-beginning-position (+ arg 1)))))
       (kill-region p1 p2)))
 
   (global-set-key [remap kill-region] 'ts-kill-region)
@@ -237,10 +236,10 @@ Otherwise emacsclient doesn't initialise UI settings.
     (interactive "p")
     (let (p1 p2)
       (if (use-region-p)
-	(progn (setq p1 (region-beginning))
-	       (setq p2 (region-end)))
-	(progn (setq p1 (line-beginning-position))
-	     (setq p2 (line-beginning-position (+ arg 1)))))
+        (progn (setq p1 (region-beginning))
+               (setq p2 (region-end)))
+        (progn (setq p1 (line-beginning-position))
+             (setq p2 (line-beginning-position (+ arg 1)))))
       (kill-ring-save p1 p2)
       (goto-char p2)))
 
@@ -267,7 +266,7 @@ Otherwise emacsclient doesn't initialise UI settings.
   the left of the cursor. Otherwise point moves to beginning of line."
     (interactive)
     (if (= (point) (save-excursion (back-to-indentation) (point)))
-	(beginning-of-line)
+        (beginning-of-line)
       (back-to-indentation)))
 
   (global-set-key [remap move-beginning-of-line] 'my/move-beginning-of-line)
@@ -281,17 +280,17 @@ Otherwise emacsclient doesn't initialise UI settings.
   With prefix ARG, omit path."
     (interactive "P")
     (let ((filename (if (equal major-mode 'dired-mode)
-		      (if arg
-			  (file-name-nondirectory
-			   (directory-file-name
-			    (file-name-directory default-directory)))
-			default-directory)
-		    (if arg
-			(file-name-nondirectory buffer-file-name)
-		      (buffer-file-name)))))
+                      (if arg
+                          (file-name-nondirectory
+                           (directory-file-name
+                            (file-name-directory default-directory)))
+                        default-directory)
+                    (if arg
+                        (file-name-nondirectory buffer-file-name)
+                      (buffer-file-name)))))
       (when filename
-	(kill-new filename)
-	(message "Saved '%s' to kill-ring!" filename))))
+        (kill-new filename)
+        (message "Saved '%s' to kill-ring!" filename))))
 
   (bind-key* "C-c f w" 'my/save-filename)
 #+end_src
@@ -315,8 +314,8 @@ Otherwise emacsclient doesn't initialise UI settings.
     "Open current or ARG file as root."
     (interactive "P")
     (if (or arg (not buffer-file-name))
-	(find-file (concat "/sudo:root@localhost:"
-			 (read-file-name "Find file (as root): ")))
+        (find-file (concat "/sudo:root@localhost:"
+                         (read-file-name "Find file (as root): ")))
       (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
 
   (bind-key* "C-c f s" 'my/sudoedit)
@@ -329,13 +328,19 @@ Otherwise emacsclient doesn't initialise UI settings.
     "Like `fill-paragraph', but unfill if used twice."
     (interactive)
     (let ((fill-column
-	 (if (eq last-command 'my/toggle-fill)
-	     (progn (setq this-command nil)
-		    (point-max))
-	   fill-column)))
+         (if (eq last-command 'my/toggle-fill)
+             (progn (setq this-command nil)
+                    (point-max))
+           fill-column)))
       (call-interactively #'fill-paragraph)))
 
   (bind-key* "M-q" 'my/toggle-fill)
+#+end_src
+
+* C MODE
+
+#+begin_src emacs-lisp
+  (use-package c-mode :custom (c-default-style "bsd"))
 #+end_src
 
 * DIRED
@@ -358,18 +363,18 @@ Otherwise emacsclient doesn't initialise UI settings.
     (defun my/dired-do-delete-skip-trash (&optional arg)
       (interactive "P")
       (let ((delete-by-moving-to-trash nil))
-	(dired-do-delete arg)))
+        (dired-do-delete arg)))
 
     (defun my/dired-get-size ()
       "Get cumlative size of marked or current item."
       (interactive)
       (let ((files (dired-get-marked-files)))
-	(with-temp-buffer
-	(apply 'call-process "du" nil t nil "-sch" files)
-	(message "Size of all marked files: %s"
-		 (progn
-		   (re-search-backward "\\(^[0-9.,]+[A-Za-z]+\\).*total$")
-		   (match-string 1))))))
+        (with-temp-buffer
+        (apply 'call-process "du" nil t nil "-sch" files)
+        (message "Size of all marked files: %s"
+                 (progn
+                   (re-search-backward "\\(^[0-9.,]+[A-Za-z]+\\).*total$")
+                   (match-string 1))))))
 
     (defun my/dired-beginning-of-buffer ()
       "Go to first file in directory."
@@ -384,12 +389,12 @@ Otherwise emacsclient doesn't initialise UI settings.
       (dired-next-line -1))
 
     :bind (:map dired-mode-map
-	      ("," . my/dired-beginning-of-buffer)
-	      ("." . my/dired-end-of-buffer)
-	      ("?" . my/dired-get-size)
-	      ("C-d" . my/dired-do-delete-skip-trash)
-	      ("b" . my/dired-up-directory)
-	      ("f" . 'dired-find-alternate-file))
+              ("," . my/dired-beginning-of-buffer)
+              ("." . my/dired-end-of-buffer)
+              ("?" . my/dired-get-size)
+              ("C-d" . my/dired-do-delete-skip-trash)
+              ("b" . my/dired-up-directory)
+              ("f" . 'dired-find-alternate-file))
     :hook
     (dired-mode . dired-omit-mode))
 #+end_src
@@ -399,7 +404,7 @@ Otherwise emacsclient doesn't initialise UI settings.
 #+begin_src emacs-lisp
   (use-package eww
     :custom (eww-search-prefix "https://lite.duckduckgo.com/lite/?q=")
-    :bind ("C-c w" . eww))
+    :bind ("C-c B" . eww))
 #+end_src
 
 * FIDO
@@ -420,8 +425,8 @@ Otherwise emacsclient doesn't initialise UI settings.
     ((text-mode org-mode) . flyspell-mode)
     (prog-mode . flyspell-prog-mode)
     :bind (:map flyspell-mode-map
-	      ("C-c s w" . flyspell-auto-correct-word)
-	      ("C-c s n" . flyspell-goto-next-error)))
+              ("C-c s w" . flyspell-auto-correct-word)
+              ("C-c s n" . flyspell-goto-next-error)))
 #+end_src
 
 * ISEARCH
@@ -448,7 +453,7 @@ Otherwise emacsclient doesn't initialise UI settings.
   (use-package eglot
     :hook (prog-mode . eglot-ensure)
     :bind (:map eglot-mode-map
-	      ("C-c e r" . eglot-rename)))
+              ("C-c e r" . eglot-rename)))
   (use-package corfu :ensure
     :custom
     (corfu-cycle t)
@@ -462,7 +467,7 @@ Otherwise emacsclient doesn't initialise UI settings.
   (use-package recentf :bind ("C-c r" . recentf))
   (use-package savehist :hook (after-init . savehist-mode))
   (use-package which-key :hook (after-init . which-key-mode))
-  (use-package whitespace :hook (before-save . whitespace-cleanup))
+  (use-package whitespace :bind ("C-c w" . whitespace-cleanup))
 #+end_src
 
 * ORG
@@ -484,29 +489,29 @@ Otherwise emacsclient doesn't initialise UI settings.
      'org-babel-load-languages
      '((shell . t)))
     (setq org-structure-template-alist
-	(append org-structure-template-alist
-		'(("cl" . "src common-lisp")
-		  ("el" . "src emacs-lisp")
-		  ("go" . "src go")
-		  ("kr" . "src c")
-		  ("nx" . "src nix")
-		  ("py" . "src python")
-		  ("sh" . "src shell")
-		  ("sq" . "src sql")
-		  ("tx" . "src text"))))
+        (append org-structure-template-alist
+                '(("cl" . "src common-lisp")
+                  ("el" . "src emacs-lisp")
+                  ("go" . "src go")
+                  ("kr" . "src c")
+                  ("nx" . "src nix")
+                  ("py" . "src python")
+                  ("sh" . "src shell")
+                  ("sq" . "src sql")
+                  ("tx" . "src text"))))
     (defun my/tangle-emacs-org-on-save ()
       (interactive)
       (when (string-equal "emacs.org"
-			(file-name-nondirectory
-			 (buffer-file-name (current-buffer))))
-	(org-babel-tangle)))
+                        (file-name-nondirectory
+                         (buffer-file-name (current-buffer))))
+        (org-babel-tangle)))
     (defun my/compile-and-load-init ()
       (interactive)
       (when (string-equal "init.el"
-			(file-name-nondirectory
-			 (buffer-file-name (current-buffer))))
-	(byte-compile-file (buffer-file-name (current-buffer)))
-	(load (buffer-file-name (current-buffer)))))
+                        (file-name-nondirectory
+                         (buffer-file-name (current-buffer))))
+        (byte-compile-file (buffer-file-name (current-buffer)))
+        (load (buffer-file-name (current-buffer)))))
     :bind (:map org-mode-map ("C-c i" . org-goto))
     :hook
     (org-mode . auto-fill-mode)
@@ -537,25 +542,25 @@ Bulk install all the grammars as a one of task, so don't tangle!
 
 #+begin_src emacs-lisp :tangle no
   (setq treesit-language-source-alist
-	'((c "https://github.com/tree-sitter/tree-sitter-c")
-	(cpp "https://github.com/tree-sitter/tree-sitter-cpp")
-	(bash "https://github.com/tree-sitter/tree-sitter-bash")
-	(cmake "https://github.com/uyha/tree-sitter-cmake")
-	(css "https://github.com/tree-sitter/tree-sitter-css")
-	(elisp "https://github.com/Wilfred/tree-sitter-elisp")
-	(go "https://github.com/tree-sitter/tree-sitter-go")
-	(html "https://github.com/tree-sitter/tree-sitter-html")
-	(javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
-	(json "https://github.com/tree-sitter/tree-sitter-json")
-	(make "https://github.com/alemuller/tree-sitter-make")
-	(markdown "https://github.com/ikatyang/tree-sitter-markdown")
-	(nix "https://github.com/nix-community/tree-sitter-nix")
-	(python "https://github.com/tree-sitter/tree-sitter-python")
-	(ruby "https://github.com/tree-sitter/tree-sitter-ruby")
-	(toml "https://github.com/tree-sitter/tree-sitter-toml")
-	(tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
-	(typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
-	(yaml "https://github.com/ikatyang/tree-sitter-yaml")))
+        '((c "https://github.com/tree-sitter/tree-sitter-c")
+        (cpp "https://github.com/tree-sitter/tree-sitter-cpp")
+        (bash "https://github.com/tree-sitter/tree-sitter-bash")
+        (cmake "https://github.com/uyha/tree-sitter-cmake")
+        (css "https://github.com/tree-sitter/tree-sitter-css")
+        (elisp "https://github.com/Wilfred/tree-sitter-elisp")
+        (go "https://github.com/tree-sitter/tree-sitter-go")
+        (html "https://github.com/tree-sitter/tree-sitter-html")
+        (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
+        (json "https://github.com/tree-sitter/tree-sitter-json")
+        (make "https://github.com/alemuller/tree-sitter-make")
+        (markdown "https://github.com/ikatyang/tree-sitter-markdown")
+        (nix "https://github.com/nix-community/tree-sitter-nix")
+        (python "https://github.com/tree-sitter/tree-sitter-python")
+        (ruby "https://github.com/tree-sitter/tree-sitter-ruby")
+        (toml "https://github.com/tree-sitter/tree-sitter-toml")
+        (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
+        (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
+        (yaml "https://github.com/ikatyang/tree-sitter-yaml")))
   (mapc #'treesit-install-language-grammar (mapcar #'car treesit-language-source-alist))
 #+end_src
 
@@ -641,15 +646,15 @@ Bulk install all the grammars as a one of task, so don't tangle!
   (use-package vterm :ensure
     :bind* ("C-c t" . vterm)
     :bind (:map vterm-mode-map
-	      ;; USE CTRL-I FFS or the sake of your pinkies!
-	      ("<tab>" . (lambda () (interactive) (message roland)))
-	      ;; USE CTRL-J/M FFS or the sake of your pinkies!
-	      ("<return>" . (lambda () (interactive) (message roland)))
-	      ;; USE CTRL-H FFS or the sake of your pinkies!
-	      ("<backspace>" . (lambda () (interactive) (message roland)))
-	      ("C-h" . (lambda () (interactive) (vterm-send-key "<backspace>")))
-	      ("C-M-h" . (lambda () (interactive) (vterm-send-key "w" nil nil t)))
-	      ("C-u" . (lambda () (interactive) (vterm-send-key "u" nil nil t)))))
+              ;; USE CTRL-I FFS or the sake of your pinkies!
+              ("<tab>" . (lambda () (interactive) (message roland)))
+              ;; USE CTRL-J/M FFS or the sake of your pinkies!
+              ("<return>" . (lambda () (interactive) (message roland)))
+              ;; USE CTRL-H FFS or the sake of your pinkies!
+              ("<backspace>" . (lambda () (interactive) (message roland)))
+              ("C-h" . (lambda () (interactive) (vterm-send-key "<backspace>")))
+              ("C-M-h" . (lambda () (interactive) (vterm-send-key "w" nil nil t)))
+              ("C-u" . (lambda () (interactive) (vterm-send-key "u" nil nil t)))))
 #+end_src
 ** VUNDO
 #+begin_src emacs-lisp

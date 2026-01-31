@@ -47,6 +47,9 @@ compat.linuxkpi.i915_disable_power_well="0"
 
 In =/boot/loader.conf=
 ** MACBOOK FUNCTION KEY HACKING
+
+https://github.com/freebsd/freebsd-src/pull/1998
+
 *** Minimal fix
 #+begin_src diff
 --- /usr/src/sys/dev/hid/hkbd.c.orig    2026-01-28 18:56:26.052780000 +0000
@@ -859,11 +862,11 @@ EndSection
   bind-key 4C-j window-resize-down-big
   bind-key 4C-l window-resize-right-big
   bind-key 4C-h window-resize-left-big
-  bind-key F1 'sudo backlight - 10'
-  bind-key F2 'sudo backlight + 10'
-  bind-key F10 'mixer vol.mute=toggle'
-  bind-key F11 'mixer vol.volume=-5%'
-  bind-key F12 'mixer vol.volume=+5%'
+  bind-key XF86MonBrightnessDown 'sudo backlight - 10'
+  bind-key XF86MonBrightnessUp 'sudo backlight + 10'
+  bind-key XF86AudioMute 'mixer vol.mute=toggle'
+  bind-key XF86AudioLowerVolume 'mixer vol.volume=-5%'
+  bind-key XF86AudioRaiseVolume 'mixer vol.volume=+5%'
 
   unbind-mouse all
   bind-mouse R-1 menu-window
