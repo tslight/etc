@@ -36,6 +36,7 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
     (save-place-mode 1)
     :custom
     (auto-save-visited-mode t)
+    (c-default-style "bsd")
     (completion-styles '(basic substring initials flex))
     (custom-file (expand-file-name "custom.el" user-emacs-directory))
     (disabled-command-function nil)
@@ -335,12 +336,6 @@ Otherwise emacsclient doesn't initialise UI settings.
       (call-interactively #'fill-paragraph)))
 
   (bind-key* "M-q" 'my/toggle-fill)
-#+end_src
-
-* C MODE
-
-#+begin_src emacs-lisp
-  (use-package c-mode :custom (c-default-style "bsd"))
 #+end_src
 
 * DIRED
