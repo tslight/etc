@@ -348,6 +348,225 @@ https://github.com/freebsd/freebsd-src/pull/1998
 
  };
 #+end_src
+* HARDWARE
+** MACBOOK
+
+https://joshua.hu/FreeBSD-on-MacbookPro-114-A1398
+https://freebsd.uw.cz/2025/05/freebsd-and-edimax-n150-wi-fi-usb.html
+https://duriansoftware.com/joe/freebsd-installation-notes-for-a-2011-macbook-air
+https://itsfoss.gitlab.io/post/configuring-bcm4360-macbook-air-on-freebsd-to-connect-to-wifi/
+
+*** AIR 7,2
+**** BIZARRE SOUND PIN/CODEC ISSUE
+
+After much faffing and too-ing and fro-ing to the installer (where bizarrely
+the sound pins were configured correctly) - I came up with these hints to make
+my sound work.
+
+Stick 'em in =/boot/device.hints= if you want to hear anything...
+
+#+begin_src conf
+hint.hdac.1.cad0.nid16.config="as=2 seq=0 device=Headphones conn=Jack ctype=Combo"
+hint.hdac.1.cad0.nid17.config="as=15 seq=0 device=Line-out conn=None ctype=Unknown misc=0"
+hint.hdac.1.cad0.nid18.config="as=1 seq=0 device=Speaker conn=Fixed loc=Internal misc=1"
+hint.hdac.1.cad0.nid19.config="as=15 seq=0 device=Line-out conn=None ctype=Unknown misc=0"
+hint.hdac.1.cad0.nid20.config="as=15 seq=0 device=Line-out conn=None ctype=Unknown misc=0"
+hint.hdac.1.cad0.nid24.config="as=3 seq=0 device=Mic conn=Jack ctype=Combo"
+hint.hdac.1.cad0.nid28.config="as=0 seq=0 device=Mic conn=Fixed ctype=Digital loc=internal misc=1"
+hint.hdaa.1.gpio_config="0=set"
+#+end_src
+
+*** PRO 8,3
+
+https://wiki.freebsd.org/Graphics/AMD-GPU-Matrix
+https://www.reddit.com/r/freebsd/comments/1jhx9y5/kld_list_entries_for_an_apple_macbookpro83_with/
+https://forums.freebsd.org/threads/after-upgrading-the-system-touchpad-unresponsive-and-keyboard-key-incorrectly-mapping.100766/
+
+**** Suspend
+
+https://bugs.freebsd.org/bugzilla//show_bug.cgi?id=252241
+https://forums.freebsd.org/threads/will-we-have-drm-kmod-driver-i915kms-ko-for-14-3-release-i386.100943/
+https://forums.macrumors.com/threads/force-2011-macbook-pro-8-2-with-failed-amd-gpu-to-always-use-intel-integrated-gpu-efi-variable-fix.2037591/
+
+On Macbook Pro 8,3 - disable AMD GPU from OSX recovery with:
+
+#+begin_src shell
+nvram gpu-power-prefs=%01%00%00%00
+nvram fa4ce28d-b62f-4c99-9cc3-6815686e30f9:gpu-power-prefs=%01%00%00%00
+#+end_src
+
+After that we should be able to load and use i915kms, prior to that the system
+will become unresponsive when i915kms is loaded.
+
+**** ASMC
+
+https://logi.wiki/index.php/SMC_Sensor_Codes
+https://github.com/freebsd/freebsd-src/pull/1992
+
+https://forums.freebsd.org/threads/macbook7-1-asmc-support.76497/
+https://bugs.freebsd.org/bugzilla//show_bug.cgi?id=272787
+https://cgit.freebsd.org/src/tree/sys/dev/asmc/asmc.c?h=main
+
+#+name: /usr/src/sys/dev/asmc/asmc.c.patch
+#+begin_src diff
+--- ./asmc.c.orig	2026-01-26 20:45:55.675061000 +0000
++++ asmc.c	2026-01-27 14:22:02.389812000 +0000
+@@ -256,6 +256,12 @@
+	},
+
+	{
++	  "MacBookPro8,3", "Apple SMC MacBook Pro (early 2011, 17-inch)",
++	  ASMC_SMS_FUNCS, ASMC_FAN_FUNCS2, ASMC_LIGHT_FUNCS,
++	  ASMC_MBP83_TEMPS, ASMC_MBP83_TEMPNAMES, ASMC_MBP83_TEMPDESCS
++	},
++
++	{
+	  "MacBookPro9,1", "Apple SMC MacBook Pro (mid 2012, 15-inch)",
+	  ASMC_SMS_FUNCS_DISABLED, ASMC_FAN_FUNCS, ASMC_LIGHT_FUNCS,
+	  ASMC_MBP91_TEMPS, ASMC_MBP91_TEMPNAMES, ASMC_MBP91_TEMPDESCS
+#+end_src
+
+#+name: /usr/src/sys/dev/asmc/asmcvar.h.patch
+#+begin_src diff
+--- ./asmcvar.h.orig	2026-01-26 20:45:55.675873000 +0000
++++ asmcvar.h	2026-01-27 14:26:09.265793000 +0000
+@@ -326,6 +326,30 @@
+				  "TMBS", "TP0P", "TPCD", "TW0P", "Th1H", \
+				  "Th2H", "Tm0P", "Ts0P", "Ts0S" }
+
++#define ASMC_MBP83_TEMPS	{ "TC0C", "TC0D", "TC0P", "TPCD", "TP0P", \
++				  "TG0D", "TG0P", "Tm0P", "Th1H", "Th2H", \
++				  "TB0T", "TB1T", "TB2T", "Ts0P", "ALSL", \
++				  "VD0R", "VP0R", "VC0C", "ID0R", "IB0R", \
++				  "IC0R", NULL }
++
++#define ASMC_MBP83_TEMPNAMES	{ "cpu_die_digital_core_2", "cpu_0_die_analog", \
++				  "cpu_proximity", "pch_die_digital", "pch_proximity", \
++				  "gpu_die", "gpu_0_proximity", "mlb_proximity", \
++				  "right_fin_stack_proximity", "left_fin_stack_proximity", \
++				  "battery_ts_max", "battery_ts_1", "battery_ts_2", \
++				  "palmrest_proximity", "ambient_light_sensor",
++				  "dc_in_voltage", "pbus_voltage", "cpu_vcore_voltage", \
++				  "dc_in_current", "battery_current", "combined_cores" }
++
++#define ASMC_MBP83_TEMPDESCS	{ "CPU Die Digital Core 2", "CPU 0 Die Analog", \
++				  "CPU Proximity", "PCH Die Digital", "PCH Proximity", \
++				  "GPU Die", "GPU 0 Proximity", "MLB Proximity", \
++				  "Right Fin Stack Proximity", "Left Fin Stack Proximity", \
++				  "Battery TS MAX", "Battery TS 1", "Battery TS 2", \
++				  "Palmrest Proximity", "Ambient Light Sensor", \
++				  "DC In (Voltage)", "PBus (Voltage)", "CPU Vcore (Voltage)", \
++				  "DC In (Current)", "Battery (Current)", "Combined Cores" }
++
+ #define ASMC_MBP91_TEMPS	{ "TA0P", "TB0T", "TB1T", "TB2T", "TC0E", \
+				  "TC0F", "TC0P", "TC1C", "TC2C", "TC3C", \
+				  "TC4C", "TCGC", "TCSA", "TCXC", "TG0D", \
+#+end_src
+
+**** BACKLIGHT
+
+https://github.com/tslight/gmuxctl/tree/main/backlight
+
+Despite the fact that we can load =acpi_video= kmod and get some promising new
+sysctls, nothing actually changes the backlight, even though they profess to...
+
+On Macbooks with dual GPUs of this vintage, the GMUX chip controls switching
+between Integrated/Discrete GPUs and backlight.
+
+For proper backlight on MBP 8,3, someone would need to port the Linux
+~apple-gmux~ driver to FreeBSD. The GMUX chip sits at IO port ~0x700~ and
+controls backlight via specific register writes.
+
+For the time being, here's some hack C code to achieve what I want:
+
+#+begin_src c
+#include <stdio.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <machine/cpufunc.h>
+
+#define GMUX_PORT_BRIGHTNESS 0x774
+
+int main(int argc, char *argv[]) {
+    int fd;
+    uint32_t val;
+
+    fd = open("/dev/io", O_RDWR);
+    if (fd < 0) {
+	perror("open /dev/io");
+	return 1;
+    }
+
+    if (argc == 1) {
+	/* Read current brightness */
+	val = inl(GMUX_PORT_BRIGHTNESS);
+	printf("Current brightness: 0x%x (%d%%)\n", val, val * 100 / 0xFFFF);
+    } else {
+	/* Set brightness (0-100) */
+	int pct = atoi(argv[1]);
+	if (pct < 0 || pct > 100) {
+	    fprintf(stderr, "Value must be 0-100\n");
+	    close(fd);
+	    return 1;
+	}
+	val = pct * 0xFFFF / 100;
+	outl(GMUX_PORT_BRIGHTNESS, val);
+	printf("Set brightness to %d%% (0x%x)\n", pct, val);
+    }
+
+    close(fd);
+    return 0;
+}
+#+end_src
+
+For more GMUX HAX take a look at: https://github.com/tslight/gmuxctl
+
+* PACKAGES
+
+#+begin_src sh :results output replace :cache no
+  pkg query -e '%a = 0' %o
+#+end_src
+
+#+RESULTS:
+#+begin_example
+base/FreeBSD-kernel-generic
+base/FreeBSD-kernel-generic-dbg
+base/FreeBSD-set-base
+base/FreeBSD-set-lib32
+base/FreeBSD-set-minimal
+base/FreeBSD-set-src
+devel/ccls
+devel/cmake
+ftp/curl
+x11-wm/cwm
+graphics/drm-kmod
+editors/emacs
+textproc/en-aspell
+misc/freebsd-doc-en
+devel/git
+graphics/glx-utils
+textproc/jq
+misc/kbdscan
+www/librewolf
+devel/libtool
+multimedia/libva-intel-driver
+multimedia/libva-utils
+devel/libvterm
+multimedia/mpv
+ports-mgmt/pkg
+accessibility/sct
+sysutils/sensors
+sysutils/smartmontools
+security/sudo
+sysutils/tmux
+x11/xlibre
+x11-drivers/xlibre-xf86-video-intel
+www/yt-dlp
+shells/zsh
+#+end_example
+
 * SUDOERS
 
 #+begin_src con
