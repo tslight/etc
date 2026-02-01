@@ -11,6 +11,7 @@
   alias cp='cp -i'
   alias d='docker'
   alias df='df -h'
+  alias diff='diff --color=always'
   alias du='du -h'
   alias e='emacs -nw'
   alias ec='emacsclient -c -a "" -nw'
@@ -35,9 +36,12 @@
   alias reboot='shutdown -r now'
   alias rm='rm -i'
   alias se='sudoedit'
-  alias t='tmux attach'
-  alias up='uptime'
-  alias vi='nvim'
+  tmux_create_or_attach () {
+      [ -z "$TMUX" ] && \
+          { tmux -q has-session && tmux attach -d || tmux -u; } || \
+              { tmux new-session -d \; choose-tree -Zs; }
+  }
+  alias t='tmux_create_or_attach'
   alias x='startx'
 #+end_src
 #+begin_src conf :noweb yes :tangle ~/.zshrc
