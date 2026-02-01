@@ -485,7 +485,7 @@ hint.atp.0.disabled="1"
 hint.bcm5974.0.disabled="1"
 #+end_src
 
-And:
+In =/boot/device.hints=, and:
 
 #+begin_src conf
 moused_enable="YES"
@@ -493,7 +493,7 @@ moused_port="/dev/wsp0"
 devmatch_blocklist="atp bcm5974 wmt hms ums psm"
 #+end_src
 
-:-/
+In =/etc/rc.conf= ... :-/
 
 **** Suspend
 
