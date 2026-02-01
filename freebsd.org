@@ -626,7 +626,6 @@ base/FreeBSD-kernel-generic-dbg
 base/FreeBSD-set-base
 base/FreeBSD-set-lib32
 base/FreeBSD-set-minimal
-base/FreeBSD-set-src
 devel/ccls
 devel/cmake
 ftp/curl
@@ -635,14 +634,12 @@ graphics/drm-kmod
 editors/emacs
 textproc/en-aspell
 misc/freebsd-doc-en
+x11/evtest
 devel/git
-graphics/glx-utils
 textproc/jq
 misc/kbdscan
 www/librewolf
 devel/libtool
-multimedia/libva-intel-driver
-multimedia/libva-utils
 devel/libvterm
 multimedia/mpv
 ports-mgmt/pkg
