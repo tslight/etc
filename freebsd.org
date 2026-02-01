@@ -464,7 +464,36 @@ hint.hdaa.1.gpio_config="0=set"
 
 https://wiki.freebsd.org/Graphics/AMD-GPU-Matrix
 https://www.reddit.com/r/freebsd/comments/1jhx9y5/kld_list_entries_for_an_apple_macbookpro83_with/
+
+**** Dodgy touchpad
+
 https://forums.freebsd.org/threads/after-upgrading-the-system-touchpad-unresponsive-and-keyboard-key-incorrectly-mapping.100766/
+
+#+begin_src conf
+# fix dodgy mbp 8,3 touchpad in 15.0
+hidquirk_load="YES"
+hw.hid.quirk.0="0x03 0x05ac 0x0253 0 0xffff HQ_HID_IGNORE"
+#+end_src
+
+In =/boot/loader.conf= seems to do the trick!
+
+Which I'm pretty sure is all one needs, however, I also did:
+
+#+begin_src conf
+hint.ums.0.disabled="1"
+hint.atp.0.disabled="1"
+hint.bcm5974.0.disabled="1"
+#+end_src
+
+And:
+
+#+begin_src conf
+moused_enable="YES"
+moused_port="/dev/wsp0"
+devmatch_blocklist="atp bcm5974 wmt hms ums psm"
+#+end_src
+
+:-/
 
 **** Suspend
 
