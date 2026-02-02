@@ -81,7 +81,7 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
     ("C-s-f" . toggle-frame-fullscreen)
     ("C-x C-b" . switch-to-buffer) ;; DWIW!
     ("C-x M-b" . ibuffer)
-    ("C-x m" . man)
+    ("C-x m" . man) ;; run sudo makewhatis or mandb
     ("C-x x s" . sort-lines)
     ("C-x M-k" . kill-buffer)
     ("C-x M-c" . kill-emacs) ;; for killing the daemon
@@ -597,6 +597,19 @@ Bulk install all the grammars as a one of task, so don't tangle!
     ("M-0" . ace-delete-window)
     ("M-1" . ace-delete-other-windows)
     :config (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
+#+end_src
+** CLANG FORMAT
+
+#+begin_src emacs-lisp
+  (use-package clang-format :ensure
+    :custom
+    (clang-format-style "file")
+    :config
+    (when (executable-find "clang-format19")
+      (setq clang-format-executable "clang-format19"))
+    :bind (:map c-mode-map
+  	      ("M-i" . clang-format-buffer)
+  	      ("C-M-i" . clang-format-region)))
 #+end_src
 
 ** COPILOT
