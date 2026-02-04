@@ -76,6 +76,7 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
     ("C-c a" . align-regexp)
     ("C-c i" . imenu)
     ("C-c m" . compile)
+    ("<f5>" . compile)
     ("C-c b" . browse-url-at-point)
     ("C-c p" . proced)
     ("C-s-f" . toggle-frame-fullscreen)
@@ -175,7 +176,7 @@ All of my custom functions live under the =my/= prefix/namespace.
     (interactive)
     (indent-region (point-min) (point-max)))
 
-  (bind-key* "M-i" 'my/indent-buffer)
+  (bind-key "M-i" 'my/indent-buffer)
 #+end_src
 
 ** init-frame
@@ -607,7 +608,7 @@ Bulk install all the grammars as a one of task, so don't tangle!
     :config
     (when (executable-find "clang-format19")
       (setq clang-format-executable "clang-format19"))
-    :bind (:map c-mode-map
+    :bind (:map c-ts-mode-map
   	      ("M-i" . clang-format-buffer)
   	      ("C-M-i" . clang-format-region)))
 #+end_src
