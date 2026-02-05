@@ -709,7 +709,8 @@ entry below, and optionally add =:tangle /sudo::/usr/share/vt/keymaps/foo.kbd=.
 
 Make the most of the extra modifier keys on a Korean/Japanese layout
 
-#+begin_src conf :tangle /sudo::/usr/share/vt/keymaps/jp.emacs.macbook.kbd :tangle-mode o444
+#+name: :tangle /sudo::/usr/share/vt/keymaps/jp.emacs.macbook.kbd :tangle-mode o444
+#+begin_src conf
 #                                                         alt
 # scan                       cntrl          alt    alt   cntrl lock
 # code  base   shift  cntrl  shift  alt    shift  cntrl  shift state
@@ -840,7 +841,8 @@ Make the most of the extra modifier keys on a Korean/Japanese layout
 + CTRL+Left/Right => Previous/Next TTY
 + CTRL+Up/Down => ScrollLock
 
-#+begin_src conf :tangle /sudo::/usr/share/vt/keymaps/us.emacs.macbook.kbd :tangle-mode o444
+#+name: :tangle /sudo::/usr/share/vt/keymaps/us.emacs.macbook.kbd :tangle-mode o444
+#+begin_src conf
   #                                                         alt
   # scan                       cntrl          alt    alt   cntrl lock
   # code  base   shift  cntrl  shift  alt    shift  cntrl  shift state
@@ -965,10 +967,11 @@ declarations if you so wish. However, for now I'm setting all of these to
 
 ** INTEL
 
-#+begin_src conf :tangle /sudo::/usr/local/etc/X11/xorg.conf.d/50-intel.conf
+#+name: conf :tangle /sudo::/usr/local/etc/X11/xorg.conf.d/50-intel.conf
+#+begin_src
   Section "Device"
-  	Identifier "Card0"
-  	Driver     "intel"
+	  Identifier "Card0"
+	  Driver     "intel"
   EndSection
 #+end_src
 
@@ -976,9 +979,9 @@ declarations if you so wish. However, for now I'm setting all of these to
 
 #+begin_src conf :tangle /sudo::/usr/local/etc/X11/xorg.conf.d/50-serverflags.conf
   Section "ServerFlags"
-  	Option "StandbyTime" "5"
-  	Option "SuspendTime" "10"
-  	Option "OffTime"     "15"
+	  Option "StandbyTime" "5"
+	  Option "SuspendTime" "10"
+	  Option "OffTime"     "15"
   EndSection
 #+end_src
 
@@ -992,11 +995,11 @@ suspend/resume...
 
 #+begin_src conf :tangle /sudo::/usr/local/etc/X11/xorg.conf.d/50-libinput-kbd.conf
   Section "InputClass"
-  	  Identifier "libinput keyboard catchall"
-  	  MatchIsKeyboard "on"
-  	  MatchDevicePath "/dev/input/event*"
-  	  Driver "libinput"
-  	  Option "AutoRepeat" "200 50"
+	    Identifier "libinput keyboard catchall"
+	    MatchIsKeyboard "on"
+	    MatchDevicePath "/dev/input/event*"
+	    Driver "libinput"
+	    Option "AutoRepeat" "200 50"
   EndSection
 #+end_src
 
@@ -1054,18 +1057,18 @@ Section "InputClass"
 	Option			"XkbRules" "evdev"
 	Option			"XkbLayout" "us+hangul(ctrl)+hangul(deadkeys)+leftmods(caps_esc_hyper)"
 	Option			"XkbOptions" "altwin:swap_alt_win,terminate:ctrl_alt_bksp"
-        Option "AutoRepeat" "200 50"
+	Option "AutoRepeat" "200 50"
 EndSection
 #+end_src
 ** TOUCHPAD
 
 #+begin_src conf :tangle /sudo::/usr/local/etc/X11/xorg.conf.d/50-libinput-tp.conf
   Section "InputClass"
-  	  Identifier "libinput touchpad catchall"
-  	  MatchIsTouchpad "on"
-  	  MatchDevicePath "/dev/input/event*"
-  	  Driver "libinput"
-  	  Option "DisableWhileTyping" "True"
+	  Identifier "libinput touchpad catchall"
+	  MatchIsTouchpad "on"
+	  MatchDevicePath "/dev/input/event*"
+	  Driver "libinput"
+	  Option "DisableWhileTyping" "True"
   EndSection
 #+end_src
 
