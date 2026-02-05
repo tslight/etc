@@ -25,86 +25,62 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
 * EMACS
 
 #+begin_src emacs-lisp
-  (use-package emacs
-    :init
-    (column-number-mode)
-    (display-battery-mode)
-    (display-time)
-    (electric-pair-mode)
-    (global-subword-mode)
-    (global-prettify-symbols-mode)
-    (save-place-mode 1)
-    :custom
-    (auto-save-visited-mode t)
-    (c-default-style "bsd")
-    (completion-styles '(basic substring initials flex))
-    (custom-file (expand-file-name "custom.el" user-emacs-directory))
-    (disabled-command-function nil)
-    (display-time-default-load-average 'nil)
-    (display-time-format "%H:%M %a %d/%m")
-    (fill-column 79)
-    (when (executable-find "fd") find-program "fd")
-    (when (executable-find "rg") grep-program "rg")
-    ;; (mac-command-modifier 'control)
-    ;; (mac-control-modifier 'super)
-    (package-archives
-     '(("gnu" . "https://elpa.gnu.org/packages/")
-       ("melpa" . "https://melpa.org/packages/")
-       ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
-    (savehist-additional-variables '(compile-command kill-ring register-alist))
-    ;; https://emacs.stackexchange.com/a/78660
-    (tramp-allow-unsafe-temporary-files t)
-    (use-package-always-defer t)
-    (use-package-enable-imenu-support t)
-    (use-short-answers t)
-    :config
-    (if (eq system-type 'darwin)
-        (setq default-frame-alist '((fullscreen . fullscreen)))
-      (setq default-frame-alist '((fullscreen . maximized))))
-    :bind
-    ("C-c f r" . rename-visited-file)
-    ("C-c a" . align-regexp)
-    ("C-c i" . imenu)
-    ("C-c m" . compile)
-    ("<f5>" . compile)
-    ("C-c b" . browse-url-at-point)
-    ("C-c p" . proced)
-    ("C-s-f" . toggle-frame-fullscreen)
-    ("C-x C-b" . switch-to-buffer) ;; DWIW!
-    ("C-x M-b" . ibuffer)
-    ("C-x m" . man) ;; run sudo makewhatis or mandb
-    ("C-x x s" . sort-lines)
-    ("C-x M-k" . kill-buffer)
-    ("C-x M-c" . kill-emacs) ;; for killing the daemon
-    ("C-x k" . (lambda () (interactive) (kill-buffer (current-buffer)))))
+  (column-number-mode)
+  (display-battery-mode)
+  (display-time)
+  (electric-pair-mode)
+  (global-subword-mode)
+  (global-prettify-symbols-mode)
+  (save-place-mode 1)
+
+  (setq c-default-style "bsd")
+  (setq completion-styles '(basic substring initials flex))
+  (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+  (setq disabled-command-function nil)
+  (setq display-time-default-load-average 'nil)
+  (setq display-time-format "%H:%M %a %d/%m")
+  (setq fill-column 79)
+  (when (executable-find "fd") find-program "fd")
+  (when (executable-find "rg") grep-program "rg")
+  (setq package-archives
+        '(("gnu" . "https://elpa.gnu.org/packages/")
+  	("melpa" . "https://melpa.org/packages/")
+  	("nongnu" . "https://elpa.nongnu.org/nongnu/")))
+  (setq savehist-additional-variables '(compile-command kill-ring register-alist))
+  ;; https://emacs.stackexchange.com/a/78660
+  (setq tramp-allow-unsafe-temporary-files t)
+  (setq use-package-always-defer t)
+  (setq use-package-enable-imenu-support t)
+  (setq use-short-answers t)
+
+  (if (eq system-type 'darwin)
+      (setq default-frame-alist '((fullscreen . fullscreen)))
+    (setq default-frame-alist '((fullscreen . maximized))))
 #+end_src
 
 * BINDINGS
 
-Override at a global level some clunky defaults. The =*= used with
-=bind/bindkey= stops minor modes from clobbering.
-
-I have my ctrl keys next to my space bar so it's much more comfortable than
-meta/alt. Also avoid shifting for frequently used shortcuts if it can be
-helped.
-
-*N.B.* =bind*= doesn't work within the =emacs= "package" using =use-package= as
-obviously Emacs is not a package!
-
 #+begin_src emacs-lisp
-  ;; prevent trackpad palm madness!
-  (bind-key* "C-&" 'async-shell-command)
-  (bind-key* "C-!" 'shell-command)
-  (bind-key* "C-$" 'aspell-word)
-  (bind-key* "C-%" 'query-replace-regexp)
-  (bind-key* "C-*" 'duplicate-line)
-  (bind-key* "C-," 'beginning-of-buffer)
-  (bind-key* "C-." 'end-of-buffer)
-  (bind-key* "C-;" 'comment-line)
-  (bind-key* "C-M-;" 'comment-box)
-  (bind-key* "C-=" 'global-text-scale-adjust)
-  (bind-key* "C-^" 'copy-from-above-command)
-  (bind-key* "C-z" 'zap-up-to-char)
+  (keymap-global-set "M-%" 'query-replace-regexp)
+  (keymap-global-set "M-*" 'duplicate-line)
+  (keymap-global-set "C-;" 'comment-line)
+  (keymap-global-set "C-M-;" 'comment-box)
+  (keymap-global-set "C-^" 'copy-from-above-command)
+  (keymap-global-set "C-z" 'zap-up-to-char)
+  (keymap-global-set "C-c f r" 'rename-visited-file)
+  (keymap-global-set "C-c a" 'align-regexp)
+  (keymap-global-set "C-c b" 'browse-url-at-point)
+  (keymap-global-set "C-c i" 'imenu)
+  (keymap-global-set "C-c m" 'man) ;; run sudo makewhatis or mandb
+  (keymap-global-set "C-c p" 'proced)
+  (keymap-global-set "<f5>" 'compile)
+  (keymap-global-set "<f11>" 'toggle-frame-fullscreen)
+  (keymap-global-set "C-x C-b" 'switch-to-buffer) ;; DWIW!
+  (keymap-global-set "C-x M-b" 'ibuffer)
+  (keymap-global-set "C-x x s" 'sort-lines)
+  (keymap-global-set "C-x M-k" 'kill-buffer)
+  (keymap-global-set "C-x M-c" 'kill-emacs) ;; for killing the daemon
+  (keymap-global-set "C-x k" #'(lambda () (interactive) (kill-buffer (current-buffer))))
 #+end_src
 
 * DEFUNS
@@ -128,7 +104,7 @@ All of my custom functions live under the =my/= prefix/namespace.
           (kill-region (- lstart 1) (+ (point) 1))
         (kill-region lstart (point)))))
 
-  (bind-key* "C-c d" 'my/delete-inside-delimiters)
+  (keymap-global-set "C-c d" 'my/delete-inside-delimiters)
 #+end_src
 
 ** delete-this-file
@@ -143,7 +119,7 @@ All of my custom functions live under the =my/= prefix/namespace.
       (delete-file (buffer-file-name) t)
       (kill-this-buffer)))
 
-  (bind-key* "C-c f d" 'my/delete-this-file)
+  (keymap-global-set "C-c f d" 'my/delete-this-file)
 #+end_src
 
 ** indent-buffer
@@ -154,7 +130,7 @@ All of my custom functions live under the =my/= prefix/namespace.
     (interactive)
     (indent-region (point-min) (point-max)))
 
-  (bind-key "M-i" 'my/indent-buffer)
+  (keymap-global-set "M-i" 'my/indent-buffer)
 #+end_src
 
 ** init-frame
@@ -180,11 +156,10 @@ Otherwise emacsclient doesn't initialise UI settings.
 
     (if window-system
         (if (eq system-type 'darwin)
-          (set-frame-font "Monaco 13" nil t)
-        (set-frame-font "Monospace 13" nil t)))
-
-    ;; without this backspace sends ctrl-h in certain terminals
-    (if (not window-system) (normal-erase-is-backspace-mode)))
+            (set-frame-font "Monaco 13" nil t)
+  	(set-frame-font "Monospace 13" nil t)))
+    
+    (normal-erase-is-backspace-mode))
 
   (if (daemonp)
       (add-hook 'after-make-frame-functions #'my/init-frame (selected-frame))
@@ -234,8 +209,8 @@ Otherwise emacsclient doesn't initialise UI settings.
     (interactive)
     (switch-to-buffer (other-buffer (current-buffer) 1)))
 
-  (bind-key* "C-c l" 'my/last-buffer)
-  (bind-key* "C-<escape>" 'my/last-buffer)
+  (keymap-global-set "C-c l" 'my/last-buffer)
+  (keymap-global-set "C-<escape>" 'my/last-buffer)
 #+end_src
 
 ** move-beginning-of-line
@@ -272,7 +247,7 @@ Otherwise emacsclient doesn't initialise UI settings.
         (kill-new filename)
         (message "Saved '%s' to kill-ring!" filename))))
 
-  (bind-key* "C-c f w" 'my/save-filename)
+  (keymap-global-set "C-c f w" 'my/save-filename)
 #+end_src
 
 ** save-whole-buffer
@@ -284,7 +259,7 @@ Otherwise emacsclient doesn't initialise UI settings.
     (kill-ring-save (point-min) (point-max))
     (message "Saved whole buffer to kill ring :-)"))
 
-  (bind-key* "C-x M-w" 'my/save-whole-buffer)
+  (keymap-global-set "C-x M-w" 'my/save-whole-buffer)
 #+end_src
 
 ** sudoedit
@@ -298,7 +273,7 @@ Otherwise emacsclient doesn't initialise UI settings.
                          (read-file-name "Find file (as root): ")))
       (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
 
-  (bind-key* "C-c f s" 'my/sudoedit)
+  (keymap-global-set "C-c f s" 'my/sudoedit)
 #+end_src
 
 ** toggle-fill
@@ -314,7 +289,7 @@ Otherwise emacsclient doesn't initialise UI settings.
            fill-column)))
       (call-interactively #'fill-paragraph)))
 
-  (bind-key* "M-q" 'my/toggle-fill)
+  (keymap-global-set "M-q" 'my/toggle-fill)
 #+end_src
 
 * DIRED
@@ -582,6 +557,7 @@ Bulk install all the grammars as a one of task, so don't tangle!
 
 #+begin_src emacs-lisp
   (use-package clang-format :ensure
+    :after (c-ts-mode-map)
     :custom
     (clang-format-style "file")
     :config
@@ -629,7 +605,7 @@ Bulk install all the grammars as a one of task, so don't tangle!
   (use-package exec-path-from-shell :ensure
     :hook (after-init . exec-path-from-shell-initialize))
 #+end_src
-** VTERM
+** COMMENT VTERM
 #+begin_src emacs-lisp
   (use-package vterm :ensure
     :bind* ("C-c t" . vterm)

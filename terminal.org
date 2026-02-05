@@ -90,7 +90,6 @@
 #+end_src
 * TMUX
 #+BEGIN_SRC conf :tangle ~/.tmux.conf
-  ## MISC
   set -g base-index 1
   set -g pane-base-index 1
   set -g history-limit 42420
@@ -100,36 +99,33 @@
   set -g display-panes-time 4000 # I'm slow and indecisive!
   set -g escape-time 0 # default is 500ms which feels like forever..
 
-  # For images in Yazi
+  # images in Yazi
   set -g allow-passthrough on
   set -ga update-environment TERM
   set -ga update-environment TERM_PROGRAM
 
-  ## STATUS BAR
-  set-option -g status-interval 5
-  set-option -g automatic-rename on
-  set-option -g automatic-rename-format '#{b:pane_current_path}'
-
-  ## COLORS
+  # colors
   set -g message-style bg=default,fg=brightgreen
   set -g mode-style bg=default,fg=brightgreen
   set -g status-style bg=default,fg=brightgreen
   set -g window-status-style bold
   set -g window-status-current-style underscore,fg=brightyellow
 
-  ## STATUS
+  # status
   set -g status-interval 60
   set -g status-left "[#S] "
   set -g status-left-length 50
   set -g status-right "%H:%M %a %d/%m"
   set -g status-right-length 50
   set -g window-status-current-format "#I: #W.#P*"
+  set -g automatic-rename on
+  set -g automatic-rename-format '#{b:pane_current_path}'
 
-  ## MOUSE
+  # mouse
   set -g mouse on
   bind -n MouseDown2Status copy-mode
 
-  ## KEYS
+  # keys
   bind C-r source-file ~/.tmux.conf \; display-message "~/.tmux.conf reloaded"
   bind e neww -n emacs 'emacsclient -nw -c -a ""'
   bind r neww -n fm yazi
