@@ -15,6 +15,7 @@
   [alias]
   a = add -A
   b = branch
+  co = checkout
   cb = checkout -b
   cm = commit -m
   cl = clone

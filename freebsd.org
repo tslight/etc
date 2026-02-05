@@ -965,45 +965,20 @@ declarations if you so wish. However, for now I'm setting all of these to
 
 ** INTEL
 
-#+begin_src conf :tangle /sudo::/usr/local/share/X11/xorg.conf.d/20-intel.conf
+#+begin_src conf :tangle /sudo::/usr/local/etc/X11/xorg.conf.d/50-intel.conf
   Section "Device"
   	Identifier "Card0"
   	Driver     "intel"
-  EndSection
-#+end_src
-
-** RADEON
-
-#+begin_src conf
-  Section "Device"
-  	Identifier "Card0"
-  	Driver     "radeon"
   EndSection
 #+end_src
 
 ** DPMS
 
-#+begin_src conf :tangle /sudo::/usr/local/share/X11/xorg.conf.d/10-serverflags.conf
+#+begin_src conf :tangle /sudo::/usr/local/etc/X11/xorg.conf.d/50-serverflags.conf
   Section "ServerFlags"
   	Option "StandbyTime" "5"
   	Option "SuspendTime" "10"
   	Option "OffTime"     "15"
-  EndSection
-#+end_src
-
-** MULTIPLE GPU
-
-#+begin_src conf
-  Section "Device"
-  	Identifier "Card0"
-  	Driver     "intel"
-  	BusID      "pci0:0:2:0"
-  EndSection
-
-  Section "Device"
-  	Identifier "Card1"
-  	Driver     "radeon"
-  	BusID      "pci0:1:0:0"
   EndSection
 #+end_src
 
@@ -1015,14 +990,12 @@ suspend/resume...
 
 *** MACBOOK STANDARD
 
-#+begin_src conf
+#+begin_src conf :tangle /sudo::/usr/local/etc/X11/xorg.conf.d/50-libinput-kbd.conf
   Section "InputClass"
   	  Identifier "libinput keyboard catchall"
   	  MatchIsKeyboard "on"
   	  MatchDevicePath "/dev/input/event*"
   	  Driver "libinput"
-  	  Option "XkbLayout" "us"
-  	  Option "XkbOptions" "caps:swapescape,ctrl:swap_lwin_lctl,ctrl:swap_rwin_rctl"
   	  Option "AutoRepeat" "200 50"
   EndSection
 #+end_src
@@ -1086,14 +1059,13 @@ EndSection
 #+end_src
 ** TOUCHPAD
 
-#+begin_src conf
+#+begin_src conf :tangle /sudo::/usr/local/etc/X11/xorg.conf.d/50-libinput-tp.conf
   Section "InputClass"
-	  Identifier "libinput touchpad catchall"
-	  MatchIsTouchpad "on"
-	  MatchDevicePath "/dev/input/event*"
-	  Driver "libinput"
-	  Option "Tapping" "True"
-	  Option "DisableWhileTyping" "True"
+  	  Identifier "libinput touchpad catchall"
+  	  MatchIsTouchpad "on"
+  	  MatchDevicePath "/dev/input/event*"
+  	  Driver "libinput"
+  	  Option "DisableWhileTyping" "True"
   EndSection
 #+end_src
 

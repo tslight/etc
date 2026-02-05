@@ -61,17 +61,7 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
     (if (eq system-type 'darwin)
         (setq default-frame-alist '((fullscreen . fullscreen)))
       (setq default-frame-alist '((fullscreen . maximized))))
-    (setq roland "YOU HAVE FORGOTTEN THE FACE OF YOUR FATHER")
     :bind
-    ;; USE CTRL-I FFS or the sake of your pinkies!
-    ("<tab>" . (lambda () (interactive) (message roland)))
-    ;; USE CTRL-J/M FFS or the sake of your pinkies!
-    ("<return>" . (lambda () (interactive) (message roland)))
-    ;; USE CTRL-H FFS or the sake of your pinkies!
-    ("<backspace>" . (lambda () (interactive) (message roland)))
-    ("C-h" . backward-delete-char-untabify) ;; act the same as terminal
-    ("C-M-h" . backward-kill-word) ;; ditto! Also M-h seems to do the same
-    ("C-c h" . 'help-command) ;; We don't always have F1 as a fallback...
     ("C-c f r" . rename-visited-file)
     ("C-c a" . align-regexp)
     ("C-c i" . imenu)
@@ -86,12 +76,7 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
     ("C-x x s" . sort-lines)
     ("C-x M-k" . kill-buffer)
     ("C-x M-c" . kill-emacs) ;; for killing the daemon
-    ("C-x k" . (lambda () (interactive) (kill-buffer (current-buffer))))
-    (:map minibuffer-local-must-match-map
-          ("C-s" . minibuffer-next-completion)
-          ("C-r" . minibuffer-previous-completion)
-          ("C-n" . next-history-element)
-          ("C-p" . previous-history-element)))
+    ("C-x k" . (lambda () (interactive) (kill-buffer (current-buffer)))))
 #+end_src
 
 * BINDINGS
@@ -108,13 +93,6 @@ obviously Emacs is not a package!
 
 #+begin_src emacs-lisp
   ;; prevent trackpad palm madness!
-  (global-unset-key (kbd "<mouse-1>"))
-  (global-unset-key (kbd "<mouse-2>"))
-  (global-unset-key (kbd "<mouse-3>"))
-  (global-unset-key (kbd "C-<down-mouse-1>"))
-  (global-unset-key (kbd "C-<down-mouse-2>"))
-  (global-unset-key (kbd "C-<down-mouse-3>"))
-  (bind-key* "C-M-h" 'backward-kill-word)
   (bind-key* "C-&" 'async-shell-command)
   (bind-key* "C-!" 'shell-command)
   (bind-key* "C-$" 'aspell-word)
@@ -548,6 +526,7 @@ Bulk install all the grammars as a one of task, so don't tangle!
         (html "https://github.com/tree-sitter/tree-sitter-html")
         (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
         (json "https://github.com/tree-sitter/tree-sitter-json")
+        (lua "https://github.com/tree-sitter-grammars/tree-sitter-lua")
         (make "https://github.com/alemuller/tree-sitter-make")
         (markdown "https://github.com/ikatyang/tree-sitter-markdown")
         (nix "https://github.com/nix-community/tree-sitter-nix")
@@ -655,14 +634,6 @@ Bulk install all the grammars as a one of task, so don't tangle!
   (use-package vterm :ensure
     :bind* ("C-c t" . vterm)
     :bind (:map vterm-mode-map
-              ;; USE CTRL-I FFS or the sake of your pinkies!
-              ("<tab>" . (lambda () (interactive) (message roland)))
-              ;; USE CTRL-J/M FFS or the sake of your pinkies!
-              ("<return>" . (lambda () (interactive) (message roland)))
-              ;; USE CTRL-H FFS or the sake of your pinkies!
-              ("<backspace>" . (lambda () (interactive) (message roland)))
-              ("C-h" . (lambda () (interactive) (vterm-send-key "<backspace>")))
-              ("C-M-h" . (lambda () (interactive) (vterm-send-key "w" nil nil t)))
               ("C-u" . (lambda () (interactive) (vterm-send-key "u" nil nil t)))))
 #+end_src
 ** VUNDO
