@@ -15,13 +15,16 @@
   [alias]
   a = add -A
   b = branch
-  c = commit -m
-  C = clone
+  cb = checkout -b
+  cm = commit -m
+  cl = clone
   d = diff
-  l = log --graph --decorate --pretty=oneline --abbrev-commit
+  lg = log --graph --oneline
+  lo = log --oneline
+  l = log
   m = merge
-  f = pull
-  p = push
+  pl = pull
+  ps = push
   rb = rebase
   rv = revert
   r = remote
