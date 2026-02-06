@@ -61,6 +61,9 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
 * BINDINGS
 
 #+begin_src emacs-lisp
+  (keyboard-translate ?\C-h ?\C-?) ;; act like the terminal
+  (define-key key-translation-map (kbd "C-M-h") (kbd "M-DEL"))
+  (keymap-global-set "C-c h" 'mark-defun) ;; originally on C-M-h
   (keymap-global-set "M-%" 'query-replace-regexp)
   (keymap-global-set "M-*" 'duplicate-line)
   (keymap-global-set "C-;" 'comment-line)
