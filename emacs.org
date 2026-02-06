@@ -627,6 +627,7 @@ ie) https://www.freshports.org/misc/emacs-libvterm/ ;-)
   	      ("<RET>" . vterm-send-return)
   	      ("<DEL>" . vterm-send-backspace)
   	      ("M-<DEL>" . vterm-send-meta-backspace)
+  	      ("C-l" . (lambda () (interactive) (vterm-send-key "l" nil nil t)))
   	      ("C-g" . (lambda () (interactive) (vterm-send-key "g" nil nil t)))
   	      ("C-u" . (lambda () (interactive) (vterm-send-key "u" nil nil t)))))
 #+end_src
