@@ -622,7 +622,7 @@ ie) https://www.freshports.org/misc/emacs-libvterm/ ;-)
   (use-package vterm :ensure
     :bind* ("C-c t" . vterm)
     :bind (:map vterm-mode-map
-  	      ("C-c h" . help-command)
+  	      ("<f1>" . help-command)
                 ("<DEL>" . (lambda () (interactive) (vterm-send-key "<backspace>")))
                 ("M-<DEL>" . (lambda () (interactive) (vterm-send-key "w" nil nil t)))
                 ("C-u" . (lambda () (interactive) (vterm-send-key "u" nil nil t)))))
