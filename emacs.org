@@ -614,12 +614,12 @@ Bulk install all the grammars as a one of task, so don't tangle!
 ** VTERM
 
 Generally better to install from OS package manager to avoid extra
-compilation step, hence no =:ensure=.
+compilation step.
 
 ie) https://www.freshports.org/misc/emacs-libvterm/ ;-)
 
 #+begin_src emacs-lisp
-  (use-package vterm
+  (use-package vterm :ensure
     :bind* ("C-c t" . vterm)
     :bind (:map vterm-mode-map
               ("C-u" . (lambda () (interactive) (vterm-send-key "u" nil nil t)))))
