@@ -623,9 +623,12 @@ ie) https://www.freshports.org/misc/emacs-libvterm/ ;-)
     :bind* ("C-c t" . vterm)
     :bind (:map vterm-mode-map
   	      ("<f1>" . help-command)
-                ("<DEL>" . (lambda () (interactive) (vterm-send-key "<backspace>")))
-                ("M-<DEL>" . (lambda () (interactive) (vterm-send-key "w" nil nil t)))
-                ("C-u" . (lambda () (interactive) (vterm-send-key "u" nil nil t)))))
+  	      ("C-i" . vterm-send-tab)
+  	      ("<RET>" . vterm-send-return)
+  	      ("<DEL>" . vterm-send-backspace)
+  	      ("M-<DEL>" . vterm-send-meta-backspace)
+  	      ("C-g" . (lambda () (interactive) (vterm-send-key "g" nil nil t)))
+  	      ("C-u" . (lambda () (interactive) (vterm-send-key "u" nil nil t)))))
 #+end_src
 
 ** VUNDO
