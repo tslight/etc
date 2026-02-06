@@ -17,7 +17,7 @@
   b = branch
   co = checkout
   cb = checkout -b
-  cm = commit -m
+  cm = commit -s -m
   cl = clone
   d = diff
   lg = log --graph --oneline

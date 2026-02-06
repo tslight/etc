@@ -401,8 +401,11 @@ Otherwise emacsclient doesn't initialise UI settings.
 #+begin_src emacs-lisp
   (use-package eglot
     :hook (prog-mode . eglot-ensure)
+    :custom
+    (eglot-ignored-server-capabilities '(:documentOnTypeFormattingProvider))
     :bind (:map eglot-mode-map
-              ("C-c e r" . eglot-rename)))
+                ("C-c e r" . eglot-rename)))
+
   (use-package corfu :ensure
     :custom
     (corfu-cycle t)
@@ -557,15 +560,15 @@ Bulk install all the grammars as a one of task, so don't tangle!
 
 #+begin_src emacs-lisp
   (use-package clang-format :ensure
-    :after (c-ts-mode-map)
+    :after (c-ts-mode)
     :custom
     (clang-format-style "file")
     :config
     (when (executable-find "clang-format19")
       (setq clang-format-executable "clang-format19"))
     :bind (:map c-ts-mode-map
-  	      ("M-i" . clang-format-buffer)
-  	      ("C-M-i" . clang-format-region)))
+  	      ("C-i" . clang-format-region)
+  	      ("M-i" . clang-format-buffer)))
 #+end_src
 
 ** COPILOT
