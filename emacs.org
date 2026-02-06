@@ -611,13 +611,20 @@ Bulk install all the grammars as a one of task, so don't tangle!
   (use-package exec-path-from-shell :ensure
     :hook (after-init . exec-path-from-shell-initialize))
 #+end_src
-** COMMENT VTERM
+** VTERM
+
+Generally better to install from OS package manager to avoid extra
+compilation step, hence no =:ensure=.
+
+ie) https://www.freshports.org/misc/emacs-libvterm/ ;-)
+
 #+begin_src emacs-lisp
-  (use-package vterm :ensure
+  (use-package vterm
     :bind* ("C-c t" . vterm)
     :bind (:map vterm-mode-map
               ("C-u" . (lambda () (interactive) (vterm-send-key "u" nil nil t)))))
 #+end_src
+
 ** VUNDO
 #+begin_src emacs-lisp
   (use-package vundo :ensure :bind* ("C-c u" . vundo))
