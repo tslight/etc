@@ -33,8 +33,12 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
   (global-prettify-symbols-mode)
   (save-place-mode 1)
 
-  (setq browse-url-browser-function 'browse-url-generic
-        browse-url-generic-program "librewolf")
+  (if (eq system-type 'darwin)
+      (setq browse-url-browser-function 'browse-url-generic
+  	  browse-url-generic-program "firefox")
+    (setq browse-url-browser-function 'browse-url-generic
+  	browse-url-generic-program "librewolf"))
+
   (setq c-default-style "bsd")
   (setq completion-styles '(basic substring initials flex))
   (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
@@ -42,15 +46,20 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
   (setq display-time-default-load-average 'nil)
   (setq display-time-format "%H:%M %a %d/%m")
   (setq fill-column 79)
+
   (when (executable-find "fd") find-program "fd")
   (when (executable-find "rg") grep-program "rg")
+
   (setq package-archives
         '(("gnu" . "https://elpa.gnu.org/packages/")
     	("melpa" . "https://melpa.org/packages/")
     	("nongnu" . "https://elpa.nongnu.org/nongnu/")))
+
   (setq savehist-additional-variables '(compile-command kill-ring register-alist))
+
   ;; https://emacs.stackexchange.com/a/78660
   (setq tramp-allow-unsafe-temporary-files t)
+
   (setq use-package-always-defer t)
   (setq use-package-enable-imenu-support t)
   (setq use-short-answers t)
