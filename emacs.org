@@ -611,6 +611,12 @@ Bulk install all the grammars as a one of task, so don't tangle!
        ("Push" 5 magit-repolist-column-unpushed-to-upstream ((:right-align t) nil))
        ("Path" 99 magit-repolist-column-path nil))))
 #+end_src
+** GOLDEN RATIO
+
+#+begin_src emacs-lisp
+  (use-package golden-ratio :demand :config (golden-ratio-mode))
+#+end_src
+
 ** HUNGRY DELETE
 #+begin_src emacs-lisp
   (use-package hungry-delete :ensure :demand
