@@ -33,6 +33,8 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
   (global-prettify-symbols-mode)
   (save-place-mode 1)
 
+  (setq browse-url-browser-function 'browse-url-generic
+        browse-url-generic-program "librewolf")
   (setq c-default-style "bsd")
   (setq completion-styles '(basic substring initials flex))
   (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
@@ -44,8 +46,8 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
   (when (executable-find "rg") grep-program "rg")
   (setq package-archives
         '(("gnu" . "https://elpa.gnu.org/packages/")
-  	("melpa" . "https://melpa.org/packages/")
-  	("nongnu" . "https://elpa.nongnu.org/nongnu/")))
+    	("melpa" . "https://melpa.org/packages/")
+    	("nongnu" . "https://elpa.nongnu.org/nongnu/")))
   (setq savehist-additional-variables '(compile-command kill-ring register-alist))
   ;; https://emacs.stackexchange.com/a/78660
   (setq tramp-allow-unsafe-temporary-files t)
