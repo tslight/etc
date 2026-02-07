@@ -276,18 +276,21 @@ Otherwise emacsclient doesn't initialise UI settings.
   (keymap-global-set "C-x M-w" 'my/save-whole-buffer)
 #+end_src
 
-** sudoedit
+** sudo shenanigans
 
 #+begin_src emacs-lisp
-  (defun my/sudoedit (&optional arg)
-    "Open current or ARG file as root."
-    (interactive "P")
-    (if (or arg (not buffer-file-name))
-        (find-file (concat "/sudo:root@localhost:"
-                         (read-file-name "Find file (as root): ")))
-      (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
+  (defun my/sudoedit ()
+    "Re-open current file as root."
+    (interactive)
+    (find-alternate-file (concat "/sudo::" buffer-file-name)))
+
+  (defun my/sudo-find-file (file-name)
+    "Like find file, but opens the file as root."
+    (interactive "FFind file (as root): ")
+    (find-file (concat "/sudo::" file-name)))
 
   (keymap-global-set "C-c f s" 'my/sudoedit)
+  (keymap-global-set "C-x M-f" 'my/sudo-find-file)
 #+end_src
 
 ** toggle-fill
