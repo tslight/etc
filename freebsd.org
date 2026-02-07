@@ -5,16 +5,16 @@
 #+PROPERTY: header-args+ :padline no
 * BOOT/LOADER
 #+begin_src conf
-efi_max_resolution="1366x768"
-loader_gfx="NO" # prevent fancy box rendering
-loader_logo="beastie" # prevent fancy logo
-autoboot_delay="5"
-aesni_load="YES"
-geom_eli_load="YES"
-kern.geom.label.disk_ident.enable="0"
-kern.geom.label.gptid.enable="0"
-zfs_load="YES"
-compat.linuxkpi.i915_disable_power_well="0"
+  efi_max_resolution="1366x768"
+  loader_gfx="NO" # prevent fancy box rendering
+  loader_logo="beastie" # prevent fancy logo
+  autoboot_delay="5"
+  aesni_load="YES"
+  geom_eli_load="YES"
+  kern.geom.label.disk_ident.enable="0"
+  kern.geom.label.gptid.enable="0"
+  zfs_load="YES"
+  compat.linuxkpi.i915_disable_power_well="0"
 #+end_src
 * BUGS/QUIRKS
 ** INTEL SOUND WEIRDNESS
@@ -37,6 +37,22 @@ In =/boot/loader.conf=
 ** MACBOOK FUNCTION KEY HACKING
 
 https://github.com/freebsd/freebsd-src/pull/1998
+** KBDREMAP MODULE
+
+*** Macbook
+
+#+begin_src  conf
+  kern.vt.enable_altgr=0
+  hw.kbdremap.rules=""
+#+end_src
+
+*** Macbook JIS
+
+#+name /etc/sysctl.conf
+#+begin_src conf 
+  kern.vt.enable_altgr=0
+  hw.kbdremap.rules="0x90:0xe0,0x91:0xe4,0xe3:0xe2,0xe2:0xe3,0xe7:0xe6,0xff:0xe7,0x39:0x47,0xe0:0x29,0x29:0x39,0x87:0x35,0x89:0x2a"
+#+end_src
 
 * CURRENT
 
