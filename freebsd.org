@@ -43,7 +43,7 @@ https://github.com/freebsd/freebsd-src/pull/1998
 
 #+begin_src  conf
   kern.vt.enable_altgr=0
-  hw.kbdremap.rules=""
+  hw.kbdremap.rules="39:29,29:39,e0:e3,e3:e0,e7:e4,ff:47"
 #+end_src
 
 *** Macbook JIS
