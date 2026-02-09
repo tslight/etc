@@ -617,7 +617,7 @@ Bulk install all the grammars as a one of task, so don't tangle!
 ** GOLDEN RATIO
 
 #+begin_src emacs-lisp
-  (use-package golden-ratio :demand :config (golden-ratio-mode))
+  (use-package golden-ratio :ensure :demand :config (golden-ratio-mode))
 #+end_src
 
 ** HUNGRY DELETE
