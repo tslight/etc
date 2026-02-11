@@ -589,13 +589,27 @@ Bulk install all the grammars as a one of task, so don't tangle!
 #+end_src
 
 ** COPILOT
+
 #+begin_src emacs-lisp
   (use-package copilot :ensure)
   (use-package copilot-chat :ensure
     :custom (copilot-chat-default-model "oswe-vscode-prime")
     :bind ("C-c c" . copilot-chat))
 #+end_src
+
+** EMMS
+
+#+begin_src emacs-lisp
+  (use-package emms :ensure
+    :bind ("C-c M-m" . emms-smart-browse)
+    :config
+    (emms-all)
+    (emms-default-players)
+    (emms-history-load))
+#+end_src
+
 ** GIT
+
 #+begin_src emacs-lisp
   (use-package git-timemachine :ensure)
   (use-package magit :ensure
@@ -614,6 +628,7 @@ Bulk install all the grammars as a one of task, so don't tangle!
        ("Push" 5 magit-repolist-column-unpushed-to-upstream ((:right-align t) nil))
        ("Path" 99 magit-repolist-column-path nil))))
 #+end_src
+
 ** GOLDEN RATIO
 
 #+begin_src emacs-lisp
@@ -621,16 +636,20 @@ Bulk install all the grammars as a one of task, so don't tangle!
 #+end_src
 
 ** HUNGRY DELETE
+
 #+begin_src emacs-lisp
   (use-package hungry-delete :ensure :demand
     :init (global-hungry-delete-mode)
     :custom (hungry-delete-join-reluctantly t))
 #+end_src
+
 ** PATH FROM SHELL
+
 #+begin_src emacs-lisp
   (use-package exec-path-from-shell :ensure
     :hook (after-init . exec-path-from-shell-initialize))
 #+end_src
+
 ** VTERM
 
 Generally better to install from OS package manager to avoid extra
@@ -653,6 +672,7 @@ ie) https://www.freshports.org/misc/emacs-libvterm/ ;-)
 #+end_src
 
 ** VUNDO
+
 #+begin_src emacs-lisp
   (use-package vundo :ensure :bind* ("C-c u" . vundo))
 #+end_src

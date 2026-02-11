@@ -23,7 +23,7 @@
   alias lc='tokei'
   alias ls='ls --color=always'
   alias l='ls -a'
-  alias ll='ls -la'
+  alias ll='ls -lah'
   alias m="make"
   alias mkdir='mkdir -p'
   alias mv='mv -i'
