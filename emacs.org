@@ -681,6 +681,6 @@ ie) https://www.freshports.org/misc/emacs-libvterm/ ;-)
 ** XCLIP
 
 #+begin_src emacs-lisp
-  (when (executable-find "xclip")
+  (when (and (not window-system) (executable-find "xclip"))
     (use-package xclip :ensure :hook (after-init . xclip-mode)))
 #+end_src
