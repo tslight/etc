@@ -573,6 +573,7 @@ Bulk install all the grammars as a one of task, so don't tangle!
     ("M-1" . ace-delete-other-windows)
     :config (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
 #+end_src
+
 ** CLANG FORMAT
 
 #+begin_src emacs-lisp
@@ -675,4 +676,11 @@ ie) https://www.freshports.org/misc/emacs-libvterm/ ;-)
 
 #+begin_src emacs-lisp
   (use-package vundo :ensure :bind* ("C-c u" . vundo))
+#+end_src
+
+** XCLIP
+
+#+begin_src emacs-lisp
+  (when (executable-find "xclip")
+    (use-package xclip :ensure :hook (after-init . xclip-mode)))
 #+end_src
