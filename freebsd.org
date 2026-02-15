@@ -35,7 +35,6 @@ compat.linuxkpi.i915_disable_power_well="0"
 
 In =/boot/loader.conf=
 ** MACBOOK FUNCTION KEY HACKING
-
 https://github.com/freebsd/freebsd-src/pull/1998
 ** KBDREMAP MODULE
 
@@ -288,6 +287,28 @@ controls backlight via specific register writes.
 For the time being, here's some hack C code to achieve what I want:
 
 For more GMUX HAX take a look at: https://github.com/tslight/gmuxctl
+
+**** Dodgy IR Receiver Flapping
+
+Add to =/boot/loader.conf=
+
+#+begin_src conf
+hint.usbhid.0.disabled="1"
+hint.uhid.0.disabled="1"
+#+end_src
+
+And create =/etc/devd/apple_ir.conf=
+
+#+begin_src conf
+notify 100 {
+    match "system"    "USB";
+    match "subsystem" "DEVICE";
+    match "type"      "ATTACH";
+    match "vendor"    "0x05ac";
+    match "product"   "0x8242";
+    action "/usr/bin/logger -t disable_apple_ir 'Powering off Apple IR receiver...'; /usr/sbin/usbconfig -d $cdev power_off; /usr/sbin/usbconfig -d $cdev";
+};
+#+end_src
 
 * HOSTNAMES
 
