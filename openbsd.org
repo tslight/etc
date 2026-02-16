@@ -482,60 +482,53 @@
 #+END_SRC
 * KSH
 ** PROFILE
+
 #+BEGIN_SRC sh :tangle ~/.profile
   PATH=$HOME/bin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin:/usr/games:/usr/libexec:/usr/local/libexec:.
-
-  [ -z $TMUX ] && [ -z $DISPLAY ] && TERM=pccon0 || TERM=linux
-
-  BLOCKSIZE="M"
-
-  EDITOR="emacsclient -nw -c"
-  ALTERNATE_EDITOR=""
-
-  PAGER="less"
-
   HISTFILE=$HOME/.ksh_history
   HISTSIZE=4242
-
-  [ -f /etc/ksh.kshrc ] && . /etc/ksh.kshrc
   ENV=$HOME/.kshrc
-
-  export PATH HOME TERM BLOCKSIZE EDITOR ALTERNATE_EDITOR PAGER HISTORY HISTSIZE ENV
+  export PATH HOME TERM HISTORY HISTSIZE ENV
 #+END_SRC
+
 ** KSHRC
+
 #+BEGIN_SRC sh :tangle ~/.kshrc
   if [ $(id -u) -eq 0 ]; then
-      PS1='\[\e[1;31m\]\h \w \$\[\e[m\] '
+      PS1='\[\e[1;31m\]\u@\h\[\e[1;33m\]:\[\e[1;35m\]\w\n\[\e[1;33m\]\$\[\e[m\] '
   else
-      PS1='\[\e[1;32m\]\h \w \$\[\e[m\] '
+      PS1='\[\e[1;32m\]\u@\h\[\e[1;33m\]:\[\e[1;35m\]\w\n\[\e[1;33m\]\$\[\e[m\] '
   fi
-
-  stty -ixon
 
   set -o emacs
   set -o csh-history
 
-  bind -m '^L'='^U'clear'^J''^Y'
+  stty kill  # for emacs vterm
 
-  [ -f ~/.ssh/known_hosts ] && KNOWN_HOSTS=$(awk '{split($1,a,","); print a[1]}' ~/.ssh/known_hosts)
-  PKG_LIST=$(pkg_info -q)
-
-  set -A complete_emacs -- --daemon --debug-init -Q -nw
-  set -A complete_emacsclient -- -c -t -a
-  set -A complete_git -- pull push mpull mpush clone checkout status
-  set -A complete_kill_1 -- -9 -HUP -INFO -KILL -TERM
-  set -A complete_pkill_1 -- -9 -HUP -INFO -KILL -TERM
-  set -A complete_make_1 -- install clean repackage reinstall
-  set -A complete_pkg_delete -- $PKG_LIST
-  set -A complete_pkg_info -- $PKG_LIST
-  set -A complete_rcctl_1 -- disable enable get ls order set
-  set -A complete_rcctl_2 -- $(ls /etc/rc.d)
-  set -A complete_ssh_1 -- $KNOWN_HOSTS
-  set -A complete_sftp_1 -- $KNOWN_HOSTS
-
-  [ -f ~/.aliases ] && . ~/.aliases
-  [ -f ~/.functions ] && . ~/.functions
+  alias cp='cp -i'
+  alias df='df -h'
+  alias du='du -h'
+  alias e='emacs -nw'
+  alias ec='emacsclient -c -a "" -nw'
+  alias g='git'
+  alias l='ls -a'
+  alias ll='ls -lah'
+  alias mv='mv -i'
+  alias pg='pgrep -l'
+  alias pingg='ping -c 4 google.com'
+  alias poweroff='doas shutdown -p now'
+  alias reboot='doas shutdown -r now'
+  alias rm='rm -i'
+  alias se='sudoedit'
+  tmux_create_or_attach () {
+      [ -z "$TMUX" ] && \
+          { tmux -q has-session && tmux attach -d || tmux -u; } || \
+              { tmux new-session -d \; choose-tree -Zs; }
+  }
+  alias t='tmux_create_or_attach'
+  alias x='startx'
 #+END_SRC
+
 * MG
 #+BEGIN_SRC conf :tangle ~/.mg
   c-mode
