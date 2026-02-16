@@ -25,30 +25,15 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
 * EMACS
 
 #+begin_src emacs-lisp
-  (column-number-mode)
-  (display-battery-mode)
-  (display-time)
-  (electric-pair-mode)
-  (global-subword-mode)
-  (global-prettify-symbols-mode)
-  (save-place-mode 1)
-
-  (if (eq system-type 'darwin)
-      (setq browse-url-browser-function 'browse-url-generic
-  	  browse-url-generic-program "firefox")
-    (setq browse-url-browser-function 'browse-url-generic
-  	browse-url-generic-program "librewolf"))
+  (setq inhibit-startup-screen t)
+  (setq initial-scratch-message nil)
+  (setq initial-major-mode 'fundamental-mode)
 
   (setq c-default-style "bsd")
   (setq completion-styles '(basic substring initials flex))
   (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
   (setq disabled-command-function nil)
-  (setq display-time-default-load-average 'nil)
-  (setq display-time-format "%H:%M %a %d/%m")
   (setq fill-column 79)
-
-  (when (executable-find "fd") find-program "fd")
-  (when (executable-find "rg") grep-program "rg")
 
   (setq package-archives
         '(("gnu" . "https://elpa.gnu.org/packages/")
@@ -63,10 +48,6 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
   (setq use-package-always-defer t)
   (setq use-package-enable-imenu-support t)
   (setq use-short-answers t)
-
-  (if (eq system-type 'darwin)
-      (setq default-frame-alist '((fullscreen . fullscreen)))
-    (setq default-frame-alist '((fullscreen . maximized))))
 #+end_src
 
 * BINDINGS
@@ -178,6 +159,36 @@ Otherwise emacsclient doesn't initialise UI settings.
   (if (daemonp)
       (add-hook 'after-make-frame-functions #'my/init-frame (selected-frame))
     (my/init-frame (selected-frame)))
+#+end_src
+
+** emacs-startup
+
+#+begin_src emacs-lisp
+  (defun my/emacs-startup ()
+    "Expensive stuff to make sure we don't run until after Emacs starts"
+    
+    (column-number-mode)
+
+    (setq display-time-default-load-average 'nil)
+    (setq display-time-format "%H:%M %a %d/%m")
+    (display-battery-mode)
+    (display-time)
+
+    (electric-pair-mode)
+    (global-subword-mode)
+    (global-prettify-symbols-mode)
+    (save-place-mode 1)
+
+    (cond ((executable-find "chrome") (setq default-browser "chrome"))
+          ((executable-find "firefox") (setq default-browser "firefox"))
+          ((executable-find "librewolf") (setq default-browser "librewolf")))
+    (setq browse-url-browser-function 'browse-url-generic
+          browse-url-generic-program default-browser)
+
+    (when (executable-find "fd") find-program "fd")
+    (when (executable-find "rg") grep-program "rg"))
+
+  (add-hook 'emacs-startup-hook #'my/emacs-startup)
 #+end_src
 
 ** kill-region
@@ -365,46 +376,6 @@ Otherwise emacsclient doesn't initialise UI settings.
     (dired-mode . dired-omit-mode))
 #+end_src
 
-* EWW
-
-#+begin_src emacs-lisp
-  (use-package eww
-    :custom (eww-search-prefix "https://lite.duckduckgo.com/lite/?q=")
-    :bind ("C-c B" . eww))
-#+end_src
-
-* FIDO
-
-#+begin_src emacs-lisp
-  (use-package icomplete
-    :custom
-    (fido-vertical-mode t)
-    (icomplete-compute-delay 0)
-    (completion-auto-help nil))
-#+end_src
-
-* FLYSPELL
-
-#+begin_src emacs-lisp
-  (use-package flyspell
-    :hook
-    ((text-mode org-mode) . flyspell-mode)
-    (prog-mode . flyspell-prog-mode)
-    :bind (:map flyspell-mode-map
-              ("C-c s w" . flyspell-auto-correct-word)
-              ("C-c s n" . flyspell-goto-next-error)))
-#+end_src
-
-* ISEARCH
-
-#+begin_src emacs-lisp
-  (use-package isearch
-    :bind (:map isearch-mode-map)
-    ("C-c h" . help-command)
-    ("C-h" . isearch-delete-char)
-    ("C-M-h" . isearch-delete-char))
-#+end_src
-
 * LINE NUMBERS
 
 #+begin_src emacs-lisp
@@ -413,29 +384,12 @@ Otherwise emacsclient doesn't initialise UI settings.
     :hook (prog-mode . display-line-numbers-mode))
 #+end_src
 
-* LSP
-
-#+begin_src emacs-lisp
-  (use-package eglot
-    :hook (prog-mode . eglot-ensure)
-    :custom
-    (eglot-ignored-server-capabilities '(:documentOnTypeFormattingProvider))
-    :bind (:map eglot-mode-map
-                ("C-c e r" . eglot-rename)))
-
-  (use-package corfu :ensure
-    :custom
-    (corfu-cycle t)
-    (corfu-auto t)
-    :hook (prog-mode . corfu-mode))
-#+end_src
-
 * MISC
 
 #+begin_src emacs-lisp
   (use-package recentf :bind ("C-c r" . recentf))
-  (use-package savehist :hook (after-init . savehist-mode))
-  (use-package which-key :hook (after-init . which-key-mode))
+  (use-package savehist :hook (emacs-startup . savehist-mode))
+  (use-package which-key :hook (emacs-startup . which-key-mode))
   (use-package whitespace :bind ("C-c w" . whitespace-cleanup))
 #+end_src
 
@@ -486,14 +440,6 @@ Otherwise emacsclient doesn't initialise UI settings.
     (org-mode . auto-fill-mode)
     (after-save . my/tangle-emacs-org-on-save)
     (org-babel-post-tangle . my/compile-and-load-init))
-#+end_src
-
-* OUTLINE
-
-#+begin_src emacs-lisp
-  (use-package outline
-    :custom (outline-minor-mode-cycle t)
-    :hook (emacs-lisp-mode . outline-minor-mode))
 #+end_src
 
 * SHELL SCRIPT
@@ -563,52 +509,6 @@ Bulk install all the grammars as a one of task, so don't tangle!
 #+end_src
 
 * 3RD PARTY
-** ACE WINDOW
-
-#+begin_src emacs-lisp
-  (use-package ace-window :ensure
-    :bind*
-    ("M-o" . ace-window)
-    ("M-0" . ace-delete-window)
-    ("M-1" . ace-delete-other-windows)
-    :config (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
-#+end_src
-
-** CLANG FORMAT
-
-#+begin_src emacs-lisp
-  (use-package clang-format :ensure
-    :after (c-ts-mode)
-    :custom
-    (clang-format-style "file")
-    :config
-    (when (executable-find "clang-format19")
-      (setq clang-format-executable "clang-format19"))
-    :bind (:map c-ts-mode-map
-  	      ("C-i" . clang-format-region)
-  	      ("M-i" . clang-format-buffer)))
-#+end_src
-
-** COPILOT
-
-#+begin_src emacs-lisp
-  (use-package copilot :ensure)
-  (use-package copilot-chat :ensure
-    :custom (copilot-chat-default-model "oswe-vscode-prime")
-    :bind ("C-c c" . copilot-chat))
-#+end_src
-
-** EMMS
-
-#+begin_src emacs-lisp
-  (use-package emms :ensure
-    :bind ("C-c M-m" . emms-smart-browse)
-    :config
-    (emms-all)
-    (emms-default-players)
-    (emms-history-load))
-#+end_src
-
 ** GIT
 
 #+begin_src emacs-lisp
@@ -630,46 +530,12 @@ Bulk install all the grammars as a one of task, so don't tangle!
        ("Path" 99 magit-repolist-column-path nil))))
 #+end_src
 
-** GOLDEN RATIO
-
-#+begin_src emacs-lisp
-  (use-package golden-ratio :ensure :demand :config (golden-ratio-mode))
-#+end_src
-
 ** HUNGRY DELETE
 
 #+begin_src emacs-lisp
-  (use-package hungry-delete :ensure :demand
-    :init (global-hungry-delete-mode)
-    :custom (hungry-delete-join-reluctantly t))
-#+end_src
-
-** PATH FROM SHELL
-
-#+begin_src emacs-lisp
-  (use-package exec-path-from-shell :ensure
-    :hook (after-init . exec-path-from-shell-initialize))
-#+end_src
-
-** VTERM
-
-Generally better to install from OS package manager to avoid extra
-compilation step.
-
-ie) https://www.freshports.org/misc/emacs-libvterm/ ;-)
-
-#+begin_src emacs-lisp
-  (use-package vterm :ensure
-    :bind* ("C-c t" . vterm)
-    :bind (:map vterm-mode-map
-  	      ("<f1>" . help-command)
-  	      ("C-i" . vterm-send-tab)
-  	      ("<RET>" . vterm-send-return)
-  	      ("<DEL>" . vterm-send-backspace)
-  	      ("M-<DEL>" . vterm-send-meta-backspace)
-  	      ("C-l" . (lambda () (interactive) (vterm-send-key "l" nil nil t)))
-  	      ("C-g" . (lambda () (interactive) (vterm-send-key "g" nil nil t)))
-  	      ("C-u" . (lambda () (interactive) (vterm-send-key "u" nil nil t)))))
+  (use-package hungry-delete :ensure
+    :custom (hungry-delete-join-reluctantly t)
+    :hook (emacs-startup . global-hungry-delete-mode))
 #+end_src
 
 ** VUNDO
@@ -682,5 +548,5 @@ ie) https://www.freshports.org/misc/emacs-libvterm/ ;-)
 
 #+begin_src emacs-lisp
   (when (and (not window-system) (executable-find "xclip"))
-    (use-package xclip :ensure :hook (after-init . xclip-mode)))
+    (use-package xclip :ensure :hook (emacs-startup . xclip-mode)))
 #+end_src
