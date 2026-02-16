@@ -30,7 +30,6 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
   (setq initial-major-mode 'fundamental-mode)
 
   (setq c-default-style "bsd")
-  (setq completion-styles '(basic substring initials flex))
   (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
   (setq disabled-command-function nil)
   (setq fill-column 79)
@@ -39,8 +38,6 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
         '(("gnu" . "https://elpa.gnu.org/packages/")
     	("melpa" . "https://melpa.org/packages/")
     	("nongnu" . "https://elpa.nongnu.org/nongnu/")))
-
-  (setq savehist-additional-variables '(compile-command kill-ring register-alist))
 
   ;; https://emacs.stackexchange.com/a/78660
   (setq tramp-allow-unsafe-temporary-files t)
@@ -53,29 +50,27 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
 * BINDINGS
 
 #+begin_src emacs-lisp
-  (keyboard-translate ?\C-h ?\C-?) ;; act like the terminal
-  (define-key key-translation-map (kbd "C-M-h") (kbd "M-DEL"))
-  (keymap-global-set "C-c h" 'mark-defun) ;; originally on C-M-h
   (keymap-global-set "M-%" 'query-replace-regexp)
   (keymap-global-set "M-*" 'duplicate-line)
   (keymap-global-set "C-;" 'comment-line)
   (keymap-global-set "C-M-;" 'comment-box)
-  (keymap-global-set "C-^" 'copy-from-above-command)
+  (keymap-global-set "C-*" 'copy-from-above-command)
   (keymap-global-set "C-z" 'zap-up-to-char)
   (keymap-global-set "C-c f r" 'rename-visited-file)
   (keymap-global-set "C-c a" 'align-regexp)
   (keymap-global-set "C-c b" 'browse-url-at-point)
+  (keymap-global-set "C-c e" 'eshell)
   (keymap-global-set "C-c i" 'imenu)
   (keymap-global-set "C-c m" 'man) ;; run sudo makewhatis or mandb
   (keymap-global-set "C-c p" 'proced)
+  (keymap-global-set "C-c t" 'ansi-term)
   (keymap-global-set "<f5>" 'compile)
   (keymap-global-set "<f11>" 'toggle-frame-fullscreen)
-  (keymap-global-set "C-x C-b" 'switch-to-buffer) ;; DWIW!
-  (keymap-global-set "C-x M-b" 'ibuffer)
+  (keymap-global-set "C-x C-b" 'ibuffer)
   (keymap-global-set "C-x x s" 'sort-lines)
+  (keymap-global-set "C-x k" #'(lambda () (interactive) (kill-buffer (current-buffer))))
   (keymap-global-set "C-x M-k" 'kill-buffer)
   (keymap-global-set "C-x M-c" 'kill-emacs) ;; for killing the daemon
-  (keymap-global-set "C-x k" #'(lambda () (interactive) (kill-buffer (current-buffer))))
 #+end_src
 
 * DEFUNS
@@ -152,9 +147,7 @@ Otherwise emacsclient doesn't initialise UI settings.
     (if window-system
         (if (eq system-type 'darwin)
             (set-frame-font "Monaco 13" nil t)
-  	(set-frame-font "Monospace 13" nil t)))
-    
-    (normal-erase-is-backspace-mode))
+  	(set-frame-font "Monospace 13" nil t))))
 
   (if (daemonp)
       (add-hook 'after-make-frame-functions #'my/init-frame (selected-frame))
@@ -168,22 +161,15 @@ Otherwise emacsclient doesn't initialise UI settings.
     "Expensive stuff to make sure we don't run until after Emacs starts"
     
     (column-number-mode)
-
-    (setq display-time-default-load-average 'nil)
-    (setq display-time-format "%H:%M %a %d/%m")
     (display-battery-mode)
     (display-time)
 
     (electric-pair-mode)
     (global-subword-mode)
-    (global-prettify-symbols-mode)
     (save-place-mode 1)
 
-    (cond ((executable-find "chrome") (setq default-browser "chrome"))
-          ((executable-find "firefox") (setq default-browser "firefox"))
-          ((executable-find "librewolf") (setq default-browser "librewolf")))
     (setq browse-url-browser-function 'browse-url-generic
-          browse-url-generic-program default-browser)
+          browse-url-generic-program "firefox")
 
     (when (executable-find "fd") find-program "fd")
     (when (executable-find "rg") grep-program "rg"))
@@ -199,10 +185,10 @@ Otherwise emacsclient doesn't initialise UI settings.
     (interactive "p")
     (let (p1 p2)
       (if (use-region-p)
-        (progn (setq p1 (region-beginning))
-               (setq p2 (region-end)))
+  	(progn (setq p1 (region-beginning))
+                 (setq p2 (region-end)))
         (progn (setq p1 (line-beginning-position))
-             (setq p2 (line-beginning-position (+ arg 1)))))
+               (setq p2 (line-beginning-position (+ arg 1)))))
       (kill-region p1 p2)))
 
   (global-set-key [remap kill-region] 'ts-kill-region)
@@ -216,10 +202,10 @@ Otherwise emacsclient doesn't initialise UI settings.
     (interactive "p")
     (let (p1 p2)
       (if (use-region-p)
-        (progn (setq p1 (region-beginning))
-               (setq p2 (region-end)))
+  	(progn (setq p1 (region-beginning))
+                 (setq p2 (region-end)))
         (progn (setq p1 (line-beginning-position))
-             (setq p2 (line-beginning-position (+ arg 1)))))
+               (setq p2 (line-beginning-position (+ arg 1)))))
       (kill-ring-save p1 p2)
       (goto-char p2)))
 
@@ -235,7 +221,6 @@ Otherwise emacsclient doesn't initialise UI settings.
     (switch-to-buffer (other-buffer (current-buffer) 1)))
 
   (keymap-global-set "C-c l" 'my/last-buffer)
-  (keymap-global-set "C-<escape>" 'my/last-buffer)
 #+end_src
 
 ** move-beginning-of-line
@@ -260,14 +245,14 @@ Otherwise emacsclient doesn't initialise UI settings.
   With prefix ARG, omit path."
     (interactive "P")
     (let ((filename (if (equal major-mode 'dired-mode)
+                        (if arg
+                            (file-name-nondirectory
+                             (directory-file-name
+                              (file-name-directory default-directory)))
+  			default-directory)
                       (if arg
-                          (file-name-nondirectory
-                           (directory-file-name
-                            (file-name-directory default-directory)))
-                        default-directory)
-                    (if arg
-                        (file-name-nondirectory buffer-file-name)
-                      (buffer-file-name)))))
+  			(file-name-nondirectory buffer-file-name)
+                        (buffer-file-name)))))
       (when filename
         (kill-new filename)
         (message "Saved '%s' to kill-ring!" filename))))
@@ -290,18 +275,20 @@ Otherwise emacsclient doesn't initialise UI settings.
 ** sudo shenanigans
 
 #+begin_src emacs-lisp
-  (defun my/sudoedit ()
+  (defun my/reopen-as-root ()
     "Re-open current file as root."
     (interactive)
-    (find-alternate-file (concat "/sudo::" buffer-file-name)))
+    (find-alternate-file
+     (concat (if (executable-find "doas") "/doas::" "/sudo::") buffer-file-name)))
 
-  (defun my/sudo-find-file (file-name)
+  (defun my/find-file-as-root (file-name)
     "Like find file, but opens the file as root."
     (interactive "FFind file (as root): ")
-    (find-file (concat "/sudo::" file-name)))
+    (find-file
+     (concat (if (executable-find "doas") "/doas::" "/sudo::") file-name)))
 
-  (keymap-global-set "C-c f s" 'my/sudoedit)
-  (keymap-global-set "C-x M-f" 'my/sudo-find-file)
+  (keymap-global-set "C-c f s" 'my/reopen-as-root)
+  (keymap-global-set "C-x M-f" 'my/find-file-as-root)
 #+end_src
 
 ** toggle-fill
@@ -311,10 +298,10 @@ Otherwise emacsclient doesn't initialise UI settings.
     "Like `fill-paragraph', but unfill if used twice."
     (interactive)
     (let ((fill-column
-         (if (eq last-command 'my/toggle-fill)
-             (progn (setq this-command nil)
-                    (point-max))
-           fill-column)))
+  	 (if (eq last-command 'my/toggle-fill)
+               (progn (setq this-command nil)
+                      (point-max))
+             fill-column)))
       (call-interactively #'fill-paragraph)))
 
   (keymap-global-set "M-q" 'my/toggle-fill)
@@ -337,41 +324,21 @@ Otherwise emacsclient doesn't initialise UI settings.
       (interactive)
       (find-alternate-file ".."))
 
-    (defun my/dired-do-delete-skip-trash (&optional arg)
-      (interactive "P")
-      (let ((delete-by-moving-to-trash nil))
-        (dired-do-delete arg)))
-
     (defun my/dired-get-size ()
       "Get cumlative size of marked or current item."
       (interactive)
       (let ((files (dired-get-marked-files)))
         (with-temp-buffer
-        (apply 'call-process "du" nil t nil "-sch" files)
-        (message "Size of all marked files: %s"
-                 (progn
-                   (re-search-backward "\\(^[0-9.,]+[A-Za-z]+\\).*total$")
-                   (match-string 1))))))
-
-    (defun my/dired-beginning-of-buffer ()
-      "Go to first file in directory."
-      (interactive)
-      (goto-char (point-min))
-      (dired-next-line 1))
-
-    (defun my/dired-end-of-buffer ()
-      "Go to last file in directory."
-      (interactive)
-      (goto-char (point-max))
-      (dired-next-line -1))
+  	(apply 'call-process "du" nil t nil "-sch" files)
+  	(message "Size of all marked files: %s"
+  		 (progn
+                     (re-search-backward "\\(^[0-9.,]+[A-Za-z]+\\).*total$")
+                     (match-string 1))))))
 
     :bind (:map dired-mode-map
-              ("," . my/dired-beginning-of-buffer)
-              ("." . my/dired-end-of-buffer)
-              ("?" . my/dired-get-size)
-              ("C-d" . my/dired-do-delete-skip-trash)
-              ("b" . my/dired-up-directory)
-              ("f" . 'dired-find-alternate-file))
+                ("?" . my/dired-get-size)
+                ("b" . my/dired-up-directory)
+                ("f" . 'dired-find-alternate-file))
     :hook
     (dired-mode . dired-omit-mode))
 #+end_src
@@ -412,27 +379,27 @@ Otherwise emacsclient doesn't initialise UI settings.
      'org-babel-load-languages
      '((shell . t)))
     (setq org-structure-template-alist
-        (append org-structure-template-alist
-                '(("cl" . "src common-lisp")
-                  ("el" . "src emacs-lisp")
-                  ("go" . "src go")
-                  ("kr" . "src c")
-                  ("nx" . "src nix")
-                  ("py" . "src python")
-                  ("sh" . "src shell")
-                  ("sq" . "src sql")
-                  ("tx" . "src text"))))
+  	(append org-structure-template-alist
+  		'(("cl" . "src common-lisp")
+                    ("el" . "src emacs-lisp")
+                    ("go" . "src go")
+                    ("kr" . "src c")
+                    ("nx" . "src nix")
+                    ("py" . "src python")
+                    ("sh" . "src shell")
+                    ("sq" . "src sql")
+                    ("tx" . "src text"))))
     (defun my/tangle-emacs-org-on-save ()
       (interactive)
       (when (string-equal "emacs.org"
-                        (file-name-nondirectory
-                         (buffer-file-name (current-buffer))))
+  			(file-name-nondirectory
+  			 (buffer-file-name (current-buffer))))
         (org-babel-tangle)))
     (defun my/compile-and-load-init ()
       (interactive)
       (when (string-equal "init.el"
-                        (file-name-nondirectory
-                         (buffer-file-name (current-buffer))))
+  			(file-name-nondirectory
+  			 (buffer-file-name (current-buffer))))
         (byte-compile-file (buffer-file-name (current-buffer)))
         (load (buffer-file-name (current-buffer)))))
     :bind (:map org-mode-map ("C-c i" . org-goto))
@@ -449,67 +416,7 @@ Otherwise emacsclient doesn't initialise UI settings.
     :hook (after-save . executable-make-buffer-file-executable-if-script-p))
 #+end_src
 
-* TREESIT
-
-https://www.masteringemacs.org/article/how-to-get-started-tree-sitter
-
-Bulk install all the grammars as a one of task, so don't tangle!
-
-#+begin_src emacs-lisp :tangle no
-  (setq treesit-language-source-alist
-        '((c "https://github.com/tree-sitter/tree-sitter-c")
-        (cpp "https://github.com/tree-sitter/tree-sitter-cpp")
-        (bash "https://github.com/tree-sitter/tree-sitter-bash")
-        (cmake "https://github.com/uyha/tree-sitter-cmake")
-        (css "https://github.com/tree-sitter/tree-sitter-css")
-        (elisp "https://github.com/Wilfred/tree-sitter-elisp")
-        (go "https://github.com/tree-sitter/tree-sitter-go")
-        (html "https://github.com/tree-sitter/tree-sitter-html")
-        (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
-        (json "https://github.com/tree-sitter/tree-sitter-json")
-        (lua "https://github.com/tree-sitter-grammars/tree-sitter-lua")
-        (make "https://github.com/alemuller/tree-sitter-make")
-        (markdown "https://github.com/ikatyang/tree-sitter-markdown")
-        (nix "https://github.com/nix-community/tree-sitter-nix")
-        (python "https://github.com/tree-sitter/tree-sitter-python")
-        (ruby "https://github.com/tree-sitter/tree-sitter-ruby")
-        (toml "https://github.com/tree-sitter/tree-sitter-toml")
-        (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
-        (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
-        (yaml "https://github.com/ikatyang/tree-sitter-yaml")))
-  (mapc #'treesit-install-language-grammar (mapcar #'car treesit-language-source-alist))
-#+end_src
-
-#+begin_src emacs-lisp
-  (use-package treesit
-    :custom
-    (c-ts-mode-indent-style "bsd")
-    (major-mode-remap-alist
-     '((c-mode . c-ts-mode)
-       (c++-mode . c++-ts-mode)
-       (css-mode . css-ts-mode)
-       (html-mode . html-ts-mode)
-       (java-mode . java-ts-mode)
-       (js-mode . js-ts-mode)
-       (python-mode . python-ts-mode)
-       (ruby-mode . ruby-ts-mode)
-       (sh-mode . bash-ts-mode)
-       (typescript-mode . typescript-ts-mode)))
-    :mode
-    ("\\.h\\'" . c-ts-mode)
-    ("\\Dockerfile\\'" . dockerfile-ts-mode)
-    ("\\.go\\'" . go-ts-mode)
-    ("\\.json\\'" . json-ts-mode)
-    ("\\.lua\\'" . lua-ts-mode)
-    ("\\.nix\\'" . nix-ts-mode)
-    ("\\.php\\'" . php-ts-mode)
-    ("\\.rs\\'" . rust-ts-mode)
-    ("\\.yaml\\'" . yaml-ts-mode)
-    ("\\.yml\\'" . yaml-ts-mode))
-#+end_src
-
 * 3RD PARTY
-
 ** GIT TIMEMACHINE
 
 #+begin_src emacs-lisp

@@ -2,491 +2,15 @@
 #+PROPERTY: header-args+ :mkdirp yes
 #+PROPERTY: header-args+ :results silent
 #+PROPERTY: header-args+ :padline no
-* APM
-** SUSPEND
-#+BEGIN_SRC sh :tangle /sudo::/etc/apm/suspend :tangle-mode (identity #o755)
-  #!/bin/sh
-  pkill -USR1 xidle
-#+END_SRC
-** CHARGING
-#+BEGIN_SRC sh :tangle /sudo::/etc/sensorsd/charging :tangle-mode (identity #o755)
-  #! /bin/sh
-
-  dbglog=/var/log/charging
-
-  logger=/usr/bin/logger
-
-  device=$1         # e.g. acpibat0
-  devtype=$2        # "watthour"
-  sensornum=$3      # e.g. "3"
-  curval=$4         # 1 = discharging, 2 = charging
-  lowlim_watthr=$5
-
-  date                                >> $dbglog
-  echo device        = $device        >> $dbglog
-  echo devtype       = $devtype       >> $dbglog
-  echo sensornum     = $sensornum     >> $dbglog
-  echo curval        = $curval        >> $dbglog
-  echo lowlim_watthr = $lowlim_watthr >> $dbglog
-
-  if [ "$curval" = "1" ]; then
-
-      # Run the discharging script with the appropriate parameters.
-      watthours=`sysctl -n hw.sensors.acpibat0.watthour3 | awk '{print $1}'`
-
-      if [ "$watthours" ]; then
-
-	  /etc/apm/discharging "acpibat0" "watthour" "3" "$watthours" "Wh" "$lowlim_watthr" "Wh"
-
-      fi
-
-  elif [ "$curval" = "2" ]; then
-
-      # Charging.  We probably want to abort any shutdowns...
-      message="Stopping any shutdowns that may have been issued."
-      echo $message >> $dbglog
-      $logger "$message"
-      pkill -9 shutdown
-
-  fi
-
-  echo "" >> $dbglog
-#+END_SRC
-** DISCHARGING
-#+BEGIN_SRC sh :tangle /sudo::/etc/sensorsd/discharging :tangle-mode (identity #o755)
-  #!/bin/sh
-
-  dbglog=/var/log/discharging
-
-  logger=/usr/bin/logger
-  shutdown=/sbin/shutdown
-
-  device=$1         # e.g. acpibat0
-  devtype=$2        # "watthour"
-  sensornum=$3      # e.g. "3"
-  curval=$4         # floating point number
-  curval_units=$5   #"Ah" or "Wh"
-  lowlim=$6         # floating point number
-  lowlim_units=$7   #"Ah" or "Wh"
-
-  # calculate exception
-  if (awk "BEGIN {exit(!($curval < $lowlim))}"); then
-      exception='below'
-  else
-      exception='within'
-  fi
-
-  date                                   >> $dbglog
-  echo device    = $device               >> $dbglog
-  echo devtype   = $devtype              >> $dbglog
-  echo sensornum = $sensornum            >> $dbglog
-  echo exception = $exception            >> $dbglog
-  echo curval    = $curval $curval_units >> $dbglog
-  echo lowlim    = $lowlim $lowlim_units >> $dbglog
-
-  # Handle the potential low-battery condition.
-  if [ "$device" = "acpibat0" -a "$sensornum" = "3" -a "$exception" = "below" ]; then
-
-      sysctl hw.sensors.${device}.raw0 >> $dbglog
-      charging_stat=`sysctl -n hw.sensors.${device}.raw0 | awk '{print $1}'`
-      echo "Charging status code = $charging_stat" >> $dbglog
-
-      if [ "$charging_stat" = "1" ]; then
-
-	  message="Low battery on $device $devtype $sensornum. Shutting down."
-	  echo $message >> $dbglog
-	  $logger "$message"
-	  $shutdown -p +5 "$message"
-
-      elif [ "$charging_stat" = "2" ]; then
-
-	  message="Low battery on $device $devtype $sensornum. Battery is charging."
-	  echo "$message" >> $dbglog
-	  $logger "$message"
-
-      else
-
-	  message="Low battery on $device $devtype $sensornum. Unknown code $charging_stat."
-	  echo "$message" >> $dbglog
-	  $logger "$message"
-
-      fi
-
-  fi
-
-  echo "" >> $dbglog
-#+END_SRC
-** SENSORSD
-#+BEGIN_SRC conf :tangle /sudo::/etc/sensorsd.conf :tangle-mode (identity #o644)
-  # If the battery gets too low, shut down the machine in an orderly
-  # fashion.  When the battery charging status changes, make sure we are still
-  # doing the right thing.
-  #
-  # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  # IF YOU CHANGE THE LIMITS ON THE WATT RULES, REMEMBER TO CHANGE
-  # THEM ON THE RAW0 ACTION AS WELL
-  # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-  # low limit 20 Wh
-  hw.sensors.acpibat0.watthour3:low=9Wh:command=/etc/sensorsd/discharging %x %t %n %2 %3
-
-  # When wall power goes off, we need to doublecheck the battery level.
-  # When wall power goes on, we need to kill any pending shutdowns.
-  hw.sensors.acpibat0.raw0:command=/etc/sensorsd/charging %x %t %n %2 "9"
-#+END_SRC
-* CWM
-#+BEGIN_SRC conf :tangle ~/.cwmrc
-  # MISC
-  borderwidth 1
-  gap 0 0 36 0
-  sticky yes
-  snapdist
-  moveamount 2
-  ignore xclock
-  ignore tint2
-
-  # COLORS
-  color activeborder '#0044DD'
-  color groupborder '#00BB44'
-  color inactiveborder '#808080'
-  color ungroupborder '#BB8800'
-  color urgencyborder '#FF0000'
-
-  color menubg '#000000'
-  color menufg '#0044BB'
-  color font '#CCCCCC'
-  color selfont '#FFFFFF'
-
-  # AUTOGROUP
-  # autogroup 1 Emacs
-  # autogroup 1 XTerm
-  # autogroup 2 Chromium-browser
-  # autogroup 2 Firefox
-
-  # KEYBOARD
-  unbind-key all
-
-  bind-key 4-BackSpace restart
-  bind-key 4C-BackSpace quit
-
-  bind-key 4-Return terminal
-  bind-key 4C-Return 'tabbed -c xterm -into'
-  bind-key 4-t 'xterm -e tmux'
-  bind-key 4C-t 'xterm -e tmux attach'
-  bind-key 4-e 'emacsclient -c -a ""'
-  bind-key 4C-e 'emacs'
-  bind-key 4-w chrome
-  bind-key 4C-w firefox
-  bind-key 4-p maim
-  bind-key 4C-p 'maim -s'
-  bind-key 4-f thunar
-  bind-key 4C-f 'xterm -e ranger'
-  bind-key 4-Delete lock
-
-  bind-key 4-c menu-cmd
-  bind-key 4-s menu-ssh
-  bind-key 4-r menu-exec
-  bind-key 4C-r menu-exec-wm
-  bind-key 4-g menu-group
-  bind-key 4-a menu-window
-  bind-key 4C-a menu-window-hidden
-
-  # bind-key M-Tab group-cycle
-  # bind-key MS-Tab group-rcycle
-
-  bind-key 4-1 group-only-1
-  bind-key 4-2 group-only-2
-  bind-key 4-3 group-only-3
-  bind-key 4-4 group-only-4
-  bind-key 4-5 group-only-5
-  bind-key 4-6 group-only-6
-  bind-key 4-7 group-only-7
-  bind-key 4-8 group-only-8
-  bind-key 4-9 group-only-9
-
-  bind-key 4S-1 group-toggle-1
-  bind-key 4S-2 group-toggle-2
-  bind-key 4S-3 group-toggle-3
-  bind-key 4S-4 group-toggle-4
-  bind-key 4S-5 group-toggle-5
-  bind-key 4S-6 group-toggle-6
-  bind-key 4S-7 group-toggle-7
-  bind-key 4S-8 group-toggle-8
-  bind-key 4S-9 group-toggle-9
-
-  bind-key 4C-1 window-movetogroup-1
-  bind-key 4C-2 window-movetogroup-2
-  bind-key 4C-3 window-movetogroup-3
-  bind-key 4C-4 window-movetogroup-4
-  bind-key 4C-5 window-movetogroup-5
-  bind-key 4C-6 window-movetogroup-6
-  bind-key 4C-7 window-movetogroup-7
-  bind-key 4C-8 window-movetogroup-8
-  bind-key 4C-9 window-movetogroup-9
-
-  bind-key 4-0 group-toggle-all
-  bind-key 4C-0 window-group
-
-  # bind-key C-Tab window-cycle
-  # bind-key CS-Tab window-rcycle
-  # bind-key 4-Tab window-cycle-ingroup
-  # bind-key 4C-Tab window-rcycle-ingroup
-
-  bind-key C-F4 window-delete
-  bind-key C-q window-delete
-  bind-key C-F7 window-menu-label
-  bind-key C-F8 window-stick
-  bind-key C-F9 window-hide
-  bind-key C-F10 window-maximize
-  bind-key CS-F10 window-vmaximize
-  bind-key 4C-F10 window-hmaximize
-  bind-key C-F11 window-fullscreen
-  bind-key C-F12 window-vtile
-  bind-key CS-F12 window-htile
-
-  bind-key 4-k window-move-up-big
-  bind-key 4-j window-move-down-big
-  bind-key 4-l window-move-right-big
-  bind-key 4-h window-move-left-big
-
-  bind-key 4C-k window-resize-up-big
-  bind-key 4C-j window-resize-down-big
-  bind-key 4C-l window-resize-right-big
-  bind-key 4C-h window-resize-left-big
-
-  # MOUSE
-  unbind-mouse all
-
-  bind-mouse R-1 menu-window
-  bind-mouse R-2 menu-window-hidden
-  bind-mouse R-3 menu-cmd
-  bind-mouse R-4 group-cycle
-  bind-mouse R-5 group-rcycle
-
-  bind-mouse C-1 window-move
-  bind-mouse C-2 window-group
-  bind-mouse C-3 window-resize
-  bind-mouse C-4 window-lower
-  bind-mouse C-5 window-raise
-
-  # MENU
-  command 'chrome'       'chrome'
-  command 'firefox'      'firefox'
-  command 'emacs'        'emacs'
-  command 'emacsclient'  'emacsclient -c -a ""'
-  command 'xterm'        'xterm'
-  command 'xterm tabbed' 'tabbed -c xterm -into'
-  command 'tmux'         'xterm -e tmux'
-  command 'tmux attach'  'xterm -e tmux attach'
-  command 'thunar'       'thunar'
-  command 'gimp'         'gimp'
-  command 'libreoffice'  'libreoffice'
-  command 'maim'         'maim'
-  command 'maim select'  'maim -s'
-  command 'xlock'        'xlock'
-  command 'zzz'          'zzz'
-  command 'reboot'       'shutdown -r now'
-  command 'shutdown'     'shutdown -p now'
-#+END_SRC
-* FVWM
-#+BEGIN_SRC conf :tangle ~/.fvwmrc
-  # STARTUP
-  AddToFunc InitFunction    "I" Module FvwmPager * *
-  +                         "I" Module FvwmWinList
-  +                         "I" exec /usr/local/bin/zap -f tint2
-  +                         "I" exec /usr/local/bin/zap -f pixelclock
-  +                         "I" exec /usr/X11R6/bin/xclock -g -0+0
-
-  AddToFunc RestartFunction "I" Module FvwmPager * *
-  +                         "I" Module FvwmWinList
-
-  # MISC
-  ModulePath /usr/X11R6/lib/X11/fvwm
-  PixmapPath /usr/X11R6/include/X11/pixmaps
-  IconPath   /usr/X11R6/include/X11/bitmaps
-
-  EdgeResistance 10 5
-  EdgeScroll 100 100
-  ClickTime 750
-
-  WindowFont -adobe-times-bold-r-*-*-14-*-*-*-*-*-*-*
-  IconFont -adobe-helvetica-bold-r-*-*-10-*-*-*-*-*-*-*
-
-  HilightColor white blue
-  MenuStyle #4d4d4d #bebebe #e7e7e7 -adobe-times-bold-r-*-*-12-*-*-*-*-*-*-* win
-
-  DeskTopSize 0x4
-
-  ColormapFocus FollowsFocus
-
-  # STYLES
-  Style "*"           NoTitle, BorderWidth 6
-  Style "*"           Color #bebebe/darkred
-  Style "*"           MWMFunctions, MWMDecor
-  Style "*"           DecorateTransient, NoPPosition
-  Style "*"           IconBox -70 140 -1 -140
-  Style "*"           SloppyFocus
-  Style "*"           RandomPlacement, SmartPlacement
-
-  Style "Fvwm*"       Sticky, WindowListSkip, BorderWidth 0, CirculateSkipIcon, CirculateSkip, StaysOnTop, NoHandles
-  Style "XClock"      Sticky, WindowListSkip, BorderWidth 0, CirculateSkipIcon, CirculateSkip, StaysOnTop, NoHandles
-
-  Style "XTerm"       Icon xterm.xpm, SloppyFocus
-  Style "xcalc"       Icon xcalc.xpm, NoButton 2,RandomPlacement,ClickToFocus
-  Style "xconsole"    Icon rterm.xpm, WindowListSkip, Sticky
-
-  # FUNCTIONS
-  AddToFunc Move-or-Raise         "I" Raise
-  +                               "M" Move
-  +                               "D" Lower
-
-  AddToFunc Move-or-Raise2        "M" Raise
-  +                               "M" Move
-  +                               "D" Lower
-
-  AddToFunc Maximize-Func         "M" Maximize 0 100
-  +                               "C" Maximize 0 80
-  +                               "D" Maximize 100 100
-
-  AddToFunc Move-or-Iconify       "I" Raise
-  +                               "M" Move
-  +                               "D" Iconify
-
-  AddToFunc Resize-or-Raise       "I" Raise
-  +                               "M" Resize
-  +                               "D" Lower
-
-  AddToFunc Resize-or-Raise2      "M" Raise
-  +                               "M" Resize
-  +                               "D" Lower
-
-  AddToFunc Iconify-and-Raise     "I" Iconify
-  +                               "I" Raise
-
-  AddToFunc FocusAndWarp          "I" Focus
-  +                               "I" WarpToWindow 2p 2p
-
-  AddToFunc DeiconifyFocusAndWarp "I" Iconify -1
-  +                               "I" FocusAndWarp
-
-  AddToFunc ChangeDefaultFocus    "I" Style "*" $0
-  +                               "I" Recapture
-
-  # MENUS
-  AddToMenu RootMenu      "Root Menu"        Title
-  +                       "X&Term"           Exec exec xterm
-  +                       "Tmux"             Exec exec xterm -e tmux
-  +                       "&Chrome"          Exec exec chrome
-  +                       "&Firefox"         Exec exec firefox
-  +                       "&Emacs"           Exec exec xterm -e emacsclient -nw -c -a ""
-  +                       "Screenshot"       Exec exec maim
-  +                       "&Scrot Select"    Exec exec maim -s
-  +                       "&Restart Fvwm"    Restart fvwm
-  +                       "Start cwm"        Restart cwm
-  +                       "&XLock"           Exec exec xlock
-  +                       "Logout"           Quit
-  +                       "&ZZZ"             Exec exec zzz
-  +                       "Reboot"           Exec exec shutdown -r now
-  +                       "Shutdown"         Exec exec shutdown -h now
-
-  AddToMenu Window-Ops    "&Move%mini.move.xpm%"               Move
-  +                       "&Resize%mini.resize.xpm%"           Resize
-  +                       "R&aise%mini.raise.xpm%"             Raise
-  +                       "&Lower%mini.lower.xpm%"             Lower
-  +                       "(De)&Iconify%mini.iconify.xpm%"     Iconify
-  +                       "(Un)&Stick%mini.stick2.xpm%"        Stick
-  +                       "(Un)Ma&ximize%mini.maximize.xpm%"   Maximize 92 100
-  +                       "(Un)&Fullscreen%mini.maximize.xpm%" Maximize
-  +                       "&Delete%mini.excl.xpm%"             Delete
-  +                       "&Close%mini.cut.xpm%"               Close
-  +                       "Destroy%mini.destroy.xpm%"          Destroy
-  +                       "Refresh Window%mini.refresh.xpm%"   RefreshWindow
-
-  # MOUSE
-  Mouse 1 R    A WindowList
-  Mouse 2 R    A Menu Window-Ops Nop
-  Mouse 3 R    A Menu RootMenu Nop
-  Mouse 4 R    A Scroll -100000 0
-  Mouse 5 R    A Scroll 100000 0
-
-  Mouse 1 TS  A Move-or-Raise
-  Mouse 3 TS  A Resize-or-Raise
-  Mouse 2 FTS A RaiseLower
-  Mouse 1 F   A Resize-or-Raise
-  Mouse 3 F   A Move-or-Raise
-
-  Mouse 1 I    A Move-or-Iconify
-  Mouse 2 I    A RaiseLower
-  Mouse 3 I    A Iconify
-
-  # KEYS
-  Key F4        A C  Close
-  Key F5        A C  Destroy
-  Key F6        A C  Stick
-  Key F7        A C  Move
-  Key F8        A C  Resize
-  Key F9        A C  Iconify
-  Key F10       A C  Maximize 92 100
-  Key F11       A C  Maximize
-
-  Key Escape    A C  Next [CurrentPage] FocusAndWarp
-  Key Escape    A CS Prev [CurrentPage] FocusAndWarp
-
-  Key Escape    A M  Next [*] FocusAndWarp
-  Key Escape    A MS Prev [*] FocusAndWarp
-
-  Key k         A 4  Scroll -100000 0
-  Key j         A 4  Scroll 100000 0
-
-  Key b         A 4  Exec exec chrome
-  Key b         A 4C Exec exec firefox
-  Key c         A 4  Menu RootMenu Root c c
-  Key e         A 4  Exec exec xterm -e emacsclient -nw -c -a ''
-  Key e         A 4C Exec exec xterm -e emacs -nw
-  Key p         A 4  Exec exec maim
-  Key p         A 4C Exec exec maim -s
-  Key r         A 4  Exec exec dmenu_run -nb darkblue -nf grey90 -sb darkred -sf white -fn "Monospace:Bold"
-  Key Return    A 4  Exec exec xterm
-  Key space     A 4  Menu Window-Ops Root c c
-  Key t         A 4  Exec exec xterm -e tmux
-  Key t         A 4C Exec exec xterm -e tmux attach
-  Key w         A 4  WindowList Root c c "Prev [*] FocusAndWarp"
-  Key w         A 4C WindowList Root c c "Next [*] FocusAndWarp"
-
-  Key BackSpace A 4  Restart fvwm
-  Key BackSpace A 4C Quit
-
-  # MODULES
-  ,,*FvwmIdentBack MidnightBlue
-  ,,*FvwmIdentFore Yellow
-  ,,*FvwmIdentFont -adobe-helvetica-medium-r-*-*-12-*-*-*-*-*-*-*
-
-  ,,*FvwmPagerFont none
-  ,,*FvwmPagerBack darkblue
-  ,,*FvwmPagerFore white
-  ,,*FvwmPagerHilight #2d2d2d
-  ,,*FvwmPagerGeometry 120x240-0--2
-  ,,*FvwmPagerSmallFont 5x8
-
-  ,,*FvwmWinListBack #908090
-  ,,*FvwmWinListFore Black
-  ,,*FvwmWinListFont -adobe-helvetica-bold-r-*-*-10-*-*-*-*-*-*-*
-  ,,*FvwmWinListAction Click1 Iconify -1,FocusAndWarp
-  ,,*FvwmWinListAction Click3 Iconify
-  ,,*FvwmWinListAction Click2 Module "FvwmIdent" FvwmIdent
-  ,,*FvwmWinListUseIconNames
-  ,,*FvwmWinListUseSkipList
-  ,,*FvwmWinListGeometry -0+29
-  ,,*FvwmWinListLeftJustify
-  ,,*FvwmWinListMaxWidth 120
-#+END_SRC
 * KSH
 ** PROFILE
 
 #+BEGIN_SRC sh :tangle ~/.profile
-  PATH=$HOME/bin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin:/usr/games:/usr/libexec:/usr/local/libexec:.
+  PATH=$HOME/bin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin
+  PATH=$PATH:/usr/games:/usr/libexec:/usr/local/libexec:.
+  HISTCONTROL=ignoredups:ignorespace
   HISTFILE=$HOME/.ksh_history
-  HISTSIZE=4242
+  HISTSIZE=4096
   ENV=$HOME/.kshrc
   export PATH HOME TERM HISTORY HISTSIZE ENV
 #+END_SRC
@@ -499,11 +23,6 @@
   else
       PS1='\[\e[1;32m\]\u@\h\[\e[1;33m\]:\[\e[1;35m\]\w\n\[\e[1;33m\]\$\[\e[m\] '
   fi
-
-  set -o emacs
-  set -o csh-history
-
-  stty kill  # for emacs vterm
 
   alias cp='cp -i'
   alias df='df -h'
@@ -519,7 +38,6 @@
   alias poweroff='doas shutdown -p now'
   alias reboot='doas shutdown -r now'
   alias rm='rm -i'
-  alias se='sudoedit'
   tmux_create_or_attach () {
       [ -z "$TMUX" ] && \
           { tmux -q has-session && tmux attach -d || tmux -u; } || \
@@ -527,90 +45,38 @@
   }
   alias t='tmux_create_or_attach'
   alias x='startx'
+
+  set -o emacs
+  set -o csh-history
+
+  stty kill  # fix backward kill in Emacs' ansi-term
 #+END_SRC
 
-* MG
-#+BEGIN_SRC conf :tangle ~/.mg
-  c-mode
-  set-default-mode fill
-  set-default-mode indent
-#+END_SRC
-* VI
-#+BEGIN_SRC conf :tangle ~/.nexrc
-  set autoindent
-  set autowrite
-  set beautify
-  set ruler
-  set shiftwidth=4
-  set showmatch
-  set showmode
-  set tabstop=4
-#+END_SRC
 * WSCONS
 
-#+BEGIN_SRC conf :tangle /sudo::/etc/wsconsctl.conf
-  #	$OpenBSD: wsconsctl.conf,v 1.2 2021/03/24 18:50:54 bru Exp $
-  #
-  # wscons configurable parameters
-  #
-  keyboard.repeat.del1=200	# change keyboard repeat/delay
+#+name: :tangle /doas::/etc/wsconsctl.conf
+#+BEGIN_SRC conf
+  keyboard.repeat.del1=200
   keyboard.repeat.deln=50
-  keyboard.backlight=0		# change keyboard backlight
-  #keyboard.encoding=ru		# use different keyboard encoding
-  #keyboard.bell.volume=0		# mute keyboard beep
-  #display.vblank=on		# enable vertical sync blank for screen burner
-  #display.screen_off=60000	# set screen burner timeout to 60 seconds
-  #display.msact=off		# disable screen unburn w/ mouse
-  mouse1.tp.tapping=1,3,2		# enable tapping with default button mappings;
-  				# for customized mappings, list 3 button codes
-  mouse1.tp.mtbuttons=1		# enable button clicking with multiple fingers
-  mouse1.reverse_scrolling=1	# enable so-called "natural" scrolling
+  keyboard.backlight=0
+  mouse1.tp.tapping=1,3,2
+  mouse1.tp.mtbuttons=1
+  mouse1.reverse_scrolling=1
 #+END_SRC
 
 * XORG
 ** XDEFAULTS
+
 #+NAME: Xdefaults
 #+BEGIN_SRC conf :tangle ~/.Xdefaults
-  ! $OpenBSD: dot.Xdefaults,v 1.3 2014/07/10 10:22:59 jasper Exp $
-  XClock*analog: false
-  XClock*reverseVideo: true
-  XClock*foreground: white
-  XClock*strftime: %H:%M %Y/%m/%d
-
-  XIdle.area: 4
-  XIdle.delay: 2
-  XIdle.position: se
-  XIdle.program: /usr/X11R6/bin/xlock
-  XIdle.timeout: 300
-
-  XLock.dpmsstandby: 2
-  XLock.dpmssuspend: 4
-  XLock.dpmsoff: 6
-  XLock.mode: blank
-  XLock.program: /usr/games/fortune -os
-
-  Xft.dpi: 96
-  Xft.antialias: true
-  Xft.rgba: rgb
-  Xft.hinting: true
-  Xft.hintstyle: hintslight
-  Xft.autohint: false
-  Xft.lcdfilter: lcddefault
-
-  XTerm*BorderWidth: 0
-  XTerm*allowBoldFonts: false
-  XTerm*backarrowKeyIsErase: true
-  XTerm*faceName: monospace:size=13
+  XTerm*faceName: monospace:size=9
   XTerm*fullscreen: never
-  XTerm*locale: true
   XTerm*loginShell: true
   XTerm*metaSendsEscape: true
   XTerm*reverseVideo: true
   XTerm*scrollBar: false
   XTerm*selectToClipboard: true
   XTerm*termName: xterm-256color
-  XTerm*ttyModes: erase^? kill ^U
-  XTerm*utf8: 1
 #+END_SRC
 
 #+BEGIN_SRC conf :noweb yes :tangle ~/.Xresources
@@ -619,137 +85,19 @@
 
 ** XENODM
 
-#+name :tangle /sudo::/etc/X11/xenodm/xenodm-config :tangle-mode (identity #o644)
+#+name /etc/X11/xenodm/xenodm-config
 #+BEGIN_SRC conf
-  ! $OpenBSD: xenodm-config.cpp,v 1.1 2016/10/23 08:30:37 matthieu Exp $
-
-  DisplayManager.authDir: /etc/X11/xenodm
-  DisplayManager.errorLogFile:    /var/log/xenodm.log
-  DisplayManager.keyFile:         /etc/X11/xenodm/xenodm-keys
-  DisplayManager.servers:         /etc/X11/xenodm/Xservers
-  DisplayManager*resources:       /etc/X11/xenodm/Xresources
-  ! All displays should use authorization, but we cannot be sure
-  ! X terminals may not be configured that way, so they will require
-  ! individual resource settings.
-  DisplayManager*authorize:       true
-  !
-  DisplayManager*startup:         /etc/X11/xenodm/Xstartup
-  DisplayManager*session:         /etc/X11/xenodm/Xsession
-  DisplayManager*reset:           /etc/X11/xenodm/Xreset
-  DisplayManager*authComplain:    true
-  ! The following three resources set up display :0 as the console.
-  DisplayManager._0.setup:        /etc/X11/xenodm/Xsetup_0
-  DisplayManager._0.startup:      /etc/X11/xenodm/GiveConsole
-  DisplayManager._0.reset:        /etc/X11/xenodm/TakeConsole
-
-  DisplayManager.*.authName:      MIT-MAGIC-COOKIE-1
-  DisplayManager.*.autoLogin:     toby
-#+END_SRC
-
-** XMODMAP
-
-#+name :tangle ~/.xmodmap/space_cadet.kbd
-#+BEGIN_SRC conf
-  ! Clear all the modifiers
-  clear control
-  clear mod1
-  clear mod4
-  clear mod5
-  clear lock
-
-  ! Alt_R -> Control_L
-  keycode 64 = Control_L
-
-  ! ISO_Level3_Shift -> Control_R
-  keycode 113 = Control_R
-
-  ! Super_L -> Alt_L
-  keycode 115 = Alt_L Meta_L
-
-  ! PrtSc -> Alt_R
-  ! keycode 111 = Alt_R Meta_R
-
-  ! Menu  -> Alt_R
-  keycode 117 = Alt_R Meta_R
-
-  ! Control_L -> Super_L
-  keycode 37 = Super_L
-
-  ! Control_R -> Super_R
-  keycode 109 = Super_R
-
-  ! Escape -> Caps_Lock
-  keycode 9 = Caps_Lock
-
-  ! Caps_Lock -> Escape
-  keycode 66 = Escape
-
-  ! ThinkPad Fn -> Menu
-  keysym XF86WakeUp = Menu
-
-  ! Re-add modifiers
-  add lock = Caps_Lock
-  add Control = Control_L Control_R
-  add mod1 = Alt_L Alt_R Meta_L Meta_R
-  add mod4 = Super_L Super_R
-  add mod5 = ISO_Level3_Shift
-#+END_SRC
-
-#+BEGIN_SRC conf :tangle ~/.xmodmap/ctrl_alt.kbd
-  ! Clear all the modifiers
-  clear control
-  clear mod1
-  clear mod4
-  clear mod5
-  clear lock
-
-  ! ISO_Level3_Shift -> Control_R
-  keycode 113 = Alt_R Meta_R
-
-  ! Super_L -> Control_L
-  keycode 115 = Control_L
-
-  ! PrtSc -> Control_R
-  keycode 111 = Control_R
-
-  ! Escape -> Caps_Lock
-  keycode 9 = Caps_Lock
-
-  ! Caps_Lock -> Escape
-  keycode 66 = Escape
-
-  ! ThinkPad Fn -> Menu
-  keysym XF86WakeUp = Menu
-
-  ! Re-add modifiers
-  add lock = Caps_Lock
-  add Control = Control_L Control_R
-  add mod1 = Alt_L Alt_R Meta_L Meta_R
-  add mod4 = Super_L Super_R
-  add mod5 = ISO_Level3_Shift
+  DisplayManager.*.autoLogin:     anon
 #+END_SRC
 
 ** XSESSION
 
 #+NAME: xsession
 #+BEGIN_SRC conf :tangle ~/.xsession
-  xinput set-prop "/dev/wsmouse" "WS Pointer Wheel Emulation" 1
-  xinput set-prop "/dev/wsmouse" "WS Pointer Wheel Emulation Button" 2
-  xinput set-prop "/dev/wsmouse" "WS Pointer Wheel Emulation Inertia" 2
-  xinput set-prop "/dev/wsmouse" "WS Pointer Wheel Emulation Timeout" 150
-  xinput set-prop "/dev/wsmouse" "WS Pointer Wheel Emulation Axes" 6 7 4 5
-
-  setxkbmap gb
-  xmodmap ~/.xmodmap/space_cadet.kbd
+  xset dpms 300 600 900 r rate 200 50
   xsetroot -solid black
-
-  xdimmer &
-  xrdb ~/.Xdefaults
-  xidle -program '/usr/X11R6/bin/xlock -lockdelay 300' &
-
-  pixelclock -top -s 4 3:00 6:00 9:00 12:00 15:00 18:00 21:00 &
-  xbattbar -t 4 &
-
+  pixelclock -top &
+  sct 4000
   exec cwm
 #+END_SRC
 
