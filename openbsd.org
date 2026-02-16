@@ -554,45 +554,31 @@
   set tabstop=4
 #+END_SRC
 * WSCONS
+
 #+BEGIN_SRC conf :tangle /sudo::/etc/wsconsctl.conf
-  # display.vblank=on
-  # display.screen_off=60000
-  # display.msact=off
-
-  keyboard.repeat.del1=200
+  #	$OpenBSD: wsconsctl.conf,v 1.2 2021/03/24 18:50:54 bru Exp $
+  #
+  # wscons configurable parameters
+  #
+  keyboard.repeat.del1=200	# change keyboard repeat/delay
   keyboard.repeat.deln=50
-  keyboard.bell.volume=0
-
-  # SPACE CADET STYLE KEYBOARD
-  keyboard.map+="keycode 1   = Caps_Lock"     # esc -> caps
-  keyboard.map+="keycode 58  = Escape"        # caps -> esc
-  keyboard.map+="keycode 56  = Cmd Control_L" # alt -> ctrl
-  keyboard.map+="keycode 184 = Cmd Control_R" # alt -> ctrl
-  keyboard.map+="keycode 29  = Alt_L"         # ctrl -> alt
-  keyboard.map+="keycode 157 = Cmd Alt_R"     # ctrl -> alt
-  keyboard.map+="keycode 84  = Cmd Alt_R"     # sysrq -> alt
-  keyboard.map+="keycode 183 = Cmd Alt_R"     # prtsc -> alt
-  keyboard.map+="keycode 221 = Cmd Alt_R"     # menu -> alt
-  keyboard.map+="keycode 219 = Alt_L"         # meta -> alt
-  keyboard.map+="keycode 220 = Cmd Alt_R"     # meta -> alt
-
-  # SIMPLE OLD SCHOOL THINKPAD KEYBOARD
-  # keyboard.map+="keycode 1   = Caps_Lock"     # esc -> caps
-  # keyboard.map+="keycode 58  = Escape"        # caps -> esc
-  # keyboard.map+="keycode 56  = Alt_L"         # alt-bksp doesn't work if this is a cmd key
-  # keyboard.map+="keycode 184 = Cmd Alt_R"     # alt -> ctrl & cmd
-  # keyboard.map+="keycode 29  = Cmd Control_L" # ctrl -> ctrl & cmd
-  # keyboard.map+="keycode 157 = Cmd Control_R" # ctrl -> ctrl & cmd
-  # keyboard.map+="keycode 84  = Cmd Control_R" # sysrq -> ctrl
-  # keyboard.map+="keycode 183 = Cmd Control_R" # prtsc -> ctrl
-  # keyboard.map+="keycode 221 = Cmd Control_R" # menu -> ctrl
-  # keyboard.map+="keycode 219 = Cmd Control_L" # meta -> ctrl
-  # keyboard.map+="keycode 220 = Cmd Control_R" # meta -> ctrl
+  keyboard.backlight=0		# change keyboard backlight
+  #keyboard.encoding=ru		# use different keyboard encoding
+  #keyboard.bell.volume=0		# mute keyboard beep
+  #display.vblank=on		# enable vertical sync blank for screen burner
+  #display.screen_off=60000	# set screen burner timeout to 60 seconds
+  #display.msact=off		# disable screen unburn w/ mouse
+  mouse1.tp.tapping=1,3,2		# enable tapping with default button mappings;
+  				# for customized mappings, list 3 button codes
+  mouse1.tp.mtbuttons=1		# enable button clicking with multiple fingers
+  mouse1.reverse_scrolling=1	# enable so-called "natural" scrolling
 #+END_SRC
+
 * XORG
 ** XDEFAULTS
 #+NAME: Xdefaults
 #+BEGIN_SRC conf :tangle ~/.Xdefaults
+  ! $OpenBSD: dot.Xdefaults,v 1.3 2014/07/10 10:22:59 jasper Exp $
   XClock*analog: false
   XClock*reverseVideo: true
   XClock*foreground: white
@@ -602,14 +588,13 @@
   XIdle.delay: 2
   XIdle.position: se
   XIdle.program: /usr/X11R6/bin/xlock
-  XIdle.timeout: 90
+  XIdle.timeout: 300
 
-  XLock.dpmsstandby: 1
-  XLock.dpmssuspend: 2
-  XLock.dpmsoff: 3
+  XLock.dpmsstandby: 2
+  XLock.dpmssuspend: 4
+  XLock.dpmsoff: 6
   XLock.mode: blank
   XLock.program: /usr/games/fortune -os
-  XLock.startCmd: /home/toby/bin/zzzdelay
 
   Xft.dpi: 96
   Xft.antialias: true
@@ -619,26 +604,30 @@
   Xft.autohint: false
   Xft.lcdfilter: lcddefault
 
-  XTerm*utf8: 1
   XTerm*BorderWidth: 0
-  XTerm*faceName: Monospace: size=9
   XTerm*allowBoldFonts: false
   XTerm*backarrowKeyIsErase: true
+  XTerm*faceName: monospace:size=13
   XTerm*fullscreen: never
   XTerm*locale: true
   XTerm*loginShell: true
   XTerm*metaSendsEscape: true
-  XTerm*reverseVideo: on
-  XTerm*scrollBar: off
+  XTerm*reverseVideo: true
+  XTerm*scrollBar: false
   XTerm*selectToClipboard: true
   XTerm*termName: xterm-256color
   XTerm*ttyModes: erase^? kill ^U
+  XTerm*utf8: 1
 #+END_SRC
+
 #+BEGIN_SRC conf :noweb yes :tangle ~/.Xresources
   <<Xdefaults>>
 #+END_SRC
+
 ** XENODM
-#+BEGIN_SRC conf :tangle /sudo::/etc/X11/xenodm/xenodm-config :tangle-mode (identity #o644)
+
+#+name :tangle /sudo::/etc/X11/xenodm/xenodm-config :tangle-mode (identity #o644)
+#+BEGIN_SRC conf
   ! $OpenBSD: xenodm-config.cpp,v 1.1 2016/10/23 08:30:37 matthieu Exp $
 
   DisplayManager.authDir: /etc/X11/xenodm
@@ -663,8 +652,11 @@
   DisplayManager.*.authName:      MIT-MAGIC-COOKIE-1
   DisplayManager.*.autoLogin:     toby
 #+END_SRC
+
 ** XMODMAP
-#+BEGIN_SRC conf :tangle ~/.xmodmap/space_cadet.kbd
+
+#+name :tangle ~/.xmodmap/space_cadet.kbd
+#+BEGIN_SRC conf
   ! Clear all the modifiers
   clear control
   clear mod1
@@ -709,6 +701,7 @@
   add mod4 = Super_L Super_R
   add mod5 = ISO_Level3_Shift
 #+END_SRC
+
 #+BEGIN_SRC conf :tangle ~/.xmodmap/ctrl_alt.kbd
   ! Clear all the modifiers
   clear control
@@ -742,7 +735,9 @@
   add mod4 = Super_L Super_R
   add mod5 = ISO_Level3_Shift
 #+END_SRC
+
 ** XSESSION
+
 #+NAME: xsession
 #+BEGIN_SRC conf :tangle ~/.xsession
   xinput set-prop "/dev/wsmouse" "WS Pointer Wheel Emulation" 1
@@ -764,6 +759,7 @@
 
   exec cwm
 #+END_SRC
+
 #+BEGIN_SRC conf :noweb yes :tangle ~/.xinitrc
   <<xsession>>
 #+END_SRC

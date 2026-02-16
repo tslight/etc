@@ -9,19 +9,14 @@
 #+name: aliases
 #+begin_src shell :tangle ~/.bashrc
   alias cp='cp -i'
-  alias d='docker'
   alias df='df -h'
-  alias diff='diff --color=always'
   alias du='du -h'
   alias e='emacs -nw'
   alias ec='emacsclient -c -a "" -nw'
   alias g='git'
-  alias grep='grep --color=always'
   alias h='history'
   alias j='jobs -l'
   alias k='kubectl'
-  alias lc='tokei'
-  alias ls='ls --color=always'
   alias l='ls -a'
   alias ll='ls -lah'
   alias m="make"
@@ -31,7 +26,7 @@
   alias pg='pgrep -ail'
   alias ping4='ping -c 4'
   alias pingg='ping -c 4 google.com'
-  # freebsd operator can use shutdown, but not reboot or poweroff
+  # bsd operator can only use shutdown
   alias poweroff='shutdown -p now'
   alias reboot='shutdown -r now'
   alias rm='rm -i'
