@@ -797,7 +797,7 @@ EndSection
   set padding 0 0 0 0
 
   bind e exec xterm -e emacsclient -nw -c -a ""
-  bind C-e exec xterm -e emacsclient -c -a ""
+  bind C-e exec xterm -e emacsclient -nw -c -a ""
   bind C-q only
   bind q only
   bind C-space colon
@@ -810,11 +810,11 @@ EndSection
   bind M-q quit
   bind M-r restart
 
-  definekey top XF86MonBrightnessDown 'sudo backlight - 10'
-  definekey top XF86MonBrightnessUp 'sudo backlight + 10'
-  definekey top XF86AudioMute 'mixer vol.mute=toggle'
-  definekey top XF86AudioLowerVolume 'mixer vol.volume=-5%'
-  definekey top XF86AudioRaiseVolume 'mixer vol.volume=+5%'
+  definekey top XF86MonBrightnessDown exec backlight - 5
+  definekey top XF86MonBrightnessUp   exec backlight + 5
+  definekey top XF86AudioMute         exec mixer vol.mute=toggle
+  definekey top XF86AudioLowerVolume  exec mixer vol.volume=-5%
+  definekey top XF86AudioRaiseVolume  exec mixer vol.volume=+5%
 #+end_src
 
 ** GTK
