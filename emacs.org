@@ -68,6 +68,7 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
   (keymap-global-set "<f11>" 'toggle-frame-fullscreen)
   (keymap-global-set "C-x C-b" 'ibuffer)
   (keymap-global-set "C-x x s" 'sort-lines)
+  (keymap-global-set "C-x g" 'vc-dir-root)
   (keymap-global-set "C-x k" #'(lambda () (interactive) (kill-buffer (current-buffer))))
   (keymap-global-set "C-x M-k" 'kill-buffer)
   (keymap-global-set "C-x M-c" 'kill-emacs) ;; for killing the daemon
