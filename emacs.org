@@ -371,30 +371,31 @@ Otherwise emacsclient doesn't initialise UI settings.
     (org-use-speed-commands t)
     (org-babel-confirm-evaluate nil)
     :config
-    ;; stops electric pair from closing > when trying to spawn a src
-    ;; block
     (add-to-list 'org-modules 'org-tempo)
+    ;; stop electric pair from closing > when spawning a src block
     (modify-syntax-entry ?< "." org-mode-syntax-table)
+    
     (org-babel-do-load-languages
      'org-babel-load-languages
      '((shell . t)))
+    
     (setq org-structure-template-alist
   	(append org-structure-template-alist
-  		'(("cl" . "src common-lisp")
-                    ("el" . "src emacs-lisp")
+  		'(("cf" . "src conf")
+  		  ("el" . "src emacs-lisp")
                     ("go" . "src go")
                     ("kr" . "src c")
-                    ("nx" . "src nix")
                     ("py" . "src python")
                     ("sh" . "src shell")
-                    ("sq" . "src sql")
                     ("tx" . "src text"))))
+    
     (defun my/tangle-emacs-org-on-save ()
       (interactive)
       (when (string-equal "emacs.org"
   			(file-name-nondirectory
   			 (buffer-file-name (current-buffer))))
         (org-babel-tangle)))
+    
     (defun my/compile-and-load-init ()
       (interactive)
       (when (string-equal "init.el"
@@ -402,7 +403,9 @@ Otherwise emacsclient doesn't initialise UI settings.
   			 (buffer-file-name (current-buffer))))
         (byte-compile-file (buffer-file-name (current-buffer)))
         (load (buffer-file-name (current-buffer)))))
+    
     :bind (:map org-mode-map ("C-c i" . org-goto))
+    
     :hook
     (org-mode . auto-fill-mode)
     (after-save . my/tangle-emacs-org-on-save)
