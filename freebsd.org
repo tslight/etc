@@ -1,8 +1,11 @@
-#+TITLE: BEASTIE BITS
+#+TITLE: [[https://www.unixprogram.com/churchofbsd/][Church of BSD]]
 #+PROPERTY: header-args :cache yes
 #+PROPERTY: header-args+ :mkdirp yes
 #+PROPERTY: header-args+ :results silent
 #+PROPERTY: header-args+ :padline no
+
+https://www.unixprogram.com/churchofbsd/
+
 * BOOT/LOADER
 #+begin_src conf
   efi_max_resolution="1366x768"
@@ -755,10 +758,7 @@ EndSection
 
 #+NAME: xsession
 #+BEGIN_SRC conf :tangle ~/.xsession
-  pixelclock &
-  pixelbatt &
-  sct 4000
-  exec cwm
+  exec ratpoison
 #+END_SRC
 #+BEGIN_SRC conf :noweb yes :tangle ~/.xinitrc
   <<xsession>>
@@ -781,25 +781,23 @@ EndSection
 ** RATPOISON
 
 #+begin_src conf :tangle ~/.ratpoisonrc
-  exec xscreensaver --no-splash
-  exec xbattbar left
-  exec sleep 1 && sct 4000
-  exec sleep 4 && alttab -mk Alt_R -frame green -inact purple
+  exec pixelclock &
+  exec pixelbatt &
+  exec sct 4000
 
-  set barpadding 0 0
+  set barpadding 1 1
+  set bargravity c
   set bgcolor black
-  set fgcolor purple
-  set font "monospace:bold:size=12"
+  set fgcolor pink
+  set font "monospace:bold:size=13"
   set framesels "asdfjkl;"
-  set fwcolor green
+  set fwcolor pink
   set bwcolor purple
   set historysize 42
-  set padding 2 0 0 0
+  set padding 0 0 0 0
 
   bind e exec xterm -e emacsclient -nw -c -a ""
-  bind C-e exec emacsclient -c -a ""
-  bind E exec xterm -e emacs
-  bind C-E exec emacs
+  bind C-e exec xterm -e emacsclient -c -a ""
   bind C-q only
   bind q only
   bind C-space colon
@@ -810,73 +808,14 @@ EndSection
   bind Tab select
   bind Return focuslast
   bind M-q quit
-  bind M-r exec restart
+  bind M-r restart
 
-  definekey top s-j focusdown
-  definekey top s-k focusup
-  definekey top s-h focusleft
-  definekey top s-l focusright
-  definekey top s-Return focuslast
-  definekey top C-s-j exchangedown
-  definekey top C-s-k exchangeup
-  definekey top C-s-h exchangeleft
-  definekey top C-s-l exchangeright
-  definekey top F10 exec mixer vol.mute=toggle
-  definekey top F11 exec mixer vol.volume=-5%
-  definekey top F12 exec mixer vol.volume=+5%
+  definekey top XF86MonBrightnessDown 'sudo backlight - 10'
+  definekey top XF86MonBrightnessUp 'sudo backlight + 10'
+  definekey top XF86AudioMute 'mixer vol.mute=toggle'
+  definekey top XF86AudioLowerVolume 'mixer vol.volume=-5%'
+  definekey top XF86AudioRaiseVolume 'mixer vol.volume=+5%'
 #+end_src
-
-** CWM
-
-#+BEGIN_SRC conf :tangle ~/.cwmrc
-  borderwidth 1
-  sticky yes
-  snapdist 5
-  moveamount 5
-  fontname "monospace:bold:size=18"
-
-  color activeborder '#B28'
-  color inactiveborder '#627'
-  color urgencyborder '#FF0'
-  color menubg '#000'
-  color menufg '#627'
-  color font '#DDD'
-  color selfont '#FFF'
-  color font '#B28'
-
-  unbind-key all
-  bind-key 4-BackSpace restart
-  bind-key 4C-BackSpace quit
-  bind-key 4-Return 'xterm'
-  bind-key 4C-Return 'librewolf'
-  bind-key 4-space menu-exec
-  bind-key CS-w menu-window
-  bind-key M-Tab window-cycle
-  bind-key MS-Tab window-rcycle
-  bind-key CS-q window-delete
-  bind-key 4-m window-maximize
-  bind-key CS-v window-vmaximize
-  bind-key CS-h window-hmaximize
-  bind-key 4C-m window-fullscreen
-  bind-key 4-k window-move-up-big
-  bind-key 4-j window-move-down-big
-  bind-key 4-l window-move-right-big
-  bind-key 4-h window-move-left-big
-  bind-key 4C-k window-resize-up-big
-  bind-key 4C-j window-resize-down-big
-  bind-key 4C-l window-resize-right-big
-  bind-key 4C-h window-resize-left-big
-  bind-key XF86MonBrightnessDown 'sudo backlight - 10'
-  bind-key XF86MonBrightnessUp 'sudo backlight + 10'
-  bind-key XF86AudioMute 'mixer vol.mute=toggle'
-  bind-key XF86AudioLowerVolume 'mixer vol.volume=-5%'
-  bind-key XF86AudioRaiseVolume 'mixer vol.volume=+5%'
-
-  unbind-mouse all
-  bind-mouse R-1 menu-window
-  bind-mouse M-1 window-move
-  bind-mouse MS-1 window-resize
-#+END_SRC
 
 ** GTK
 
