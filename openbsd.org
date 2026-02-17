@@ -8,9 +8,6 @@
 #+BEGIN_SRC sh :tangle ~/.profile
   PATH=$HOME/bin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin
   PATH=$PATH:/usr/games:/usr/libexec:/usr/local/libexec:.
-  HISTCONTROL=ignoredups:ignorespace
-  HISTFILE=$HOME/.ksh_history
-  HISTSIZE=4096
   ENV=$HOME/.kshrc
   export PATH HOME TERM HISTORY HISTSIZE ENV
 #+END_SRC
@@ -18,6 +15,10 @@
 ** KSHRC
 
 #+BEGIN_SRC sh :tangle ~/.kshrc
+  HISTCONTROL=ignoredups:ignorespace
+  HISTFILE=$HOME/.ksh_history
+  HISTSIZE=4096
+  
   if [ $(id -u) -eq 0 ]; then
       PS1='\[\e[1;31m\]\u@\h\[\e[1;33m\]:\[\e[1;35m\]\w\n\[\e[1;33m\]\$\[\e[m\] '
   else
@@ -34,7 +35,7 @@
   alias ll='ls -lah'
   alias mv='mv -i'
   alias pg='pgrep -l'
-  alias pingg='ping -c 4 google.com'
+  alias pingg='ping -c 4 openbsd.org'
   alias poweroff='doas shutdown -p now'
   alias reboot='doas shutdown -r now'
   alias rm='rm -i'
@@ -96,11 +97,58 @@
 #+BEGIN_SRC conf :tangle ~/.xsession
   xset dpms 300 600 900 r rate 200 50
   xsetroot -solid black
-  pixelclock -top &
+  pixelclock &
+  pixelbatt &
   sct 4000
   exec cwm
 #+END_SRC
 
 #+BEGIN_SRC conf :noweb yes :tangle ~/.xinitrc
   <<xsession>>
+#+END_SRC
+
+** CWM
+
+#+BEGIN_SRC conf :tangle ~/.cwmrc
+  borderwidth 1
+  sticky yes
+  snapdist 5
+  moveamount 5
+  fontname "monospace:bold:size=13"
+
+  color activeborder '#B28'
+  color inactiveborder '#627'
+  color urgencyborder '#FF0'
+  color menubg '#000'
+  color menufg '#627'
+  color font '#DDD'
+  color selfont '#FFF'
+  color font '#B28'
+
+  unbind-key all
+  bind-key 4-BackSpace restart
+  bind-key 4C-BackSpace quit
+  bind-key 4-Return 'xterm'
+  bind-key 4C-Return 'chrome'
+  bind-key 4-space menu-exec
+  bind-key CS-w menu-window
+  bind-key M-Tab window-cycle
+  bind-key MS-Tab window-rcycle
+  bind-key CS-q window-delete
+  bind-key 4-m window-maximize
+  bind-key CS-v window-vmaximize
+  bind-key CS-h window-hmaximize
+  bind-key 4C-m window-fullscreen
+  bind-key 4-k window-move-up-big
+  bind-key 4-j window-move-down-big
+  bind-key 4-l window-move-right-big
+  bind-key 4-h window-move-left-big
+  bind-key 4C-k window-resize-up-big
+  bind-key 4C-j window-resize-down-big
+  bind-key 4C-l window-resize-right-big
+  bind-key 4C-h window-resize-left-big
+  unbind-mouse all
+  bind-mouse R-1 menu-window
+  bind-mouse M-1 window-move
+  bind-mouse MS-1 window-resize
 #+END_SRC
