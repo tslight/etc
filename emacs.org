@@ -123,47 +123,20 @@ All of my custom functions live under the =my/= prefix/namespace.
   (keymap-global-set "M-i" 'my/indent-buffer)
 #+end_src
 
-** init-frame
-
-Otherwise emacsclient doesn't initialise UI settings.
-
-#+begin_src emacs-lisp
-  (defun my/init-frame (frame)
-    "Initialize frame UI, and settings that don't work unless they're set
-  after emacsclient has created a frame"
-    (select-frame frame)
-
-    (if window-system (load-theme 'modus-vivendi))
-
-    (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
-    (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
-    (if (fboundp 'tooltip-mode) (tooltip-mode -1))
-
-    (when (not (eq system-type 'darwin)) (menu-bar-mode -1))
-
-    (if (not (eq system-type 'darwin))
-        (setq frame-resize-pixelwise t)) ; proper maximize in some wm
-
-    (if window-system
-        (if (eq system-type 'darwin)
-            (set-frame-font "Monaco 13" nil t)
-  	(set-frame-font "Monospace 13" nil t))))
-
-  (if (daemonp)
-      (add-hook 'after-make-frame-functions #'my/init-frame (selected-frame))
-    (my/init-frame (selected-frame)))
-#+end_src
-
 ** emacs-startup
 
 #+begin_src emacs-lisp
-  (defun my/emacs-startup ()
-    "Expensive stuff to make sure we don't run until after Emacs starts"
+  (defun my/run-after-startup ()
+    (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
+    (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
+    (if (fboundp 'tooltip-mode) (tooltip-mode -1))
+    (if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
+    
+    (load-theme 'modus-vivendi)
     
     (column-number-mode)
     (display-battery-mode)
     (display-time)
-
     (electric-pair-mode)
     (global-subword-mode)
     (save-place-mode 1)
@@ -174,7 +147,7 @@ Otherwise emacsclient doesn't initialise UI settings.
     (when (executable-find "fd") find-program "fd")
     (when (executable-find "rg") grep-program "rg"))
 
-  (add-hook 'emacs-startup-hook #'my/emacs-startup)
+  (add-hook 'emacs-startup-hook #'my/run-after-startup)
 #+end_src
 
 ** kill-region

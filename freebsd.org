@@ -758,7 +758,10 @@ EndSection
 
 #+NAME: xsession
 #+BEGIN_SRC conf :tangle ~/.xsession
-  exec ratpoison
+  pixelclock &
+  pixelbatt &
+  sct 4000
+  exec sdorfehs
 #+END_SRC
 #+BEGIN_SRC conf :noweb yes :tangle ~/.xinitrc
   <<xsession>>
@@ -778,22 +781,25 @@ EndSection
   <<xdefaults>>
 #+END_SRC
 
-** RATPOISON
+** SDORFEHS
 
-#+begin_src conf :tangle ~/.ratpoisonrc
-  exec pixelclock &
-  exec pixelbatt &
-  exec sct 4000
+#+begin_src conf :tangle ~/.config/sdorfehs/config
+  escape C-Escape
 
-  set barpadding 1 1
+  set barborder 1
+  set barbordercolor purple
   set bargravity c
+  set barsticky 0
   set bgcolor black
   set fgcolor pink
+  set bwcolor purple
+  set fwcolor pink
   set font "monospace:bold:size=13"
   set framesels "asdfjkl;"
-  set fwcolor pink
-  set bwcolor purple
+  set gap 0
   set historysize 42
+  set ignoreresizehints 1
+  set onlyborder 0
   set padding 0 0 0 0
 
   bind e exec xterm -e emacsclient -nw -c -a ""
