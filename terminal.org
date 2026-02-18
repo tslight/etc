@@ -14,22 +14,9 @@
   default = current
   [alias]
   a = add -A
-  b = branch
-  co = checkout
-  cb = checkout -b
-  cm = commit -s -m
-  cl = clone
-  d = diff
-  lg = log --graph --oneline
-  lo = log --oneline
-  l = log
-  m = merge
-  pl = pull
-  ps = push
-  rb = rebase
-  rv = revert
-  r = remote
-  s = status
+  c = commit -s -m
+  ll = log --graph --oneline
+  l = log --oneline -n 10
   [core]
   autocrlf = false
   whitespace = trailing-space,space-before-tab
@@ -59,11 +46,12 @@
 #+END_SRC
 
 * NEOVIM
+
 #+begin_src lua :tangle ~/.config/nvim/init.lua
   vim.cmd.colorscheme("wildcharm")
   vim.g.mapleader = " "
   vim.keymap.set("n", "<leader>w", vim.cmd.write, { desc = "Write" })
-  vim.keymap.set("n", "<leader>W", vim.cmd('wall'), { desc = "Write" })
+  vim.keymap.set("n", "<leader>s", vim.cmd('wall'), { desc = "Write" })
   vim.keymap.set("n", "<leader>q", vim.cmd.quit, { desc = "Quit" })
 
   vim.keymap.set("n", "<leader>j", ':bn<cr>', { desc = "Buffer Next" })
@@ -81,45 +69,20 @@
   vim.keymap.set("n", "<leader>t", ':terminal<cr>', { desc = "Terminal" })
 
   vim.opt.wrap = false
-  vim.opt.termguicolors = true
   vim.opt.cursorline = true
   vim.opt.number = true
   vim.opt.relativenumber = true
-  vim.opt.shiftwidth = 2
   vim.opt.undofile = true
 #+end_src
+
 * TMUX
+
 #+BEGIN_SRC conf :tangle ~/.tmux.conf
   set -g base-index 1
   set -g pane-base-index 1
-  set -g history-limit 42420
-  set -g renumber-windows on
-  set -g set-titles on
-  set -g set-titles-string "#T: [#S] #I: #W: #P"
+  set -g history-limit 32768
   set -g display-panes-time 4000 # I'm slow and indecisive!
   set -g escape-time 0 # default is 500ms which feels like forever..
-
-  # images in Yazi
-  set -g allow-passthrough on
-  set -ga update-environment TERM
-  set -ga update-environment TERM_PROGRAM
-
-  # colors
-  set -g message-style bg=default,fg=brightgreen
-  set -g mode-style bg=default,fg=brightgreen
-  set -g status-style bg=default,fg=brightgreen
-  set -g window-status-style bold
-  set -g window-status-current-style underscore,fg=brightyellow
-
-  # status
-  set -g status-interval 60
-  set -g status-left "[#S] "
-  set -g status-left-length 50
-  set -g status-right "%H:%M %a %d/%m"
-  set -g status-right-length 50
-  set -g window-status-current-format "#I: #W.#P*"
-  set -g automatic-rename on
-  set -g automatic-rename-format '#{b:pane_current_path}'
 
   # mouse
   set -g mouse on
@@ -128,9 +91,8 @@
   # keys
   bind C-r source-file ~/.tmux.conf \; display-message "~/.tmux.conf reloaded"
   bind e neww -n emacs 'emacsclient -nw -c -a ""'
-  bind r neww -n fm yazi
-  bind t neww -n top btm
 #+END_SRC
+
 * XDG
 
 #+begin_src conf :tangle ~/.config/user-dirs.dirs
@@ -142,15 +104,4 @@ XDG_PICTURES_DIR="$HOME/img"
 XDG_PUBLICSHARE_DIR="$HOME/pub"
 XDG_TEMPLATES_DIR="$HOME/templates"
 XDG_VIDEOS_DIR="$HOME/video"
-#+end_src
-
-* YAZI
-#+begin_src toml :tangle ~/.config/yazi/yazi.toml
-  # A TOML linter such as https://taplo.tamasfe.dev/ can use this schema to validate your config.
-  # If you encounter any issues, please make an issue at https://github.com/yazi-rs/schemas.
-  "$schema" = "https://yazi-rs.github.io/schemas/yazi.json"
-
-  [mgr]
-  show_hidden = true
-  ratio = [ 1, 2, 5 ]
 #+end_src
