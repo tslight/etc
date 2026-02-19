@@ -316,6 +316,16 @@ All of my custom functions live under the =my/= prefix/namespace.
     (dired-mode . dired-omit-mode))
 #+end_src
 
+* ESHELL
+** ALIASES
+
+#+begin_src emacs-lisp :tangle ~/.emacs.d/eshell/alias :comments no
+  alias g git $@*
+  alias l ls -a $@*
+  alias ll ls -alh $@*
+  alias pg pgrep -l $@*
+#+end_src
+
 * LINE NUMBERS
 
 #+begin_src emacs-lisp
