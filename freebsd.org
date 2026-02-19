@@ -760,6 +760,7 @@ EndSection
 #+BEGIN_SRC conf :tangle ~/.xsession
   pixelclock &
   pixelbatt &
+  saltab &
   sct 4000
   exec sdorfehs
 #+END_SRC

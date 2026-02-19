@@ -1,8 +1,8 @@
 #+TITLE: The Wizard & The Fish
 #+PROPERTY: header-args :cache yes
 #+PROPERTY: header-args+ :mkdirp yes
-#+PROPERTY: header-args+ :results silent
 #+PROPERTY: header-args+ :padline no
+#+PROPERTY: header-args+ :results silent
 * SONG 7.3
 
 Once there was a Wizard so old and wise
