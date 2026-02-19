@@ -1,11 +1,10 @@
 #+TITLE: One Shell To Rule Them All!
 #+PROPERTY: header-args :cache yes
-#+PROPERTY: header-args :comments no
 #+PROPERTY: header-args+ :mkdirp yes
 #+PROPERTY: header-args+ :padline no
 #+PROPERTY: header-args+ :results silent
-#+PROPERTY: header-args+ :tangle-mode (identity #o644)
 * ALIASES
+
 #+name: aliases
 #+begin_src shell :tangle ~/.bashrc
   alias cp='cp -i'
@@ -39,11 +38,14 @@
   alias t='tmux_create_or_attach'
   alias x='startx'
 #+end_src
+
 #+begin_src conf :noweb yes :tangle ~/.zshrc
   <<aliases>>
 #+end_src
+
 * BASH
 ** ENVIRONMENT
+
 #+BEGIN_SRC sh :tangle ~/.bash_profile
   export ALTERNATE_EDITOR=""
   export BLOCK_SIZE=human-readable
@@ -64,12 +66,16 @@
 
   umask 022
 #+END_SRC
+
 ** COMPLETION
+
 #+begin_src shell
   complete -cf sudo     # completion after sudo
   complete -cf man      # same, but for man
 #+end_src
+
 ** PROMPT
+
 #+BEGIN_SRC sh :tangle ~/.bashrc
   export RED="\\[\\e[1;31m\\]"
   export GRN="\\[\\e[1;32m\\]"
@@ -78,18 +84,15 @@
   export CYN="\\[\\e[1;36m\\]"
   export OFF="\\[\\e[0m\\]"
 
-  export GIT_PS1_SHOWDIRTYSTATE=yes
-  export GIT_PS1_SHOWSTASHSTATE=yes
-  export GIT_PS1_SHOWUNTRACKEDFILES=true
-  export GIT_PS1_SHOWUPSTREAM=yes
-
   if [ "$(id -u)" -eq 0 ]; then
       export PS1="${RED}\\u${YEL}@${RED}\\h${YEL}:${MAG}\\W \\n${YEL}\$? \$ ${OFF}"
   else
       export PS1="${GRN}\\u${YEL}@${GRN}\\h${YEL}:${MAG}\\W \\n${YEL}\$? \$ ${OFF}"
   fi
 #+END_SRC
+
 ** OPTIONS
+
 #+BEGIN_SRC sh :tangle ~/.bashrc
   shopt -s autocd       # cd without cd. who knew?
   shopt -s checkjobs    # don't exit if we still have jobs running
@@ -104,7 +107,9 @@
   shopt -s nocaseglob   # match filename case insensitively
   stty -ixon            # disable ctrl-s/q flow control
 #+END_SRC
+
 * INPUTRC
+
 #+BEGIN_SRC sh :tangle ~/.inputrc
   set bell-style none
   set colored-completion-prefix on
@@ -119,8 +124,10 @@
   "\en": history-search-forward
   "\ep": history-search-backward
 #+END_SRC
+
 * ZSH
 ** AUTOLOAD
+
 #+begin_src shell :tangle ~/.zshrc
   autoload -Uz compinit && compinit -u      # completion library
   autoload -Uz bashcompinit && bashcompinit # bash completions too please
@@ -128,18 +135,22 @@
   # autoload -Uz promptinit && promptinit && prompt vcs
   # Alt-n & Alt-p to search history using current input
   autoload -Uz history-search-end
+#+end_src
+
+** BINDINGS
+
+#+begin_src shell :tangle ~/.zshrc
   zle -N history-beginning-search-backward-end history-search-end
   zle -N history-beginning-search-forward-end history-search-end
   bindkey '\ep' history-beginning-search-backward-end
   bindkey '\en' history-beginning-search-forward-end
-#+end_src
-** BINDINGS
-#+begin_src shell :tangle ~/.zshrc
   bindkey '^[[Z' reverse-menu-complete # shift-tab cycles backwards
   bindkey \^U backward-kill-line # ctrl-u (whole-line by default)
-  bindkey -e # ensure we use emacs bindings even though EDITOR=vi
+  bindkey -e # ensure we use emacs bindings even when EDITOR=vi
 #+end_src
+
 ** COMPLETION
+
 #+begin_src shell :tangle ~/.zshrc
   zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*' # case insensitivity
   zstyle ':completion:*' menu select # arrow select
@@ -152,13 +163,13 @@
   zstyle ':completion:*:processes' command 'ps -au $USER'
   zstyle ':completion:*:processes-names' command 'ps -e -o comm='
 #+end_src
+
 ** ENVIRONMENT
+
 #+BEGIN_SRC sh :tangle ~/.zshenv
   export HISTFILE=$HOME/.zsh_history
-  export HISTSIZE=100000
+  export HISTSIZE=4096
   export SAVEHIST=$HISTSIZE
-  export EDITOR=vi
-  export PAGER=less
   export BLOCK_SIZE=human-readable
   export DIRSTACKSIZE=12
   export KEYTIMEOUT=1
@@ -182,6 +193,7 @@
   umask 022
 #+END_SRC
 ** OPTIONS
+
 #+BEGIN_SRC sh :tangle ~/.zshrc
   setopt auto_name_dirs         # absolute name becomes dir
   setopt autocd                 # cd without typing cd. omg.
@@ -205,46 +217,17 @@
   unsetopt completealiases      # supposedly allows aliases to be completed, but I turn it off because it breaks mine..
   ttyctl -f                     # avoid having to manually reset the terminal
 #+END_SRC
+
 ** PROMPT
+
 #+begin_src zsh :tangle ~/.zshrc
   prompt_vcs_setup() {
-      zstyle ':vcs_info:*' enable git svn
-      zstyle ':vcs_info:git:*' formats '%B%F{cyan}(%b)%f'
-      autoload -Uz vcs_info
-      precmd_vcs_info() { vcs_info; }
-      precmd_functions+=( precmd_vcs_info )
-      setopt prompt_subst
-      local user_at_host="%B%F{green}%n%B%F{yellow}@%B%F{green}%m%b%f"
-      local cwd="%B%F{yellow}:%F{magenta}%~%b%f"
-      local git_branch=\$vcs_info_msg_0_
+      local user_at_host="%B%F{green}%n%F{yellow}@%F{green}%m"
+      local cwd="%B%F{yellow}:%F{magenta}%~"
       local exit_status="%B%(?.%F{yellow}√.%F{red}%?)"
-      local priv="%B%F{yellow}%#%b%f"
-      PS1="${user_at_host}${cwd} ${git_branch}"$'\n'"${exit_status} ${priv} "
-      PS2="> "
-      prompt_opts=( cr percent )
+      local prompt="%B%F{yellow}%#%b%f"
+      PS1="${user_at_host}${cwd}"$'\n'"${exit_status} ${prompt} "
   }
 
   prompt_vcs_setup "$@"
-
-  # https://github.com/akermu/emacs-libvterm?tab=readme-ov-file#shell-side-configuration
-  vterm_printf() {
-      if [ -n "$TMUX" ] \
-	     && { [ "${TERM%%-*}" = "tmux" ] \
-		      || [ "${TERM%%-*}" = "screen" ]; }; then
-	  # Tell tmux to pass the escape sequences through
-	  printf "\ePtmux;\e\e]%s\007\e\\" "$1"
-      elif [ "${TERM%%-*}" = "screen" ]; then
-	  # GNU screen (screen, screen-256color, screen-256color-bce)
-	  printf "\eP\e]%s\007\e\\" "$1"
-      else
-	  printf "\e]%s\e\\" "$1"
-      fi
-  }
-
-  # https://github.com/akermu/emacs-libvterm?tab=readme-ov-file#shell-side-configuration
-  vterm_prompt_end() {
-      vterm_printf "51;A$(whoami)@$(hostname):$(pwd)"
-  }
-  setopt PROMPT_SUBST
-  PROMPT=$PROMPT'%{$(vterm_prompt_end)%}'
 #+end_src

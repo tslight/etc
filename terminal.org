@@ -14,9 +14,13 @@
   default = current
   [alias]
   a = add -A
-  c = commit -s -m
+  co = checkout -b
+  cm = commit -s -m
   ll = log --graph --oneline
   l = log --oneline -n 10
+  s = status
+  f = pull
+  p = push
   [core]
   autocrlf = false
   whitespace = trailing-space,space-before-tab
@@ -41,6 +45,9 @@
   ,*.core
   #*#
   #*
+  .#*
+  ,#*
+  ,#*#
   TAGS
   tags
 #+END_SRC
