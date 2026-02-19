@@ -1,4 +1,5 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
+
 OFF="$(tput sgr0)"
 GRN="$(tput bold)$(tput setaf 2)"
 YEL="$(tput bold)$(tput setaf 3)"

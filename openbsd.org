@@ -233,3 +233,20 @@ and could protect his new friends for the rest of his days
   bind-mouse M-1 window-move
   bind-mouse MS-1 window-resize
 #+END_SRC
+
+** GTK
+
+#+NAME: gtk2
+#+BEGIN_SRC conf :tangle ~/.gtkrc-2.0.mine
+  gtk-key-theme-name = "Emacs"
+#+END_SRC
+
+#+BEGIN_SRC conf :noweb yes :tangle ~/.gtkrc-2.0
+  <<gtk2>>
+#+END_SRC
+
+#+NAME: gtk3
+#+BEGIN_SRC conf :tangle ~/.config/gtk-3.0/settings.ini
+  [Settings]
+  gtk-key-theme-name = Emacs
+#+END_SRC
