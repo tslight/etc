@@ -89,8 +89,9 @@ and could protect his new friends for the rest of his days
 #+BEGIN_SRC sh :tangle ~/.profile
   PATH=$HOME/bin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin
   PATH=$PATH:/usr/games:/usr/libexec:/usr/local/libexec:.
+  TERM=xterm-256color
   ENV=$HOME/.kshrc
-  export PATH HOME TERM HISTORY HISTSIZE ENV
+  export PATH HOME TERM ENV
 #+END_SRC
 
 ** KSHRC
@@ -99,6 +100,7 @@ and could protect his new friends for the rest of his days
   HISTCONTROL=ignoredups:ignorespace
   HISTFILE=$HOME/.ksh_history
   HISTSIZE=4096
+  export HISTORY HISTCONTROL HISTFILE HISTSIZE
   
   if [ $(id -u) -eq 0 ]; then
       PS1='\[\e[1;31m\]\u@\h\[\e[1;33m\]:\[\e[1;35m\]\w\n\[\e[1;33m\]\$\[\e[m\] '
@@ -144,6 +146,15 @@ and could protect his new friends for the rest of his days
   mouse1.tp.tapping=1,3,2
   mouse1.tp.mtbuttons=1
   mouse1.reverse_scrolling=1
+  keyboard.map+="keycode 1   = Cmd_Debugger Caps_Lock"
+  keyboard.map+="keycode 58  = Cmd_Debugger Escape"
+  keyboard.map+="keycode 170 = Cmd2 Alt_L"      # Print_Screen
+  keyboard.map+="keycode 183 = Cmd2 Alt_L"      # Print_Screen
+  keyboard.map+="keycode 219 = Cmd2 Alt_L"      # Meta_L
+  keyboard.map+="keycode 56  = Cmd1 Control_L"  # Cmd2 Alt_L
+  keyboard.map+="keycode 184 = Cmd1 Control_R"  # Cmd2 Alt_R Multi_key
+  keyboard.map+="keycode 29  = Cmd2 Meta_L"     # Cmd2 Alt_R Multi_key
+  keyboard.map+="keycode 157 = Cmd2 Meta_R"     # Cmd2 Alt_R Multi_key
 #+END_SRC
 
 * XORG
@@ -172,12 +183,61 @@ and could protect his new friends for the rest of his days
   DisplayManager.*.autoLogin:     anon
 #+END_SRC
 
+** XMODMAP
+
+#+begin_src conf :tangle ~/.Xmodmap
+  clear control
+  clear mod1
+  clear mod4
+  clear mod5
+  clear lock
+
+  ! Alt_R -> Control_L
+  keycode 64 = Control_L
+
+  ! ISO_Level3_Shift -> Control_R
+  keycode 113 = Control_R
+
+  ! Super_L -> Alt_L
+  keycode 115 = Alt_L Meta_L
+
+  ! PrtSc -> Alt_R
+  keycode 111 = Alt_R Meta_R
+
+  ! Control_L -> Super_L
+  keycode 37 = Super_L
+
+  ! Control_R -> Super_R
+  keycode 109 = Super_R
+
+  ! Escape -> Caps_Lock
+  keycode 9 = Caps_Lock
+
+  ! Caps_Lock -> Escape
+  keycode 66 = Escape
+
+  ! ThinkPad Fn -> Menu
+  keysym XF86WakeUp = Menu
+
+  ! Re-add modifiers
+  add lock = Caps_Lock
+  add Control = Control_L Control_R
+  add mod1 = Alt_L Alt_R Meta_L Meta_R
+  add mod4 = Super_L Super_R
+  add mod5 = ISO_Level3_Shift
+#+end_src
+
 ** XSESSION
 
 #+NAME: xsession
 #+BEGIN_SRC conf :tangle ~/.xsession
+  xinput set-prop "/dev/wsmouse" "WS Pointer Wheel Emulation" 1
+  xinput set-prop "/dev/wsmouse" "WS Pointer Wheel Emulation Button" 2
+  xinput set-prop "/dev/wsmouse" "WS Pointer Wheel Emulation Axes" 6 7 4 5
+
   xset dpms 300 600 900 r rate 200 50
   xsetroot -solid black
+  xmodmap ~/.Xmodmap
   pixelclock &
   pixelbatt &
   sct 4000
@@ -210,6 +270,8 @@ and could protect his new friends for the rest of his days
   bind-key 4-BackSpace restart
   bind-key 4C-BackSpace quit
   bind-key 4-Return 'xterm'
+  bind-key 4-e 'xterm -e emacsclient -c -a ""'
+  bind-key 4-w firefox
   bind-key 4C-Return 'chrome'
   bind-key 4-space menu-exec
   bind-key CS-w menu-window
