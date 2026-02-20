@@ -162,7 +162,9 @@ and could protect his new friends for the rest of his days
 
 #+NAME: Xdefaults
 #+BEGIN_SRC conf :tangle ~/.Xdefaults
-  XTerm*faceName: monospace:size=9
+  Xft.dpi: 96
+  Xft.antialias: true
+  XTerm*faceName: monospace:size=12
   XTerm*fullscreen: never
   XTerm*loginShell: true
   XTerm*metaSendsEscape: true
@@ -192,39 +194,21 @@ and could protect his new friends for the rest of his days
   clear mod5
   clear lock
 
-  ! Alt_R -> Control_L
+  ! ThinkPad Chicklet Space Cadet
   keycode 64 = Control_L
-
-  ! ISO_Level3_Shift -> Control_R
   keycode 113 = Control_R
-
-  ! Super_L -> Alt_L
   keycode 115 = Alt_L Meta_L
-
-  ! PrtSc -> Alt_R
   keycode 111 = Alt_R Meta_R
-
-  ! Control_L -> Super_L
   keycode 37 = Super_L
-
-  ! Control_R -> Super_R
   keycode 109 = Super_R
 
-  ! Escape -> Caps_Lock
   keycode 9 = Caps_Lock
-
-  ! Caps_Lock -> Escape
   keycode 66 = Escape
 
-  ! ThinkPad Fn -> Menu
-  keysym XF86WakeUp = Menu
-
-  ! Re-add modifiers
   add lock = Caps_Lock
   add Control = Control_L Control_R
   add mod1 = Alt_L Alt_R Meta_L Meta_R
   add mod4 = Super_L Super_R
-  add mod5 = ISO_Level3_Shift
 #+end_src
 
 ** XSESSION
@@ -240,6 +224,7 @@ and could protect his new friends for the rest of his days
   xmodmap ~/.Xmodmap
   pixelclock &
   pixelbatt &
+  saltab &
   sct 4000
   exec cwm
 #+END_SRC
@@ -261,27 +246,20 @@ and could protect his new friends for the rest of his days
   color inactiveborder '#627'
   color urgencyborder '#FF0'
   color menubg '#000'
-  color menufg '#627'
+  color menufg '#505'
   color font '#DDD'
   color selfont '#FFF'
-  color font '#B28'
 
   unbind-key all
   bind-key 4-BackSpace restart
   bind-key 4C-BackSpace quit
-  bind-key 4-Return 'xterm'
+  bind-key 4-t 'xterm'
   bind-key 4-e 'xterm -e emacsclient -c -a ""'
   bind-key 4-w firefox
-  bind-key 4C-Return 'chrome'
   bind-key 4-space menu-exec
-  bind-key CS-w menu-window
-  bind-key M-Tab window-cycle
-  bind-key MS-Tab window-rcycle
-  bind-key CS-q window-delete
+  bind-key 4-q window-delete
   bind-key 4-m window-maximize
-  bind-key CS-v window-vmaximize
-  bind-key CS-h window-hmaximize
-  bind-key 4C-m window-fullscreen
+  bind-key 4-f window-fullscreen
   bind-key 4-k window-move-up-big
   bind-key 4-j window-move-down-big
   bind-key 4-l window-move-right-big
