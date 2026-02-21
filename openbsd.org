@@ -89,9 +89,10 @@ and could protect his new friends for the rest of his days
 #+BEGIN_SRC sh :tangle ~/.profile
   PATH=$HOME/bin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin
   PATH=$PATH:/usr/games:/usr/libexec:/usr/local/libexec:.
+  MANPATH=/usr/share/man:/usr/X11R6/man:/usr/local/man
   TERM=xterm-256color
   ENV=$HOME/.kshrc
-  export PATH HOME TERM ENV
+  export PATH MANPATH HOME TERM ENV
 #+END_SRC
 
 ** KSHRC
@@ -101,7 +102,7 @@ and could protect his new friends for the rest of his days
   HISTFILE=$HOME/.ksh_history
   HISTSIZE=4096
   export HISTORY HISTCONTROL HISTFILE HISTSIZE
-  
+
   if [ $(id -u) -eq 0 ]; then
       PS1='\[\e[1;31m\]\u@\h\[\e[1;33m\]:\[\e[1;35m\]\w\n\[\e[1;33m\]\$\[\e[m\] '
   else
@@ -132,6 +133,12 @@ and could protect his new friends for the rest of his days
 
   set -o emacs
   set -o csh-history
+
+  set -A complete_git -- $(git --list-cmds=main)
+  set -A complete_make -- all install clean package reinstall repackage
+  set -A complete_man -- $(lsm | sort | uniq)
+  set -A complete_rcctl_1 -- disable enable get ls order set
+  set -A complete_rcctl_2 -- $(ls /etc/rc.d)
 
   stty kill  # fix backward kill in Emacs' ansi-term
 #+END_SRC
