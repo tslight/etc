@@ -136,8 +136,11 @@ and could protect his new friends for the rest of his days
   set -A complete_git -- $(git --list-cmds=main)
   set -A complete_make -- all install clean package reinstall repackage
   set -A complete_man -- $(lsm | sort | uniq)
+  set -A complete_pkg_delete -- $(pkg_info -q)
+  set -A complete_pkg_info -- $(pkg_info -q)
   set -A complete_rcctl_1 -- disable enable get ls order set restart start stop
   set -A complete_rcctl_2 -- $(rcctl ls all)
+  set -A complete_ssh -- $(awk '{split($1,a,","); print a[1]}' ~/.ssh/known_hosts)
 
   stty kill  # fix backward kill in Emacs' ansi-term
 #+END_SRC
