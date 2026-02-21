@@ -120,15 +120,14 @@ and could protect his new friends for the rest of his days
   alias mv='mv -i'
   alias pg='pgrep -l'
   alias pingg='ping -c 4 openbsd.org'
-  alias poweroff='doas shutdown -p now'
-  alias reboot='doas shutdown -r now'
+  alias bye='doas shutdown -p now'
+  alias rb='doas shutdown -r now'
   alias rm='rm -i'
-  tmux_create_or_attach () {
+  t() {
       [ -z "$TMUX" ] && \
           { tmux -q has-session && tmux attach -d || tmux -u; } || \
               { tmux new-session -d \; choose-tree -Zs; }
   }
-  alias t='tmux_create_or_attach'
   alias x='startx'
 
   set -o emacs
@@ -137,8 +136,8 @@ and could protect his new friends for the rest of his days
   set -A complete_git -- $(git --list-cmds=main)
   set -A complete_make -- all install clean package reinstall repackage
   set -A complete_man -- $(lsm | sort | uniq)
-  set -A complete_rcctl_1 -- disable enable get ls order set
-  set -A complete_rcctl_2 -- $(ls /etc/rc.d)
+  set -A complete_rcctl_1 -- disable enable get ls order set restart start stop
+  set -A complete_rcctl_2 -- $(rcctl ls all)
 
   stty kill  # fix backward kill in Emacs' ansi-term
 #+END_SRC
