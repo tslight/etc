@@ -426,6 +426,9 @@ All of my custom functions live under the =my/= prefix/namespace.
 ** XCLIP
 
 #+begin_src emacs-lisp
-  (when (and (not window-system) (executable-find "xclip"))
+  (when (and (not window-system) (or (executable-find "pbpaste")
+  				   (executable-find "wl-copy")
+  				   (executable-find "xclip")
+  				   (executable-find "xsel")))
     (use-package xclip :ensure :hook (emacs-startup . xclip-mode)))
 #+end_src
