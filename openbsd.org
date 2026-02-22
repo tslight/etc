@@ -149,13 +149,13 @@ and could protect his new friends for the rest of his days
   mouse1.reverse_scrolling=1
   keyboard.map+="keycode 1   = Cmd_Debugger Caps_Lock"
   keyboard.map+="keycode 58  = Cmd_Debugger Escape"
-  keyboard.map+="keycode 170 = Cmd2 Alt_L"      # Print_Screen
-  keyboard.map+="keycode 183 = Cmd2 Alt_L"      # Print_Screen
-  keyboard.map+="keycode 219 = Cmd2 Alt_L"      # Meta_L
-  keyboard.map+="keycode 56  = Cmd1 Control_L"  # Cmd2 Alt_L
-  keyboard.map+="keycode 184 = Cmd1 Control_R"  # Cmd2 Alt_R Multi_key
-  keyboard.map+="keycode 29  = Cmd2 Meta_L"     # Cmd2 Alt_R Multi_key
-  keyboard.map+="keycode 157 = Cmd2 Meta_R"     # Cmd2 Alt_R Multi_key
+  keyboard.map+="keycode 170 = Cmd Alt_L"      # Print_Screen
+  keyboard.map+="keycode 183 = Cmd Alt_L"      # Print_Screen
+  keyboard.map+="keycode 219 = Cmd Alt_L"      # Meta_L
+  keyboard.map+="keycode 56  = Cmd Control_L"  # Cmd2 Alt_L
+  keyboard.map+="keycode 184 = Cmd Control_R"  # Cmd2 Alt_R Multi_key
+  keyboard.map+="keycode 29  = Cmd Meta_L"     # Cmd2 Alt_R Multi_key
+  keyboard.map+="keycode 157 = Cmd Meta_R"     # Cmd2 Alt_R Multi_key
 #+END_SRC
 
 * XORG
