@@ -29,7 +29,7 @@ ask() {
 
 tangle_file () {
     local file="$1"
-    [[ -f "$file" ]] || { echo "Invalid file"; exit 1; }
+    [ -f "$file" ] || { echo "Invalid file"; exit 1; }
     echo "${GRN}Tangling $f....${OFF}"
     emacs --batch \
 	  --eval "(require 'org)" \
@@ -37,7 +37,7 @@ tangle_file () {
     echo "${GRN}Tangling $f done.${OFF}"
 }
 
-if [[ -z "$1" ]]; then
+if [ -z "$1" ]; then
     for f in *.org; do
 	if ask "${GRN}Tangle $f?${OFF}"; then
 	    tangle_file "$f"
