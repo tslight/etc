@@ -125,8 +125,8 @@ and could protect his new friends for the rest of his days
   alias rm='rm -i'
   t() {
       [ -z "$TMUX" ] && \
-          { tmux -q has-session && tmux attach -d || tmux -u; } || \
-              { tmux new-session -d \; choose-tree -Zs; }
+	  { tmux -q has-session && tmux attach -d || tmux -u; } || \
+	      { tmux new-session -d \; choose-tree -Zs; }
   }
   alias x='startx'
 
@@ -258,7 +258,7 @@ and could protect his new friends for the rest of his days
   bind-key 4-BackSpace restart
   bind-key 4C-BackSpace quit
 
-  bind-key 4-t 'xterm'
+  bind-key 4-t 'tabbed -c xterm -into'
   bind-key 4-e 'xterm -e emacsclient -c -a ""'
   bind-key 4-b firefox
 
@@ -329,10 +329,25 @@ and could protect his new friends for the rest of his days
   bind-key 4S-Escape window-rcycle-ingroup
 
   unbind-mouse all
-  bind-mouse R-1 menu-window
-  bind-mouse R-3 menu-cmd
   bind-mouse M-1 window-move
-  bind-mouse MS-1 window-resize
+  bind-mouse M-2 window-group
+  bind-mouse M-3 window-resize
+  bind-mouse M-4 window-lower
+  bind-mouse M-5 window-raise
+  bind-mouse R-1 menu-window
+  bind-mouse R-2 menu-window-hidden
+  bind-mouse R-3 menu-cmd
+  bind-mouse R-4 group-cycle
+  bind-mouse R-5 group-rcycle
+
+  command 'chrome' 'chrome'
+  command 'firefox' 'firefox'
+  command 'emacs' 'xterm -e emacsclient -c -a ""'
+  command 'xterm' 'tabbed -c xterm -into'
+  command 'xlock' 'xlock'
+  command 'sleep' 'zzz'
+  command 'reboot' 'shutdown -r now'
+  command 'shutdown' 'shutdown -p now'
 #+END_SRC
 
 ** GTK
