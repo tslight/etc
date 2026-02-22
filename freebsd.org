@@ -60,19 +60,19 @@ https://github.com/freebsd/freebsd-src/pull/1998
 
 Turn off debug options for better performance
 
-#+begin_src conf :tangle /sudo::/etc/make.conf
-  KERNCONF=GENERIC-NODEBUG
+#+begin_src conf :tangle /doas::/etc/make.conf
+  # KERNCONF=GENERIC-NODEBUG
   ALLOW_PKGBASE_INSTALLKERNEL=yes
 #+end_src
 
-#+begin_src conf :tangle /sudo::/etc/src.conf
+#+begin_src conf :tangle /doas::/etc/src.conf
   WITH_MALLOC_PRODUCTION=YES
   WITHOUT_LLVM_ASSERTIONS=YES
 #+end_src
 
 * CRON
 
-#+begin_src sh :tangle /sudo::/etc/crontab
+#+begin_src sh :tangle /doas::/etc/crontab
   # /etc/crontab - system crontab for FreeBSD
   #
   #
@@ -95,15 +95,16 @@ Turn off debug options for better performance
   # Adjust the time zone if the CMOS clock keeps local time, as opposed to
   # UTC time.  See adjkerntz(8) for details.
   1,31	0-5	*	*	*	root	adjkerntz -a
-  ,*	*	*	*	*	root	asmcfan > /dev/null
   ,*	*	*	*	*	root	fscksaver > /dev/null
 #+end_src
 
 ** ASMCFAN
 
-Control the fans depending on temperature, in a Macbook that supports ASMC.
+Control the fans depending on temperature, in a Macbook that supports
+ASMC.
 
-#+begin_src shell :tangle /sudo::/usr/local/bin/asmcfan :tangle-mode o755
+#+name: :tangle /doas::/usr/local/bin/asmcfan :tangle-mode o755
+#+begin_src shell
   #!/bin/sh
   if ! kldstat | grep -q asmc.ko; then
       if ! kldload asmc; then
@@ -164,7 +165,7 @@ Control the fans depending on temperature, in a Macbook that supports ASMC.
 
 Shutdown when battery is lower than 10% and we're not charging.
 
-#+begin_src shell :tangle /sudo::/usr/local/bin/fscksaver :tangle-mode o755
+#+begin_src shell :tangle /doas::/usr/local/bin/fscksaver :tangle-mode o755
   #!/bin/sh
 
   # Get battery life percentage
@@ -348,7 +349,7 @@ x11-wm/ratpoison
 net/rsync
 accessibility/sct
 sysutils/sensors
-security/sudo
+security/doas
 sysutils/tmux
 x11-wm/twm
 x11-clocks/xclock
@@ -357,15 +358,6 @@ x11/xset
 x11/xterm
 shells/zsh
 #+end_example
-
-* SUDOERS
-
-#+begin_src con
-Defaults insults
-Defaults timestamp_timeout=30
-%wheel ALL=(ALL:ALL) ALL
-%operator ALL=(ALL:ALL) NOPASSWD: /usr/bin/backlight
-#+end_src
 
 * VT
 
@@ -378,14 +370,13 @@ it in =/usr/share/vt/keymaps= and run =sysrc keymap=foo.kbd= or add
 =keymap=foo.kbd= to =/etc/rc.conf=.
 
 Once everything is working as expected and you've tested with a reboot, add an
-entry below, and optionally add =:tangle /sudo::/usr/share/vt/keymaps/foo.kbd=.
+entry below, and optionally add =:tangle /doas::/usr/share/vt/keymaps/foo.kbd=.
 
 ** JP EMACS MACBOOK
 
 Make the most of the extra modifier keys on a Korean/Japanese layout
 
-#+name: :tangle /sudo::/usr/share/vt/keymaps/jp.emacs.macbook.kbd :tangle-mode o444
-#+begin_src conf
+#+begin_src conf :tangle /doas::/usr/share/vt/keymaps/jp.emacs.macbook.kbd :tangle-mode o444
 #                                                         alt
 # scan                       cntrl          alt    alt   cntrl lock
 # code  base   shift  cntrl  shift  alt    shift  cntrl  shift state
@@ -504,6 +495,7 @@ Make the most of the extra modifier keys on a Korean/Japanese layout
   115   '`'    '~'    nop    nop    '`'    '~'    nop    nop     O
   125   bs     bs     del    del    bs     bs     del    del     O
 #+end_src
+
 ** US EMACS MACBOOK
 
 + ESC <=> CapsLock
@@ -516,8 +508,7 @@ Make the most of the extra modifier keys on a Korean/Japanese layout
 + CTRL+Left/Right => Previous/Next TTY
 + CTRL+Up/Down => ScrollLock
 
-#+name: :tangle /sudo::/usr/share/vt/keymaps/us.emacs.macbook.kbd :tangle-mode o444
-#+begin_src conf
+#+begin_src conf :tangle /doas::/usr/share/vt/keymaps/us.emacs.macbook.kbd :tangle-mode o444
   #                                                         alt
   # scan                       cntrl          alt    alt   cntrl lock
   # code  base   shift  cntrl  shift  alt    shift  cntrl  shift state
@@ -631,18 +622,136 @@ Make the most of the extra modifier keys on a Korean/Japanese layout
     106   rctrl  rctrl  rctrl  rctrl  rctrl  rctrl  rctrl  rctrl   O
     107   fkey64 fkey64 fkey64 fkey64 fkey64 fkey64 fkey64 fkey64  O
     108   nop    nop    nop    nop    nop    nop    nop    nop     O
-
 #+end_src
+
+** US EMACS THINKPAD
+
+#+begin_src conf :tangle /doas::/usr/share/vt/keymaps/us.emacs.thinkpad.kbd :tangle-mode o444
+#                                                         alt
+# scan                       cntrl          alt    alt   cntrl lock
+# code  base   shift  cntrl  shift  alt    shift  cntrl  shift state
+# ------------------------------------------------------------------
+  000   nop    nop    nop    nop    nop    nop    nop    nop     O
+  001   clock  clock  clock  clock  clock  clock  susp   clock   O
+  002   '1'    '!'    nop    nop    '1'    '!'    nop    nop     O
+  003   '2'    '@'    nul    nul    '2'    '@'    nul    nul     O
+  004   '3'    '#'    nop    nop    '3'    '#'    nop    nop     O
+  005   '4'    '$'    nop    nop    '4'    '$'    nop    nop     O
+  006   '5'    '%'    nop    nop    '5'    '%'    nop    nop     O
+  007   '6'    '^'    rs     rs     '6'    '^'    rs     rs      O
+  008   '7'    '&'    nop    nop    '7'    '&'    nop    nop     O
+  009   '8'    '*'    nop    nop    '8'    '*'    nop    nop     O
+  010   '9'    '('    nop    nop    '9'    '('    nop    nop     O
+  011   '0'    ')'    nop    nop    '0'    ')'    nop    nop     O
+  012   '-'    '_'    us     us     '-'    '_'    us     us      O
+  013   '='    '+'    nop    nop    '='    '+'    nop    nop     O
+  014   del    del    del    del    del    del    del    del     O
+  015   ht     btab   nop    nop    ht     btab   nop    nop     O
+  016   'q'    'Q'    dc1    dc1    'q'    'Q'    dc1    dc1     C
+  017   'w'    'W'    etb    etb    'w'    'W'    etb    etb     C
+  018   'e'    'E'    enq    enq    'e'    'E'    enq    enq     C
+  019   'r'    'R'    dc2    dc2    'r'    'R'    dc2    dc2     C
+  020   't'    'T'    dc4    dc4    't'    'T'    dc4    dc4     C
+  021   'y'    'Y'    em     em     'y'    'Y'    em     em      C
+  022   'u'    'U'    nak    nak    'u'    'U'    nak    nak     C
+  023   'i'    'I'    ht     btab   ht     btab   ht     btab    C
+  024   'o'    'O'    si     si     'o'    'O'    si     si      C
+  025   'p'    'P'    dle    dle    'p'    'P'    dle    dle     C
+  026   '['    '{'    esc    esc    '['    '{'    esc    esc     O
+  027   ']'    '}'    gs     gs     ']'    '}'    gs     gs      O
+  028   cr     cr     nl     nl     cr     cr     nl     nl      O
+  029   pscr   pscr   pscr   pscr   pscr   pscr   pscr   pscr    O
+  030   'a'    'A'    soh    soh    'a'    'A'    soh    soh     C
+  031   's'    'S'    dc3    dc3    's'    'S'    dc3    dc3     C
+  032   'd'    'D'    eot    eot    'd'    'D'    eot    eot     C
+  033   'f'    'F'    ack    ack    'f'    'F'    ack    ack     C
+  034   'g'    'G'    bel    bel    'g'    'G'    bel    bel     C
+  035   'h'    'H'    bs     bs     bs     bs     del    del	 C
+  036   'j'    'J'    nl     nl     'j'    'J'    nl     nl      C
+  037   'k'    'K'    vt     vt     'k'    'K'    vt     vt      C
+  038   'l'    'L'    ff     ff     'l'    'L'    ff     ff      C
+  039   ';'    ':'    ';'    ':'    ';'    ':'    nop    nop     O
+  040   '''    '"'    '''    '"'    '''    '"'    nop    nop     O
+  041   '`'    '~'    '`'    '~'    '`'    '~'    nop    nop     O
+  042   lshift lshift lshift lshift lshift lshift lshift lshift  O
+  043   '\'    '|'    fs     fs     '\'    '|'    fs     fs      O
+  044   'z'    'Z'    sub    sub    'z'    'Z'    sub    sub     C
+  045   'x'    'X'    can    can    'x'    'X'    can    can     C
+  046   'c'    'C'    etx    etx    'c'    'C'    etx    etx     C
+  047   'v'    'V'    syn    syn    'v'    'V'    syn    syn     C
+  048   'b'    'B'    stx    stx    'b'    'B'    stx    stx     C
+  049   'n'    'N'    so     so     'n'    'N'    so     so      C
+  050   'm'    'M'    cr     cr     'm'    'M'    cr     cr      C
+  051   ','    '<'    ','    '<'    ','    '<'    nop    nop     O
+  052   '.'    '>'    '.'    '>'    '.'    '>'    nop    nop     O
+  053   '/'    '?'    us     us     0xaf   0xbf   nop    nop     O
+  054   rshift rshift rshift rshift rshift rshift rshift rshift  O
+  055   '*'    '*'    '*'    '*'    '*'    '*'    '*'    '*'     O
+  056   lctrl  lctrl  lctrl  lctrl  lctrl  lctrl  lctrl  lctrl   O
+  057   ' '    ' '    nul    ' '    ' '    ' '    nul    ' '     O
+  058   esc    esc    esc    esc    esc    esc    debug  esc     O
+  059   fkey01 fkey13 scr01  fkey37 scr01  scr11  scr01  scr11   O
+  060   fkey02 fkey14 scr02  fkey38 scr02  scr12  scr02  scr12   O
+  061   fkey03 fkey15 scr03  fkey39 scr03  scr13  scr03  scr13   O
+  062   fkey04 fkey16 scr04  fkey40 scr04  scr14  scr04  scr14   O
+  063   fkey05 fkey17 scr05  fkey41 scr05  scr15  scr05  scr15   O
+  064   fkey06 fkey18 scr06  fkey42 scr06  scr16  scr06  scr16   O
+  065   fkey07 fkey19 scr07  fkey43 scr07  scr07  scr07  scr07   O
+  066   fkey08 fkey20 scr08  fkey44 scr08  scr08  scr08  scr08   O
+  067   fkey09 fkey21 scr09  fkey45 scr09  scr09  scr09  scr09   O
+  068   fkey10 fkey22 scr10  fkey46 scr10  scr10  scr10  scr10   O
+  069   nlock  nlock  nlock  nlock  nlock  nlock  nlock  nlock   O
+  070   slock  slock  slock  slock  slock  slock  slock  slock   O
+  071   fkey49 '7'    '7'    '7'    '7'    '7'    '7'    '7'     N
+  072   fkey50 '8'    '8'    '8'    '8'    '8'    '8'    '8'     N
+  073   fkey51 '9'    '9'    '9'    '9'    '9'    '9'    '9'     N
+  074   fkey52 '-'    '-'    '-'    '-'    '-'    '-'    '-'     N
+  075   fkey53 '4'    '4'    '4'    '4'    '4'    '4'    '4'     N
+  076   fkey54 '5'    '5'    '5'    '5'    '5'    '5'    '5'     N
+  077   fkey55 '6'    '6'    '6'    '6'    '6'    '6'    '6'     N
+  078   fkey56 '+'    '+'    '+'    '+'    '+'    '+'    '+'     N
+  079   fkey57 '1'    '1'    '1'    '1'    '1'    '1'    '1'     N
+  080   fkey58 '2'    '2'    '2'    '2'    '2'    '2'    '2'     N
+  081   fkey59 '3'    '3'    '3'    '3'    '3'    '3'    '3'     N
+  082   fkey60 '0'    '0'    '0'    '0'    '0'    '0'    '0'     N
+  083   del    '.'    '.'    '.'    '.'    '.'    boot   boot    N
+  084   nop    nop    nop    nop    nop    nop    nop    nop     O
+  085   nop    nop    nop    nop    nop    nop    nop    nop     O
+  086   nop    nop    nop    nop    nop    nop    nop    nop     O
+  087   fkey11 fkey23 fkey35 fkey47 scr11  scr11  scr11  scr11   O
+  088   fkey12 fkey24 fkey36 fkey48 scr12  scr12  scr12  scr12   O
+  089   cr     cr     nl     nl     cr     cr     nl     nl      O
+  090   nscr   nscr   nscr   nscr   nscr   nscr   nscr   nscr    O
+  091   '/'    '/'    '/'    '/'    '/'    '/'    '/'    '/'     N
+  092   lalt   lalt   lalt   lalt   lalt   lalt   lalt   lalt    O
+  093   rctrl  rctrl  rctrl  rctrl  rctrl  rctrl  rctrl  rctrl   O
+  094   fkey49 fkey49 fkey49 fkey49 fkey49 fkey49 fkey49 fkey49  O
+  095   fkey50 fkey50 fkey50 fkey50 fkey50 fkey50 fkey50 fkey50  O
+  096   fkey51 fkey51 fkey51 fkey51 fkey51 fkey51 fkey51 fkey51  O
+  097   fkey53 fkey53 fkey53 fkey53 fkey53 fkey53 fkey53 fkey53  O
+  098   fkey55 fkey55 fkey55 fkey55 fkey55 fkey55 fkey55 fkey55  O
+  099   fkey57 fkey57 fkey57 fkey57 fkey57 fkey57 fkey57 fkey57  O
+  100   fkey58 fkey58 fkey58 fkey58 fkey58 fkey58 fkey58 fkey58  O
+  101   fkey59 fkey59 fkey59 fkey59 fkey59 fkey59 fkey59 fkey59  O
+  102   fkey60 paste  fkey60 fkey60 fkey60 fkey60 fkey60 fkey60  O
+  103   fkey61 fkey61 fkey61 fkey61 fkey61 fkey61 boot   fkey61  O
+  104   slock  saver  slock  saver  susp   nop    susp   nop     O
+  105   lalt   lalt   lalt   lalt   lalt   lalt   lalt   lalt    O
+  106   fkey63 fkey63 fkey63 fkey63 fkey63 fkey63 fkey63 fkey63  O
+  107   fkey64 fkey64 fkey64 fkey64 fkey64 fkey64 fkey64 fkey64  O
+  108   nop    nop    nop    nop    nop    nop    nop    nop     O
+#+end_src
+
 * XORG
 
 On FreeBSD Xorg configuration lives in =/usr/local/etc/X11/xorg.conf.d/= so
-add: =:tangle /sudo::/usr/local/etc/X11/xorg.conf.d/20-foo.conf= to the block
+add: =:tangle /doas::/usr/local/etc/X11/xorg.conf.d/20-foo.conf= to the block
 declarations if you so wish. However, for now I'm setting all of these to
 == whilst I figure things out...
 
 ** INTEL
 
-#+name: conf :tangle /sudo::/usr/local/etc/X11/xorg.conf.d/50-intel.conf
+#+name: conf :tangle /doas::/usr/local/etc/X11/xorg.conf.d/50-intel.conf
 #+begin_src
   Section "Device"
 	  Identifier "Card0"
@@ -652,7 +761,7 @@ declarations if you so wish. However, for now I'm setting all of these to
 
 ** DPMS
 
-#+begin_src conf :tangle /sudo::/usr/local/etc/X11/xorg.conf.d/50-serverflags.conf
+#+begin_src conf :tangle /doas::/usr/local/etc/X11/xorg.conf.d/50-serverflags.conf
   Section "ServerFlags"
 	  Option "StandbyTime" "5"
 	  Option "SuspendTime" "10"
@@ -668,7 +777,7 @@ suspend/resume...
 
 *** MACBOOK STANDARD
 
-#+begin_src conf :tangle /sudo::/usr/local/etc/X11/xorg.conf.d/50-libinput-kbd.conf
+#+begin_src conf :tangle /doas::/usr/local/etc/X11/xorg.conf.d/50-libinput-kbd.conf
   Section "InputClass"
 	    Identifier "libinput keyboard catchall"
 	    MatchIsKeyboard "on"
@@ -681,7 +790,7 @@ suspend/resume...
 *** MACBOOK KOREAN/JAPANESE
 **** EXTRA XKB OPTIONS
 
-#+name: :tangle /sudo::/usr/local/share/X11/xkb/symbols/hangul
+#+name: :tangle /doas::/usr/local/share/X11/xkb/symbols/hangul
 #+begin_src conf
 // Make better use of a Korean keyboard with a non-Korean layout
 
@@ -702,7 +811,7 @@ xkb_symbols "deadkeys" {
 };
 #+end_src
 
-#+name: :tangle /sudo::/usr/local/share/X11/xkb/symbols/leftmods
+#+name: :tangle /doas::/usr/local/share/X11/xkb/symbols/leftmods
 #+begin_src conf
 // Japanese/Korean MacBook (Non-Standard?) Far Left Modifier Options
 partial modifier_keys
@@ -744,7 +853,7 @@ EndSection
 
 ** TOUCHPAD
 
-#+begin_src conf :tangle /sudo::/usr/local/etc/X11/xorg.conf.d/50-libinput-tp.conf
+#+begin_src conf :tangle /doas::/usr/local/etc/X11/xorg.conf.d/50-libinput-tp.conf
   Section "InputClass"
 	  Identifier "libinput touchpad catchall"
 	  MatchIsTouchpad "on"
@@ -753,20 +862,6 @@ EndSection
 	  Option "DisableWhileTyping" "True"
   EndSection
 #+end_src
-
-** XSESSION
-
-#+NAME: xsession
-#+BEGIN_SRC conf :tangle ~/.xsession
-  pixelclock &
-  pixelbatt &
-  saltab &
-  sct 4000
-  exec sdorfehs
-#+END_SRC
-#+BEGIN_SRC conf :noweb yes :tangle ~/.xinitrc
-  <<xsession>>
-#+END_SRC
 
 ** XDEFAULTS
 
@@ -780,6 +875,48 @@ EndSection
 #+end_src
 #+BEGIN_SRC conf :noweb yes :tangle ~/.Xresources
   <<xdefaults>>
+#+END_SRC
+
+** XMODMAP
+
+#+begin_src conf :tangle ~/.Xmodmap
+  clear control
+  clear mod1
+  clear mod4
+  clear mod5
+  clear lock
+
+  ! ThinkPad Chicklet Space Cadet
+  keycode 64 = Control_L
+  keycode 108 = Control_R
+  keycode 107 = Alt_L Meta_L
+  keycode 133 = Alt_L Meta_L
+  keycode 37 = Super_L
+  keycode 105 = Super_R
+
+  keycode 9 = Caps_Lock
+  keycode 66 = Escape
+
+  add lock = Caps_Lock
+  add Control = Control_L Control_R
+  add mod1 = Alt_L Meta_L
+  add mod4 = Super_L Super_R
+#+end_src
+
+** XSESSION
+
+#+NAME: xsession
+#+BEGIN_SRC conf :tangle ~/.xsession
+  xmodmap ~/.Xmodmap
+  pixelclock &
+  pixelbatt &
+  saltab &
+  sct 4000
+  exec sdorfehs
+#+END_SRC
+
+#+BEGIN_SRC conf :noweb yes :tangle ~/.xinitrc
+  <<xsession>>
 #+END_SRC
 
 ** SDORFEHS
@@ -817,6 +954,14 @@ EndSection
   bind M-q quit
   bind M-r restart
 
+  definekey top s-e exec xterm -e emacsclient -nw -c -a ""
+  definekey top s-t exec xterm
+  definekey top s-w exec librewolf
+  definekey top s-q kill
+  definekey top s-m only
+  definekey top s-v hsplit
+  definekey top s-s vsplit
+  definekey top s-space exec
   definekey top XF86MonBrightnessDown exec backlight - 5
   definekey top XF86MonBrightnessUp   exec backlight + 5
   definekey top XF86AudioMute         exec mixer vol.mute=toggle
