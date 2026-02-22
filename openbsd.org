@@ -257,10 +257,13 @@ and could protect his new friends for the rest of his days
   unbind-key all
   bind-key 4-BackSpace restart
   bind-key 4C-BackSpace quit
+
   bind-key 4-t 'xterm'
   bind-key 4-e 'xterm -e emacsclient -c -a ""'
-  bind-key 4-w firefox
-  bind-key 4-space menu-exec
+  bind-key 4-b firefox
+
+  bind-key 4-v window-vtile
+  bind-key 4C-v window-htile
   bind-key 4-q window-delete
   bind-key 4-m window-maximize
   bind-key 4-f window-fullscreen
@@ -272,8 +275,62 @@ and could protect his new friends for the rest of his days
   bind-key 4C-j window-resize-down-big
   bind-key 4C-l window-resize-right-big
   bind-key 4C-h window-resize-left-big
+  bind-key 4M-h window-snap-left
+  bind-key 4M-j window-snap-down
+  bind-key 4M-k window-snap-up
+  bind-key 4M-l window-snap-right
+
+  bind-key 4-a menu-cmd
+  bind-key 4-s menu-ssh
+  bind-key 4-space menu-exec
+  bind-key 4C-space menu-exec-wm
+  bind-key 4-g menu-group
+  bind-key 4-w menu-window
+  bind-key 4C-w menu-window-hidden
+
+  bind-key 4-1 group-only-1
+  bind-key 4-2 group-only-2
+  bind-key 4-3 group-only-3
+  bind-key 4-4 group-only-4
+  bind-key 4-5 group-only-5
+  bind-key 4-6 group-only-6
+  bind-key 4-7 group-only-7
+  bind-key 4-8 group-only-8
+  bind-key 4-9 group-only-9
+
+  bind-key 4S-1 group-toggle-1
+  bind-key 4S-2 group-toggle-2
+  bind-key 4S-3 group-toggle-3
+  bind-key 4S-4 group-toggle-4
+  bind-key 4S-5 group-toggle-5
+  bind-key 4S-6 group-toggle-6
+  bind-key 4S-7 group-toggle-7
+  bind-key 4S-8 group-toggle-8
+  bind-key 4S-9 group-toggle-9
+
+  bind-key 4C-1 window-movetogroup-1
+  bind-key 4C-2 window-movetogroup-2
+  bind-key 4C-3 window-movetogroup-3
+  bind-key 4C-4 window-movetogroup-4
+  bind-key 4C-5 window-movetogroup-5
+  bind-key 4C-6 window-movetogroup-6
+  bind-key 4C-7 window-movetogroup-7
+  bind-key 4C-8 window-movetogroup-8
+  bind-key 4C-9 window-movetogroup-9
+
+  bind-key 4-0 group-toggle-all
+  bind-key 4C-0 window-group
+
+  bind-key C-Escape window-cycle
+  bind-key CS-Escape window-rcycle
+  bind-key M-Escape group-cycle
+  bind-key MS-Escape group-rcycle
+  bind-key 4-Escape window-cycle-ingroup
+  bind-key 4S-Escape window-rcycle-ingroup
+
   unbind-mouse all
   bind-mouse R-1 menu-window
+  bind-mouse R-3 menu-cmd
   bind-mouse M-1 window-move
   bind-mouse MS-1 window-resize
 #+END_SRC
