@@ -161,7 +161,6 @@ and could protect his new friends for the rest of his days
 * XORG
 ** XDEFAULTS
 
-#+NAME: Xdefaults
 #+BEGIN_SRC conf :tangle ~/.Xdefaults
   Xft.dpi: 96
   Xft.antialias: true
@@ -178,10 +177,6 @@ and could protect his new friends for the rest of his days
   XTerm*termName: xterm-256color
 #+END_SRC
 
-#+BEGIN_SRC conf :noweb yes :tangle ~/.Xresources
-  <<Xdefaults>>
-#+END_SRC
-
 ** XENODM
 
 #+name /etc/X11/xenodm/xenodm-config
@@ -191,7 +186,7 @@ and could protect his new friends for the rest of his days
 
 ** XMODMAP
 
-#+begin_src conf :tangle ~/.Xmodmap
+#+begin_src conf :tangle (if (string-search "Lenovo" (shell-command-to-string "sysctl -n hw.vendor")) "~/.Xmodmap" "no")
   clear control
   clear mod1
   clear mod4
@@ -217,25 +212,26 @@ and could protect his new friends for the rest of his days
 
 ** XSESSION
 
-#+NAME: xsession
-#+BEGIN_SRC conf :tangle ~/.xsession
+#+begin_src conf :tangle (if (string-search "Lenovo" (shell-command-to-string "sysctl -n hw.vendor")) "~/.xsession" "no")
   xinput set-prop "/dev/wsmouse" "WS Pointer Wheel Emulation" 1
   xinput set-prop "/dev/wsmouse" "WS Pointer Wheel Emulation Button" 2
   xinput set-prop "/dev/wsmouse" "WS Pointer Wheel Emulation Axes" 6 7 4 5
+  xmodmap ~/.Xmodmap
+#+end_src
 
+#+begin_src conf :tangle (if (string-search "Apple" (shell-command-to-string "sysctl -n hw.vendor")) "~/.xsession" "no")
+  setxkbmap -option 'caps:swapescape,ctrl:swap_lwin_lctl,ctrl:swap_rwin_rctl'
+#+end_src
+
+#+begin_src conf :tangle ~/.xsession
   xset dpms 300 600 900 r rate 200 50
   xsetroot -solid black
-  xmodmap ~/.Xmodmap
   pixelclock &
   pixelbatt &
   saltab &
   sct 4000
   exec cwm
-#+END_SRC
-
-#+BEGIN_SRC conf :noweb yes :tangle ~/.xinitrc
-  <<xsession>>
-#+END_SRC
+#+end_src
 
 ** CWM
 
