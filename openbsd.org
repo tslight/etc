@@ -139,7 +139,7 @@ and could protect his new friends for the rest of his days
 
 * WSCONS
 
-#+name: :tangle (if (string-search "Lenovo" (shell-command-to-string "sysctl -n hw.vendor")) "/doas::/etc/wsconsctl.conf" "no")
+#+name: :tangle (if (string-search "LENOVO" (shell-command-to-string "sysctl -n hw.vendor")) "/doas::/etc/wsconsctl.conf" "no")
 #+begin_src conf
   keyboard.repeat.del1=200
   keyboard.repeat.deln=50
@@ -198,7 +198,7 @@ and could protect his new friends for the rest of his days
 
 ** XMODMAP
 
-#+begin_src conf :tangle (if (string-search "Lenovo" (shell-command-to-string "sysctl -n hw.vendor")) "~/.Xmodmap" "no")
+#+begin_src conf :tangle (if (string-search "LENOVO" (shell-command-to-string "sysctl -n hw.vendor")) "~/.Xmodmap" "no")
   clear control
   clear mod1
   clear mod4
@@ -224,7 +224,7 @@ and could protect his new friends for the rest of his days
 
 ** XSESSION
 
-#+begin_src conf :tangle (if (string-search "Lenovo" (shell-command-to-string "sysctl -n hw.vendor")) "~/.xsession" "no")
+#+begin_src conf :tangle (if (string-search "LENOVO" (shell-command-to-string "sysctl -n hw.vendor")) "~/.xsession" "no")
   xinput set-prop "/dev/wsmouse" "WS Pointer Wheel Emulation" 1
   xinput set-prop "/dev/wsmouse" "WS Pointer Wheel Emulation Button" 2
   xinput set-prop "/dev/wsmouse" "WS Pointer Wheel Emulation Axes" 6 7 4 5
