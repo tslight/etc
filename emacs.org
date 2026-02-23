@@ -35,9 +35,9 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
   (setq fill-column 79)
 
   (setq package-archives
-	'(("gnu" . "https://elpa.gnu.org/packages/")
-	("melpa" . "https://melpa.org/packages/")
-	("nongnu" . "https://elpa.nongnu.org/nongnu/")))
+	  '(("gnu" . "https://elpa.gnu.org/packages/")
+	  ("melpa" . "https://melpa.org/packages/")
+	  ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
 
   ;; https://emacs.stackexchange.com/a/78660
   (setq tramp-allow-unsafe-temporary-files t)
@@ -45,6 +45,7 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
   (setq use-package-always-defer t)
   (setq use-package-enable-imenu-support t)
   (setq use-short-answers t)
+  (setq view-mode t)
 #+end_src
 
 * BINDINGS
@@ -64,6 +65,7 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
   (keymap-global-set "C-c m" 'man) ;; run sudo makewhatis or mandb
   (keymap-global-set "C-c p" 'proced)
   (keymap-global-set "C-c t" 'ansi-term)
+  (keymap-global-set "C-c v" 'view-mode)
   (keymap-global-set "<f5>" 'compile)
   (keymap-global-set "<f11>" 'toggle-frame-fullscreen)
   (keymap-global-set "C-x C-b" 'ibuffer)
