@@ -221,6 +221,7 @@ and could protect his new friends for the rest of his days
 
 #+begin_src conf :tangle (if (string-search "Apple" (shell-command-to-string "sysctl -n hw.vendor")) "~/.xsession" "no")
   setxkbmap -option 'caps:swapescape,ctrl:swap_lwin_lctl,ctrl:swap_rwin_rctl'
+  xmodmap -e "keysym Left = Super_R"
 #+end_src
 
 #+begin_src conf :tangle ~/.xsession
