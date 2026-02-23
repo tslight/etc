@@ -258,9 +258,9 @@ and could protect his new friends for the rest of his days
   bind-key 4-BackSpace restart
   bind-key 4C-BackSpace quit
 
-  bind-key 4-t 'tabbed -c xterm -into'
-  bind-key 4-e 'xterm -e emacsclient -c -a ""'
   bind-key 4-b firefox
+  bind-key 4-e 'xterm -e emacsclient -c -a ""'
+  bind-key 4-t terminal
 
   bind-key 4-v window-vtile
   bind-key 4C-v window-htile
@@ -279,6 +279,12 @@ and could protect his new friends for the rest of his days
   bind-key 4M-j window-snap-down
   bind-key 4M-k window-snap-up
   bind-key 4M-l window-snap-right
+  bind-key M-Escape window-cycle
+  bind-key MS-Escape window-rcycle
+  bind-key C-Escape window-cycle-ingroup
+  bind-key CS-Escape window-rcycle-ingroup
+  bind-key C-grave window-cycle-inclass
+  bind-key CS-grave window-rcycle-inclass
 
   bind-key 4-a menu-cmd
   bind-key 4-s menu-ssh
@@ -321,12 +327,9 @@ and could protect his new friends for the rest of his days
   bind-key 4-0 group-toggle-all
   bind-key 4C-0 window-group
 
-  bind-key C-Escape window-cycle
-  bind-key CS-Escape window-rcycle
-  bind-key M-Escape group-cycle
-  bind-key MS-Escape group-rcycle
-  bind-key 4-Escape window-cycle-ingroup
-  bind-key 4S-Escape window-rcycle-ingroup
+  bind-key 4-Escape group-last
+  bind-key 4-Tab group-cycle
+  bind-key 4S-Tab group-rcycle
 
   unbind-mouse all
   bind-mouse M-1 window-move
@@ -340,12 +343,12 @@ and could protect his new friends for the rest of his days
   bind-mouse R-4 group-cycle
   bind-mouse R-5 group-rcycle
 
-  command 'chrome' 'chrome'
-  command 'firefox' 'firefox'
+  command 'chrome' chrome
+  command 'firefox' firefox
   command 'emacs' 'xterm -e emacsclient -c -a ""'
-  command 'xterm' 'tabbed -c xterm -into'
-  command 'xlock' 'xlock'
-  command 'sleep' 'zzz'
+  command 'xterm' terminal
+  command 'xlock' xlock
+  command 'sleep' zzz
   command 'reboot' 'shutdown -r now'
   command 'shutdown' 'shutdown -p now'
 #+END_SRC
