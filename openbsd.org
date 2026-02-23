@@ -139,12 +139,11 @@ and could protect his new friends for the rest of his days
 
 * WSCONS
 
-#+name: :tangle /doas::/etc/wsconsctl.conf
-#+BEGIN_SRC conf
+#+name: :tangle (if (string-search "Lenovo" (shell-command-to-string "sysctl -n hw.vendor")) "/doas::/etc/wsconsctl.conf" "no")
+#+begin_src conf
   keyboard.repeat.del1=200
   keyboard.repeat.deln=50
   keyboard.backlight=0
-  mouse1.tp.tapping=1,3,2
   mouse1.tp.mtbuttons=1
   mouse1.reverse_scrolling=1
   keyboard.map+="keycode 1   = Cmd_Debugger Caps_Lock"
@@ -156,7 +155,20 @@ and could protect his new friends for the rest of his days
   keyboard.map+="keycode 184 = Cmd Control_R"  # Cmd2 Alt_R Multi_key
   keyboard.map+="keycode 29  = Cmd Meta_L"     # Cmd2 Alt_R Multi_key
   keyboard.map+="keycode 157 = Cmd Meta_R"     # Cmd2 Alt_R Multi_key
-#+END_SRC
+#+end_src
+
+#+name: :tangle (if (string-search "Apple" (shell-command-to-string "sysctl -n hw.vendor")) "/doas::/etc/wsconsctl.conf" "no")
+#+begin_src conf
+  keyboard.backlight=0		# change keyboard backlight
+  keyboard1.repeat.del1=200	# change keyboard repeat/delay
+  keyboard1.repeat.deln=50
+  keyboard1.encoding=us.metaesc	# use different keyboard encoding
+  mouse1.tp.mtbuttons=1		# enable button clicking with multiple fingers
+  mouse1.reverse_scrolling=1	# enable so-called "natural" scrolling
+  keyboard1.map+="keysym Meta_L = Control_L"
+  keyboard1.map+="keysym Meta_R = Control_R"
+  keyboard1.map+="keysym Caps_Lock = Escape"
+#+end_src
 
 * XORG
 ** XDEFAULTS
