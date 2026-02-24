@@ -250,10 +250,12 @@ and could protect his new friends for the rest of his days
 
 #+BEGIN_SRC conf :tangle ~/.cwmrc
   borderwidth 1
+  fontname "monospace:bold:size=13"
+  ignore tint2
+  gap 0 0 2 6
+  moveamount 5
   sticky yes
   snapdist 5
-  moveamount 5
-  fontname "monospace:bold:size=13"
 
   color activeborder '#B28'
   color inactiveborder '#627'
@@ -271,8 +273,10 @@ and could protect his new friends for the rest of his days
   bind-key 4-e 'xterm -e emacsclient -c -a ""'
   bind-key 4-t terminal
 
-  bind-key 4-v window-vtile
-  bind-key 4C-v window-htile
+  bind-key 4-comma window-vtile
+  bind-key 4-period window-htile
+  bind-key 4C-comma window-vmaximize
+  bind-key 4C-period window-hmaximize
   bind-key 4-q window-delete
   bind-key 4-m window-maximize
   bind-key 4-f window-fullscreen
