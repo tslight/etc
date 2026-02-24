@@ -45,7 +45,7 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
   (setq use-package-always-defer t)
   (setq use-package-enable-imenu-support t)
   (setq use-short-answers t)
-  (setq view-mode t)
+  (setq view-read-only t) ;; pager bindings in all RO buffers
 #+end_src
 
 * BINDINGS
@@ -73,6 +73,10 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
   (keymap-global-set "C-x k" #'(lambda () (interactive) (kill-buffer (current-buffer))))
   (keymap-global-set "C-x M-k" 'kill-buffer)
   (keymap-global-set "C-x M-c" 'kill-emacs) ;; for killing the daemon
+  ;; these are far superior to the defaults imho
+  (global-set-key [remap capitalize-word] 'capitalize-dwim)
+  (global-set-key [remap downcase-word] 'downcase-dwim)
+  (global-set-key [remap upcase-word] 'upcase-dwim)
 #+end_src
 
 * DEFUNS
