@@ -64,12 +64,14 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
   (keymap-global-set "C-c i" 'imenu)
   (keymap-global-set "C-c m" 'man) ;; run sudo makewhatis or mandb
   (keymap-global-set "C-c p" 'proced)
+  (keymap-global-set "C-c r" 'recentf)
+  (keymap-global-set "C-c s" 'shell)
   (keymap-global-set "C-c t" 'ansi-term)
-  (keymap-global-set "C-c v" 'view-mode)
   (keymap-global-set "<f5>" 'compile)
   (keymap-global-set "<f11>" 'toggle-frame-fullscreen)
   (keymap-global-set "C-x C-b" 'ibuffer)
   (keymap-global-set "C-x x s" 'sort-lines)
+  (keymap-global-set "C-x M-e" 'eval-buffer)
   (keymap-global-set "C-x k" #'(lambda () (interactive) (kill-buffer (current-buffer))))
   (keymap-global-set "C-x M-k" 'kill-buffer)
   (keymap-global-set "C-x M-c" 'kill-emacs) ;; for killing the daemon
