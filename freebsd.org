@@ -95,6 +95,7 @@ Turn off debug options for better performance
   # Adjust the time zone if the CMOS clock keeps local time, as opposed to
   # UTC time.  See adjkerntz(8) for details.
   1,31	0-5	*	*	*	root	adjkerntz -a
+  ,*	*	*	*	*	root	asmcfan > /dev/null
   ,*	*	*	*	*	root	fscksaver > /dev/null
 #+end_src
 
@@ -103,8 +104,8 @@ Turn off debug options for better performance
 Control the fans depending on temperature, in a Macbook that supports
 ASMC.
 
-#+name: :tangle /doas::/usr/local/bin/asmcfan :tangle-mode o755
-#+begin_src shell
+#+name:
+#+begin_src shell :tangle /doas::/usr/local/bin/asmcfan :tangle-mode o755
   #!/bin/sh
   if ! kldstat | grep -q asmc.ko; then
       if ! kldload asmc; then
@@ -527,7 +528,7 @@ Make the most of the extra modifier keys on a Korean/Japanese layout
     011   '0'    ')'    nop    nop    '0'    ')'    nop    nop     O
     012   '-'    '_'    us     us     '-'    '_'    us     us      O
     013   '='    '+'    nop    nop    '='    '+'    nop    nop     O
-    014   bs     bs     del    del    bs     bs     del    del     O
+    014   del    del    del    del    del    del    del    del     O
     015   ht     btab   nop    nop    ht     btab   nop    nop     O
     016   'q'    'Q'    dc1    dc1    'q'    'Q'    dc1    dc1     C
     017   'w'    'W'    etb    etb    'w'    'W'    etb    etb     C
@@ -566,7 +567,7 @@ Make the most of the extra modifier keys on a Korean/Japanese layout
     050   'm'    'M'    cr     cr     'm'    'M'    cr     cr      C
     051   ','    '<'    nop    nop    ','    '<'    nop    nop     O
     052   '.'    '>'    nop    nop    '.'    '>'    nop    nop     O
-    053   '/'    '?'    nop    nop    '/'    '?'    nop    nop     O
+    053   '/'    '?'    us     us    '/'    '?'    nop    nop     O
     054   rshift rshift rshift rshift rshift rshift rshift rshift  O
     055   '*'    '*'    '*'    '*'    '*'    '*'    '*'    '*'     O
     056   lalt   lalt   lalt   lalt   lalt   lalt   lalt   lalt    O
@@ -743,22 +744,6 @@ Make the most of the extra modifier keys on a Korean/Japanese layout
 #+end_src
 
 * XORG
-
-On FreeBSD Xorg configuration lives in =/usr/local/etc/X11/xorg.conf.d/= so
-add: =:tangle /doas::/usr/local/etc/X11/xorg.conf.d/20-foo.conf= to the block
-declarations if you so wish. However, for now I'm setting all of these to
-== whilst I figure things out...
-
-** INTEL
-
-#+name: conf :tangle /doas::/usr/local/etc/X11/xorg.conf.d/50-intel.conf
-#+begin_src
-  Section "Device"
-	  Identifier "Card0"
-	  Driver     "intel"
-  EndSection
-#+end_src
-
 ** DPMS
 
 #+begin_src conf :tangle /doas::/usr/local/etc/X11/xorg.conf.d/50-serverflags.conf
@@ -779,11 +764,12 @@ suspend/resume...
 
 #+begin_src conf :tangle /doas::/usr/local/etc/X11/xorg.conf.d/50-libinput-kbd.conf
   Section "InputClass"
-	    Identifier "libinput keyboard catchall"
-	    MatchIsKeyboard "on"
-	    MatchDevicePath "/dev/input/event*"
-	    Driver "libinput"
-	    Option "AutoRepeat" "200 50"
+	  Identifier "libinput keyboard catchall"
+	  MatchIsKeyboard "on"
+	  MatchDevicePath "/dev/input/event*"
+	  Driver "libinput"
+	  Option "AutoRepeat" "200 50"
+	  Option "XkbOptions" "caps:swapescape,ctrl:swap_lwin_lctl,ctrl:swap_rwin_rctl"
   EndSection
 #+end_src
 
@@ -867,107 +853,155 @@ EndSection
 
 #+NAME: xdefaults
 #+begin_src conf :tangle ~/.Xdefaults
+  Xft*dpi: 167
+  Xcursor*size: 28
+  Xcursor*theme: whiteglass
   XTerm*faceName: monospace:size=13
   XTerm*metaSendsEscape: true
   XTerm*reverseVideo: true
   XTerm*selectToClipboard: true
   XTerm*termName: xterm-256color
+  XTerm*utf8: true
 #+end_src
 #+BEGIN_SRC conf :noweb yes :tangle ~/.Xresources
   <<xdefaults>>
 #+END_SRC
 
-** XMODMAP
-
-#+begin_src conf :tangle ~/.Xmodmap
-  clear control
-  clear mod1
-  clear mod4
-  clear mod5
-  clear lock
-
-  ! ThinkPad Chicklet Space Cadet
-  keycode 64 = Control_L
-  keycode 108 = Control_R
-  keycode 107 = Alt_L Meta_L
-  keycode 133 = Alt_L Meta_L
-  keycode 37 = Super_L
-  keycode 105 = Super_R
-
-  keycode 9 = Caps_Lock
-  keycode 66 = Escape
-
-  add lock = Caps_Lock
-  add Control = Control_L Control_R
-  add mod1 = Alt_L Meta_L
-  add mod4 = Super_L Super_R
-#+end_src
-
 ** XSESSION
 
 #+NAME: xsession
 #+BEGIN_SRC conf :tangle ~/.xsession
-  xmodmap ~/.Xmodmap
-  pixelclock &
+  xmodmap -e "keysym Left = Super_R"
+  pixelclock -s 15 &
   pixelbatt &
   saltab &
   sct 4000
-  exec sdorfehs
+  exec cwm
 #+END_SRC
 
 #+BEGIN_SRC conf :noweb yes :tangle ~/.xinitrc
   <<xsession>>
 #+END_SRC
 
-** SDORFEHS
+** CWM
 
-#+begin_src conf :tangle ~/.config/sdorfehs/config
-  escape C-Escape
+#+BEGIN_SRC conf :tangle ~/.cwmrc
+  borderwidth 1
+  fontname "monospace:bold:size=13"
+  ignore tint2
+  gap 0 0 2 15
+  moveamount 5
+  sticky yes
+  snapdist 5
 
-  set barborder 1
-  set barbordercolor purple
-  set bargravity c
-  set barsticky 0
-  set bgcolor black
-  set fgcolor pink
-  set bwcolor purple
-  set fwcolor pink
-  set font "monospace:bold:size=13"
-  set framesels "asdfjkl;"
-  set gap 0
-  set historysize 42
-  set ignoreresizehints 1
-  set onlyborder 0
-  set padding 0 0 0 0
+  color activeborder '#B28'
+  color inactiveborder '#627'
+  color urgencyborder '#FF0'
+  color menubg '#000'
+  color menufg '#505'
+  color font '#DDD'
+  color selfont '#FFF'
 
-  bind e exec xterm -e emacsclient -nw -c -a ""
-  bind C-e exec xterm -e emacsclient -nw -c -a ""
-  bind C-q only
-  bind q only
-  bind C-space colon
-  bind space exec
-  bind C-v hsplit
-  bind v hsplit
-  bind w exec librewolf
-  bind Tab select
-  bind Return focuslast
-  bind M-q quit
-  bind M-r restart
+  unbind-key all
+  bind-key 4-BackSpace restart
+  bind-key 4C-BackSpace quit
 
-  definekey top s-e exec xterm -e emacsclient -nw -c -a ""
-  definekey top s-t exec xterm
-  definekey top s-w exec librewolf
-  definekey top s-q kill
-  definekey top s-m only
-  definekey top s-v hsplit
-  definekey top s-s vsplit
-  definekey top s-space exec
-  definekey top XF86MonBrightnessDown exec backlight - 5
-  definekey top XF86MonBrightnessUp   exec backlight + 5
-  definekey top XF86AudioMute         exec mixer vol.mute=toggle
-  definekey top XF86AudioLowerVolume  exec mixer vol.volume=-5%
-  definekey top XF86AudioRaiseVolume  exec mixer vol.volume=+5%
-#+end_src
+  bind-key 4-b firefox
+  bind-key 4-e 'xterm -e emacsclient -c -a ""'
+  bind-key 4-t terminal
+
+  bind-key 4-comma window-vtile
+  bind-key 4-period window-htile
+  bind-key 4C-comma window-vmaximize
+  bind-key 4C-period window-hmaximize
+  bind-key 4-q window-delete
+  bind-key 4-m window-maximize
+  bind-key 4-f window-fullscreen
+  bind-key 4-k window-move-up-big
+  bind-key 4-j window-move-down-big
+  bind-key 4-l window-move-right-big
+  bind-key 4-h window-move-left-big
+  bind-key 4C-k window-resize-up-big
+  bind-key 4C-j window-resize-down-big
+  bind-key 4C-l window-resize-right-big
+  bind-key 4C-h window-resize-left-big
+  bind-key 4M-h window-snap-left
+  bind-key 4M-j window-snap-down
+  bind-key 4M-k window-snap-up
+  bind-key 4M-l window-snap-right
+  bind-key M-Escape window-cycle
+  bind-key MS-Escape window-rcycle
+  bind-key C-Escape window-cycle-ingroup
+  bind-key CS-Escape window-rcycle-ingroup
+  bind-key C-grave window-cycle-inclass
+  bind-key CS-grave window-rcycle-inclass
+
+  bind-key 4-a menu-cmd
+  bind-key 4-s menu-ssh
+  bind-key 4-space menu-exec
+  bind-key 4C-space menu-exec-wm
+  bind-key 4-g menu-group
+  bind-key 4-w menu-window
+  bind-key 4C-w menu-window-hidden
+
+  bind-key 4-1 group-only-1
+  bind-key 4-2 group-only-2
+  bind-key 4-3 group-only-3
+  bind-key 4-4 group-only-4
+  bind-key 4-5 group-only-5
+  bind-key 4-6 group-only-6
+  bind-key 4-7 group-only-7
+  bind-key 4-8 group-only-8
+  bind-key 4-9 group-only-9
+
+  bind-key 4S-1 group-toggle-1
+  bind-key 4S-2 group-toggle-2
+  bind-key 4S-3 group-toggle-3
+  bind-key 4S-4 group-toggle-4
+  bind-key 4S-5 group-toggle-5
+  bind-key 4S-6 group-toggle-6
+  bind-key 4S-7 group-toggle-7
+  bind-key 4S-8 group-toggle-8
+  bind-key 4S-9 group-toggle-9
+
+  bind-key 4C-1 window-movetogroup-1
+  bind-key 4C-2 window-movetogroup-2
+  bind-key 4C-3 window-movetogroup-3
+  bind-key 4C-4 window-movetogroup-4
+  bind-key 4C-5 window-movetogroup-5
+  bind-key 4C-6 window-movetogroup-6
+  bind-key 4C-7 window-movetogroup-7
+  bind-key 4C-8 window-movetogroup-8
+  bind-key 4C-9 window-movetogroup-9
+
+  bind-key 4-0 group-toggle-all
+  bind-key 4C-0 window-group
+
+  bind-key 4-Escape group-last
+  bind-key 4-Tab group-cycle
+  bind-key 4S-Tab group-rcycle
+
+  unbind-mouse all
+  bind-mouse M-1 window-move
+  bind-mouse M-2 window-group
+  bind-mouse M-3 window-resize
+  bind-mouse M-4 window-lower
+  bind-mouse M-5 window-raise
+  bind-mouse R-1 menu-window
+  bind-mouse R-2 menu-window-hidden
+  bind-mouse R-3 menu-cmd
+  bind-mouse R-4 group-cycle
+  bind-mouse R-5 group-rcycle
+
+  command 'chrome' chrome
+  command 'firefox' firefox
+  command 'emacs' 'xterm -e emacsclient -c -a ""'
+  command 'xterm' terminal
+  command 'xlock' xlock
+  command 'sleep' zzz
+  command 'reboot' 'shutdown -r now'
+  command 'shutdown' 'shutdown -p now'
+#+END_SRC
 
 ** GTK
 
