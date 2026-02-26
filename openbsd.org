@@ -84,8 +84,6 @@ He was happy that he now understood this strange place
 and could protect his new friends for the rest of his days
 
 * KSH
-** PROFILE
-
 #+BEGIN_SRC sh :tangle ~/.profile
   PATH=$HOME/bin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin
   PATH=$PATH:/usr/games:/usr/libexec:/usr/local/libexec:.
@@ -94,9 +92,6 @@ and could protect his new friends for the rest of his days
   ENV=$HOME/.kshrc
   export PATH MANPATH HOME TERM ENV
 #+END_SRC
-
-** KSHRC
-
 #+BEGIN_SRC sh :tangle ~/.kshrc
   HISTCONTROL=ignoredups:ignorespace
   HISTFILE=$HOME/.ksh_history
@@ -125,8 +120,8 @@ and could protect his new friends for the rest of his days
   alias rm='rm -i'
   t() {
       [ -z "$TMUX" ] && \
-	  { tmux -q has-session && tmux attach -d || tmux -u; } || \
-	      { tmux new-session -d \; choose-tree -Zs; }
+  	{ tmux -q has-session && tmux attach -d || tmux -u; } || \
+  	    { tmux new-session -d \; choose-tree -Zs; }
   }
   alias x='startx'
 
@@ -135,6 +130,10 @@ and could protect his new friends for the rest of his days
   set -o csh-history
 
   stty kill  # fix backward kill in Emacs' ansi-term
+
+  [[ -n $INSIDE_EMACS ]] && cd() {
+  	builtin cd "$@" && { echo '\032/\c'; pwd; } >/dev/tty
+      }
 #+END_SRC
 
 * CRON
