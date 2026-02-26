@@ -766,21 +766,15 @@ if [ -x /usr/bin/fortune ] ; then /usr/bin/fortune freebsd-tips ; fi
   alias cp='cp -ip'
   alias mv='mv -i'
   alias rm='rm -i'
-
   alias e='emacs'
   alias ec='emacsclient -c -a ""'
-
   alias g=git
   alias j=jobs
-
   alias h='fc -l'
   alias history='fc -l'
-
   alias l='ls -a'
   alias ll='ls -laFoh'
-
   alias pg='pgrep -ail'
-
   alias rb='shutdown -r now'
   alias bye='shutdown -p now'
 
@@ -810,11 +804,6 @@ if [ -x /usr/bin/fortune ] ; then /usr/bin/fortune freebsd-tips ; fi
 
   # search path for cd(1)
   CDPATH=:$HOME
-
-  # directory tracking in emacs' ansi-term
-  [ -n $INSIDE_EMACS ] && cd() {
-  	builtin cd "$@" && { echo '\032/\c'; pwd; } >/dev/tty
-      }
 #+end_src
 
 * XORG
