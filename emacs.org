@@ -25,9 +25,9 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
 * EMACS
 
 #+begin_src emacs-lisp
-  (setq inhibit-startup-screen t)
-  (setq initial-scratch-message nil)
-  (setq initial-major-mode 'fundamental-mode)
+  (setq inhibit-startup-screen t
+        initial-scratch-message nil
+        initial-major-mode 'fundamental-mode)
 
   (setq c-default-style "bsd")
   (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
@@ -35,16 +35,20 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
   (setq fill-column 79)
 
   (setq package-archives
-	  '(("gnu" . "https://elpa.gnu.org/packages/")
-	  ("melpa" . "https://melpa.org/packages/")
-	  ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
+        '(("gnu" . "https://elpa.gnu.org/packages/")
+  	("melpa" . "https://melpa.org/packages/")
+  	("nongnu" . "https://elpa.nongnu.org/nongnu/")))
 
   ;; https://emacs.stackexchange.com/a/78660
   (setq tramp-allow-unsafe-temporary-files t)
 
-  (setq use-package-always-defer t)
-  (setq use-package-enable-imenu-support t)
-  (setq use-short-answers t)
+  (setq use-package-always-defer t
+        use-package-enable-imenu-support t
+        use-short-answers t)
+
+  (setq user-full-name "~Not Toby"
+        user-mail-address "oxff@sdf.org")
+
   (setq view-read-only t) ;; pager bindings in all RO buffers
 #+end_src
 
@@ -334,6 +338,18 @@ All of my custom functions live under the =my/= prefix/namespace.
   alias pg pgrep -l $@*
 #+end_src
 
+* GNUS
+
+#+begin_src emacs-lisp
+  (use-package gnus
+    :config
+    (add-to-list 'gnus-secondary-select-methods
+  	       '(nnimap "mx.sdf.org"
+  			(nnimap-address "mx.sdf.org")
+  			(nnimap-server-port 143)
+  			(nnimap-stream starttls))))
+#+end_src
+
 * LINE NUMBERS
 
 #+begin_src emacs-lisp
@@ -347,7 +363,7 @@ All of my custom functions live under the =my/= prefix/namespace.
 #+begin_src emacs-lisp
   (use-package savehist :hook (emacs-startup . savehist-mode))
   (use-package which-key :hook (emacs-startup . which-key-mode))
-  (use-package whitespace :hook (after-save . whitespace-cleanup))
+  (use-package whitespace :bind ("C-c w" . whitespace-cleanup))
 #+end_src
 
 * ORG
@@ -407,6 +423,18 @@ All of my custom functions live under the =my/= prefix/namespace.
 #+begin_src emacs-lisp
   (use-package sh-script
     :hook (after-save . executable-make-buffer-file-executable-if-script-p))
+#+end_src
+
+* SMTPMAIL
+
+#+begin_src emacs-lisp
+  (use-package smtpmail
+    :custom
+    (send-mail-function 'smtpmail-send-it)
+    (smtpmail-default-smtp-server "mx.sdf.org")
+    (smtpmail-local-domain "sdf.org")
+    (smtpmail-smtp-service 587)
+    (smtpmail-stream-type 'starttls))
 #+end_src
 
 * 3RD PARTY
