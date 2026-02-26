@@ -7,6 +7,7 @@
 https://www.unixprogram.com/churchofbsd/
 
 * BOOT/LOADER
+
 #+begin_src conf
   efi_max_resolution="1366x768"
   loader_gfx="NO" # prevent fancy box rendering
@@ -19,6 +20,7 @@ https://www.unixprogram.com/churchofbsd/
   zfs_load="YES"
   compat.linuxkpi.i915_disable_power_well="0"
 #+end_src
+
 * BUGS/QUIRKS
 ** INTEL SOUND WEIRDNESS
 
@@ -743,6 +745,78 @@ Make the most of the extra modifier keys on a Korean/Japanese layout
   108   nop    nop    nop    nop    nop    nop    nop    nop     O
 #+end_src
 
+* SH
+
+#+begin_src shell :tangle ~/.profile
+# PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin:$HOME/bin; export PATH
+TERM=xterm-256color; export TERM
+EDITOR=vi; export EDITOR
+PAGER=less; export PAGER
+# set ENV to a file invoked each time sh is started for interactive use.
+ENV=$HOME/.shrc; export ENV
+# Let sh(1) know it's at home, despite /home being a symlink.
+if [ "$PWD" != "$HOME" ] && [ "$PWD" -ef "$HOME" ] ; then cd ; fi
+# Query terminal size; useful for serial lines.
+if [ -x /usr/bin/resizewin ] ; then /usr/bin/resizewin -z ; fi
+# Display a random cookie on each login.
+if [ -x /usr/bin/fortune ] ; then /usr/bin/fortune freebsd-tips ; fi
+#+end_src
+
+#+begin_src shell :tangle ~/.shrc
+  alias cp='cp -ip'
+  alias mv='mv -i'
+  alias rm='rm -i'
+
+  alias e='emacs'
+  alias ec='emacsclient -c -a ""'
+
+  alias g=git
+  alias j=jobs
+
+  alias h='fc -l'
+  alias history='fc -l'
+
+  alias l='ls -a'
+  alias ll='ls -laFoh'
+
+  alias pg='pgrep -ail'
+
+  alias rb='shutdown -r now'
+  alias bye='shutdown -p now'
+
+  t() {
+      [ -z "$TMUX" ] && \
+  	  { tmux -q has-session && tmux attach -d || tmux -u; } || \
+  	      { tmux new-session -d \; choose-tree -Zs; }
+  }
+
+  alias x='startx'
+
+  # csh like history on arrow up and down
+  bind ^[[A ed-search-prev-history
+  bind ^[[B ed-search-next-history
+
+  # Ctrl+right arrow: go to the next word
+  # Ctrl+left arrow: go to the previous word
+  bind "\\e[1;5C" em-next-word
+  bind "\\e[1;5D" ed-prev-word
+
+  # Fix home/del for mobaxterm
+  bind ^[[5~ ed-move-to-beg
+  bind ^[[6~ ed-move-to-end
+
+  # set prompt: ``username@hostname:directory $ ''
+  PS1="\u@\h:\w \\$ "
+
+  # search path for cd(1)
+  CDPATH=:$HOME
+
+  # directory tracking in emacs' ansi-term
+  [ -n $INSIDE_EMACS ] && cd() {
+  	builtin cd "$@" && { echo '\032/\c'; pwd; } >/dev/tty
+      }
+#+end_src
+
 * XORG
 ** DPMS
 
@@ -853,10 +927,10 @@ EndSection
 
 #+NAME: xdefaults
 #+begin_src conf :tangle ~/.Xdefaults
-  Xft*dpi: 167
-  Xcursor*size: 28
+  Xft*dpi: 165
+  Xcursor*size: 30
   Xcursor*theme: whiteglass
-  XTerm*faceName: monospace:size=13
+  XTerm*faceName: monospace:size=12
   XTerm*metaSendsEscape: true
   XTerm*reverseVideo: true
   XTerm*selectToClipboard: true
@@ -871,7 +945,7 @@ EndSection
 
 #+NAME: xsession
 #+BEGIN_SRC conf :tangle ~/.xsession
-  xmodmap -e "keysym Left = Super_R"
+  sleep 1 && xmodmap -e "keysym Left = Super_R" &
   pixelclock -s 15 &
   pixelbatt &
   saltab &
@@ -881,141 +955,4 @@ EndSection
 
 #+BEGIN_SRC conf :noweb yes :tangle ~/.xinitrc
   <<xsession>>
-#+END_SRC
-
-** CWM
-
-#+BEGIN_SRC conf :tangle ~/.cwmrc
-  borderwidth 1
-  fontname "monospace:bold:size=13"
-  ignore tint2
-  gap 0 0 2 15
-  moveamount 5
-  sticky yes
-  snapdist 5
-
-  color activeborder '#B28'
-  color inactiveborder '#627'
-  color urgencyborder '#FF0'
-  color menubg '#000'
-  color menufg '#505'
-  color font '#DDD'
-  color selfont '#FFF'
-
-  unbind-key all
-  bind-key 4-BackSpace restart
-  bind-key 4C-BackSpace quit
-
-  bind-key 4-b firefox
-  bind-key 4-e 'xterm -e emacsclient -c -a ""'
-  bind-key 4-t terminal
-
-  bind-key 4-comma window-vtile
-  bind-key 4-period window-htile
-  bind-key 4C-comma window-vmaximize
-  bind-key 4C-period window-hmaximize
-  bind-key 4-q window-delete
-  bind-key 4-m window-maximize
-  bind-key 4-f window-fullscreen
-  bind-key 4-k window-move-up-big
-  bind-key 4-j window-move-down-big
-  bind-key 4-l window-move-right-big
-  bind-key 4-h window-move-left-big
-  bind-key 4C-k window-resize-up-big
-  bind-key 4C-j window-resize-down-big
-  bind-key 4C-l window-resize-right-big
-  bind-key 4C-h window-resize-left-big
-  bind-key 4M-h window-snap-left
-  bind-key 4M-j window-snap-down
-  bind-key 4M-k window-snap-up
-  bind-key 4M-l window-snap-right
-  bind-key M-Escape window-cycle
-  bind-key MS-Escape window-rcycle
-  bind-key C-Escape window-cycle-ingroup
-  bind-key CS-Escape window-rcycle-ingroup
-  bind-key C-grave window-cycle-inclass
-  bind-key CS-grave window-rcycle-inclass
-
-  bind-key 4-a menu-cmd
-  bind-key 4-s menu-ssh
-  bind-key 4-space menu-exec
-  bind-key 4C-space menu-exec-wm
-  bind-key 4-g menu-group
-  bind-key 4-w menu-window
-  bind-key 4C-w menu-window-hidden
-
-  bind-key 4-1 group-only-1
-  bind-key 4-2 group-only-2
-  bind-key 4-3 group-only-3
-  bind-key 4-4 group-only-4
-  bind-key 4-5 group-only-5
-  bind-key 4-6 group-only-6
-  bind-key 4-7 group-only-7
-  bind-key 4-8 group-only-8
-  bind-key 4-9 group-only-9
-
-  bind-key 4S-1 group-toggle-1
-  bind-key 4S-2 group-toggle-2
-  bind-key 4S-3 group-toggle-3
-  bind-key 4S-4 group-toggle-4
-  bind-key 4S-5 group-toggle-5
-  bind-key 4S-6 group-toggle-6
-  bind-key 4S-7 group-toggle-7
-  bind-key 4S-8 group-toggle-8
-  bind-key 4S-9 group-toggle-9
-
-  bind-key 4C-1 window-movetogroup-1
-  bind-key 4C-2 window-movetogroup-2
-  bind-key 4C-3 window-movetogroup-3
-  bind-key 4C-4 window-movetogroup-4
-  bind-key 4C-5 window-movetogroup-5
-  bind-key 4C-6 window-movetogroup-6
-  bind-key 4C-7 window-movetogroup-7
-  bind-key 4C-8 window-movetogroup-8
-  bind-key 4C-9 window-movetogroup-9
-
-  bind-key 4-0 group-toggle-all
-  bind-key 4C-0 window-group
-
-  bind-key 4-Escape group-last
-  bind-key 4-Tab group-cycle
-  bind-key 4S-Tab group-rcycle
-
-  unbind-mouse all
-  bind-mouse M-1 window-move
-  bind-mouse M-2 window-group
-  bind-mouse M-3 window-resize
-  bind-mouse M-4 window-lower
-  bind-mouse M-5 window-raise
-  bind-mouse R-1 menu-window
-  bind-mouse R-2 menu-window-hidden
-  bind-mouse R-3 menu-cmd
-  bind-mouse R-4 group-cycle
-  bind-mouse R-5 group-rcycle
-
-  command 'chrome' chrome
-  command 'firefox' firefox
-  command 'emacs' 'xterm -e emacsclient -c -a ""'
-  command 'xterm' terminal
-  command 'xlock' xlock
-  command 'sleep' zzz
-  command 'reboot' 'shutdown -r now'
-  command 'shutdown' 'shutdown -p now'
-#+END_SRC
-
-** GTK
-
-#+NAME: gtk2
-#+BEGIN_SRC conf :tangle ~/.gtkrc-2.0.mine
-  gtk-key-theme-name = "Emacs"
-#+END_SRC
-
-#+BEGIN_SRC conf :noweb yes :tangle ~/.gtkrc-2.0
-  <<gtk2>>
-#+END_SRC
-
-#+NAME: gtk3
-#+BEGIN_SRC conf :tangle ~/.config/gtk-3.0/settings.ini
-  [Settings]
-  gtk-key-theme-name = Emacs
 #+END_SRC
