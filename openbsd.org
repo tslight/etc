@@ -3,7 +3,7 @@
 #+PROPERTY: header-args+ :mkdirp yes
 #+PROPERTY: header-args+ :padline no
 #+PROPERTY: header-args+ :results silent
-* SONG 7.3
+* SONG
 
 Once there was a Wizard so old and wise
 that he asked Mother Night for a new enterprise
@@ -137,6 +137,26 @@ and could protect his new friends for the rest of his days
   stty kill  # fix backward kill in Emacs' ansi-term
 #+END_SRC
 
+* CRON
+
+#+begin_src sh :tangle /doas::/etc/crontab
+  SHELL=/bin/sh
+  PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin
+  ,*	*	*	*	*	root	fscksaver > /dev/null
+#+end_src
+
+Shutdown when battery is lower than 10% and we're not charging.
+
+#+begin_src shell :tangle /doas::/usr/local/bin/fscksaver :tangle-mode o755
+  #!/bin/sh
+  battery_percent=$(apm -l)
+  ac_status=$(apm -a)
+  if [ "$battery_percent" -lt 5 ] && [ "$ac_status" -eq 0 ]; then
+      logger -t fscksaver "$battery_life% & not charging. Shutting down..."
+      shutdown -p now
+  fi
+#+end_src
+
 * WSCONS
 
 #+name: :tangle (if (string-search "LENOVO" (shell-command-to-string "sysctl -n hw.vendor")) "/doas::/etc/wsconsctl.conf" "no")
@@ -250,7 +270,7 @@ and could protect his new friends for the rest of his days
 
 #+BEGIN_SRC conf :tangle ~/.cwmrc
   borderwidth 1
-  fontname "monospace:bold:size=13"
+  fontname "monospace:bold:size=12"
   ignore tint2
   gap 0 0 2 6
   moveamount 5
