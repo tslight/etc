@@ -10,17 +10,24 @@
 #+BEGIN_SRC conf :tangle ~/.config/git/config
   [color]
   ui = true
+  [diff]
+  noprefix = true
+  renames = false
   [push]
   default = current
   [alias]
   a = add -A
-  co = checkout -b
+  b = branch -a
+  cc = checkout -b
+  cb = checkout
   cm = commit -s -m
+  d = diff --relative
+  f = fetch --all
   ll = log --graph --oneline
   l = log --oneline -n 10
   s = status
-  f = pull
-  p = push
+  p = pull
+  P = push
   [core]
   autocrlf = false
   whitespace = trailing-space,space-before-tab
@@ -29,8 +36,8 @@
   [init]
   defaultBranch = main
   [user]
-  name = tslight
-  email = tslight@pm.com
+  name = "~Not Toby"
+  email = oxff@sdf.org
 #+END_SRC
 
 ** IGNORE
@@ -52,31 +59,25 @@
 * NEOVIM
 
 #+begin_src lua :tangle ~/.config/nvim/init.lua
-  vim.cmd.colorscheme("wildcharm")
+  vim.cmd.colorscheme("quiet")
+
   vim.g.mapleader = " "
-  vim.keymap.set("n", "<leader>w", vim.cmd.write, { desc = "Write" })
-  vim.keymap.set("n", "<leader>s", vim.cmd('wall'), { desc = "Write" })
-  vim.keymap.set("n", "<leader>q", vim.cmd.quit, { desc = "Quit" })
-
+  vim.keymap.set("n", "<leader>w", ':w',    { desc = "Write" })
+  vim.keymap.set("n", "<leader>s", ':wall', { desc = "Write" })
+  vim.keymap.set("n", "<leader>q", ':q!',   { desc = "Quit" })
+  vim.keymap.set("n", "<leader>e", ':e ', { desc = "Edit" })
+  vim.keymap.set("n", "<leader>b", ':b ', { desc = "Buffers" })
   vim.keymap.set("n", "<leader>j", ':bn<cr>', { desc = "Buffer Next" })
-  vim.keymap.set("n", "<leader>k", ':bpcr>', { desc = "Buffer Prev" })
-  vim.keymap.set("n", "<leader>l", ':bl<cr>', { desc = "Buffer Last" })
-  vim.keymap.set("n", "<leader>d", ':bd<r>', { desc = "Buffer Delete" })
-
-  vim.keymap.set("n", "<leader>i",
-		 function()
-		    local pos = vim.api.nvim_win_get_cursor(0)
-		    vim.cmd('normal! ggVG=')
-		    vim.api.nvim_win_set_cursor(0, pos)
-		 end, { desc = "Buffer Indent" })
-
+  vim.keymap.set("n", "<leader>k", ':bp<cr>', { desc = "Buffer Prev" })
+  vim.keymap.set("n", "<leader>d", ':bd<cr>', { desc = "Buffer Delete" })
   vim.keymap.set("n", "<leader>t", ':terminal<cr>', { desc = "Terminal" })
 
-  vim.opt.wrap = false
   vim.opt.cursorline = true
+  vim.opt.laststatus=0
   vim.opt.number = true
   vim.opt.relativenumber = true
   vim.opt.undofile = true
+  vim.opt.wrap = false
 #+end_src
 
 * TMUX
