@@ -190,83 +190,10 @@ Shutdown when battery is lower than 10% and we're not charging.
 #+end_src
 
 * XORG
-** XDEFAULTS
-
-#+BEGIN_SRC conf :tangle ~/.Xdefaults
-  Xft.dpi: 96
-  Xft.antialias: true
-  XIdle.timeout: 300
-  XLock.mode: random
-  XLock.program: /usr/games/fortune -o
-  XTerm*faceName: monospace:size=12
-  XTerm*fullscreen: never
-  XTerm*loginShell: true
-  XTerm*metaSendsEscape: true
-  XTerm*reverseVideo: true
-  XTerm*scrollBar: false
-  XTerm*selectToClipboard: true
-  XTerm*termName: xterm-256color
-  XTerm*allowMouseOps: true
-  XTerm*disallowedWindowOps: 20,21,SetXprop
-  XTerm*VT100*translations: #override \n\
-      Shift Ctrl <Key> V: insert-selection(CLIPBOARD) \n\
-      Shift Ctrl <Key> C: select-end(CLIPBOARD)
-#+END_SRC
-
 ** XENODM
 
 #+name /etc/X11/xenodm/xenodm-config
 #+BEGIN_SRC conf
   DisplayManager.*.autoLogin:     anon
 #+END_SRC
-
-** XMODMAP
-
-#+begin_src conf :tangle (if (string-search "LENOVO" (shell-command-to-string "sysctl -n hw.vendor")) "~/.Xmodmap" "no")
-  clear control
-  clear mod1
-  clear mod4
-  clear mod5
-  clear lock
-
-  ! ThinkPad Chicklet Space Cadet
-  keycode 64 = Control_L
-  keycode 113 = Control_R
-  keycode 115 = Alt_L Meta_L
-  keycode 111 = Alt_R Meta_R
-  keycode 37 = Super_L
-  keycode 109 = Super_R
-
-  keycode 9 = Caps_Lock
-  keycode 66 = Escape
-
-  add lock = Caps_Lock
-  add Control = Control_L Control_R
-  add mod1 = Alt_L Alt_R Meta_L Meta_R
-  add mod4 = Super_L Super_R
-#+end_src
-
-** XSESSION
-
-#+begin_src conf :tangle (if (string-search "LENOVO" (shell-command-to-string "sysctl -n hw.vendor")) "~/.xsession" "no")
-  xinput set-prop "/dev/wsmouse" "WS Pointer Wheel Emulation" 1
-  xinput set-prop "/dev/wsmouse" "WS Pointer Wheel Emulation Button" 2
-  xinput set-prop "/dev/wsmouse" "WS Pointer Wheel Emulation Axes" 6 7 4 5
-  xmodmap ~/.Xmodmap
-#+end_src
-
-#+begin_src conf :tangle (if (string-search "Apple" (shell-command-to-string "sysctl -n hw.vendor")) "~/.xsession" "no")
-  setxkbmap -option 'caps:swapescape,ctrl:swap_lwin_lctl,ctrl:swap_rwin_rctl'
-  xmodmap -e "keysym Left = Super_R"
-#+end_src
-
-#+begin_src conf :tangle ~/.xsession
-  xset dpms 300 600 900 r rate 200 50
-  xsetroot -solid black
-  pixelclock &
-  pixelbatt &
-  saltab &
-  sct 4000
-  exec cwm
-#+end_src
 

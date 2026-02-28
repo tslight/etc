@@ -913,36 +913,3 @@ EndSection
   EndSection
 #+end_src
 
-** XDEFAULTS
-
-#+NAME: xdefaults
-#+begin_src conf :tangle ~/.Xdefaults
-  Xft*dpi: 165
-  Xcursor*size: 30
-  Xcursor*theme: whiteglass
-  XTerm*faceName: monospace:size=12
-  XTerm*metaSendsEscape: true
-  XTerm*reverseVideo: true
-  XTerm*selectToClipboard: true
-  XTerm*termName: xterm-256color
-  XTerm*utf8: true
-#+end_src
-#+BEGIN_SRC conf :noweb yes :tangle ~/.Xresources
-  <<xdefaults>>
-#+END_SRC
-
-** XSESSION
-
-#+NAME: xsession
-#+BEGIN_SRC conf :tangle ~/.xsession
-  sleep 1 && xmodmap -e "keysym Left = Super_R" &
-  pixelclock -s 15 &
-  pixelbatt &
-  saltab &
-  sct 4000
-  exec cwm
-#+END_SRC
-
-#+BEGIN_SRC conf :noweb yes :tangle ~/.xinitrc
-  <<xsession>>
-#+END_SRC
