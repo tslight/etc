@@ -62,13 +62,12 @@
   vim.cmd.colorscheme("quiet")
 
   vim.g.mapleader = " "
-  vim.keymap.set("n", "<leader>w", ':w',    { desc = "Write" })
-  vim.keymap.set("n", "<leader>s", ':wall', { desc = "Write" })
+  vim.keymap.set("n", "<leader>w", ':wall', { desc = "Write" })
   vim.keymap.set("n", "<leader>q", ':q!',   { desc = "Quit" })
   vim.keymap.set("n", "<leader>e", ':e ', { desc = "Edit" })
   vim.keymap.set("n", "<leader>b", ':b ', { desc = "Buffers" })
-  vim.keymap.set("n", "<leader>j", ':bn<cr>', { desc = "Buffer Next" })
-  vim.keymap.set("n", "<leader>k", ':bp<cr>', { desc = "Buffer Prev" })
+  vim.keymap.set("n", "<leader>n", ':bn<cr>', { desc = "Buffer Next" })
+  vim.keymap.set("n", "<leader>p", ':bp<cr>', { desc = "Buffer Prev" })
   vim.keymap.set("n", "<leader>d", ':bd<cr>', { desc = "Buffer Delete" })
   vim.keymap.set("n", "<leader>t", ':terminal<cr>', { desc = "Terminal" })
 
@@ -83,30 +82,19 @@
 * TMUX
 
 #+BEGIN_SRC conf :tangle ~/.tmux.conf
-  set -g base-index 1
-  set -g pane-base-index 1
-  set -g history-limit 32768
-  set -g display-panes-time 4000 # I'm slow and indecisive!
-  set -g escape-time 0 # default is 500ms which feels like forever..
-
-  # mouse
   set -g mouse on
-  bind -n MouseDown2Status copy-mode
-
-  # keys
-  bind C-r source-file ~/.tmux.conf \; display-message "~/.tmux.conf reloaded"
-  bind e neww -n emacs 'emacsclient -nw -c -a ""'
+  set -s copy-command 'xsel -b'
 #+END_SRC
 
 * XDG
 
 #+begin_src conf :tangle ~/.config/user-dirs.dirs
-XDG_DESKTOP_DIR="$HOME/desk"
-XDG_DOCUMENTS_DIR="$HOME/doc"
-XDG_DOWNLOAD_DIR="$HOME/tmp"
-XDG_MUSIC_DIR="$HOME/audio"
-XDG_PICTURES_DIR="$HOME/img"
-XDG_PUBLICSHARE_DIR="$HOME/pub"
-XDG_TEMPLATES_DIR="$HOME/templates"
-XDG_VIDEOS_DIR="$HOME/video"
+  XDG_DESKTOP_DIR="$HOME/desk"
+  XDG_DOCUMENTS_DIR="$HOME/doc"
+  XDG_DOWNLOAD_DIR="$HOME/tmp"
+  XDG_MUSIC_DIR="$HOME/audio"
+  XDG_PICTURES_DIR="$HOME/img"
+  XDG_PUBLICSHARE_DIR="$HOME/pub"
+  XDG_TEMPLATES_DIR="$HOME/templates"
+  XDG_VIDEOS_DIR="$HOME/video"
 #+end_src

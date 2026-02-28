@@ -206,6 +206,11 @@ Shutdown when battery is lower than 10% and we're not charging.
   XTerm*scrollBar: false
   XTerm*selectToClipboard: true
   XTerm*termName: xterm-256color
+  XTerm*allowMouseOps: true
+  XTerm*disallowedWindowOps: 20,21,SetXprop
+  XTerm*VT100*translations: #override \n\
+      Shift Ctrl <Key> V: insert-selection(CLIPBOARD) \n\
+      Shift Ctrl <Key> C: select-end(CLIPBOARD)
 #+END_SRC
 
 ** XENODM
