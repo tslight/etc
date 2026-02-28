@@ -83,7 +83,14 @@
 
 #+BEGIN_SRC conf :tangle ~/.tmux.conf
   set -g mouse on
+#+END_SRC
+
+#+BEGIN_SRC conf :tangle (if (eq system-type 'berkeley-unix) "~/.tmux.conf" "no")
   set -s copy-command 'xsel -b'
+#+END_SRC
+
+#+BEGIN_SRC conf :tangle (if (eq system-type 'darwin) "~/.tmux.conf" "no")
+  set -s copy-command 'pbcopy'
 #+END_SRC
 
 * XDG

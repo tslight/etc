@@ -7,10 +7,22 @@
 
 * General
 
+If running on a resolution sharper than 2000 horizontal pixels leave
+more room for pixelclock
+
+#+begin_src conf :tangle (if (> (string-to-number (shell-command-to-string "xdpyinfo | grep dimensions | awk '{print $2}' | awk -Fx '{print $1}'")) 2000) "~/.cwmrc" "no")
+  gap 0 0 2 15
+#+end_src
+
+If less than 2000 pixels, 5 should be fine
+
+#+begin_src conf :tangle (if (< (string-to-number (shell-command-to-string "xdpyinfo | grep dimensions | awk '{print $2}' | awk -Fx '{print $1}'")) 2000) "~/.cwmrc" "no")
+  gap 0 0 2 5
+#+end_src
+
 #+begin_src conf
   borderwidth 1
   fontname "monospace:bold:size=12"
-  gap 0 0 2 15
   moveamount 5
   sticky yes
   snapdist 5
@@ -32,13 +44,15 @@
 
 #+begin_src conf
   unbind-key all
-  
+
   bind-key 4C-r restart
   bind-key 4C-q quit
 
   bind-key 4-e 'xterm -e emacsclient -c -a ""'
   bind-key 4-b firefox
-  bind-key 4-t xterm
+  bind-key 4-t 'xterm -e tmux'
+  bind-key 4-Return xterm
+  bind-key 4C-Delete xlock
 
   bind-key 4-comma window-vtile
   bind-key 4-period window-htile
@@ -146,7 +160,8 @@
 * Menu
 
 #+begin_src conf
-  command 'term' terminal
+  command 'xterm' xterm
+  command 'tmux' 'xterm -e tmux'
   command 'emacs' 'xterm -e emacsclient -c -a ""'
   command 'firefox' firefox
   command 'chrome' chrome
