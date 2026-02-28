@@ -748,18 +748,19 @@ Make the most of the extra modifier keys on a Korean/Japanese layout
 * SH
 
 #+begin_src shell :tangle ~/.profile
-# PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin:$HOME/bin; export PATH
-TERM=xterm-256color; export TERM
-EDITOR=vi; export EDITOR
-PAGER=less; export PAGER
-# set ENV to a file invoked each time sh is started for interactive use.
-ENV=$HOME/.shrc; export ENV
-# Let sh(1) know it's at home, despite /home being a symlink.
-if [ "$PWD" != "$HOME" ] && [ "$PWD" -ef "$HOME" ] ; then cd ; fi
-# Query terminal size; useful for serial lines.
-if [ -x /usr/bin/resizewin ] ; then /usr/bin/resizewin -z ; fi
-# Display a random cookie on each login.
-if [ -x /usr/bin/fortune ] ; then /usr/bin/fortune freebsd-tips ; fi
+  # PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin:$HOME/bin; export PATH
+  TERM=xterm-256color; export TERM
+  EDITOR=vi; export EDITOR
+  PAGER=less; export PAGER
+  HISTSIZE=4096; export HISTSIZE
+  # set ENV to a file invoked each time sh is started for interactive use.
+  ENV=$HOME/.shrc; export ENV
+  # Let sh(1) know it's at home, despite /home being a symlink.
+  if [ "$PWD" != "$HOME" ] && [ "$PWD" -ef "$HOME" ] ; then cd ; fi
+  # Query terminal size; useful for serial lines.
+  if [ -x /usr/bin/resizewin ] ; then /usr/bin/resizewin -z ; fi
+  # Display a random cookie on each login.
+  if [ -x /usr/bin/fortune ] ; then /usr/bin/fortune freebsd-tips ; fi
 #+end_src
 
 #+begin_src shell :tangle ~/.shrc
