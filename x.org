@@ -3,12 +3,20 @@
 #+PROPERTY: header-args+ :mkdirp yes
 #+PROPERTY: header-args+ :padline no
 #+PROPERTY: header-args+ :results silent
+
+After tangling all the things, run this to maximise compatasillybility...
+
+#+begin_src shell :tangle no :results silent
+  ln -fs ~/.Xdefaults ~/.Xresources
+  ln -fs ~/.xsession ~/.xinitrc
+#+end_src
+
 * XDEFAULTS
 
 If more than 1920 horizontal pixels we probably need some kind of
 scaling going on...
 
-#+begin_src conf :tangle (if (> (string-to-number (shell-command-to-string "xdpyinfo | grep dimensions | awk '{print $2}' | awk -Fx '{print $1}'")) 2000) "~/.Xdefault" "no")
+#+begin_src conf :tangle (if (> (string-to-number (shell-command-to-string "xdpyinfo | grep dimensions | awk '{print $2}' | awk -Fx '{print $1}'")) 2000) "~/.Xdefaults" "no")
   Xft*dpi: 165
   Xcursor*size: 30
   Xcursor*theme: whiteglass
@@ -103,9 +111,4 @@ If less than 2000 pixels, default 5 pixels should be fine
   saltab &
   sct 4000
   exec cwm
-#+end_src
-
-#+begin_src shell :tangle no :results silent
-  ln -fs ~/.Xdefaults ~/.Xresources
-  ln -fs ~/.xsession ~/.xinitrc
 #+end_src

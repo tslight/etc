@@ -764,29 +764,6 @@ Make the most of the extra modifier keys on a Korean/Japanese layout
 #+end_src
 
 #+begin_src shell :tangle ~/.shrc
-  alias cp='cp -ip'
-  alias mv='mv -i'
-  alias rm='rm -i'
-  alias e='emacs'
-  alias ec='emacsclient -c -a ""'
-  alias g=git
-  alias j=jobs
-  alias h='fc -l'
-  alias history='fc -l'
-  alias l='ls -a'
-  alias ll='ls -laFoh'
-  alias pg='pgrep -ail'
-  alias rb='shutdown -r now'
-  alias bye='shutdown -p now'
-
-  t() {
-      [ -z "$TMUX" ] && \
-  	  { tmux -q has-session && tmux attach -d || tmux -u; } || \
-  	      { tmux new-session -d \; choose-tree -Zs; }
-  }
-
-  alias x='startx'
-
   # csh like history on arrow up and down
   bind ^[[A ed-search-prev-history
   bind ^[[B ed-search-next-history
@@ -805,6 +782,8 @@ Make the most of the extra modifier keys on a Korean/Japanese layout
 
   # search path for cd(1)
   CDPATH=:$HOME
+
+  [ -f $HOME/.alias ] && . $HOME/.alias
 #+end_src
 
 * XORG
