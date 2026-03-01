@@ -47,7 +47,7 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
         use-short-answers t)
 
   (setq user-full-name "~Not Toby"
-        user-mail-address "oxff@sdf.org")
+        user-mail-address "0x2b@0xff.art")
 
   (setq view-read-only t) ;; pager bindings in all RO buffers
 #+end_src
@@ -343,11 +343,11 @@ All of my custom functions live under the =my/= prefix/namespace.
 #+begin_src emacs-lisp
   (use-package gnus
     :config
-    (add-to-list 'gnus-secondary-select-methods
-  	       '(nnimap "mx.sdf.org"
-  			(nnimap-address "mx.sdf.org")
-  			(nnimap-server-port 143)
-  			(nnimap-stream starttls))))
+    (setq gnus-secondary-select-methods
+  	'((nnimap "gandi"
+  		  (nnimap-address "mail.gandi.net")
+  		  (nnimap-server-port 993)
+  		  (nnimap-stream ssl)))))
 #+end_src
 
 * LINE NUMBERS
@@ -431,10 +431,9 @@ All of my custom functions live under the =my/= prefix/namespace.
   (use-package smtpmail
     :custom
     (send-mail-function 'smtpmail-send-it)
-    (smtpmail-default-smtp-server "mx.sdf.org")
-    (smtpmail-local-domain "sdf.org")
-    (smtpmail-smtp-service 587)
-    (smtpmail-stream-type 'starttls))
+    (smtpmail-default-smtp-server "mail.gandi.net")
+    (smtpmail-smtp-service 465)
+    (smtpmail-stream-type 'ssl))
 #+end_src
 
 * 3RD PARTY

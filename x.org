@@ -9,6 +9,7 @@ After tangling all the things, run this to maximise compatasillybility...
 #+begin_src shell :tangle no :results silent
   ln -fs ~/.Xdefaults ~/.Xresources
   ln -fs ~/.xsession ~/.xinitrc
+  xrdb ~/.Xdefaults
 #+end_src
 
 * XDEFAULTS
