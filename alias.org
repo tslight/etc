@@ -1,0 +1,51 @@
+#+TITLE: Indirection is Everything
+#+PROPERTY: header-args :cache yes
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :padline no
+#+PROPERTY: header-args+ :results silent
+#+PROPERTY: header-args+ :tangle ~/.alias
+* Paranoia
+
+#+begin_src shell
+  alias cp='cp -i'
+  alias rm='rm -i'
+  alias mv='mv -i'
+#+end_src
+
+* Humanify
+
+#+begin_src shell
+  alias df='df -h'
+  alias du='du -h'
+#+end_src
+
+* Blah blah blah
+
+#+begin_src shell
+  alias e='emacs -nw'
+  alias ec='emacsclient -c -a "" -nw'
+  alias g=git
+  alias l='ls -a'
+  alias ll='ls -aFloh'
+  [ $(uname) == "OpenBSD" ] && alias pg='pgrep -l' || alias pg='pgrep -ail'
+  alias pingg='ping -c 4 openbsd.org'
+  alias x=startx
+#+end_src
+
+* tmux dwim
+
+#+begin_src shell
+  tmux_create_or_attach() {
+      [ -z "$TMUX" ] && \
+  	{ tmux -q has-session && tmux attach -d || tmux -u; } || \
+  	    { tmux new-session -d \; choose-tree -Zs; }
+  }
+  alias t=tmux_create_or_attach
+#+end_src
+
+* Goodbyebs
+
+#+begin_src shell
+  alias bye='doas shutdown -p now'
+  alias rb='doas shutdown -r now'
+#+end_src

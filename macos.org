@@ -1,0 +1,113 @@
+#+TITLE: A Mind Forever Voyaging...
+#+PROPERTY: header-args :cache yes
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :padline no
+#+PROPERTY: header-args+ :results silent
+* ZSH
+** AUTOLOAD
+
+#+begin_src shell :tangle ~/.zshrc
+  autoload -Uz compinit && compinit -u      # completion library
+  autoload -Uz bashcompinit && bashcompinit # bash completions too please
+  autoload -Uz colors && colors             # colour library
+  # autoload -Uz promptinit && promptinit && prompt vcs
+  # Alt-n & Alt-p to search history using current input
+  autoload -Uz history-search-end
+#+end_src
+
+** BINDINGS
+
+#+begin_src shell :tangle ~/.zshrc
+  zle -N history-beginning-search-backward-end history-search-end
+  zle -N history-beginning-search-forward-end history-search-end
+  bindkey '\ep' history-beginning-search-backward-end
+  bindkey '\en' history-beginning-search-forward-end
+  bindkey '^[[Z' reverse-menu-complete # shift-tab cycles backwards
+  bindkey \^U backward-kill-line # ctrl-u (whole-line by default)
+  bindkey -e # ensure we use emacs bindings even when EDITOR=vi
+#+end_src
+
+** COMPLETION
+
+#+begin_src shell :tangle ~/.zshrc
+  zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*' # case insensitivity
+  zstyle ':completion:*' menu select # arrow select
+  zstyle ':completion:*' rehash true # auto add new commands
+  zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;32'
+  zstyle ':completion:*:default' list-colors "${(@s.:.)LS_COLORS}"
+  zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,user,%cpu,tty,cputime,cmd'
+  zstyle ':completion:*:make::' tag-order targets variables # show targets before variables
+  zstyle ':completion:*:make:*:targets' call-command true # make target completions
+  zstyle ':completion:*:processes' command 'ps -au $USER'
+  zstyle ':completion:*:processes-names' command 'ps -e -o comm='
+#+end_src
+
+** ENVIRONMENT
+
+#+BEGIN_SRC sh :tangle ~/.zshenv
+  export HISTFILE=$HOME/.zsh_history
+  export HISTSIZE=4096
+  export SAVEHIST=$HISTSIZE
+  export BLOCK_SIZE=human-readable
+  export DIRSTACKSIZE=12
+  export KEYTIMEOUT=1
+  WORDCHARS=${WORDCHARS/\-} # adds - to word delimiter
+  WORDCHARS=${WORDCHARS/\.} # adds . to word delimiter
+  WORDCHARS=${WORDCHARS/\/} # adds / to word delimiter
+  WORDCHARS=${WORDCHARS/\\} # adds \ to word delimiter
+  WORDCHARS=${WORDCHARS/\=} # adds = to word delimiter
+  WORDCHARS=${WORDCHARS/\_} # adds _ to word delimiter
+  export WORDCHARS
+
+  # https://superuser.com/a/1054825
+  typeset -U CDPATH cdpath
+  cdpath=($HOME $HOME/src $cdpath)
+  export CDPATH
+
+  typeset -U PATH path
+  path=($HOME/bin $HOME/.local/bin $path)
+  export PATH
+
+  umask 022
+#+END_SRC
+** OPTIONS
+
+#+BEGIN_SRC sh :tangle ~/.zshrc
+  setopt auto_name_dirs         # absolute name becomes dir
+  setopt autocd                 # cd without typing cd. omg.
+  setopt chaselinks             # follow links in cd.
+  setopt complete_in_word       # complete unique matches
+  setopt correct                # allow me to be slack
+  setopt extended_glob          # set awesome to max
+  setopt hist_expire_dups_first # trim duplicates from file first
+  setopt hist_find_no_dups      # when searching don't find duplicates
+  setopt hist_ignore_all_dups   # don't store duplicates
+  setopt hist_ignore_space      # don't store cmds that start with a space
+  setopt hist_no_store          # don't store history cmds
+  setopt inc_append_history     # immediately write cmd after enter
+  setopt longlistjobs           # display PID when suspending processes as well
+  setopt list_ambiguous         # complete until it gets ambiguous
+  setopt magic_equal_subst      # expand inside equals
+  setopt nobeep                 # stop harassing me
+  setopt nonomatch              # try to avoid the 'zsh: no matches found...'
+  setopt prompt_subst           # param expansion, cmd substitution, &  math
+  unsetopt flow_control         # stty ixon doesn't work, but this does.
+  unsetopt completealiases      # supposedly allows aliases to be completed, but I turn it off because it breaks mine..
+  ttyctl -f                     # avoid having to manually reset the terminal
+#+END_SRC
+
+** PROMPT
+
+#+begin_src zsh :tangle ~/.zshrc
+  user_at_host="%B%F{green}%n%F{yellow}@%F{green}%m"
+  cwd="%B%F{yellow}:%F{magenta}%~"
+  exit_status="%B%(?.%F{yellow}√.%F{red}%?)"
+  prompt="%B%F{yellow}%#%b%f"
+  PS1="${user_at_host}${cwd}"$'\n'"${exit_status} ${prompt} "
+#+end_src
+
+** ALIAS
+
+#+begin_src shell
+  [ -f $HOME/.alias ] && source $HOME/.alias
+#+end_src
