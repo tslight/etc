@@ -45,7 +45,6 @@ If less than 2000 pixels, 96 should be good innit mush.
   XTerm*termName: xterm-256color
   XTerm*utf8: true
   XTerm*utf8Title: true
-  XTerm*visualBell: true
   XTerm*VT100*translations: #override \n\
       Shift Ctrl <Key> V: insert-selection(CLIPBOARD) \n\
       Shift Ctrl <Key> C: select-end(CLIPBOARD)
@@ -53,7 +52,7 @@ If less than 2000 pixels, 96 should be good innit mush.
 
 * XMODMAP
 
-#+begin_src conf :tangle (if (string-search "LENOVO" (shell-command-to-string "sysctl -n hw.vendor")) "~/.Xmodmap" "no")
+#+begin_src conf :tangle (if (eq 0 (shell-command "dmesg | grep -iq lenovo")) "~/.Xmodmap" "no")
   clear control
   clear mod1
   clear mod4
@@ -79,14 +78,14 @@ If less than 2000 pixels, 96 should be good innit mush.
 
 * XSESSION
 
-#+begin_src conf :tangle (if (string-search "LENOVO" (shell-command-to-string "sysctl -n hw.vendor")) "~/.xsession" "no")
+#+begin_src conf :tangle (if (eq 0 (shell-command "dmesg | grep -iq lenovo")) "~/.xsession" "no")
   xinput set-prop "/dev/wsmouse" "WS Pointer Wheel Emulation" 1
   xinput set-prop "/dev/wsmouse" "WS Pointer Wheel Emulation Button" 2
   xinput set-prop "/dev/wsmouse" "WS Pointer Wheel Emulation Axes" 6 7 4 5
   xmodmap ~/.Xmodmap
 #+end_src
 
-#+begin_src conf :tangle (if (string-search "Apple" (shell-command-to-string "sysctl -n hw.vendor")) "~/.xsession" "no")
+#+begin_src conf :tangle (if (eq 0 (shell-command "dmesg | grep -iq apple")) "~/.xsession" "no")
   setxkbmap -option 'caps:swapescape,ctrl:swap_lwin_lctl,ctrl:swap_rwin_rctl'
   xmodmap -e "keysym Left = Super_R"
 #+end_src
