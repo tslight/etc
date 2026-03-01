@@ -6,6 +6,8 @@
 #+PROPERTY: header-args+ :tangle ~/.alias
 * Paranoia
 
+Everyone is fallable...
+
 #+begin_src shell
   alias cp='cp -i'
   alias rm='rm -i'
@@ -14,6 +16,10 @@
 
 * Humanify
 
+Who reads bytes for crying out loud?
+
+I'm not JUST a wet robot Goddamnit!
+
 #+begin_src shell
   alias df='df -h'
   alias du='du -h'
@@ -21,12 +27,15 @@
 
 * Blah blah blah
 
+Do not be tempted to add more you deviant.
+
 #+begin_src shell
   alias e='emacs -nw'
   alias ec='emacsclient -c -a "" -nw'
   alias g=git
   alias l='ls -a'
   alias ll='ls -aFloh'
+  alias mkdir='mkdir -p' # why is this even necessary ffs
   [ $(uname) == "OpenBSD" ] && alias pg='pgrep -l' || alias pg='pgrep -ail'
   alias pingg='ping -c 4 openbsd.org'
   alias x=startx
@@ -44,6 +53,8 @@
 #+end_src
 
 * Goodbyebs
+
+Seeya later alligator...
 
 #+begin_src shell
   alias bye='doas shutdown -p now'
