@@ -343,11 +343,12 @@ All of my custom functions live under the =my/= prefix/namespace.
 #+begin_src emacs-lisp
   (use-package gnus
     :config
-    (setq gnus-secondary-select-methods
-  	'((nnimap "gandi"
-  		  (nnimap-address "mail.gandi.net")
-  		  (nnimap-server-port 993)
-  		  (nnimap-stream ssl)))))
+    (setq gnus-select-method
+      '(nnimap "gandi"
+               (nnimap-address "mail.gandi.net")
+               (nnimap-server-port 993)
+               (nnimap-stream ssl)
+               (nnimap-user "0x2b@0xff.art"))))
 #+end_src
 
 * LINE NUMBERS
