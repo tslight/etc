@@ -51,42 +51,17 @@ If less than 2000 pixels, 96 should be good innit mush.
       Shift Ctrl <Key> C: select-end(CLIPBOARD)
 #+end_src
 
-* XMODMAP
-
-#+begin_src conf :tangle (if (eq 0 (shell-command "dmesg | grep -iq lenovo")) "~/.Xmodmap" "no")
-  clear control
-  clear mod1
-  clear mod4
-  clear mod5
-  clear lock
-
-  ! ThinkPad Chicklet Space Cadet
-  keycode 64 = Control_L
-  keycode 113 = Control_R
-  keycode 115 = Alt_L Meta_L
-  keycode 111 = Alt_R Meta_R
-  keycode 37 = Super_L
-  keycode 109 = Super_R
-
-  keycode 9 = Caps_Lock
-  keycode 66 = Escape
-
-  add lock = Caps_Lock
-  add Control = Control_L Control_R
-  add mod1 = Alt_L Alt_R Meta_L Meta_R
-  add mod4 = Super_L Super_R
-#+end_src
-
 * XSESSION
 
-#+begin_src conf :tangle (if (eq 0 (shell-command "dmesg | grep -iq lenovo")) "~/.xsession" "no")
+#+begin_src conf :tangle (if (eq 0 (shell-command "grep -iq lenovo /var/log/messages")) "~/.xsession" "no")
   xinput set-prop "/dev/wsmouse" "WS Pointer Wheel Emulation" 1
   xinput set-prop "/dev/wsmouse" "WS Pointer Wheel Emulation Button" 2
   xinput set-prop "/dev/wsmouse" "WS Pointer Wheel Emulation Axes" 6 7 4 5
-  xmodmap ~/.Xmodmap
+  setxkbmap -option 'caps:swapescape,altwin:ctrl_alt_win'
+  xmodmap -e "keysym Print = Alt_L"
 #+end_src
 
-#+begin_src conf :tangle (if (eq 0 (shell-command "dmesg | grep -iq apple")) "~/.xsession" "no")
+#+begin_src conf :tangle (if (eq 0 (shell-command "grep -iq apple /var/log/messages")) "~/.xsession" "no")
   setxkbmap -option 'caps:swapescape,ctrl:swap_lwin_lctl,ctrl:swap_rwin_rctl'
   xmodmap -e "keysym Left = Super_R"
 #+end_src

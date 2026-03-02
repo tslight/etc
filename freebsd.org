@@ -97,8 +97,13 @@ Turn off debug options for better performance
   # Adjust the time zone if the CMOS clock keeps local time, as opposed to
   # UTC time.  See adjkerntz(8) for details.
   1,31	0-5	*	*	*	root	adjkerntz -a
-  ,*	*	*	*	*	root	asmcfan > /dev/null
   ,*	*	*	*	*	root	fscksaver > /dev/null
+#+end_src
+
+Only tangle this on Apple hardware.
+
+#+begin_src sh :tangle (if (eq 0 (shell-command "grep -iq apple /var/log/messages")) "/doas::/etc/crontab" "no")
+  ,*	*	*	*	*	root	asmcfan > /dev/null
 #+end_src
 
 ** ASMCFAN
@@ -107,7 +112,7 @@ Control the fans depending on temperature, in a Macbook that supports
 ASMC.
 
 #+name:
-#+begin_src shell :tangle /doas::/usr/local/bin/asmcfan :tangle-mode o755
+#+begin_src shell :tangle (if (eq 0 (shell-command "grep -iq apple /var/log/messages")) "/doas::/usr/local/bin/asmcfan" "no") :tangle-mode o755
   #!/bin/sh
   if ! kldstat | grep -q asmc.ko; then
       if ! kldload asmc; then
@@ -805,7 +810,7 @@ suspend/resume...
 
 *** MACBOOK STANDARD
 
-#+begin_src conf :tangle /doas::/usr/local/etc/X11/xorg.conf.d/50-libinput-kbd.conf
+#+begin_src conf :tangle (if (eq 0 (shell-command "grep -iq apple /var/log/messages")) "/doas::/usr/local/etc/X11/xorg.conf.d/50-libinput-kbd.conf" "no") 
   Section "InputClass"
 	  Identifier "libinput keyboard catchall"
 	  MatchIsKeyboard "on"
@@ -813,6 +818,19 @@ suspend/resume...
 	  Driver "libinput"
 	  Option "AutoRepeat" "200 50"
 	  Option "XkbOptions" "caps:swapescape,ctrl:swap_lwin_lctl,ctrl:swap_rwin_rctl"
+  EndSection
+#+end_src
+
+*** THINKPAD CHICKLET
+
+#+begin_src conf :tangle (if (eq 0 (shell-command "grep -iq lenovo /var/log/messages")) "/doas::/usr/local/etc/X11/xorg.conf.d/50-libinput-kbd.conf" "no") 
+  Section "InputClass"
+	  Identifier "libinput keyboard catchall"
+	  MatchIsKeyboard "on"
+	  MatchDevicePath "/dev/input/event*"
+	  Driver "libinput"
+	  Option "AutoRepeat" "200 50"
+	  Option "XkbOptions" "caps:swapescape,altwin:ctrl_alt_win"
   EndSection
 #+end_src
 
