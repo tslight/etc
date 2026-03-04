@@ -17,7 +17,7 @@ After tangling all the things, run this to maximise compatasillybility...
 If more than 1920 horizontal pixels we probably need some kind of
 scaling going on...
 
-#+begin_src conf :tangle (if (> (string-to-number (shell-command-to-string "xdpyinfo | grep dimensions | awk '{print $2}' | awk -Fx '{print $1}'")) 2000) "~/.Xdefaults" "no")
+#+begin_src conf :tangle (if (retina-display-p) "~/.Xdefaults" "no")
   Xft*dpi: 165
   Xcursor*size: 30
   Xcursor*theme: whiteglass
@@ -25,7 +25,7 @@ scaling going on...
 
 If less than 2000 pixels, 96 should be good innit mush.
 
-#+begin_src conf :tangle (if (< (string-to-number (shell-command-to-string "xdpyinfo | grep dimensions | awk '{print $2}' | awk -Fx '{print $1}'")) 2000) "~/.Xdefaults" "no")
+#+begin_src conf  :tangle (if (not (retina-display-p)) "~/.xsession" "no")
   Xft.dpi: 96
 #+end_src
 
@@ -53,7 +53,7 @@ If less than 2000 pixels, 96 should be good innit mush.
 
 * XSESSION
 
-#+begin_src conf :tangle (if (eq 0 (shell-command "grep -iq lenovo /var/log/messages")) "~/.xsession" "no")
+#+begin_src conf :tangle (if (lenovo-p) "~/.xsession" "no")
   xinput set-prop "/dev/wsmouse" "WS Pointer Wheel Emulation" 1
   xinput set-prop "/dev/wsmouse" "WS Pointer Wheel Emulation Button" 2
   xinput set-prop "/dev/wsmouse" "WS Pointer Wheel Emulation Axes" 6 7 4 5
@@ -61,7 +61,7 @@ If less than 2000 pixels, 96 should be good innit mush.
   xmodmap -e "keysym Print = Alt_L"
 #+end_src
 
-#+begin_src conf :tangle (if (eq 0 (shell-command "grep -iq apple /var/log/messages")) "~/.xsession" "no")
+#+begin_src conf :tangle (if (apple-p) "~/.xsession" "no")
   setxkbmap -option 'caps:swapescape,ctrl:swap_lwin_lctl,ctrl:swap_rwin_rctl'
   xmodmap -e "keysym Left = Super_R"
 #+end_src
@@ -69,13 +69,13 @@ If less than 2000 pixels, 96 should be good innit mush.
 If running on a resolution sharper than 2000 horizontal pixels make
 pixelclock bigger
 
-#+begin_src conf :tangle (if (> (string-to-number (shell-command-to-string "xdpyinfo | grep dimensions | awk '{print $2}' | awk -Fx '{print $1}'")) 2000) "~/.xsession" "no")
+#+begin_src conf :tangle (if (retina-display-p) "~/.xsession" "no")
   pixelclock -s 15 &
 #+end_src
 
 If less than 2000 pixels, default 5 pixels should be fine
 
-#+begin_src conf :tangle (if (< (string-to-number (shell-command-to-string "xdpyinfo | grep dimensions | awk '{print $2}' | awk -Fx '{print $1}'")) 2000) "~/.xsession" "no")
+#+begin_src conf :tangle (if (not (retina-display-p)) "~/.xsession" "no")
   pixelclock &
 #+end_src
 
