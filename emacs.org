@@ -286,17 +286,12 @@ This are used in tangle logic in other files
 
   (defun lenovo-p ()
     (and (eq 0 (shell-command "grep -iq lenovo /var/log/messages"))))
-  
+
   (defun freebsd-p ()
     (and (string-match-p "freebsd" system-configuration)))
 
   (defun openbsd-p ()
     (and (string-match-p "openbsd" system-configuration)))
-
-  (defun apple-freebsd-p () (and (apple-p) (freebsd-p)))
-  (defun apple-openbsd-p () (and (apple-p) (openbsd-p)))
-  (defun lenovo-freebsd-p () (and (lenovo-p) (freebsd-p)))
-  (defun lenovo-openbsd-p () (and (lenovo-p) (openbsd-p)))
 
   (defun retina-display-p ()
     (> (string-to-number
@@ -361,10 +356,17 @@ This are used in tangle logic in other files
 ** ALIASES
 
 #+begin_src emacs-lisp :tangle ~/.emacs.d/eshell/alias :comments no
+  alias cp cp -i $@*
+  alias mv mv -i $@*
+  alias rm rm -i $@*
+  alias df df -h $@*
+  alias du du -h $@*
+  alias mkdir mkdir -p $@*
   alias g git $@*
   alias l ls -a $@*
-  alias ll ls -alh $@*
+  alias ll ls -aFloh $@*
   alias pg pgrep -l $@*
+  alias pingg ping google.com
 #+end_src
 
 * GNUS

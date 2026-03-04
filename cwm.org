@@ -10,13 +10,13 @@
 If running on a resolution sharper than 2000 horizontal pixels leave
 more room for pixelclock
 
-#+begin_src conf :tangle (if (> (string-to-number (shell-command-to-string "xdpyinfo | grep dimensions | awk '{print $2}' | awk -Fx '{print $1}'")) 2000) "~/.cwmrc" "no")
+#+begin_src conf :tangle (if (retina-display-p) "~/.cwmrc" "no")
   gap 0 0 2 15
 #+end_src
 
 If less than 2000 pixels, 5 should be fine
 
-#+begin_src conf :tangle (if (< (string-to-number (shell-command-to-string "xdpyinfo | grep dimensions | awk '{print $2}' | awk -Fx '{print $1}'")) 2000) "~/.cwmrc" "no")
+#+begin_src conf :tangle (if (not (retina-display-p)) "~/.cwmrc" "no")
   gap 0 0 2 5
 #+end_src
 
@@ -132,12 +132,15 @@ If less than 2000 pixels, 5 should be fine
 
 ** FreeBSD ONLY
 
-#+begin_src conf :tangle (if (string-match "FreeBSD" (shell-command-to-string "uname")) "~/.cwmrc" "no")
+#+begin_src conf :tangle (if (freebsd-p) "~/.cwmrc" "no")
   bind-key XF86AudioLowerVolume 'mixer vol=-5%'
   bind-key XF86AudioRaiseVolume 'mixer vol=+5%'
   bind-key XF86AudioMute 'mixer vol.mute=toggle'
   bind-key XF86MonBrightnessDown 'backlight - 5'
   bind-key XF86MonBrightnessUp 'backlight + 5'
+#+end_src
+
+#+begin_src conf :tangle (if (lenovo-p) "~/.cwmrc" "no")
   bind-key 4-F1 'mixer vol.mute=toggle'
   bind-key 4-F2 'mixer vol=-5%'
   bind-key 4-F3 'mixer vol=+5%'

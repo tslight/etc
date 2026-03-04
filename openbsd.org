@@ -139,8 +139,7 @@ Shutdown when battery is lower than 10% and we're not charging.
 
 * WSCONS
 
-#+name: :tangle (if (string-search "LENOVO" (shell-command-to-string "sysctl -n hw.vendor")) "/doas::/etc/wsconsctl.conf" "no")
-#+begin_src conf
+#+begin_src conf :tangle (if (lenovo-p) "/doas::/etc/wsconsctl.conf" "no")
   keyboard.repeat.del1=200
   keyboard.repeat.deln=50
   keyboard.backlight=0
@@ -157,8 +156,7 @@ Shutdown when battery is lower than 10% and we're not charging.
   keyboard.map+="keycode 157 = Cmd Meta_R"     # Cmd2 Alt_R Multi_key
 #+end_src
 
-#+name: :tangle (if (string-search "Apple" (shell-command-to-string "sysctl -n hw.vendor")) "/doas::/etc/wsconsctl.conf" "no")
-#+begin_src conf
+#+begin_src conf :tangle (if (apple-p) "/doas::/etc/wsconsctl.conf" "no")
   keyboard.backlight=0		# change keyboard backlight
   keyboard1.repeat.del1=200	# change keyboard repeat/delay
   keyboard1.repeat.deln=50

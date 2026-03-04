@@ -102,7 +102,7 @@ Turn off debug options for better performance
 
 Only tangle this on Apple hardware.
 
-#+begin_src sh :tangle (if (eq 0 (shell-command "grep -iq apple /var/log/messages")) "/doas::/etc/crontab" "no")
+#+begin_src sh :tangle (if (apple-p) "/doas::/etc/crontab" "no")
   ,*	*	*	*	*	root	asmcfan > /dev/null
 #+end_src
 
@@ -112,7 +112,7 @@ Control the fans depending on temperature, in a Macbook that supports
 ASMC.
 
 #+name:
-#+begin_src shell :tangle (if (eq 0 (shell-command "grep -iq apple /var/log/messages")) "/doas::/usr/local/bin/asmcfan" "no") :tangle-mode o755
+#+begin_src shell :tangle (if (apple-p) "/doas::/usr/local/bin/asmcfan" "no") :tangle-mode o755
   #!/bin/sh
   if ! kldstat | grep -q asmc.ko; then
       if ! kldload asmc; then
@@ -810,7 +810,7 @@ suspend/resume...
 
 *** MACBOOK STANDARD
 
-#+begin_src conf :tangle (if (eq 0 (shell-command "grep -iq apple /var/log/messages")) "/doas::/usr/local/etc/X11/xorg.conf.d/50-libinput-kbd.conf" "no") 
+#+begin_src conf :tangle (if (apple-p) "/doas::/usr/local/etc/X11/xorg.conf.d/50-libinput-kbd.conf" "no") 
   Section "InputClass"
 	  Identifier "libinput keyboard catchall"
 	  MatchIsKeyboard "on"
@@ -823,7 +823,7 @@ suspend/resume...
 
 *** THINKPAD CHICKLET
 
-#+begin_src conf :tangle (if (eq 0 (shell-command "grep -iq lenovo /var/log/messages")) "/doas::/usr/local/etc/X11/xorg.conf.d/50-libinput-kbd.conf" "no") 
+#+begin_src conf :tangle (if (lenovo-p) "/doas::/usr/local/etc/X11/xorg.conf.d/50-libinput-kbd.conf" "no") 
   Section "InputClass"
 	  Identifier "libinput keyboard catchall"
 	  MatchIsKeyboard "on"
