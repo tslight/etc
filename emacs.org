@@ -276,6 +276,35 @@ All of my custom functions live under the =my/= prefix/namespace.
   (keymap-global-set "C-x M-f" 'my/find-file-as-root)
 #+end_src
 
+** system shenanignans
+
+This are used in tangle logic in other files
+
+#+begin_src emacs-lisp
+  (defun apple-p ()
+    (and (eq 0 (shell-command "grep -iq apple /var/log/messages"))))
+
+  (defun lenovo-p ()
+    (and (eq 0 (shell-command "grep -iq lenovo /var/log/messages"))))
+  
+  (defun freebsd-p ()
+    (and (string-match-p "freebsd" system-configuration)))
+
+  (defun openbsd-p ()
+    (and (string-match-p "openbsd" system-configuration)))
+
+  (defun apple-freebsd-p () (and (apple-p) (freebsd-p)))
+  (defun apple-openbsd-p () (and (apple-p) (openbsd-p)))
+  (defun lenovo-freebsd-p () (and (lenovo-p) (freebsd-p)))
+  (defun lenovo-openbsd-p () (and (lenovo-p) (openbsd-p)))
+
+  (defun retina-display-p ()
+    (> (string-to-number
+        (shell-command-to-string
+         "xdpyinfo | grep dimensions | awk '{print $2}' | awk -Fx '{print $1}'"))
+       2000))
+#+end_src
+
 ** toggle-fill
 
 #+begin_src emacs-lisp
