@@ -78,12 +78,12 @@ If less than 2000 pixels, 5 should be fine
   bind-key 4M-k window-snap-up
   bind-key 4M-l window-snap-right
 
-  bind-key M-Escape window-cycle
-  bind-key MS-Escape window-rcycle
-  bind-key C-Escape window-cycle-ingroup
-  bind-key CS-Escape window-rcycle-ingroup
-  bind-key C-grave window-cycle-inclass
-  bind-key CS-grave window-rcycle-inclass
+  bind-key M-Tab window-cycle
+  bind-key MS-Tab window-rcycle
+  bind-key M-Escape window-cycle-ingroup
+  bind-key MS-Escape window-rcycle-ingroup
+  bind-key M-grave window-cycle-inclass
+  bind-key MS-grave window-rcycle-inclass
 
   bind-key 4-a menu-cmd
   bind-key 4-s menu-ssh
@@ -138,6 +138,16 @@ If less than 2000 pixels, 5 should be fine
   bind-key XF86AudioMute 'mixer vol.mute=toggle'
   bind-key XF86MonBrightnessDown 'backlight - 5'
   bind-key XF86MonBrightnessUp 'backlight + 5'
+#+end_src
+
+*** Apple ONLY
+
+#+begin_src conf :tangle (if (and (freebsd-p) (apple-p)) "~/.cwmrc" "no")
+  bind-key 4-F1 'backlight - 5'
+  bind-key 4-F2 'backlight + 5'
+  bind-key 4-F10 'mixer vol.mute=toggle'
+  bind-key 4-F11 'mixer vol=-5%'
+  bind-key 4-F12 'mixer vol=+5%'
 #+end_src
 
 *** ThinkPad ONLY

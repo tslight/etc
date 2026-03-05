@@ -1,0 +1,28 @@
+#+TITLE: X Marks the Rot
+#+PROPERTY: header-args :cache yes
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :results silent
+#+PROPERTY: header-args+ :padline no
+
+* dpms
+
+#+begin_src conf :tangle /doas::/usr/local/etc/X11/xorg.conf.d/50-serverflags.conf
+  Section "ServerFlags"
+	  Option "StandbyTime" "5"
+	  Option "SuspendTime" "10"
+	  Option "OffTime"     "15"
+  EndSection
+#+end_src
+
+* touchpad
+
+#+begin_src conf :tangle /doas::/usr/local/etc/X11/xorg.conf.d/50-libinput-tp.conf
+  Section "InputClass"
+	  Identifier "libinput touchpad catchall"
+	  MatchIsTouchpad "on"
+	  MatchDevicePath "/dev/input/event*"
+	  Driver "libinput"
+	  Option "DisableWhileTyping" "True"
+  EndSection
+#+end_src
+

@@ -1,0 +1,409 @@
+#+TITLE: [[https://www.unixprogram.com/churchofbsd/][Church of BSD]]
+#+PROPERTY: header-args :cache yes
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :results silent
+#+PROPERTY: header-args+ :padline no
+
+https://www.unixprogram.com/churchofbsd/
+
+* BOOT/LOADER
+
+#+begin_src conf
+  loader_gfx="NO" # prevent fancy box rendering
+  loader_logo="beastie" # prevent fancy logo
+  autoboot_delay="5"
+  aesni_load="YES"
+  geom_eli_load="YES"
+  kern.geom.label.disk_ident.enable="0"
+  kern.geom.label.gptid.enable="0"
+  zfs_load="YES"
+  compat.linuxkpi.i915_disable_power_well="0"
+#+end_src
+
+* BUGS/QUIRKS
+** INTEL SOUND WEIRDNESS
+
+https://bugs.freebsd.org/bugzilla/show_bug.cgi?id=229190
+
+If seeing a lot of this in the =dmesg=:
+
+#+begin_src
+hdac0: Unexpected unsolicited response from address 0: 00000000
+#+end_src
+
+Try :
+
+#+begin_src
+compat.linuxkpi.i915_disable_power_well="0"
+#+end_src
+
+In =/boot/loader.conf=
+** MACBOOK FUNCTION KEY HACKING
+https://github.com/freebsd/freebsd-src/pull/1998
+** KBDREMAP MODULE
+
+*** Macbook
+
+#+begin_src  conf
+  kern.vt.enable_altgr=0
+  hw.kbdremap.rules="39:29,29:39,e0:e3,e3:e0,e7:e4,ff:47"
+#+end_src
+
+*** Macbook JIS
+
+#+name /etc/sysctl.conf
+#+begin_src conf
+  kern.vt.enable_altgr=0
+  hw.kbdremap.rules="90:e0,91:e4,e3:e2,e2:e3,e7:e6,ff:e7,39:47,e0:29,29:39,87:35,89:2a"
+#+end_src
+
+* CURRENT
+
+Turn off debug options for better performance
+
+#+begin_src conf :tangle /doas::/etc/make.conf
+  # KERNCONF=GENERIC-NODEBUG
+  ALLOW_PKGBASE_INSTALLKERNEL=yes
+#+end_src
+
+#+begin_src conf :tangle /doas::/etc/src.conf
+  WITH_MALLOC_PRODUCTION=YES
+  WITHOUT_LLVM_ASSERTIONS=YES
+#+end_src
+
+* CRON
+
+#+begin_src sh :tangle /doas::/etc/crontab
+  # /etc/crontab - system crontab for FreeBSD
+  #
+  #
+  SHELL=/bin/sh
+  PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin
+  #
+  #minute	hour	mday	month	wday	who	command
+  #
+  # Save some entropy so that /dev/random can re-seed on boot.
+  ,*/11	*	*	*	*	operator /usr/libexec/save-entropy
+  #
+  # Rotate log files every hour, if necessary.
+  0	*	*	*	*	root	newsyslog
+  #
+  # Perform daily/weekly/monthly maintenance.
+  1	3	*	*	*	root	periodic daily
+  15	4	*	*	6	root	periodic weekly
+  30	5	1	*	*	root	periodic monthly
+  #
+  # Adjust the time zone if the CMOS clock keeps local time, as opposed to
+  # UTC time.  See adjkerntz(8) for details.
+  1,31	0-5	*	*	*	root	adjkerntz -a
+  ,*	*	*	*	*	root	fscksaver > /dev/null
+#+end_src
+
+Only tangle this on Apple hardware.
+
+#+begin_src sh :tangle (if (apple-p) "/doas::/etc/crontab" "no")
+  ,*	*	*	*	*	root	asmcfan > /dev/null
+#+end_src
+
+** ASMCFAN
+
+Control the fans depending on temperature, in a Macbook that supports
+ASMC.
+
+#+name:
+#+begin_src shell :tangle (if (apple-p) "/doas::/usr/local/bin/asmcfan" "no") :tangle-mode o755
+  #!/bin/sh
+  if ! kldstat | grep -q asmc.ko; then
+      if ! kldload asmc; then
+	  logger -t asmcfan "ERROR: Failed to load ASMC module."
+	  exit 1
+      fi
+  fi
+
+  TEMP=$(sysctl -n dev.cpu.0.temperature | cut -c 1-2)
+  CUR_SPEED=$(sysctl -n dev.asmc.0.fan.0.targetspeed)
+  SET_SPEED=0
+
+  if [ "$TEMP" -le 25 ]; then
+      SET_SPEED=0
+      logger -t asmcfan "${TEMP}°C: ${SET_SPEED}RPM: BRRRRRRR!!!"
+  elif [ "$TEMP" -le 30 ]; then
+      SET_SPEED=1000
+      logger -t asmcfan "${TEMP}°C: ${SET_SPEED}RPM: Getting a tad bit nippy..."
+  elif [ "$TEMP" -le 35 ]; then
+      SET_SPEED=1500
+  elif [ "$TEMP" -le 40 ]; then
+      SET_SPEED=2000
+  elif [ "$TEMP" -le 45 ]; then
+      SET_SPEED=2500
+  elif [ "$TEMP" -le 55 ]; then
+      SET_SPEED=3000
+  elif [ "$TEMP" -le 60 ]; then
+      SET_SPEED=3500
+  elif [ "$TEMP" -le 65 ]; then
+      SET_SPEED=4000
+  elif [ "$TEMP" -le 70 ]; then
+      SET_SPEED=4500
+  elif [ "$TEMP" -le 75 ]; then
+      SET_SPEED=5000
+  elif [ "$TEMP" -le 80 ]; then
+      SET_SPEED=5500
+      logger -t asmcfan "${TEMP}°C: ${SET_SPEED}RPM: It's getting HOT in here..."
+  elif [ "$TEMP" -le 85 ]; then
+      SET_SPEED=6000
+      logger -t asmcfan "${TEMP}°C: ${SET_SPEED}RPM: I'm melting..."
+  else
+      SET_SPEED=6500
+      logger -t asmcfan "${TEMP}°C: ${SET_SPEED}RPM: SCORCHIO!!!"
+  fi
+
+  if [ "$SET_SPEED" -ne "$CUR_SPEED" ]; then
+      sysctl dev.asmc.0.fan.0.maxspeed="$SET_SPEED" > /dev/null
+      sysctl dev.asmc.0.fan.0.minspeed="$SET_SPEED" > /dev/null
+      if sysctl dev.asmc.0.fan.1 2> /dev/null; then
+	  sysctl dev.asmc.0.fan.1.maxspeed="$SET_SPEED" > /dev/null
+	  sysctl dev.asmc.0.fan.1.minspeed="$SET_SPEED" > /dev/null
+      fi
+  fi
+
+  exit 0
+#+end_src
+** FSCKSAVER
+
+Shutdown when battery is lower than 10% and we're not charging.
+
+#+begin_src shell :tangle /doas::/usr/local/bin/fscksaver :tangle-mode o755
+  #!/bin/sh
+
+  # Get battery life percentage
+  battery_life=$(sysctl -n hw.acpi.battery.life)
+
+  # Get AC line status (1 = plugged in, 0 = on battery)
+  ac_status=$(sysctl -n hw.acpi.acline)
+
+  # Check if battery is below 5% and not plugged in
+  if [ "$battery_life" -lt 5 ] && [ "$ac_status" -eq 0 ]; then
+      logger -t fscksaver "$battery_life% & not charging. Shutting down..."
+      shutdown -p now
+  fi
+#+end_src
+
+* GENERAL
+
+https://docs.freebsd.org/en/books/handbook/x11/
+https://docs.freebsd.org/en/books/handbook/kernelconfig/
+https://www.duskopijetlovic.com/boot/dotfiles/howto/freebsd/config/sysadmin/2025/03/02/new-freebsd-system-setup.html
+
+* HARDWARE
+** MACBOOK
+
+https://joshua.hu/FreeBSD-on-MacbookPro-114-A1398
+https://freebsd.uw.cz/2025/05/freebsd-and-edimax-n150-wi-fi-usb.html
+https://duriansoftware.com/joe/freebsd-installation-notes-for-a-2011-macbook-air
+https://itsfoss.gitlab.io/post/configuring-bcm4360-macbook-air-on-freebsd-to-connect-to-wifi/
+
+*** AIR 7,2
+**** BIZARRE SOUND PIN/CODEC ISSUE
+
+After much faffing and too-ing and fro-ing to the installer (where bizarrely
+the sound pins were configured correctly) - I came up with these hints to make
+my sound work.
+
+Stick 'em in =/boot/device.hints= if you want to hear anything...
+
+#+begin_src conf
+hint.hdac.1.cad0.nid16.config="as=2 seq=0 device=Headphones conn=Jack ctype=Combo"
+hint.hdac.1.cad0.nid17.config="as=15 seq=0 device=Line-out conn=None ctype=Unknown misc=0"
+hint.hdac.1.cad0.nid18.config="as=1 seq=0 device=Speaker conn=Fixed loc=Internal misc=1"
+hint.hdac.1.cad0.nid19.config="as=15 seq=0 device=Line-out conn=None ctype=Unknown misc=0"
+hint.hdac.1.cad0.nid20.config="as=15 seq=0 device=Line-out conn=None ctype=Unknown misc=0"
+hint.hdac.1.cad0.nid24.config="as=3 seq=0 device=Mic conn=Jack ctype=Combo"
+hint.hdac.1.cad0.nid28.config="as=0 seq=0 device=Mic conn=Fixed ctype=Digital loc=internal misc=1"
+hint.hdaa.1.gpio_config="0=set"
+#+end_src
+
+*** PRO 8,3
+
+https://wiki.freebsd.org/Graphics/AMD-GPU-Matrix
+https://www.reddit.com/r/freebsd/comments/1jhx9y5/kld_list_entries_for_an_apple_macbookpro83_with/
+
+**** Dodgy touchpad
+
+https://forums.freebsd.org/threads/after-upgrading-the-system-touchpad-unresponsive-and-keyboard-key-incorrectly-mapping.100766/
+
+#+begin_src conf
+# fix dodgy mbp 8,3 touchpad in 15.0
+hidquirk_load="YES"
+hw.hid.quirk.0="0x03 0x05ac 0x0253 0 0xffff HQ_HID_IGNORE"
+#+end_src
+
+In =/boot/loader.conf= seems to do the trick!
+
+Which I'm pretty sure is all one needs, however, I also did:
+
+#+begin_src conf
+hint.ums.0.disabled="1"
+hint.atp.0.disabled="1"
+hint.bcm5974.0.disabled="1"
+#+end_src
+
+In =/boot/device.hints=, and:
+
+#+begin_src conf
+moused_enable="YES"
+moused_port="/dev/wsp0"
+devmatch_blocklist="atp bcm5974 wmt hms ums psm"
+#+end_src
+
+In =/etc/rc.conf= ... :-/
+
+**** Suspend
+
+https://bugs.freebsd.org/bugzilla//show_bug.cgi?id=252241
+https://forums.freebsd.org/threads/will-we-have-drm-kmod-driver-i915kms-ko-for-14-3-release-i386.100943/
+https://forums.macrumors.com/threads/force-2011-macbook-pro-8-2-with-failed-amd-gpu-to-always-use-intel-integrated-gpu-efi-variable-fix.2037591/
+
+On Macbook Pro 8,3 - disable AMD GPU from OSX recovery with:
+
+#+begin_src shell
+nvram gpu-power-prefs=%01%00%00%00
+nvram fa4ce28d-b62f-4c99-9cc3-6815686e30f9:gpu-power-prefs=%01%00%00%00
+#+end_src
+
+After that we should be able to load and use i915kms, prior to that the system
+will become unresponsive when i915kms is loaded.
+
+**** ASMC
+
+https://logi.wiki/index.php/SMC_Sensor_Codes
+https://github.com/freebsd/freebsd-src/pull/1992
+https://forums.freebsd.org/threads/macbook7-1-asmc-support.76497/
+https://bugs.freebsd.org/bugzilla//show_bug.cgi?id=272787
+https://cgit.freebsd.org/src/tree/sys/dev/asmc/asmc.c?h=main
+
+**** BACKLIGHT
+
+https://github.com/tslight/gmuxctl/tree/main/backlight
+
+Despite the fact that we can load =acpi_video= kmod and get some promising new
+sysctls, nothing actually changes the backlight, even though they profess to...
+
+On Macbooks with dual GPUs of this vintage, the GMUX chip controls switching
+between Integrated/Discrete GPUs and backlight.
+
+For proper backlight on MBP 8,3, someone would need to port the Linux
+~apple-gmux~ driver to FreeBSD. The GMUX chip sits at IO port ~0x700~ and
+controls backlight via specific register writes.
+
+For the time being, here's some hack C code to achieve what I want:
+
+For more GMUX HAX take a look at: https://github.com/tslight/gmuxctl
+
+**** Dodgy IR Receiver Flapping
+
+Add to =/boot/loader.conf=
+
+#+begin_src conf
+hint.usbhid.0.disabled="1"
+hint.uhid.0.disabled="1"
+#+end_src
+
+And create =/etc/devd/apple_ir.conf=
+
+#+begin_src conf
+notify 100 {
+    match "system"    "USB";
+    match "subsystem" "DEVICE";
+    match "type"      "ATTACH";
+    match "vendor"    "0x05ac";
+    match "product"   "0x8242";
+    action "/usr/bin/logger -t disable_apple_ir 'Powering off Apple IR receiver...'; /usr/sbin/usbconfig -d $cdev power_off; /usr/sbin/usbconfig -d $cdev";
+};
+#+end_src
+
+* HOSTNAMES
+
+https://www.youtube.com/watch?v=TgeUniPBQjM&list=WL&index=1
+
+Hostnames: freefall, groundrush, skyrush, thud, treefall
+
+* PACKAGES
+
+#+begin_src sh :results output replace :cache no
+  pkg query -e '%a = 0' %o
+#+end_src
+
+#+RESULTS:
+#+begin_example
+base/FreeBSD-kernel-generic
+base/FreeBSD-kernel-generic-dbg
+base/FreeBSD-set-base
+base/FreeBSD-set-lib32
+base/FreeBSD-set-minimal
+x11-wm/cwm
+x11-fonts/dejavu
+graphics/drm-latest-kmod
+editors/emacs
+textproc/en-aspell
+misc/freebsd-doc-en
+x11/evtest
+devel/git
+www/librewolf
+editors/mg
+x11-fonts/opensans-ttf
+ports-mgmt/pkg
+x11-wm/ratpoison
+net/rsync
+accessibility/sct
+sysutils/sensors
+security/doas
+sysutils/tmux
+x11-wm/twm
+x11-clocks/xclock
+x11/xlibre-minimal
+x11/xset
+x11/xterm
+shells/zsh
+#+end_example
+
+* SH
+
+#+begin_src shell :tangle ~/.profile
+  # PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin:$HOME/bin; export PATH
+  TERM=xterm-256color; export TERM
+  EDITOR=vi; export EDITOR
+  PAGER=less; export PAGER
+  HISTSIZE=4096; export HISTSIZE
+  # set ENV to a file invoked each time sh is started for interactive use.
+  ENV=$HOME/.shrc; export ENV
+  # Let sh(1) know it's at home, despite /home being a symlink.
+  if [ "$PWD" != "$HOME" ] && [ "$PWD" -ef "$HOME" ] ; then cd ; fi
+  # Query terminal size; useful for serial lines.
+  if [ -x /usr/bin/resizewin ] ; then /usr/bin/resizewin -z ; fi
+  # Display a random cookie on each login.
+  if [ -x /usr/bin/fortune ] ; then /usr/bin/fortune freebsd-tips ; fi
+#+end_src
+
+#+begin_src shell :tangle ~/.shrc
+  # csh like history on arrow up and down
+  bind ^[[A ed-search-prev-history
+  bind ^[[B ed-search-next-history
+
+  # Ctrl+right arrow: go to the next word
+  # Ctrl+left arrow: go to the previous word
+  bind "\\e[1;5C" em-next-word
+  bind "\\e[1;5D" ed-prev-word
+
+  # Fix home/del for mobaxterm
+  bind ^[[5~ ed-move-to-beg
+  bind ^[[6~ ed-move-to-end
+
+  # set prompt: ``username@hostname:directory $ ''
+  PS1="\u@\h:\w \\$ "
+
+  # search path for cd(1)
+  CDPATH=:$HOME
+
+  [ -f $HOME/.alias ] && . $HOME/.alias
+#+end_src
+

@@ -18,6 +18,7 @@
   [alias]
   a = add -A
   b = branch -a
+  cl = clone --single-branch --depth 1
   cc = checkout -b
   cb = checkout
   cm = commit -s -m
