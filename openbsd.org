@@ -175,4 +175,3 @@ Shutdown when battery is lower than 10% and we're not charging.
 #+BEGIN_SRC conf
   DisplayManager.*.autoLogin:     anon
 #+END_SRC
-
