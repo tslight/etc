@@ -143,6 +143,8 @@ If less than 2000 pixels, 5 should be fine
 *** Apple ONLY
 
 #+begin_src conf :tangle (if (and (freebsd-p) (apple-p)) "~/.cwmrc" "no")
+  bind-key 4-XF86MonBrightnessDown 'backlight - 5'
+  bind-key 4-XF86MonBrightnessUp 'backlight + 5'
   bind-key 4-F1 'backlight - 5'
   bind-key 4-F2 'backlight + 5'
   bind-key 4-F10 'mixer vol.mute=toggle'
