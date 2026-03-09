@@ -155,8 +155,9 @@ Shutdown when battery is lower than 10% and we're not charging.
   keyboard.repeat.del1=200
   keyboard.repeat.deln=50
 
-  mouse1.tp.mtbuttons=1
-  mouse1.reverse_scrolling=1
+  mouse.tp.disable=1
+  # mouse.tp.mtbuttons=1
+  # mouse.reverse_scrolling=1
 #+end_src
 
 #+begin_src conf :tangle (if (apple-p) "/doas::/etc/wsconsctl.conf" "no")
