@@ -140,11 +140,9 @@ Shutdown when battery is lower than 10% and we're not charging.
 * WSCONS
 
 #+begin_src conf :tangle (if (lenovo-p) "/doas::/etc/wsconsctl.conf" "no")
-  keyboard.repeat.del1=200
-  keyboard.repeat.deln=50
   keyboard.backlight=0
-  mouse1.tp.mtbuttons=1
-  mouse1.reverse_scrolling=1
+  keyboard.encoding=us.metaesc
+
   keyboard.map+="keycode 1   = Cmd_Debugger Caps_Lock"
   keyboard.map+="keycode 58  = Cmd_Debugger Escape"
   keyboard.map+="keycode 170 = Cmd Alt_L"      # Print_Screen
@@ -154,6 +152,11 @@ Shutdown when battery is lower than 10% and we're not charging.
   keyboard.map+="keycode 184 = Cmd Control_R"  # Cmd2 Alt_R Multi_key
   keyboard.map+="keycode 29  = Cmd Meta_L"     # Cmd2 Alt_R Multi_key
   keyboard.map+="keycode 157 = Cmd Meta_R"     # Cmd2 Alt_R Multi_key
+  keyboard.repeat.del1=200
+  keyboard.repeat.deln=50
+
+  mouse1.tp.mtbuttons=1
+  mouse1.reverse_scrolling=1
 #+end_src
 
 #+begin_src conf :tangle (if (apple-p) "/doas::/etc/wsconsctl.conf" "no")
