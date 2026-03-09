@@ -82,7 +82,6 @@ If less than 2000 pixels, default 5 pixels should be fine
   xset dpms 300 600 900 r rate 200 50
   xsetroot -solid black
   pixelbatt &
-  saltab &
-  sct 4000
+  sct 3500
   exec cwm
 #+end_src
