@@ -78,6 +78,7 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
   (keymap-global-set "C-c M-t r" 'transpose-regions)
   (keymap-global-set "C-c M-t s" 'transpose-sexps)
   (keymap-global-set "<f5>" 'compile)
+  (keymap-global-set "C-s-f" 'toggle-frame-fullscreen)
   (keymap-global-set "<f11>" 'toggle-frame-fullscreen)
   (keymap-global-set "C-x C-b" 'ibuffer)
   (keymap-global-set "C-x x s" 'sort-lines)
