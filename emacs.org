@@ -34,10 +34,13 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
   (setq disabled-command-function nil)
   (setq fill-column 79)
 
+  (setq mac-command-modifier 'control)
+  (setq mac-control-modifier 'super)
+
   (setq package-archives
         '(("gnu" . "https://elpa.gnu.org/packages/")
-  	("melpa" . "https://melpa.org/packages/")
-  	("nongnu" . "https://elpa.nongnu.org/nongnu/")))
+    	("melpa" . "https://melpa.org/packages/")
+    	("nongnu" . "https://elpa.nongnu.org/nongnu/")))
 
   ;; https://emacs.stackexchange.com/a/78660
   (setq tramp-allow-unsafe-temporary-files t)
@@ -223,6 +226,15 @@ All of my custom functions live under the =my/= prefix/namespace.
       (back-to-indentation)))
 
   (global-set-key [remap move-beginning-of-line] 'my/move-beginning-of-line)
+#+end_src
+
+** new-morning-page
+
+#+begin_src emacs-lisp
+(defun my/new-morning-page ()
+  "Create Morning Page with Epoch time as name."
+  (interactive)
+  (find-file (format-time-string "~/Dropbox/mp/%s")))
 #+end_src
 
 ** save-filename
