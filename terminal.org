@@ -94,7 +94,7 @@
   set -s copy-command 'pbcopy'
 #+END_SRC
 
-* XDG
+* COMMENT XDG
 
 #+begin_src conf :tangle ~/.config/user-dirs.dirs
   XDG_DESKTOP_DIR="$HOME/desk"
