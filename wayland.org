@@ -3,469 +3,438 @@
 #+PROPERTY: header-args+ :mkdirp yes
 #+PROPERTY: header-args+ :padline no
 #+PROPERTY: header-args+ :results silent
-* FUZZEL
-#+begin_src conf :tangle ~/.config/fuzzel/fuzzel.ini
-  lines=20
-  width=20
-  horizontal-pad=8
-  vertical-pad=8
-  icons-enabled=false
-  use-bold=true
-  font=JetBrainsMono Nerd Font:size=13
-  [colors]
-  background=000000ff
-  text=ffffffff
-  match=ffffffff
-  selection-match=ffffffff
-  selection=662277ff
-  selection-text=ffffffff
-  border=662277ff
-  [border]
-  width=1
-  radius=0
-#+end_src
 * NIRI
 #+begin_src kdl :tangle ~/.config/niri/config.kdl
-  input {
-	  keyboard {
-		  xkb {
-			  layout "us"
-		  }
-		  numlock
-	  }
-	  touchpad {
-		  tap
-		  natural-scroll
-	  }
-  }
+spawn-at-startup "noctalia"
+prefer-no-csd
+screenshot-path null
 
-  output "eDP-1" {
-	  background-color "#000"
-	  backdrop-color "#203"
-  }
-  output "DP-1" {
-	  focus-at-startup
-	  background-color "#000"
-	  backdrop-color "#203"
-  }
+environment {
+    ELECTRON_OZONE_PLATFORM_HINT "auto"
+    QT_QPA_PLATFORM "wayland"
+    QT_QPA_PLATFORMTHEME "gtk3"
+    QT_WAYLAND_DISABLE_WINDOWDECORATION "1"
+    XDG_CURRENT_DESKTOP "niri"
+    XDG_SESSION_TYPE "wayland"
+}
 
-  layout {
-	  gaps 0
-	  background-color "#000"
-	  center-focused-column "never"
-	  preset-column-widths {
-		  proportion 0.33333
-		  proportion 0.5
-		  proportion 0.66667
-		  proportion 0.99999
-	  }
-	  default-column-width { proportion 0.99999; }
-	  focus-ring {
-		  width 2
-		  active-color "#B28"
-		  inactive-color "#627"
-	  }
-	  border { off; }
-	  shadow { off; }
-  }
+cursor {
+    xcursor-theme "capitaine-cursors"
+    xcursor-size 24
+}
 
-  spawn-at-startup "waybar"
-  spawn-sh-at-startup "wlsunset -l 51.50 -L -0.12"
-  spawn-sh-at-startup "swayidle -w timeout 120 'niri msg action power-off-monitors' timeout 600 'swaylock -c 000000' before-sleep 'swaylock -c 000000'"
+blur {
+    passes 2        // more passes = stronger blur (default: 3)
+    offset 3.0      // sample distance per pass (default: 3.0)
+    noise 0.03      // grain overlay (default: 0.02)
+    saturation 1.0  // color saturation boost (default: 1.5)
+}
 
-  hotkey-overlay { skip-at-startup; }
-  prefer-no-csd
-  screenshot-path "~/Pictures/scrots/%Y-%m-%d.%H-%M-%S.png"
-  animations { off; }
+debug {
+    // Allows notification actions and window activation from Noctalia.
+    honor-xdg-activation-with-invalid-serial
+}
 
-  window-rule {
-	  match app-id=r#"firefox$"# title="^Picture-in-Picture$"
-	  open-floating true
-  }
+hotkey-overlay {
+   skip-at-startup
+}
 
-  binds {
-	  Mod+Slash { show-hotkey-overlay; }
-	  Mod+E      hotkey-overlay-title="Open Editor" { spawn "nirirun" "emacs"; }
-	  Mod+T      hotkey-overlay-title="Open Terminal" { spawn "nirirun" "foot" "-e" "tmux" "attach"; }
-	  Mod+W      hotkey-overlay-title="Open Web Browser" { spawn "nirirun" "librewolf"; }
-	  Mod+Space  hotkey-overlay-title="Launch Programs" { spawn "fuzzel"; }
-	  Mod+Ctrl+Q hotkey-overlay-title="Lock Screen" { spawn "swaylock" "-c" "000000"; }
-	  XF86AudioMute         allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"; }
-	  XF86AudioLowerVolume  allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1-"; }
-	  XF86AudioRaiseVolume  allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+"; }
-	  XF86AudioMicMute      allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"; }
-	  XF86AudioPlay         allow-when-locked=true { spawn-sh "playerctl play-pause"; }
-	  XF86AudioStop         allow-when-locked=true { spawn-sh "playerctl stop"; }
-	  XF86AudioPrev         allow-when-locked=true { spawn-sh "playerctl previous"; }
-	  XF86AudioNext         allow-when-locked=true { spawn-sh "playerctl next"; }
-	  XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "10%-"; }
-	  XF86MonBrightnessUp   allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "+10%"; }
+layout {
+    gaps 1 // Gap between windows
+    center-focused-column "never" // Don’t auto-center focused column
 
-	  Mod+O repeat=false { toggle-overview; }
-	  Mod+Q repeat=false { close-window; }
+    background-color "transparent" // <- needed for noctalia-shell to set wallpaper
 
-	  Mod+H     { focus-column-left; }
-	  Mod+J     { focus-window-down; }
-	  Mod+K     { focus-window-up; }
-	  Mod+L     { focus-column-right; }
-
-	  Mod+Ctrl+H     { move-column-left; }
-	  Mod+Ctrl+J     { move-window-down; }
-	  Mod+Ctrl+K     { move-window-up; }
-	  Mod+Ctrl+L     { move-column-right; }
-
-	  Mod+Home { focus-column-first; }
-	  Mod+End  { focus-column-last; }
-	  Mod+Ctrl+Home { move-column-to-first; }
-	  Mod+Ctrl+End  { move-column-to-last; }
-
-	  Mod+Shift+H     { focus-monitor-left; }
-	  Mod+Shift+J     { focus-monitor-down; }
-	  Mod+Shift+K     { focus-monitor-up; }
-	  Mod+Shift+L     { focus-monitor-right; }
-
-	  Mod+Alt+Ctrl+H     { move-column-to-monitor-left; }
-	  Mod+Alt+Ctrl+J     { move-column-to-monitor-down; }
-	  Mod+Alt+Ctrl+K     { move-column-to-monitor-up; }
-	  Mod+Alt+Ctrl+L     { move-column-to-monitor-right; }
-
-	  Mod+U              { focus-workspace-down; }
-	  Mod+I              { focus-workspace-up; }
-	  Mod+Ctrl+U         { move-column-to-workspace-down; }
-	  Mod+Ctrl+I         { move-column-to-workspace-up; }
-
-	  Mod+Shift+U         { move-workspace-down; }
-	  Mod+Shift+I         { move-workspace-up; }
-
-	  Mod+1 { focus-workspace 1; }
-	  Mod+2 { focus-workspace 2; }
-	  Mod+3 { focus-workspace 3; }
-	  Mod+4 { focus-workspace 4; }
-	  Mod+5 { focus-workspace 5; }
-	  Mod+6 { focus-workspace 6; }
-	  Mod+7 { focus-workspace 7; }
-	  Mod+8 { focus-workspace 8; }
-	  Mod+9 { focus-workspace 9; }
-	  Mod+Ctrl+1 { move-column-to-workspace 1; }
-	  Mod+Ctrl+2 { move-column-to-workspace 2; }
-	  Mod+Ctrl+3 { move-column-to-workspace 3; }
-	  Mod+Ctrl+4 { move-column-to-workspace 4; }
-	  Mod+Ctrl+5 { move-column-to-workspace 5; }
-	  Mod+Ctrl+6 { move-column-to-workspace 6; }
-	  Mod+Ctrl+7 { move-column-to-workspace 7; }
-	  Mod+Ctrl+8 { move-column-to-workspace 8; }
-	  Mod+Ctrl+9 { move-column-to-workspace 9; }
-
-	  Mod+Tab { focus-workspace-previous; }
-
-	  Mod+BracketLeft  { consume-or-expel-window-left; }
-	  Mod+BracketRight { consume-or-expel-window-right; }
-
-	  Mod+Comma  { consume-window-into-column; }
-	  Mod+Period { expel-window-from-column; }
-
-	  Mod+R { switch-preset-column-width; }
-	  Mod+Shift+R { switch-preset-window-height; }
-	  Mod+Ctrl+R { reset-window-height; }
-	  Mod+M { maximize-column; }
-	  Mod+F { fullscreen-window; }
-
-	  Mod+Ctrl+F { expand-column-to-available-width; }
-	  Mod+C { center-column; }
-	  Mod+Ctrl+C { center-visible-columns; }
-
-	  Mod+Minus { set-column-width "-10%"; }
-	  Mod+Equal { set-column-width "+10%"; }
-	  Mod+Shift+Minus { set-window-height "-10%"; }
-	  Mod+Shift+Equal { set-window-height "+10%"; }
-
-	  Mod+V       { toggle-window-floating; }
-	  Mod+Shift+V { switch-focus-between-floating-and-tiling; }
-
-	  Mod+Ctrl+t { toggle-column-tabbed-display; }
-
-	  Mod+P { screenshot; }
-	  Mod+Ctrl+P { screenshot-screen; }
-	  Mod+Alt+P { screenshot-window; }
-
-	  XF86Display { power-off-monitors; }
-	  F7 { power-off-monitors; }
-	  Mod+Ctrl+BackSpace { quit; }
-  }
-#+end_src
-
-* WAYBAR
-** CONFIG
-#+begin_src json-ts :tangle ~/.config/waybar/config.jsonc
-  {
-    "layer": "top",
-    "position": "left",
-    "spacing": 12,
-    "modules-left": [
-      "custom/sensors",
-      "cpu",
-      "memory",
-      "disk",
-      "network",
-      "systemd-failed-units",
-    ],
-    "modules-right": [
-      "backlight",
-      "pulseaudio",
-      "battery",
-      "idle_inhibitor",
-      "tray",
-      "clock",
-      "custom/power"
-    ],
-    "custom/sensors": {
-      "exec": "~/.config/waybar/scripts/sensors.sh",
-      "interval": 10,
-      "return-type": "json",
-      "tooltip": true
-    },
-    "cpu": {
-      "format": "{usage}%",
-    },
-    "memory": {
-      "format": "{}%",
-      "tooltip-format": "RAM: {used}GB/{total}GB\nSWAP: {swapUsed}GB/{swapTotal}GB",
-    },
-    "disk": {
-      "format": "{percentage_used}%",
-      "tooltip-format": "{used}/{total}"
-    },
-    "systemd-failed-units": {
-      "format-ok": "",
-      "format": "{nr_failed}",
-      "tooltip-format": "System: {nr_failed_system}\nUser: {nr_failed_user}",
-    },
-    "network": {
-      "format-wifi": "{signalStrength}%",
-      "format-ethernet": "🌐",
-      "format-linked": "🔗‍",
-      "format-disabled": "⚠️",
-      "format-disconnected": "💥️",
-      "tooltip-format": "{ifname}\n{essid}\n{ipaddr}/{cidr}\nVia: {gwaddr}\nUpload: {bandwidthUpBytes}\nDownload: {bandwidthDownBytes}",
-    },
-    "backlight": {
-      "format": "🔆",
-      "tooltip-format": "{percent}%"
-    },
-    "pulseaudio": {
-      "format": "🔊",
-      "tooltip-format": "{volume}%",
-      "format-muted": "🔇",
-    },
-    "battery": {
-      "format": "",
-      "full-at": 98,
-      "states": {
-	"good": 80,
-	"warning": 30,
-	"critical": 20
-      },
-      "tooltip-format": "{capacity}%\n{time}\n{cycles} cycles\n{health}% health",
-      "format-full": "",
-      "format-good": "🔋",
-      "format-charging": "🔌",
-      "format-discharging": "🪫",
-      "format-discharging-warning": "🪫❗",
-      "format-discharging-critical": "{capacity}%‼️",
-    },
-    "idle_inhibitor": {
-      "format": "{icon}",
-      "format-icons": {
-	"activated": "☕",
-	"deactivated": "🥃"
-      },
-      "timeout": 120
-    },
-    "tray": {
-      "spacing": 10,
-    },
-    "clock": {
-      "format": "{:%H:%M\n%d/%m}",
-      "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-    },
-    "custom/power": {
-      "format" : "⏻",
-      "tooltip": false,
-      "menu": "on-click",
-      "menu-file": "$HOME/.config/waybar/power_menu.xml",
-      "menu-actions": {
-	"shutdown": "shutdown",
-	"reboot": "reboot",
-	"suspend": "systemctl suspend",
-	"hibernate": "systemctl hibernate"
-      }
+    preset-column-widths {
+        proportion 0.33333
+        proportion 0.5
+        proportion 0.66667
     }
-  }
+
+    struts {}
+    focus-ring {
+        width 1
+        active-color "purple"
+    }
+}
+
+animations {
+    off
+}
+
+window-rule {
+    geometry-corner-radius 0 // Set every window radius to 20
+    clip-to-geometry true
+    open-maximized-to-edges true
+}
+
+window-rule {
+    background-effect {
+      blur true
+      xray false
+    }
+}
+
+window-rule {
+    match app-id="steam"
+    exclude title=r#"^[Ss]team$"#
+    open-floating true
+}
+
+window-rule {
+   match app-id="steam" title=r#"^notificationtoasts_\d+_desktop$"#
+   default-floating-position x=10 y=10 relative-to="bottom-right"
+   open-focused false
+}
+
+layer-rule {
+    match namespace="^noctalia-wallpaper"
+    place-within-backdrop true
+}
+
+layer-rule {
+    match namespace="^noctalia-(bar-[^\"]+|notification|dock|panel|attached-panel|osd)$"
+    background-effect {
+      xray false
+      // blur false
+    }
+}
+
+input {
+    keyboard {
+        xkb {
+            //If you want to overwrite your keyboard layout,
+            // uncomment the line below and change the layout accordingly.
+            //layout "us" // Use the American keyboard layout
+        }
+        numlock // Enable numlock on startup
+    }
+
+    touchpad {
+        //tap // Enable tap-to-click
+	dwt
+        natural-scroll // Enable natural (macOS-style) scrolling
+    }
+
+    mouse {
+        // If you want to disable Mouse Acceleration,
+        // uncomment the lines below.
+        //accel-profile "flat"
+        //accel-speed 0.0
+    }
+
+    focus-follows-mouse // Automatically focus windows under the mouse pointer
+    workspace-auto-back-and-forth // Enable workspace back & forth switching
+}
+
+binds {
+    Mod+Shift+ESCAPE { show-hotkey-overlay; }
+    Mod+Return hotkey-overlay-title="Open Terminal: Alacritty" { spawn "alacritty"; }
+    Mod+B hotkey-overlay-title="Open Browser: firefox" { spawn "firefox"; }
+    Mod+E hotkey-overlay-title="Open Text Editor: Emacs" { spawn "emacs"; }
+    Mod+Shift+Return hotkey-overlay-title="Open Wallpaper Selector: noctalia wallpaper toggle" { spawn-sh "noctalia msg panel-toggle wallpaper"; }
+    Mod+S hotkey-overlay-title="Open Control Center: noctalia controlCenter" { spawn-sh "noctalia msg panel-toggle control-center"; }
+    Mod+Shift+S hotkey-overlay-title="Open Settings: noctalia settings" { spawn-sh "noctalia msg settings-toggle"; }
+    Mod+Space hotkey-overlay-title="Open App Launcher: noctalia launcher" { spawn-sh "noctalia msg panel-toggle launcher"; }
+    Mod+ALT+L hotkey-overlay-title="Lock Screen: noctalia lock" { spawn-sh "noctalia msg session lock"; }
+    Mod+Shift+Q hotkey-overlay-title="Session Menu: noctalia sessionMenu" { spawn-sh "noctalia msg panel-toggle session"; }
+    XF86AudioRaiseVolume                allow-when-locked=true { spawn-sh "noctalia msg volume-up"; }
+    XF86AudioLowerVolume                allow-when-locked=true { spawn-sh "noctalia msg volume-down"; }
+    XF86AudioMute                       allow-when-locked=true { spawn-sh "noctalia msg volume-mute"; }
+    XF86AudioMicMute                    allow-when-locked=true { spawn-sh "noctalia msg mic-mute"; }
+    XF86AudioNext                       allow-when-locked=true { spawn-sh "noctalia msg media next"; }
+    XF86AudioPrev                       allow-when-locked=true { spawn-sh "noctalia msg media previous"; }
+    XF86AudioPlay                       allow-when-locked=true { spawn-sh "noctalia msg media play"; }
+    XF86AudioPause                      allow-when-locked=true { spawn-sh "noctalia msg media stop"; }
+    XF86MonBrightnessUp                 allow-when-locked=true { spawn-sh "noctalia msg brightness-up"; }
+    XF86MonBrightnessDown               allow-when-locked=true { spawn-sh "noctalia msg brightness-down"; }
+    Mod+Q                               { close-window; }
+    Mod+Left                            { focus-column-left; }
+    Mod+H                               { focus-column-left; }
+    Mod+Right                           { focus-column-right; }
+    Mod+L                               { focus-column-right; }
+    Mod+Up                              { focus-window-up; }
+    Mod+K                               { focus-window-up; }
+    Mod+Down                            { focus-window-down; }
+    Mod+J                               { focus-window-down; }
+    Mod+CTRL+Left                       { move-column-left; }
+    Mod+CTRL+H                          { move-column-left; }
+    Mod+CTRL+Right                      { move-column-right; }
+    Mod+CTRL+L                          { move-column-right; }
+    Mod+CTRL+UP                         { move-window-up; }
+    Mod+CTRL+K                          { move-window-up; }
+    Mod+CTRL+Down                       { move-window-down; }
+    Mod+CTRL+J                          { move-window-down; }
+    Mod+Home                            { focus-column-first; }
+    Mod+End                             { focus-column-last; }
+    Mod+CTRL+Home                       { move-column-to-first; }
+    Mod+CTRL+End                        { move-column-to-last; }
+    Mod+Shift+Left                      { focus-monitor-left; }
+    Mod+Shift+Right                     { focus-monitor-right; }
+    Mod+Shift+UP                        { focus-monitor-up; }
+    Mod+Shift+Down                      { focus-monitor-down; }
+    Mod+Shift+CTRL+Left                 { move-column-to-monitor-left; }
+    Mod+Shift+CTRL+Right                { move-column-to-monitor-right; }
+    Mod+Shift+CTRL+UP                   { move-column-to-monitor-up; }
+    Mod+Shift+CTRL+Down                 { move-column-to-monitor-down; }
+    Mod+Shift+V                         { switch-focus-between-floating-and-tiling; }
+    Mod+BracketLeft                     { consume-or-expel-window-left; }
+    Mod+BracketRight                    { consume-or-expel-window-right; }
+    Mod+Comma                           { consume-window-into-column; }
+    Mod+Period                          { expel-window-from-column; }
+    Mod+R                               { switch-preset-column-width; }
+    Mod+Shift+R                         { switch-preset-column-width-back; }
+    Mod+Ctrl+Shift+R                    { switch-preset-window-height; }
+    Mod+Ctrl+R                          { reset-window-height; }
+    Mod+WheelScrollDown                 cooldown-ms=150 { focus-workspace-down; }
+    Mod+WheelScrollUp                   cooldown-ms=150 { focus-workspace-up; }
+    Mod+CTRL+WheelScrollDown            cooldown-ms=150 { move-column-to-workspace-down; }
+    Mod+CTRL+WheelScrollUp              cooldown-ms=150 { move-column-to-workspace-up; }
+    Mod+WheelScrollRight                { focus-column-right; }
+    Mod+WheelScrollLeft                 { focus-column-left; }
+    Mod+CTRL+WheelScrollRight           { move-column-right; }
+    Mod+CTRL+WheelScrollLeft            { move-column-left; }
+    Mod+Shift+WheelScrollDown           { focus-column-right; }
+    Mod+Shift+WheelScrollUp             { focus-column-left; }
+    Mod+CTRL+Shift+WheelScrollDown      { move-column-right; }
+    Mod+CTRL+Shift+WheelScrollUp        { move-column-left; }
+    Mod+1                               { focus-workspace 1; }
+    Mod+2                               { focus-workspace 2; }
+    Mod+3                               { focus-workspace 3; }
+    Mod+4                               { focus-workspace 4; }
+    Mod+5                               { focus-workspace 5; }
+    Mod+6                               { focus-workspace 6; }
+    Mod+7                               { focus-workspace 7; }
+    Mod+8                               { focus-workspace 8; }
+    Mod+9                               { focus-workspace 9; }
+    Mod+CTRL+1                          { move-column-to-workspace 1; }
+    Mod+CTRL+2                          { move-column-to-workspace 2; }
+    Mod+CTRL+3                          { move-column-to-workspace 3; }
+    Mod+CTRL+4                          { move-column-to-workspace 4; }
+    Mod+CTRL+5                          { move-column-to-workspace 5; }
+    Mod+CTRL+6                          { move-column-to-workspace 6; }
+    Mod+CTRL+7                          { move-column-to-workspace 7; }
+    Mod+CTRL+8                          { move-column-to-workspace 8; }
+    Mod+CTRL+9                          { move-column-to-workspace 9; }
+    Mod+TAB                             { focus-workspace-previous; }
+    Mod+CTRL+F                          { expand-column-to-available-width; }
+    Mod+C                               { center-column; }
+    Mod+CTRL+C                          { center-visible-columns; }
+    Mod+Minus                           { set-column-width "-10%"; }
+    Mod+Equal                           { set-column-width "+10%"; }
+    Mod+Shift+Minus                     { set-window-height "-10%"; }
+    Mod+Shift+Equal                     { set-window-height "+10%"; }
+    Mod+T                               { toggle-window-floating; }
+    Mod+F                               { maximize-column; }
+    Mod+Shift+F                         { fullscreen-window; }
+    Mod+W                               { toggle-column-tabbed-display; }
+    Mod+M                               { maximize-window-to-edges; }
+    CTRL+Shift+1                        { screenshot; }
+    CTRL+Shift+2                        { screenshot-screen; }
+    CTRL+Shift+3                        { screenshot-window; }
+    // ─── Emergency Escape Key ───
+    // Use this when a fullscreen app blocks your keybinds.
+    // It disables any active keyboard shortcut inhibitor, restoring control.
+    Mod+ESCAPE                          allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
+    CTRL+ALT+Delete                     { quit; } // Also quits Niri
+    Mod+Shift+P                         { power-off-monitors; } // Turn off screens (useful for OLED or privacy)
+    Mod+O                               repeat=false { toggle-overview; }
+}
 #+end_src
-** POWER
-#+begin_src xml :tangle ~/.config/waybar/power_menu.xml
-  <?xml version="1.0" encoding="UTF-8"?>
-  <interface>
-    <object class="GtkMenu" id="menu">
-      <child>
-	<object class="GtkMenuItem" id="suspend">
-	<property name="label">Suspend</property>
-	</object>
-      </child>
-      <child>
-	<object class="GtkMenuItem" id="hibernate">
-	<property name="label">Hibernate</property>
-	</object>
-      </child>
-      <child>
-	<object class="GtkMenuItem" id="shutdown">
-	<property name="label">Shutdown</property>
-	</object>
-      </child>
-      <child>
-	<object class="GtkSeparatorMenuItem" id="delimiter1"/>
-      </child>
-      <child>
-	<object class="GtkMenuItem" id="reboot">
-	<property name="label">Reboot</property>
-	</object>
-      </child>
-    </object>
-  </interface>
+* NOCTALIA
+#+begin_src kdl :tangle ~/.config/noctalia/config.toml
+[bar.default]
+capsule_thickness = 0.10000000149011612
+center = [ "taskbar" ]
+concave_edge_corners = false
+end = [
+    "media",
+    "tray",
+    "notifications",
+    "clipboard",
+    "network",
+    "bluetooth",
+    "volume",
+    "brightness",
+    "control-center",
+    "caffeine",
+    "session"
+]
+margin_ends = 0
+padding = 8
+position = "left"
+radius = 0
+shadow = false
+start = [ "clock", "battery", "temp", "launcher", "wallpaper", "workspaces" ]
+thickness = 48
+
+[battery]
+warning_threshold = 15
+
+[control_center]
+width = 820
+
+[desktop_widgets]
+enabled = false
+
+[dock]
+background_opacity = 0.4999999888241291
+concave_edge_corners = false
+cross_axis_padding = 0
+item_spacing = 0
+magnification = false
+magnification_scale = 1.0
+main_axis_padding = 0
+position = "right"
+radius = 0
+radius_bottom_left = 0
+radius_bottom_right = 0
+radius_top_left = 0
+radius_top_right = 0
+reserve_space = false
+smart_auto_hide = true
+
+[hot_corners.bottom_left]
+action = "launcher"
+
+[idle]
+behavior_order = [ "screen-off", "lock", "lock-and-suspend" ]
+
+    [idle.behavior.lock]
+    action = "lock"
+    enabled = true
+    timeout = 600.0
+
+    [idle.behavior.lock-and-suspend]
+    action = "lock_and_suspend"
+    enabled = true
+    timeout = 900.0
+
+    [idle.behavior.screen-off]
+    action = "screen_off"
+    enabled = true
+    timeout = 300.0
+
+[location]
+auto_locate = true
+
+[lockscreen_widgets]
+enabled = false
+schema_version = 2
+widget_order = [ "lockscreen-login-box@eDP-1" ]
+
+    [lockscreen_widgets.grid]
+    cell_size = 16
+    major_interval = 4
+    visible = true
+
+    [lockscreen_widgets.widget."lockscreen-login-box@eDP-1"]
+    box_height = 196.0
+    box_width = 810.0
+    cx = 823.0
+    cy = 847.0
+    output = "eDP-1"
+    placement_height = 1029.0
+    placement_width = 1646.0
+    rotation = 0.0
+    type = "login_box"
+
+        [lockscreen_widgets.widget."lockscreen-login-box@eDP-1".settings]
+        background_color = "surface_variant"
+        background_opacity = 0.88
+        background_radius = 12.0
+        center_password_text = false
+        input_opacity = 1.0
+        input_radius = 6.0
+        layout = "regular"
+        show_caps_lock = true
+        show_keyboard_layout = true
+        show_login_button = true
+        show_media = true
+        show_session_buttons = true
+        show_unlock_hint = true
+        show_weather = true
+
+    [lockscreen_widgets.widget."lockscreen-login-box@eDP-2"]
+    box_height = 196.0
+    box_width = 810.0
+    cx = 960.0
+    cy = 898.0
+    output = "eDP-2"
+    placement_height = 1080.0
+    placement_width = 1920.0
+    rotation = 0.0
+    type = "login_box"
+
+        [lockscreen_widgets.widget."lockscreen-login-box@eDP-2".settings]
+        background_color = "surface_variant"
+        background_opacity = 0.88
+        background_radius = 12.0
+        center_password_text = false
+        input_opacity = 1.0
+        input_radius = 6.0
+        layout = "regular"
+        show_caps_lock = true
+        show_keyboard_layout = true
+        show_login_button = true
+        show_media = true
+        show_session_buttons = true
+        show_unlock_hint = true
+        show_weather = true
+
+[nightlight]
+enabled = true
+temperature_day = 5200
+temperature_night = 3600
+
+[shell]
+panel_anchor_bar = "default"
+polkit_agent = true
+
+    [shell.animation]
+    enabled = false
+
+    [shell.panel]
+    open_near_click_control_center = true
+
+[theme]
+builtin = "Dracula"
+community_palette = "Lilac AMOLED"
+mode = "dark"
+pure_black_dark = true
+source = "builtin"
+wallpaper_scheme = "m3-content"
+
+[wallpaper.default]
+path = "/usr/share/noctalia/assets/noctalia-wallpaper.png"
+
+[wallpaper.last]
+path = "/usr/share/noctalia/assets/noctalia-wallpaper.png"
+
+[wallpaper.monitors.eDP-1]
+path = "color:#000000"
+
+[wallpaper.monitors.eDP-2]
+path = "color:#000000"
+
+[widget.clock]
+format = "{:%H:%M:%d:%m}"
+tooltip_format = "%H:%M:%S %A %d %B %Y"
+vertical_format = "%H:%M %d/%m"
+
+[widget.launcher]
+glyph = "menu-2"
+
+[widget.network]
+show_label = false
+
+[widget.taskbar]
+icon_scale = 2.0
+inactive_opacity = 0.79000000000000004
+pinned = [ "Alacritty", "firefox", "emacs" ]
+pinned_opacity = 0.73999999999999999
+
+[widget.temp]
+label_show_units = false
 #+end_src
-** SCRIPTS
-#+begin_src sh :tangle ~/.config/waybar/scripts/sensors.sh :tangle-mode o755
-  #!/usr/bin/env bash
-  output=$(sensors 2>/dev/null)
-  temp=$(echo "$output" | awk '/Package id 0:/ {print $4; exit}')
-  temp=${temp//+}
-  temp=${temp%%.*}
-  printf '{"text": "%s°C", "tooltip": "%s"}\n' "$temp" "$(echo "$output" | sed ':a;N;$!ba;s/\n/\\n/g')"
-#+end_src
-** STYLE
-#+begin_src css :tangle ~/.config/waybar/style.css
-  ,* {
-      font-family: FontAwesome, Roboto, Helvetica, Arial, sans-serif;
-      font-size: 15px;
-      font-weight: bold;
-  }
 
-  window#waybar {
-      background-color: #000;
-      color: #ffffff;
-  }
-
-  window#waybar.hidden {
-      opacity: 1;
-  }
-
-  #network,
-  #cpu,
-  #memory,
-  #disk,
-  #temperature,
-  #backlight,
-  #pulseaudio,
-  #battery,
-  #idle_inhibitor,
-  #tray,
-  #clock {
-      padding: 0 2px;
-      color: #fff;
-  }
-
-  #network {
-      background-color: #627;
-      color: #FFF
-  }
-
-  #network.ethernet {
-      background-color: #000;
-      color: #FFF
-  }
-
-  #network.disconnected {
-      background-color: #900;
-  }
-
-  #cpu {
-      background-color: #B28;
-      color: #FFF;
-  }
-
-  #memory {
-      background-color: #627;
-      color: #FFF;
-  }
-
-  #disk {
-      background-color: #B28;
-      color: #FFF;
-  }
-
-  #custom-sensors {
-      background-color: #627;
-      color: #FFF;
-  }
-
-  #backlight {
-      background-color: #000;
-  }
-
-  #pulseaudio {
-      background-color: #000;
-  }
-
-  #battery {
-      background-color: #000;
-      color: #FFF;
-  }
-
-  #battery.charging, #battery.plugged {
-      background-color: #000;
-      color: #FFF;
-  }
-
-  @keyframes blink {
-      to {
-	    background-color: #FF0;
-	    color: #000;
-      }
-  }
-
-  /* Using steps() instead of linear as a timing function to limit cpu usage */
-  #battery.critical:not(.charging) {
-      background-color: #900;
-      color: #FFF;
-      animation-name: blink;
-      animation-duration: 0.5s;
-      animation-timing-function: steps(12);
-      animation-iteration-count: infinite;
-      animation-direction: alternate;
-  }
-
-  #idle_inhibitor {
-      background-color: #000;
-  }
-
-  #idle_inhibitor.activated {
-      background-color: #000;
-  }
-
-  #tray {
-      background-color: #000;
-  }
-
-  #tray > .passive {
-      -gtk-icon-effect: dim;
-  }
-
-  #tray > .needs-attention {
-      -gtk-icon-effect: highlight;
-      background-color: #800;
-  }
-
-  #clock {
-      background-color: #000000;
-  }
-#+end_src
