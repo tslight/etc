@@ -70,7 +70,7 @@
 
 ** ALIAS
 
-#+begin_src shell
+#+begin_src shell :tangle ~/.bashrc
   [ -f $HOME/.alias ] && source $HOME/.alias
 #+end_src
 
