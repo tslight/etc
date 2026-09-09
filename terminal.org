@@ -90,10 +90,10 @@
   set -ga update-environment TERM
   set -ga update-environment TERM_PROGRAM
   # Set the status bar background to your default terminal background (opaque)
-  set -g status-style "bg=default,fg=green"
+  set -g status-style "bg=default,fg=green,bold"
   # Optional: Ensure individual window tabs match this clean inverted look
-  set -g window-status-style "bg=default,fg=green"
-  set -g window-status-current-style "bg=default,fg=green,bold"
+  set -g window-status-style "bg=default,fg=green,bold"
+  set -g window-status-current-style "bg=default,fg=yellow,bold"
   # Start window numbering at 1
   set -g base-index 1
   # Start pane numbering at 1
