@@ -84,6 +84,11 @@
 
 #+BEGIN_SRC conf :tangle ~/.tmux.conf
   set -g mouse on
+  # Allow terminal graphics sequences to pass through tmux
+  set -g allow-passthrough on
+  # Ensure tmux updates terminal environment identifiers
+  set -ga update-environment TERM
+  set -ga update-environment TERM_PROGRAM
 #+END_SRC
 
 #+BEGIN_SRC conf :tangle (if (eq system-type 'berkeley-unix) "~/.tmux.conf" "no")
@@ -94,3 +99,11 @@
   set -s copy-command 'pbcopy'
 #+END_SRC
 
+* YAZI
+
+#+begin_src conf :tangle ~/.config/yazi/yazi.toml
+  [mgr]
+  # Default is [1, 4, 3]. Change it to give more or less space to the middle pane.
+  # Parent = 1 part, Current = 2 parts, Preview = 5 parts
+  ratio = [1, 3, 5]
+#+end_src
