@@ -89,6 +89,17 @@
   # Ensure tmux updates terminal environment identifiers
   set -ga update-environment TERM
   set -ga update-environment TERM_PROGRAM
+  # Set the status bar background to your default terminal background (opaque)
+  set -g status-style "bg=default,fg=green"
+  # Optional: Ensure individual window tabs match this clean inverted look
+  set -g window-status-style "bg=default,fg=green"
+  set -g window-status-current-style "bg=default,fg=green,bold"
+  # Start window numbering at 1
+  set -g base-index 1
+  # Start pane numbering at 1
+  setw -g pane-base-index 1
+  # Automatically renumber windows when one is closed
+  set -g renumber-windows on
 #+END_SRC
 
 #+BEGIN_SRC conf :tangle (if (eq system-type 'berkeley-unix) "~/.tmux.conf" "no")
