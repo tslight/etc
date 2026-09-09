@@ -1,0 +1,19 @@
+#+TITLE: Free the Desktop Slop!
+#+PROPERTY: header-args :cache yes
+#+PROPERTY: header-args :comments no
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :padline no
+#+PROPERTY: header-args+ :results silent
+* User Directories
+
+#+begin_src conf :tangle ~/.config/user-dirs.dirs
+  XDG_DESKTOP_DIR="$HOME/desk"
+  XDG_DOCUMENTS_DIR="$HOME/doc"
+  XDG_DOWNLOAD_DIR="$HOME/tmp"
+  XDG_MUSIC_DIR="$HOME/audio"
+  XDG_PICTURES_DIR="$HOME/img"
+  XDG_PROJECTS_DIR="$HOME/src"
+  XDG_PUBLICSHARE_DIR="$HOME/pub"
+  XDG_TEMPLATES_DIR="$HOME/templates"
+  XDG_VIDEOS_DIR="$HOME/video"
+#+end_src
