@@ -6,32 +6,42 @@
 #+PROPERTY: header-args+ :padline yes
 #+PROPERTY: header-args+ :tangle /sudo::/etc/udev/hwdb.d/90-sc-kbd.hwdb
 
-For maximum Emacs comfort, I remap my keyboard to conform to the Symbolics'
-[[http://xahlee.info/kbd/space-cadet_keyboard.html][Space-Cadet]] Lisp Machine keyboard layout. This was the keyboard Emacs' was
-originally written on/with.
+For maximum Emacs comfort, I remap my keyboard to conform to the
+Symbolics' [[http://xahlee.info/kbd/space-cadet_keyboard.html][Space-Cadet]] Lisp Machine keyboard layout.
 
-#+CAPTION: The Venerable Space Cadet Keyboard
-#+NAME:fig:Space_aCadet
-[[./.img/space_cadet_close_up.jpg]]
+This was the modifier layout found on the keyboard Emacs' was
+originally written on/with:
 
-This layout not only makes so much more sense for Emacs, but for most other
-applications too. Typically the Control key is the most commonly used modifier,
-followed by Alt /(Meta)/, and then the Super /(Windows)/ key.
+=[SUPER]>[META]>[CTRL]>[ S P A C E ]<[CTRL][META][SUPER]=
 
-It makes the most sense to me, to have the most used modifiers accessible with
-one's strongest digits (the thumbs), and the least used modifiers using the
-weakest digit - one's pinkies.
+As opposed to the standard order of most modern PC keyboards:
 
-It also means that your modifiers are symmetrical, so you can use them in the
-same touch-typing fashion as the shift key (ie. one hand presses modifier, the
-other, the modified key).
+=[CTRL]>[SUPER]>[META]>[ S P A C E ]<[META][SUPER][CTRL]=
 
-In addition I also switch the Escape and CapsLock keys, because I still use Vim
-from time to time...
+Or, even worse, the layout on Apple keyboards:
 
-There are a variety of ways to achieve this on Linux - ~setxkbmap~, ~xmodmap~
-or with ~udev~. I choose the latter as it remaps at a lower level and therefore
-works in X11, Wayland and a tty. Whereas the former only work in X11.
+=[CTRL]>[META]>[SUPER]>[ S P A C E ]<[SUPER][META][CTRL]=
+
+The Space Cadet layout not only makes so much more sense for Emacs,
+but for most other applications too. Typically the Control key is the
+most commonly used modifier, followed by Alt /(Meta)/, and then the
+Super /(Windows)/ key.
+
+It makes the most sense to me, to have the most used modifiers
+accessible with one's strongest digits (the thumbs), and the least
+used modifiers using the weakest digit - one's pinkies.
+
+It also means that your modifiers are symmetrical, so you can use them
+in the same touch-typing fashion as the shift key (ie. one hand
+presses modifier, the other, the modified key).
+
+In addition I also switch the Escape and CapsLock keys, because I
+still use Vim from time to time...
+
+There are a variety of ways to achieve this on Linux - ~setxkbmap~,
+~xmodmap~ or with ~udev~. I choose the latter as it remaps at a lower
+level and therefore works in X11, Wayland and a tty. Whereas the
+former only work in X11.
 
 * INSTALL
 
