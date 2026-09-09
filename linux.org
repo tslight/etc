@@ -25,6 +25,8 @@
   export MANPATH
 
   umask 022
+
+  [ -f $HOME/.bashrc ] && source $HOME/.bashrc
 #+END_SRC
 
 ** PROMPT
