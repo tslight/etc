@@ -1,0 +1,36 @@
+#+TITLE: brcmfmac suspension crash
+#+PROPERTY: header-args :cache yes
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :padline no
+#+PROPERTY: header-args+ :results silent
+
+Some users report that systems using the brcmfmac driver (notably the
+Broadcom 4352 chipset on MacBookPro12,1 and similar hardware)
+experience Wi-Fi failures after suspending. Symptoms may include:
+
+- Device failing to suspend
+- No Wi-Fi networks visible after suspend attempt (or no Wi-Fi
+  networks after resume)
+- Wireless interface not functioning
+- dmesg logs showing driver errors or timeouts
+
+This appears to be a race condition during suspend, where the driver
+is not properly unloaded before power state changes occur.
+
+A workaround is unloading the brcmfmac module before suspend and
+reload it after resume by systemd service:
+
+#+begin_src conf :tangle /sudo::/etc/systemd/system/brcmfmac-reload.service
+  [Unit]
+  Before=sleep.target
+  [Service]
+  Type=oneshot
+  ExecStart=/bin/bash -c 'sleep 2 && exec modprobe -r brcmfmac'
+  ExecStop=/bin/modprobe brcmfmac
+  [Install]
+  WantedBy=sleep.target
+#+end_src
+
+#+begin_src shell :dir /sudo:: :tangle no
+  systemctl enable brcmfmac-reload.service
+#+end_src
