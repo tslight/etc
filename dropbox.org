@@ -32,7 +32,7 @@ Wants=network-online.target
 
 [Service]
 Type=notify
-ExecStart=/usr/bin/rclone mount remote:Dropbox %h/Dropbox \
+ExecStart=/usr/bin/rclone mount dropbox: %h/db \
   --vfs-cache-mode full \
   --vfs-cache-max-size 50G \
   --vfs-cache-max-age 900h \
@@ -40,7 +40,7 @@ ExecStart=/usr/bin/rclone mount remote:Dropbox %h/Dropbox \
   --buffer-size 64M \
   --log-level NOTICE
 
-ExecStop=/usr/bin/fusermount3 -u %h/Dropbox
+ExecStop=/usr/bin/fusermount3 -u %h/db
 Restart=on-failure
 RestartSec=5
 
@@ -63,7 +63,7 @@ Wants=network-online.target
 
 [Service]
 Type=notify
-ExecStart=/usr/bin/rclone mount remote:Dropbox %h/Dropbox \
+ExecStart=/usr/bin/rclone mount dropbox: %h/db \
   --vfs-cache-mode full \
   --vfs-cache-max-size off \
   --vfs-cache-max-age off \
@@ -71,7 +71,7 @@ ExecStart=/usr/bin/rclone mount remote:Dropbox %h/Dropbox \
   --buffer-size 64M \
   --log-level NOTICE
 
-ExecStop=/usr/bin/fusermount3 -u %h/Dropbox
+ExecStop=/usr/bin/fusermount3 -u %h/db
 Restart=on-failure
 RestartSec=5
 
@@ -119,15 +119,35 @@ profile matches your current machine.
 
 ** For the 50GB Constrained Setup:
 #+BEGIN_SRC bash :tangle no
-mkdir -p ~/Dropbox
+mkdir -p ~/db
 systemctl --user daemon-reload
 systemctl --user enable --now rclone-dropbox.service
 systemctl --user status rclone-dropbox.service
 #+END_SRC
 
+#+RESULTS:
+| ●           | rclone-dropbox.service                                                         | -                                                        | Rclone   | Dropbox        | Mount                   | (50GB     | Capped               | Profile) |                     |        |                  |          |               |           |             |        |      |   |      |     |
+| Loaded:     | loaded                                                                         | (/home/oxff/.config/systemd/user/rclone-dropbox.service; | enabled; | preset:        | enabled)                |           |                      |          |                     |        |                  |          |               |           |             |        |      |   |      |     |
+| Active:     | active                                                                         | (running)                                                | since    | Thu            | 2026-09-10              | 07:49:17  | BST;                 | 6ms      | ago                 |        |                  |          |               |           |             |        |      |   |      |     |
+| Invocation: | 68074b7af4654fffb65641ee9b9235d1                                               |                                                          |          |                |                         |           |                      |          |                     |        |                  |          |               |           |             |        |      |   |      |     |
+| Docs:       | man:rclone(1)                                                                  |                                                          |          |                |                         |           |                      |          |                     |        |                  |          |               |           |             |        |      |   |      |     |
+| Main        | PID:                                                                           | 42662                                                    | (rclone) |                |                         |           |                      |          |                     |        |                  |          |               |           |             |        |      |   |      |     |
+| Status:     | "[07:49]                                                                       | vfs                                                      | cache:   | objects        | 0                       | (was      | 0)                   | in       | use                 | 0,     | to               | upload   | 0,            | uploading | 0,          | total  | size | 0 | (was | 0)" |
+| Tasks:      | 13                                                                             | (limit:                                                  | 18995)   |                |                         |           |                      |          |                     |        |                  |          |               |           |             |        |      |   |      |     |
+| Memory:     | 35.1M                                                                          | (peak:                                                   | 35.1M)   |                |                         |           |                      |          |                     |        |                  |          |               |           |             |        |      |   |      |     |
+| CPU:        | 144ms                                                                          |                                                          |          |                |                         |           |                      |          |                     |        |                  |          |               |           |             |        |      |   |      |     |
+| CGroup:     | /user.slice/user-1000.slice/user@1000.service/app.slice/rclone-dropbox.service |                                                          |          |                |                         |           |                      |          |                     |        |                  |          |               |           |             |        |      |   |      |     |
+| └─42662     | /usr/bin/rclone                                                                | mount                                                    | dropbox: | /home/oxff/db  | --vfs-cache-mode        | full      | --vfs-cache-max-size | 50G      | --vfs-cache-max-age | 900h   | --vfs-read-ahead | 128M     | --buffer-size | 64M       | --log-level | NOTICE |      |   |      |     |
+|             |                                                                                |                                                          |          |                |                         |           |                      |          |                     |        |                  |          |               |           |             |        |      |   |      |     |
+| Sep         | 10                                                                             | 07:49:12                                                 | freefall | systemd[1861]: | rclone-dropbox.service: | Failed    | with                 | result   | 'exit-code'.        |        |                  |          |               |           |             |        |      |   |      |     |
+| Sep         | 10                                                                             | 07:49:12                                                 | freefall | systemd[1861]: | Failed                  | to        | start                | Rclone   | Dropbox             | Mount  | (50GB            | Capped   | Profile).     |           |             |        |      |   |      |     |
+| Sep         | 10                                                                             | 07:49:16                                                 | freefall | systemd[1861]: | rclone-dropbox.service: | Scheduled | restart              | job      | immediately         | on     | client           | request, | restart       | counter   | is          | at     |   67 |   |      |     |
+| Sep         | 10                                                                             | 07:49:16                                                 | freefall | systemd[1861]: | Starting                | Rclone    | Dropbox              | Mount    | (50GB               | Capped | Profile)...      |          |               |           |             |        |      |   |      |     |
+| Sep         | 10                                                                             | 07:49:17                                                 | freefall | systemd[1861]: | Started                 | Rclone    | Dropbox              | Mount    | (50GB               | Capped | Profile).        |          |               |           |             |        |      |   |      |     |
+
 ** For the Full Local Mirror Setup:
 #+BEGIN_SRC bash :tangle no
-mkdir -p ~/Dropbox
+mkdir -p ~/db
 systemctl --user daemon-reload
 systemctl --user enable --now rclone-dropbox-mirror.service rclone-refresh.timer
 
