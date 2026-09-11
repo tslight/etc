@@ -1,4 +1,4 @@
-#+TITLE: LINUX SPACE CADET KEYBOARD REMAPPING
+#+TITLE: UDEV M8
 #+PROPERTY: header-args :cache yes
 #+PROPERTY: header-args+ :mkdirp yes
 #+PROPERTY: header-args+ :tangle-mode (identity #o644)
@@ -6,111 +6,11 @@
 #+PROPERTY: header-args+ :padline yes
 #+PROPERTY: header-args+ :tangle /sudo::/etc/udev/hwdb.d/90-sc-kbd.hwdb
 
-For maximum Emacs comfort, I remap my keyboard to conform to the
-Symbolics' [[http://xahlee.info/kbd/space-cadet_keyboard.html][Space-Cadet]] Lisp Machine keyboard layout.
-
-This was the modifier layout found on the keyboard Emacs' was
-originally written on/with:
-
-=[SUPER]>[META]>[CTRL]>[ S P A C E ]<[CTRL][META][SUPER]=
-
-As opposed to the standard order of most modern PC keyboards:
-
-=[CTRL]>[SUPER]>[META]>[ S P A C E ]<[META][SUPER][CTRL]=
-
-Or, even worse, the layout on Apple keyboards:
-
-=[CTRL]>[META]>[SUPER]>[ S P A C E ]<[SUPER][META][CTRL]=
-
-The Space Cadet layout not only makes so much more sense for Emacs,
-but for most other applications too. Typically the Control key is the
-most commonly used modifier, followed by Alt /(Meta)/, and then the
-Super /(Windows)/ key.
-
-It makes the most sense to me, to have the most used modifiers
-accessible with one's strongest digits (the thumbs), and the least
-used modifiers using the weakest digit - one's pinkies.
-
-It also means that your modifiers are symmetrical, so you can use them
-in the same touch-typing fashion as the shift key (ie. one hand
-presses modifier, the other, the modified key).
-
-In addition I also switch the Escape and CapsLock keys, because I
-still use Vim from time to time...
-
-There are a variety of ways to achieve this on Linux - ~setxkbmap~,
-~xmodmap~ or with ~udev~. I choose the latter as it remaps at a lower
-level and therefore works in X11, Wayland and a tty. Whereas the
-former only work in X11.
-
-* INSTALL
-
-*This will only work if your hardware is listed in the "KEYBOARDS" section
-below*
-
-If it isn't please follow the "MODIFY" instructions, and I'd be very
-grateful if you'd also followed the "CONTRIBUTE" instructions and
-helped out the next guy...
-
-Providing your hardware is supported, execute the code block below
-after tangling this file, and everything should /'just werk'/ (TM).
-
+* KEYBOARD
 #+begin_src shell :dir /sudo:: :tangle no
 systemd-hwdb update && udevadm trigger
 udevadm info /dev/input/event* | grep -E 'caps|esc|meta|alt|ctrl'
 #+end_src
-
-* MODIFY
-
-We need to create a new file at ~/etc/udev/hwdb.d~ that has a section that
-references our keyboard identifier and underneath declares which scancodes map
-to which keycodes (see [[file:kbd.hwdb][kbd.hwdb]] or the examples below).
-
-[[https://wiki.archlinux.org/index.php/Map_scancodes_to_keycodes][Map Scancodes to Keycodes]]
-
-To find the correct keycodes use the ~evtest~ utility with the path to the
-input device as the parameter, eg. ~/dev/input/event0~.
-
-#+BEGIN_SRC sh :tangle no
-  sudo evtest /dev/input/event0
-#+END_SRC
-
-If you run ~evtest~ with no argument it should ask you which device you want to
-test, and which one is the keyboard /should/ be obvious..
-
-*N.B.* ~evtest~ needs to be run as root to work.
-
-The keycode is the unique identifier after the string "value".
-
-One thing to note is that Meta refers to Super in the output from evtest, not
-Alt as you might expect.
-
-For examples of how to derive the keyboard type matching rule, check [[https://github.com/systemd/systemd/blob/master/hwdb/60-keyboard.hwdb][here]].
-
-Also, ~/usr/include/linux/input.h~ may be of use... Good luck!
-
-You can get also the keyboard identifier with:
-
-#+BEGIN_SRC sh :tangle no
-  cat /proc/bus/input/devices | grep -i keyboard -A 9 -B 1
-#+END_SRC
-
-*N.B.* Make sure all the of the keyboard identifier string is capitalised apart
-from the section delimiters... (~b****v***p***~)
-
-Finally one needs to run:
-
-#+BEGIN_SRC sh :tangle no
-  sudo systemd-hwdb update && sudo udevadm trigger
-#+END_SRC
-
-To check this has worked, run the following:
-
-#+BEGIN_SRC sh :tangle no
-  udevadm info /dev/input/event* | grep -E 'caps|esc|meta|alt|ctrl'
-#+END_SRC
-
-* KEYBOARDS
 ** APPLE
 *** Apple MacBook Pro M1
 #+begin_src conf
@@ -264,3 +164,5 @@ Shows up in ~/proc/bus/input/devices~ as "Microsoft Microsoft® Nano Transceiver
     KEYBOARD_KEY_700e0=leftmeta         # left  --> meta
     KEYBOARD_KEY_70050=leftmeta         # ctrl  --> meta
 #+end_src
+
+
