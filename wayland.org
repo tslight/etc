@@ -215,10 +215,14 @@
       "temp",
       "launcher",
       "wallpaper",
-      "control-center",
       "workspaces"
   ]
   thickness = 48
+
+  [bar.default.dead_zone.actions]
+  left = "panel-toggle control-center home"
+  middle = "panel-toggle control-center weather"
+  right = "panel-toggle control-center media"
 
   [battery]
   warning_threshold = 15
