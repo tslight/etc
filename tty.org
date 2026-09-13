@@ -1,0 +1,21 @@
+#+TITLE: TTY
+#+PROPERTY: header-args :cache yes
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :tangle-mode (identity #o644)
+#+PROPERTY: header-args+ :results silent
+#+PROPERTY: header-args+ :padline yes
+
+* Stop clearing of boot messages
+
+#+begin_src ini :tangle /etc/systemd/system/getty@tty1.service.d/noclear.conf
+[Service]
+TTYVTDisallocate=no
+#+end_src
+
+* Auto login to TTY1
+
+#+begin_src ini :tangle /etc/systemd/system/getty@tty1.service.d/override.conf
+[Service]
+ExecStart=
+ExecStart=-/sbin/agetty --autologin oxff --noclear %I $TERM
+#+end_src

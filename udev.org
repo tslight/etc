@@ -7,7 +7,7 @@
 #+PROPERTY: header-args+ :tangle /sudo::/etc/udev/hwdb.d/90-sc-kbd.hwdb
 
 * KEYBOARD
-#+begin_src shell :dir /sudo:: :tangle no
+#+begin_src sh :dir /sudo:: :tangle no
 systemd-hwdb update && udevadm trigger
 udevadm info /dev/input/event* | grep -E 'caps|esc|meta|alt|ctrl'
 #+end_src
