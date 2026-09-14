@@ -1,9 +1,6 @@
 #+TITLE: Rclone Dropbox Configuration
 #+PROPERTY: header-args :mkdirp yes
-
-* Unit files
-** Limited Persistence
-
+#+PROPERTY: header-args+ :results silent
 #+BEGIN_SRC ini :tangle ~/.config/systemd/user/rclone-dropbox.service
   [Unit]
   Description=Rclone Dropbox Mount (50GB Capped Profile)
@@ -19,6 +16,8 @@
     --vfs-cache-max-age 900h \
     --vfs-read-ahead 128M \
     --buffer-size 64M \
+    --dir-cache-time 1m \
+    --poll-interval 30s \
     --log-level NOTICE
 
   ExecStop=/usr/bin/fusermount3 -u %h/db
@@ -28,66 +27,8 @@
   [Install]
   WantedBy=default.target
 #+END_SRC
-
-** Unlimited Persistence
-
-#+BEGIN_SRC ini :tangle ~/.config/systemd/user/rclone-dropbox.service
-  [Unit]
-  Description=Rclone Dropbox Mount (Full Mirror Profile)
-  Documentation=man:rclone(1)
-  After=network-online.target
-  Wants=network-online.target
-
-  [Service]
-  Type=notify
-  ExecStart=/usr/bin/rclone mount dropbox: %h/db \
-    --vfs-cache-mode full \
-    --vfs-cache-max-size off \
-    --vfs-cache-max-age off \
-    --vfs-read-ahead 128M \
-    --buffer-size 64M \
-    --log-level NOTICE
-
-  ExecStop=/usr/bin/fusermount3 -u %h/db
-  Restart=on-failure
-  RestartSec=5
-
-  [Install]
-  WantedBy=default.target
-#+END_SRC
-
-* Mount via systemd
-
-#+BEGIN_SRC bash :tangle no :results no
+#+BEGIN_SRC bash :tangle no
 mkdir -p ~/db
 systemctl --user daemon-reload
 systemctl --user enable --now rclone-dropbox.service
-systemctl --user status rclone-dropbox.service
-#+END_SRC
-
-* Preventing Tools from Triggering Caching
-
-#+BEGIN_SRC bash :tangle no
-  ncdu --apparent-size ~/Dropbox
-#+END_SRC
-
-*** Yazi Patch
-
-#+BEGIN_SRC toml :tangle no
-[[plugin.prepend_previewers]]
-url = "**/Dropbox/**"
-run = "noop"
-
-[[plugin.prepend_preloaders]]
-url = "**/Dropbox/**"
-run = "noop"
-#+END_SRC
-
-*** Ranger Patch
-
-#+BEGIN_SRC ranger :tangle no
-setlocal path=~/Dropbox preview_files false
-setlocal path=~/Dropbox preview_directories false
-setlocal path=~/Dropbox preview_images false
-setlocal path=~/Dropbox collapse_preview true
 #+END_SRC
