@@ -23,7 +23,7 @@
   overview {
       backdrop-color "#000000"
   }
-  
+
   debug {
       // Allows notification actions and window activation from Noctalia.
       honor-xdg-activation-with-invalid-serial
@@ -84,9 +84,12 @@
 
   binds {
       Mod+Shift+ESCAPE      { show-hotkey-overlay; }
-      Mod+Return            hotkey-overlay-title="Open Terminal: Kitty" { spawn "kitty"; }
-      Mod+B                 hotkey-overlay-title="Open Browser: firefox" { spawn "firefox"; }
-      Mod+E                 hotkey-overlay-title="Open Text Editor: Emacs" { spawn "emacs"; }
+      Mod+E                 hotkey-overlay-title="Focus or Spawn Emacs" { spawn "niri-rorr.sh" "emacs"; }
+      Mod+Ctrl+E            hotkey-overlay-title="Open Emacs Client" { spawn "emacsclient" "-a" "'emacs'" "-c" "-n"; }
+      Mod+T                 hotkey-overlay-title="Focus or Spawn Kitty" { spawn "niri-rorr.sh" "kitty"; }
+      Mod+Ctrl+T            hotkey-overlay-title="Open Terminal: Kitty" { spawn "kitty"; }
+      Mod+W                 hotkey-overlay-title="Focus or Spawn Firefox" { spawn "niri-rorr.sh" "firefox"; }
+      Mod+Ctrl+W            hotkey-overlay-title="Open Browser: firefox" { spawn "firefox"; }
       Mod+Shift+Return      hotkey-overlay-title="Open Wallpaper Selector: noctalia wallpaper toggle" { spawn-sh "noctalia msg panel-toggle wallpaper"; }
       Mod+S                 hotkey-overlay-title="Open Control Center: noctalia controlCenter" { spawn-sh "noctalia msg panel-toggle control-center"; }
       Mod+Shift+S           hotkey-overlay-title="Open Settings: noctalia settings" { spawn-sh "noctalia msg settings-toggle"; }
@@ -167,10 +170,10 @@
       Mod+Equal             { set-column-width "+10%"; }
       Mod+Shift+Minus       { set-window-height "-10%"; }
       Mod+Shift+Equal       { set-window-height "+10%"; }
-      Mod+T                 { toggle-window-floating; }
-      Mod+F                 { maximize-column; }
-      Mod+Shift+F           { fullscreen-window; }
-      Mod+W                 { toggle-column-tabbed-display; }
+      Mod+Shift+F           { toggle-window-floating; }
+      Mod+Ctrl+M            { maximize-column; }
+      Mod+F                 { fullscreen-window; }
+      Mod+Shift+T           { toggle-column-tabbed-display; }
       Mod+M                 { maximize-window-to-edges; }
       CTRL+Shift+1          { screenshot; }
       CTRL+Shift+2          { screenshot-screen; }
@@ -183,6 +186,63 @@
       // It disables any active keyboard shortcut inhibitor, restoring control.
       Mod+ESCAPE            allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
   }
+#+end_src
+* NIRI-ROR
+
+#+begin_src shell :tangle /sudo::/usr/local/bin/niri-rorr.sh :tangle-mode (identity #o755)
+#!/bin/sh
+APP=$1
+
+# there may be instances of the app
+declare -a INSTANCES
+
+# get id of every possible instance
+INSTANCES=($(niri msg -j windows | jq ".[] | select(.app_id==\"$(echo $APP)\")" | jq '.["id"]'))
+
+# if there is no emacs: launch emacs
+if [ ${#INSTANCES[@]} -eq 0 ]; then
+    niri msg action spawn -- $APP
+else
+    # if there is only one instance, focus it
+    if [ ${#INSTANCES[@]} -eq 1 ]; then
+	# echo "Found only one instance - focussing now."
+	niri msg action focus-window --id $INSTANCES
+    else
+	# if there are more instances
+	# sort them
+	ISORTED=( $( printf "%s\n" "${INSTANCES[@]}" | sort -n ) )
+
+        # get id of currently focused window
+        FOCUSED=$(niri msg -j focused-window | jq '.id')
+
+        # if no instance is in focus, focus the first one
+	if [[ ! " ${ISORTED[@]} " =~ ${FOCUSED} ]]; then
+
+	    # app not in focus, so focus first instance
+	    niri msg action focus-window --id ${ISORTED[0]}
+	else
+	    # if an instance is already in focus, focus next one
+	    count=-1
+	    for i in "${ISORTED[@]}"
+	    do
+		((count=$count+1))
+
+	        if [ $i -eq ${FOCUSED} ]; then
+		    # if instance is in focus, get next index
+		    ((new_index=$count+1))
+		fi
+	    done
+
+            # if focus is already on the last instance, focus on first instance
+	    if [[ "$new_index" -eq "${#INSTANCES[@]}" ]]; then
+		((new_index=0))
+	    fi
+
+            # if an instance is in focus, focus next one
+	    niri msg action focus-window --id ${ISORTED[new_index]}
+	fi
+    fi
+fi
 #+end_src
 
 * NOCTALIA
