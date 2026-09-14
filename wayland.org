@@ -131,10 +131,10 @@
       Mod+Shift+Right       { focus-monitor-right; }
       Mod+Shift+UP          { focus-monitor-up; }
       Mod+Shift+Down        { focus-monitor-down; }
-      Mod+Shift+CTRL+Left   { move-column-to-monitor-left; }
-      Mod+Shift+CTRL+Right  { move-column-to-monitor-right; }
-      Mod+Shift+CTRL+UP     { move-column-to-monitor-up; }
-      Mod+Shift+CTRL+Down   { move-column-to-monitor-down; }
+      Mod+Shift+H           { move-column-to-monitor-left; }
+      Mod+Shift+L           { move-column-to-monitor-right; }
+      Mod+Shift+K           { move-column-to-monitor-up; }
+      Mod+Shift+J           { move-column-to-monitor-down; }
       Mod+Shift+V           { switch-focus-between-floating-and-tiling; }
       Mod+BracketLeft       { consume-or-expel-window-left; }
       Mod+BracketRight      { consume-or-expel-window-right; }
