@@ -1,0 +1,12 @@
+* Speed up decryption
+
+#+begin_src shell
+  sudo cryptsetup luksChangeKey --pbkdf argon2id --pbkdf-memory 131072 --iter-time 500 /dev/nvme0n1p2
+  sudo cryptsetup luksDump /dev/nvme0n1p2
+  time echo -n "YOUR_PASSPHRASE" | sudo cryptsetup open --test-passphrase /dev/nvme0n1p2
+#+end_src
+
+* Thinkpad Triggering uevents delay
+
+Add =usb-storage.quirks=0bda:0316:i= to =/etc/kernel/cmdline= and then
+run =sudo mkinitcpio -P=

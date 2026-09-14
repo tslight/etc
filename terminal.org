@@ -72,6 +72,7 @@
   vim.keymap.set("n", "<leader>d", ':bd<cr>', { desc = "Buffer Delete" })
   vim.keymap.set("n", "<leader>t", ':terminal<cr>', { desc = "Terminal" })
 
+  vim.opt.clipboard = 'unnamedplus'
   vim.opt.cursorline = true
   vim.opt.laststatus=0
   vim.opt.number = true

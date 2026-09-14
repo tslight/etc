@@ -2,7 +2,6 @@
 #+PROPERTY: header-args :mkdirp yes
 
 * Unit files
-
 ** Limited Persistence
 
 #+BEGIN_SRC ini :tangle ~/.config/systemd/user/rclone-dropbox.service
@@ -32,7 +31,7 @@
 
 ** Unlimited Persistence
 
-#+BEGIN_SRC ini :tangle ~/.config/systemd/user/rclone-dropbox-mirror.service
+#+BEGIN_SRC ini :tangle ~/.config/systemd/user/rclone-dropbox.service
   [Unit]
   Description=Rclone Dropbox Mount (Full Mirror Profile)
   Documentation=man:rclone(1)
@@ -59,7 +58,7 @@
 
 * Mount via systemd
 
-#+BEGIN_SRC bash :tangle no
+#+BEGIN_SRC bash :tangle no :results no
 mkdir -p ~/db
 systemctl --user daemon-reload
 systemctl --user enable --now rclone-dropbox.service
