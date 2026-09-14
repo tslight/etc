@@ -1,4 +1,4 @@
-#+TITLE: Rclone Dropbox Configuration
+#+TITLE: Rclone Dropbox VFS Mount Configuration
 #+PROPERTY: header-args :mkdirp yes
 #+PROPERTY: header-args+ :results silent
 #+BEGIN_SRC ini :tangle ~/.config/systemd/user/rclone-dropbox.service
