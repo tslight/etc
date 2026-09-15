@@ -103,13 +103,25 @@
   set -g renumber-windows on
 #+END_SRC
 
+* If running on a BSD...
+
 #+BEGIN_SRC conf :tangle (if (eq system-type 'berkeley-unix) "~/.tmux.conf" "no")
   set -s copy-command 'xsel -b'
 #+END_SRC
 
+* If running on macOS...
+
 #+BEGIN_SRC conf :tangle (if (eq system-type 'darwin) "~/.tmux.conf" "no")
   set -s copy-command 'pbcopy'
 #+END_SRC
+
+* Keybindings
+
+#+begin_src conf :tangle ~/.tmux.conf
+  bind v new-window -c "#{pane_current_path}" nvim
+  bind y new-window -c "#{pane_current_path}" yazi
+  bind b new-window btm
+#+end_src
 
 * YAZI
 

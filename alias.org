@@ -45,6 +45,7 @@ Do not be tempted to add more you deviant.
   alias pkgrm="sudo pacman -Rnsc"
   alias pkgfd="pacman -Ss"
   alias pkgup="sudo pacman -Syyu"
+  alias se=sudoedit
 #+end_src
 
 * tmux dwim
