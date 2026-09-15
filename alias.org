@@ -41,11 +41,17 @@ Do not be tempted to add more you deviant.
   alias pingg='ping -c 1 google.com'
   alias x=startx
   alias n=niri-session
-  alias pkget="sudo pacman -S"
-  alias pkgrm="sudo pacman -Rnsc"
-  alias pkgfd="pacman -Ss"
-  alias pkgup="sudo pacman -Syyu"
   alias se=sudoedit
+#+end_src
+
+* pkg
+
+#+begin_src shell
+  alias pkget="sudo pacman -S"
+  alias pkgfd="pacman -Ss"
+  alias pkgin="pacman -Qqe"
+  alias pkgrm="sudo pacman -Rnsc"
+  alias pkgup="sudo pacman -Syyu"
 #+end_src
 
 * tmux dwim
