@@ -247,7 +247,7 @@ fi
 
 * NOCTALIA
 
-#+begin_src kdl :tangle ~/.config/noctalia/config.toml
+#+begin_src toml :tangle ~/.config/noctalia/config.toml
   [bar.default]
   capsule_thickness = 0.25
   center = [ "taskbar" ]

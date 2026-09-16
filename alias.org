@@ -47,7 +47,7 @@ Do not be tempted to add more you deviant.
 * pkg
 
 #+begin_src shell
-  alias pkget="sudo pacman -S"
+  alias pkget="sudo pacman -S --needed"
   alias pkgfd="pacman -Ss"
   alias pkgin="pacman -Qqe"
   alias pkgrm="sudo pacman -Rnsc"
