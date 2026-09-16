@@ -32,13 +32,14 @@ Verify your kernel is utilizing the correct energy-performance preference engine
 #+BEGIN_SRC bash
 cat /sys/devices/system/cpu/amd_pstate/status
 #+END_SRC
-*Expected Output:* =active=. 
-/Note: If it outputs 'guided' or 'disabled', append =amd_pstate=active= to your kernel command line flags in your bootloader config, then rebuild it./
+*Expected Output:* =active=.  /Note: If it outputs 'guided' or
+'disabled', append =amd_pstate=active= to your kernel command line
+flags in your bootloader config, then rebuild it./
 
 ** 1.3 Automated Profile Switching (udev rule)
 Because =power-profiles-daemon= does not shift profiles on power supply changes by default, deploy this custom rule.
 Create file: =/etc/udev/rules.d/99-power-profiles.rules=
-#+BEGIN_SRC udev
+#+BEGIN_SRC udev :tangle /sudo::/etc/udev/rules.d/99-power-profiles.rules
 # Switch to power-saver mode when the charger is unplugged
 SUBSYSTEM=="power_supply", ATTR{online}=="0", RUN+="/usr/bin/powerprofilesctl set power-saver"
 
