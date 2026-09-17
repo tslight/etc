@@ -25,6 +25,7 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
 * EMACS
 
 #+begin_src emacs-lisp
+  (global-auto-revert-mode t)
   (setq inhibit-startup-screen t
         initial-scratch-message nil
         initial-major-mode 'fundamental-mode)
@@ -485,12 +486,6 @@ This are used in tangle logic in other files
 #+end_src
 
 * 3RD PARTY
-** GIT TIMEMACHINE
-
-#+begin_src emacs-lisp
-  (use-package git-timemachine :ensure)
-#+end_src
-
 ** HUNGRY DELETE
 
 #+begin_src emacs-lisp
@@ -503,14 +498,4 @@ This are used in tangle logic in other files
 
 #+begin_src emacs-lisp
   (use-package vundo :ensure :bind ("C-c u" . vundo))
-#+end_src
-
-** XCLIP
-
-#+begin_src emacs-lisp
-  (when (and (not window-system) (or (executable-find "pbpaste")
-				     (executable-find "wl-copy")
-				     (executable-find "xclip")
-				     (executable-find "xsel")))
-    (use-package xclip :ensure :hook (emacs-startup . xclip-mode)))
 #+end_src
