@@ -14,6 +14,7 @@
 #+NAME: gtk3
 #+BEGIN_SRC conf :tangle ~/.config/gtk-3.0/settings.ini
   [Settings]
+  gtk-key-theme = Emacs
   gtk-key-theme-name = Emacs
 #+END_SRC
 #+begin_src shell :tangle no
