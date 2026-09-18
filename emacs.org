@@ -467,6 +467,12 @@ This are used in tangle logic in other files
     (org-babel-post-tangle . my/compile-and-load-init))
 #+end_src
 
+* REPEAT
+
+#+begin_src emacs-lisp
+  (use-package repeat :init (repeat-mode 1))
+#+end_src
+
 * SHELL SCRIPT
 
 #+begin_src emacs-lisp

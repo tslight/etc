@@ -16,3 +16,6 @@
   [Settings]
   gtk-key-theme-name = Emacs
 #+END_SRC
+#+begin_src shell :tangle no
+  gsettings set org.gnome.desktop.interface gtk-key-theme "Emacs"
+#+end_src
