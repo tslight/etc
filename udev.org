@@ -35,7 +35,7 @@ udevadm info /dev/input/event* | grep -E 'caps|esc|meta|alt|ctrl'
     KEYBOARD_KEY_700e2=leftalt       # leftopt   --> leftalt
     KEYBOARD_KEY_700e6=leftalt       # rightopt  --> leftalt (to avoid altgr shit)
     KEYBOARD_KEY_700e0=leftmeta      # leftctrl  --> super
-    KEYBOARD_KEY_70050=leftmeta      # leftarrow --> super
+  # KEYBOARD_KEY_70050=leftmeta      # leftarrow --> super
 #+end_src
 *** Apple MacBook Pro OG JIS
 #+begin_src conf
