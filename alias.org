@@ -54,6 +54,13 @@ Do not be tempted to add more you deviant.
   alias pkgup="sudo pacman -Syyu"
 #+end_src
 
+* rclone
+
+#+begin_src shell
+  alias dropbox_sync_to_device='rclone sync dropbox: ~/db --progress'
+  alias dropbox_sync_from_device='rclone sync ~/db dropbox: --progress'
+#+end_src
+
 * tmux dwim
 
 #+begin_src shell
