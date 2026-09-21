@@ -35,9 +35,6 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
   (setq disabled-command-function nil)
   (setq fill-column 79)
 
-  (setq mac-command-modifier 'control)
-  (setq mac-control-modifier 'super)
-
   (setq package-archives
         '(("gnu" . "https://elpa.gnu.org/packages/")
     	("melpa" . "https://melpa.org/packages/")
