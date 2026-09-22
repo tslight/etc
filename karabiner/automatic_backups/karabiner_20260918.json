@@ -1,0 +1,86 @@
+{
+    "profiles": [
+        {
+            "name": "Default profile",
+            "selected": true,
+            "virtual_hid_keyboard": {
+                "keyboard_type_v2": "jis"
+            },
+            "complex_modifications": {
+                "parameters": {
+                    "basic.to_if_alone_timeout_milliseconds": 1000,
+                    "basic.to_if_held_down_threshold_milliseconds": 500,
+                    "basic.to_delayed_action_delay_milliseconds": 500,
+                    "simultaneous.detect_key_down_duration_milliseconds": 50,
+                    "simultaneous_threshold_milliseconds": 50
+                },
+                "rules": [
+                    {
+                        "description": "Custom PC JIS Layout Remaps with Dual Hyper and Caps/Esc Swap",
+                        "manipulators": [
+                            {
+                                "type": "basic",
+                                "from": { "key_code": "caps_lock" },
+                                "to": [{ "key_code": "escape" }]
+                            },
+                            {
+                                "type": "basic",
+                                "from": { "key_code": "escape" },
+                                "to": [{ "key_code": "caps_lock" }]
+                            },
+                            {
+                                "type": "basic",
+                                "from": { "key_code": "japanese_pc_nfer" },
+                                "to": [{ "key_code": "left_control" }]
+                            },
+                            {
+                                "type": "basic",
+                                "from": { "key_code": "japanese_pc_xfer" },
+                                "to": [{ "key_code": "right_control" }]
+                            },
+                            {
+                                "type": "basic",
+                                "from": { "key_code": "japanese_pc_katakana" },
+                                "to": [{ "key_code": "right_option" }]
+                            },
+                            {
+                                "type": "basic",
+                                "from": { "key_code": "application" },
+                                "to": [{ "key_code": "right_command" }]
+                            },
+                            {
+                                "type": "basic",
+                                "from": { "key_code": "left_control" },
+                                "to": [
+                                    {
+                                        "key_code": "left_control",
+                                        "modifiers": [
+                                            "left_shift",
+                                            "left_option",
+                                            "left_command"
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "basic",
+                                "from": { "key_code": "right_control" },
+                                "to": [
+                                    {
+                                        "key_code": "right_control",
+                                        "modifiers": [
+                                            "right_shift",
+                                            "right_option",
+                                            "right_command"
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    ]
+}
+

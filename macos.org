@@ -3,6 +3,12 @@
 #+PROPERTY: header-args+ :mkdirp yes
 #+PROPERTY: header-args+ :padline no
 #+PROPERTY: header-args+ :results silent
+* KARABINER
+
+#+begin_src shell :tangle no
+  ln -sfn ~/etc/karabiner ~/.config/karabiner
+#+end_src
+
 * ZSH
 ** AUTOLOAD
 
@@ -108,6 +114,6 @@
 
 ** ALIAS
 
-#+begin_src shell
+#+begin_src zsh :tangle ~/.zshrc
   [ -f $HOME/.alias ] && source $HOME/.alias
 #+end_src
