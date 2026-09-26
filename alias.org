@@ -30,17 +30,18 @@ I'm not JUST a wet robot Goddamnit!
 Do not be tempted to add more you deviant.
 
 #+begin_src shell
+  alias cat='bat -p'
   alias e='emacs -nw'
   alias ec='emacsclient -c -a "" -nw'
   alias g=git
   alias l='lsd -a'
   alias ll='lsd -la'
+  alias lg='lazygit'
   alias tree='lsd --tree'
   alias mkdir='mkdir -p'
   alias pg='pgrep -ail'
   alias pingg='ping -c 1 google.com'
-  alias x=startx
-  alias n=niri-session
+  alias vi='nvim'
   alias se=sudoedit
 #+end_src
 

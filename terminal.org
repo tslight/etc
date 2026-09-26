@@ -120,6 +120,7 @@
 #+begin_src conf :tangle ~/.tmux.conf
   bind v new-window -c "#{pane_current_path}" nvim
   bind y new-window -c "#{pane_current_path}" yazi
+  bind g popup -d "#{pane_current_path}" -w 80% -h 80% -E lazygit
   bind b new-window btm
 #+end_src
 
