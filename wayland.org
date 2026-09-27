@@ -176,6 +176,7 @@
       Mod+ESCAPE            allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
   }
 #+end_src
+
 * NIRI-ROR
 
 #+begin_src shell :tangle ~/bin/niri-rorr.sh :tangle-mode (identity #o755)
