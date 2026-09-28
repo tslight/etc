@@ -47,7 +47,8 @@ Do not be tempted to add more you deviant.
 
 * pkg
 
-#+begin_src shell
+#+begin_src shell :tangle (if (eq system-type 'gnu/linux) "~/.alias" "no")
+  alias pkgcl="sudo pacman -Scc"
   alias pkget="sudo pacman -S --needed"
   alias pkgfd="pacman -Ss"
   alias pkgin="pacman -Qqe"
@@ -60,6 +61,19 @@ Do not be tempted to add more you deviant.
 #+begin_src shell
   alias dropbox_sync_to_device='rclone sync dropbox: ~/db --progress'
   alias dropbox_sync_from_device='rclone sync ~/db dropbox: --progress'
+  dropbox_mount() {
+      [ -z $1 ] && $MAXSIZE="50G" || $MAXSIZE=$1
+      /usr/bin/rclone mount dropbox: $HOME/db \
+  		    --vfs-cache-mode full \
+  		    --vfs-cache-max-size $MAXSIZE \
+  		    --vfs-cache-max-age 900h \
+  		    --vfs-read-ahead 128M \
+  		    --buffer-size 64M \
+  		    --dir-cache-time 1m \
+  		    --poll-interval 30s \
+  		    --log-level NOTICE
+  }
+  alias dropbox_unmount='fusermount3 -u $HOME/db'
 #+end_src
 
 * tmux dwim
