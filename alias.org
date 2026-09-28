@@ -71,7 +71,7 @@ Do not be tempted to add more you deviant.
   		    --buffer-size 64M \
   		    --dir-cache-time 1m \
   		    --poll-interval 30s \
-  		    --log-level NOTICE
+  		    --log-level NOTICE &
   }
   alias dropbox_unmount='fusermount3 -u $HOME/db'
 #+end_src
