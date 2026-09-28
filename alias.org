@@ -62,7 +62,7 @@ Do not be tempted to add more you deviant.
   alias dropbox_sync_to_device='rclone sync dropbox: ~/db --progress'
   alias dropbox_sync_from_device='rclone sync ~/db dropbox: --progress'
   dropbox_mount() {
-      [ -z $1 ] && MAXSIZE="50G" || MAXSIZE=$1
+      [ -z $1 ] && MAXSIZE="10G" || MAXSIZE=$1
       /usr/bin/rclone mount dropbox: "$HOME/db" \
   		    --vfs-cache-mode full \
   		    --vfs-cache-max-size "$MAXSIZE" \
@@ -71,7 +71,7 @@ Do not be tempted to add more you deviant.
   		    --buffer-size 64M \
   		    --dir-cache-time 1m \
   		    --poll-interval 30s \
-  		    --log-level NOTICE &
+  		    --log-level NOTICE
   }
   alias dropbox_unmount='fusermount3 -u $HOME/db'
 #+end_src
