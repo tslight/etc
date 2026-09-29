@@ -153,19 +153,19 @@ All of my custom functions live under the =my/= prefix/namespace.
     (load-theme 'modus-vivendi)
     (cond
      ((find-font (font-spec :name "JetBrainsMono NF"))
-      (set-frame-font "JetBrainsMono NF-14"))
+      (set-frame-font "JetBrainsMono NF-13"))
      ((find-font (font-spec :name "Cascadia Code"))
-      (set-frame-font "Cascadia Code-14"))
+      (set-frame-font "Cascadia Code-13"))
      ((find-font (font-spec :name "Cascadia Mono"))
-      (set-frame-font "Cascadia Mono-14"))
+      (set-frame-font "Cascadia Mono-13"))
      ((find-font (font-spec :name "Menlo"))
-      (set-frame-font "Menlo-14"))
+      (set-frame-font "Menlo-13"))
      ((find-font (font-spec :name "Monaco"))
-      (set-frame-font "Monaco-14"))
+      (set-frame-font "Monaco-13"))
      ((find-font (font-spec :name "DejaVu Sans Mono"))
-      (set-frame-font "DejaVu Sans Mono-14"))
+      (set-frame-font "DejaVu Sans Mono-13"))
      ((find-font (font-spec :name "Monospace"))
-      (set-frame-font "Monospace-14")))
+      (set-frame-font "Monospace-13")))
     
     (column-number-mode)
     (display-battery-mode)
@@ -249,7 +249,7 @@ All of my custom functions live under the =my/= prefix/namespace.
 (defun my/new-morning-page ()
   "Create Morning Page with Epoch time as name."
   (interactive)
-  (find-file (format-time-string "~/Dropbox/mp/%s")))
+  (find-file (format-time-string "~/db/mp/%s")))
 #+end_src
 
 ** save-filename
