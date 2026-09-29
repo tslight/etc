@@ -34,7 +34,6 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
   (setq c-default-style "bsd")
   (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
   (setq disabled-command-function nil)
-  (setq fill-column 79)
   (setq view-read-only t) ;; pager bindings in all RO buffers
 #+end_src
 
@@ -51,6 +50,14 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
   (setq kept-old-versions 12)
   (setq version-control t)
   (setq create-lockfiles nil) ;; prevent creation of .#myfile.ext
+#+end_src
+
+** fill me in
+
+#+begin_src emacs-lisp
+  (setq fill-column 79)
+  (add-hook 'org-mode-hook 'auto-fill-mode)
+  (add-hook 'text-mode-hook 'auto-fill-mode)
 #+end_src
 
 ** try not to use packages!
