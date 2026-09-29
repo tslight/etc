@@ -150,6 +150,21 @@ All of my custom functions live under the =my/= prefix/namespace.
     (if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
 
     (load-theme 'modus-vivendi)
+    (cond
+     ((find-font (font-spec :name "JetBrainsMono NF"))
+      (set-frame-font "JetBrainsMono NF-14"))
+     ((find-font (font-spec :name "Cascadia Code"))
+      (set-frame-font "Cascadia Code-14"))
+     ((find-font (font-spec :name "Cascadia Mono"))
+      (set-frame-font "Cascadia Mono-14"))
+     ((find-font (font-spec :name "Menlo"))
+      (set-frame-font "Menlo-14"))
+     ((find-font (font-spec :name "Monaco"))
+      (set-frame-font "Monaco-14"))
+     ((find-font (font-spec :name "DejaVu Sans Mono"))
+      (set-frame-font "DejaVu Sans Mono-14"))
+     ((find-font (font-spec :name "Monospace"))
+      (set-frame-font "Monospace-14")))
 
     (column-number-mode)
     (display-battery-mode)
@@ -159,7 +174,7 @@ All of my custom functions live under the =my/= prefix/namespace.
     (save-place-mode 1)
 
     (setq browse-url-browser-function 'browse-url-generic
-	  browse-url-generic-program "firefox")
+  	browse-url-generic-program "firefox")
 
     (when (executable-find "fd") find-program "fd")
     (when (executable-find "rg") grep-program "rg"))
