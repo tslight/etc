@@ -23,6 +23,7 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
 #+end_src
 
 * EMACS
+** basics
 
 #+begin_src emacs-lisp
   (global-auto-revert-mode t)
@@ -34,23 +35,51 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
   (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
   (setq disabled-command-function nil)
   (setq fill-column 79)
+  (setq view-read-only t) ;; pager bindings in all RO buffers
+#+end_src
 
+** backup/autosave/lockfile hygiene
+
+#+begin_src emacs-lisp
+  (setq auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)))
+  (setq auto-save-timeout 5)
+  (setq auto-save-visited-mode t)
+  (setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
+  (setq backup-by-copying t) ;; copy files, don't rename them.
+  (setq delete-old-versions t)
+  (setq kept-new-versions 12)
+  (setq kept-old-versions 12)
+  (setq version-control t)
+  (setq create-lockfiles nil) ;; prevent creation of .#myfile.ext
+#+end_src
+
+** try not to use packages!
+
+#+begin_src emacs-lisp
   (setq package-archives
         '(("gnu" . "https://elpa.gnu.org/packages/")
     	("melpa" . "https://melpa.org/packages/")
     	("nongnu" . "https://elpa.nongnu.org/nongnu/")))
 
-  ;; https://emacs.stackexchange.com/a/78660
-  (setq tramp-allow-unsafe-temporary-files t)
-
   (setq use-package-always-defer t
         use-package-enable-imenu-support t
         use-short-answers t)
+#+end_src
 
+** supertramp
+
+#+begin_src emacs-lisp
+  ;; https://emacs.stackexchange.com/a/78660
+  (setq tramp-allow-unsafe-temporary-files t)
+  (setq password-cache-expiry 3600) ;nil to never expire during the session
+  (setq auth-source-cache-expiry 3600)
+#+end_src
+
+** whoami
+
+#+begin_src emacs-lisp
   (setq user-full-name "~Not Toby"
         user-mail-address "0x2b@0xff.art")
-
-  (setq view-read-only t) ;; pager bindings in all RO buffers
 #+end_src
 
 * BINDINGS
@@ -122,10 +151,11 @@ All of my custom functions live under the =my/= prefix/namespace.
     (interactive)
     (or (buffer-file-name) (error "No file is currently being edited"))
     (when (yes-or-no-p (format "Really delete '%s'?"
-			       (file-name-nondirectory buffer-file-name)))
+                               (file-name-nondirectory buffer-file-name)))
       (delete-file (buffer-file-name) t)
-      (kill-this-buffer)))
+      (kill-current-buffer)))
 
+  (keymap-global-set "C-c f d" #'my/delete-this-file)
   (keymap-global-set "C-c f d" 'my/delete-this-file)
 #+end_src
 
@@ -246,10 +276,10 @@ All of my custom functions live under the =my/= prefix/namespace.
 ** new-morning-page
 
 #+begin_src emacs-lisp
-(defun my/new-morning-page ()
-  "Create Morning Page with Epoch time as name."
-  (interactive)
-  (find-file (format-time-string "~/db/mp/%s")))
+  (defun my/new-morning-page ()
+    "Create Morning Page named YYYYmmdd.HHMMSS.txt."
+    (interactive)
+    (find-file (format-time-string "~/db/mp/%Y%m%d.%H%M%S.txt")))
 #+end_src
 
 ** save-filename
