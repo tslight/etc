@@ -147,7 +147,8 @@ All of my custom functions live under the =my/= prefix/namespace.
     (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
     (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
     (if (fboundp 'tooltip-mode) (tooltip-mode -1))
-    (if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
+    (if (not (eq system-type 'darwin))
+        (if (fboundp 'menu-bar-mode) (menu-bar-mode -1)))
 
     (load-theme 'modus-vivendi)
     (cond
@@ -165,7 +166,7 @@ All of my custom functions live under the =my/= prefix/namespace.
       (set-frame-font "DejaVu Sans Mono-14"))
      ((find-font (font-spec :name "Monospace"))
       (set-frame-font "Monospace-14")))
-
+    
     (column-number-mode)
     (display-battery-mode)
     (display-time)
