@@ -78,8 +78,7 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
 #+begin_src emacs-lisp
   ;; https://emacs.stackexchange.com/a/78660
   (setq tramp-allow-unsafe-temporary-files t)
-  (setq password-cache-expiry 3600) ;nil to never expire during the session
-  (setq auth-source-cache-expiry 3600)
+  (setq password-cache-expiry 3600) ;nil to never expire during session
 #+end_src
 
 ** whoami
