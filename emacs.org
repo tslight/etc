@@ -26,9 +26,9 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
 ** basics
 
 #+begin_src emacs-lisp
-  (setq global-auto-revert-mode t)
-  (setq global-hl-line-mode t)
-  (setq global-prettify-symbols-mode t)
+  (global-auto-revert-mode)
+  (global-hl-line-mode)
+  (global-prettify-symbols-mode)
   (setq inhibit-startup-screen t
         initial-scratch-message nil
         initial-major-mode 'fundamental-mode)
@@ -36,6 +36,7 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
   (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
   (setq disabled-command-function nil)
   (setq view-read-only t) ;; pager bindings in all RO buffers
+  (setq set-mark-command-repeat-pop t) ;; repeating C-SPC after popping, pops it
 #+end_src
 
 ** backup/autosave/lockfile hygiene
