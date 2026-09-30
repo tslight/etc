@@ -28,6 +28,7 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
 #+begin_src emacs-lisp
   (setq global-auto-revert-mode t)
   (setq global-hl-line-mode t)
+  (setq global-prettify-symbols-mode t)
   (setq inhibit-startup-screen t
         initial-scratch-message nil
         initial-major-mode 'fundamental-mode)
