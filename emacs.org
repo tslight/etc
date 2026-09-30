@@ -622,6 +622,16 @@ This are used in tangle logic in other files
     (smtpmail-stream-type 'ssl))
 #+end_src
 
+* VERSION CONTROL
+
+#+begin_src emacs-lisp
+  (use-package vc
+    :custom
+    (vc-make-backup-files t)
+    (version-control t)
+    :bind ("C-x v d" . vc-dir-root))
+#+end_src
+
 * 3RD PARTY
 ** HUNGRY DELETE
 
