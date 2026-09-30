@@ -435,6 +435,29 @@ This are used in tangle logic in other files
   alias pingg ping google.com
 #+end_src
 
+* FLY ME TO THE MOON
+** make
+
+#+begin_src emacs-lisp
+  (use-package flymake-mode
+    :hook
+    (prog-mode . flymake-mode)
+    (json-mode . flymake-mode)
+    (yaml-mode . flymake-mode)
+    (shell-script-mode . flymake-mode))
+#+end_src
+
+** spell
+
+#+begin_src emacs-lisp
+  (use-package flyspell-mode
+    :hook
+    (org-mode . flyspell-mode)
+    (prog-mode . flyspell-prog-mode)
+    (shell-script-mode . flyspell-prog-mode)
+    (text-mode . flyspell-mode))
+#+end_src
+
 * GNUS
 
 #+begin_src emacs-lisp
