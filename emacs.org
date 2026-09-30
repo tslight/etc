@@ -221,6 +221,23 @@ All of my custom functions live under the =my/= prefix/namespace.
   (add-hook 'emacs-startup-hook #'my/run-after-startup)
 #+end_src
 
+** kill-buffer-other-window
+
+#+begin_src emacs-lisp
+  (defun my/kill-buffer-other-window ()
+    "Kill the buffer in the last used window."
+    (interactive)
+    ;; Window selection is used because point goes to a different window
+    ;; if more than 2 windows are present
+    (let ((current-window (selected-window))
+          (other-window (get-mru-window t t t)))
+      (select-window other-window)
+      (kill-current-buffer)
+      (select-window current-window)))
+
+  (keymap-global-set "C-c k" 'my/kill-buffer-other-window)
+#+end_src
+
 ** kill-region
 
 #+begin_src emacs-lisp
@@ -279,6 +296,26 @@ All of my custom functions live under the =my/= prefix/namespace.
       (back-to-indentation)))
 
   (global-set-key [remap move-beginning-of-line] 'my/move-beginning-of-line)
+#+end_src
+
+** move-lines
+
+#+begin_src emacs-lisp
+(defmacro save-column (&rest body)
+  `(let ((column (current-column)))
+     (unwind-protect (progn ,@body) (move-to-column column))))
+(put 'save-column 'lisp-indent-function 0)
+
+(defun my/move-line-up ()
+  (interactive)
+  (save-column (transpose-lines 1) (forward-line -2)))
+
+(defun my/move-line-down ()
+  (interactive)
+  (save-column (forward-line 1) (transpose-lines 1) (forward-line -1)))
+
+(keymap-global-set "M-p" 'my/move-line-up)
+(keymap-global-set "M-n" 'my/move-line-down)
 #+end_src
 
 ** new-morning-page
@@ -382,6 +419,21 @@ This are used in tangle logic in other files
       (call-interactively #'fill-paragraph)))
 
   (keymap-global-set "M-q" 'my/toggle-fill)
+#+end_src
+
+** toggle-maximize-window
+
+#+begin_src emacs-lisp
+  (defun ts-toggle-maximize-window ()
+    "Temporarily maximize a window."
+    (interactive)
+    (if (= 1 (length (window-list)))
+        (jump-to-register '_)
+      (progn
+        (window-configuration-to-register '_)
+        (delete-other-windows))))
+
+  (keymap-global-set "C-c z" 'ts-toggle-maximize-window)
 #+end_src
 
 * DIRED
