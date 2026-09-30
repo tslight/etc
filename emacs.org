@@ -29,6 +29,7 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
   (global-auto-revert-mode)
   (global-hl-line-mode)
   (global-prettify-symbols-mode)
+  (pending-delete-mode)
   (setq inhibit-startup-screen t
         initial-scratch-message nil
         initial-major-mode 'fundamental-mode)
