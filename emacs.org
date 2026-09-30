@@ -492,6 +492,7 @@ This are used in tangle logic in other files
 * MISC
 
 #+begin_src emacs-lisp
+  (use-package repeat :hook (emacs-startup . repeat-mode))
   (use-package savehist :hook (emacs-startup . savehist-mode))
   (use-package which-key :hook (emacs-startup . which-key-mode))
   (use-package whitespace :bind ("C-c w" . whitespace-cleanup))
@@ -547,12 +548,6 @@ This are used in tangle logic in other files
     (org-mode . auto-fill-mode)
     (after-save . my/tangle-emacs-org-on-save)
     (org-babel-post-tangle . my/compile-and-load-init))
-#+end_src
-
-* REPEAT
-
-#+begin_src emacs-lisp
-  (use-package repeat :init (repeat-mode 1))
 #+end_src
 
 * SHELL SCRIPT
