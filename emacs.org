@@ -633,6 +633,13 @@ This are used in tangle logic in other files
 #+end_src
 
 * 3RD PARTY
+** DEFAULT TEXT MODE
+
+#+begin_src emacs-lisp
+  (use-package default-text-scale :ensure
+    :config (default-text-scale-mode))
+#+end_src
+
 ** HUNGRY DELETE
 
 #+begin_src emacs-lisp
