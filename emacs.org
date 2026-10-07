@@ -214,9 +214,9 @@ All of my custom functions live under the =my/= prefix/namespace.
     (electric-pair-mode)
     (global-subword-mode)
     (save-place-mode 1)
-
+    
     (setq browse-url-browser-function 'browse-url-generic
-  	browse-url-generic-program "firefox")
+    	browse-url-generic-program "firefox")
 
     (when (executable-find "fd") find-program "fd")
     (when (executable-find "rg") grep-program "rg"))
@@ -438,6 +438,25 @@ This are used in tangle logic in other files
 
   (keymap-global-set "C-c z" 'ts-toggle-maximize-window)
 #+end_src
+
+* DESKTOP
+
+#+begin_src emacs-lisp
+  (use-package desktop
+    :init
+    (setq desktop-dirname "~/.emacs.d/desktop/")
+    (setq desktop-path (list desktop-dirname))
+    (setq desktop-base-file-name "emacs.desktop")
+    (setq desktop-base-lock-name "lock")
+    (unless (file-directory-p desktop-dirname)
+      (make-directory desktop-dirname t))
+    (setq desktop-save t)
+    (setq desktop-load-locked-desktop t)
+    :config
+    (desktop-save-mode 1)
+    :hook
+    (emacs-startup . desktop-read))
+  #+end_src
 
 * DIRED
 
