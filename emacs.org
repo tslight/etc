@@ -36,8 +36,10 @@ To un/comment a heading - move the point to the heading and press =C-c ;=.
   (setq c-default-style "bsd")
   (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
   (setq disabled-command-function nil)
-  (setq view-read-only t) ;; pager bindings in all RO buffers
+  (setq proced-enable-color-flag t)
+  (setq dictionary-server "dict.org")
   (setq set-mark-command-repeat-pop t) ;; repeating C-SPC after popping, pops it
+  (setq view-read-only t) ;; pager bindings in all RO buffers
 #+end_src
 
 ** backup/autosave/lockfile hygiene
